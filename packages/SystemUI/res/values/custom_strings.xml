@@ -19,4 +19,9 @@
     <string name="task_unlocked_desc">Lock %1$s. Currently unlocked</string>
     <!-- Content description for Accessibility on locked tasks in recents -->
     <string name="task_locked_desc">Unlock %1$s. Currently locked</string>
+
+    <!-- Typing virtual buttons -->
+    <string name="accessibility_dpad_left">Cursor left</string>
+    <string name="accessibility_dpad_right">Cursor right</string>
+
 </resources>
