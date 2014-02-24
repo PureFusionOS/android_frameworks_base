@@ -1551,6 +1551,14 @@ public class Preference implements Comparable<Preference> {
         return getSharedPreferences().contains(mKey);
     }
 
+    /**
+     * Returns whether the preference can be found in persistent storage
+     * @hide
+     */
+    protected boolean isPersisted() {
+        return getSharedPreferences().contains(mKey);
+    }
+
     private void dispatchSetInitialValue() {
         if (getPreferenceDataStore() != null) {
             onSetInitialValue(true, mDefaultValue);
