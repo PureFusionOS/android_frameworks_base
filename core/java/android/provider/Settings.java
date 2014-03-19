@@ -3594,6 +3594,36 @@ public final class Settings {
         public static final String BATTERY_LIGHT_LOW_COLOR = "battery_light_low_color";
 
         /**
+         * Whether to show the battery bar
+         * @hide
+         */
+        public static final String BATTERY_BAR_LOCATION = "battery_bar_location";
+
+        /**
+         * Battery bar color
+         * @hide
+         */
+        public static final String BATTERY_BAR_COLOR = "battery_bar_color";
+
+        /**
+         * Battery bar thickness
+         * @hide
+         */
+        public static final String BATTERY_BAR_THICKNESS = "battery_bar_thickness";
+
+        /**
+         * Battery bar style
+         * @hide
+         */
+        public static final String BATTERY_BAR_STYLE = "battery_bar_style";
+
+        /**
+         * Battery bar animation
+         * @hide
+         */
+        public static final String BATTERY_BAR_ANIMATE = "battery_bar_animate";
+
+        /**
          * What color to use for the battery LED while charging - medium
          * @hide
          */
