@@ -3542,6 +3542,19 @@ public class SettingsProvider extends ContentProvider {
                                     Settings.Global.OTA_DISABLE_AUTOMATIC_UPDATE,
                                     "1", null, true, SettingsState.SYSTEM_PACKAGE_NAME);
                         }
+
+                        // Version 147: Set the default value for BATTERY_PLUGGED_SOUND.
+                        currentSetting = globalSettings.getSettingLocked(
+                                Settings.Global.BATTERY_PLUGGED_SOUND);
+                        if (currentSetting.isNull()) {
+                            final String defaultValue = getContext().getResources().getString(
+                                    R.string.def_battery_plugged_sound);
+                            if (defaultValue != null) {
+                                globalSettings.insertSettingLocked(
+                                        Settings.Global.BATTERY_PLUGGED_SOUND, defaultValue,
+                                        null, true, SettingsState.SYSTEM_PACKAGE_NAME);
+                            }
+                        }
                     }
 
                     currentVersion = 147;
