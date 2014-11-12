@@ -2252,5 +2252,9 @@ message MetricsEvent {
 
     // PureNexus Metrics
     PURE = 500;
+
+    // BEGIN PA CONSTANTS
+    // Settings -> Backup & Reset -> Feature Preferences
+    FEATURE_PREFERENCES = 501;
   }
 }

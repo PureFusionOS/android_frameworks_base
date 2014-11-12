@@ -198,4 +198,9 @@
 
     <!-- [CHAR LIMIT=100] Notification Importance slider: very low importance level description -->
     <string name="notification_importance_very_low">No full screen interruption, peeking, sound, or vibration. Hide from lock screen.</string>
+
+    <!-- OnTheSpot: Action denial button text. [CHAR LIMIT=NONE] -->
+    <string name="on_the_spot_deny">NO THANKS</string>
+    <!-- OnTheSpot: Action confirmation button text. [CHAR LIMIT=NONE] -->
+    <string name="on_the_spot_confirm">OKAY</string>
 </resources>
