@@ -69,4 +69,9 @@ interface IPowerManager
     // sets the delai after which to check the proximity to decide whether
     // to wake the device
     void wakeUpWithProximityCheck(long time, String reason, String opPackageName);
+
+    void setKeyboardVisibility(boolean visible);
+
+    void setKeyboardLight(boolean on, int key);
+
 }
