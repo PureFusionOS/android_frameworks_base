@@ -1508,7 +1508,8 @@ public final class MediaCodecInfo {
             return supports(width, height, null);
         }
 
-        private boolean supports(Integer width, Integer height, Number rate) {
+        private boolean supports(
+                Integer width, Integer height, Number rate) {
             boolean ok = true;
 
             if (ok && width != null) {
