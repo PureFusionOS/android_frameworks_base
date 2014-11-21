@@ -40,6 +40,7 @@ import android.provider.Settings;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.InputDevice;
+import android.view.IWindowManager;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.WindowManagerGlobal;
@@ -258,10 +259,13 @@ public class Action {
         if (intent == null) {
             return;
         }
+        // Dissmiss keyguard first.
+        final IWindowManager wm = IWindowManager.Stub
+                .asInterface(ServiceManager.getService(Context.WINDOW_SERVICE));
         try {
-            WindowManagerGlobal.getWindowManagerService().dismissKeyguard(null /* callback */);
-        } catch (RemoteException e) {
-            Log.w("Action", "Error dismissing keyguard", e);
+            wm.dismissKeyguard(null);
+        } catch (Exception e) {
+            // ignore it
         }
         intent.addFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK

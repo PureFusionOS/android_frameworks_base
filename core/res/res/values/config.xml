@@ -2959,4 +2959,7 @@
          config_proximityCheckOnWake must be true. -->
     <bool name="config_proximityCheckOnFingerprintWake">false</bool>
 
+    <!-- Sets whether IME switcher on statusbar should be shown or not. -->
+	<bool name="config_show_IMESwitcher">true</bool>
+
 </resources>
