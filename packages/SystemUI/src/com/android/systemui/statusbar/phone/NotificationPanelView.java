@@ -53,7 +53,9 @@ import android.widget.TextView;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardStatusView;
+import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.systemui.DejankUtils;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
@@ -146,6 +148,7 @@ public class NotificationPanelView extends PanelView implements
     private boolean mQsExpandedWhenExpandingStarted;
     private boolean mQsFullyExpanded;
     private boolean mKeyguardShowing;
+    private boolean mKeyguardOrShadeShowing;
     private boolean mDozing;
     private boolean mDozingOnDown;
     protected int mStatusBarState;
@@ -221,6 +224,9 @@ public class NotificationPanelView extends PanelView implements
     private boolean mLaunchingAffordance;
     private FalsingManager mFalsingManager;
     private String mLastCameraLaunchSource = KeyguardBottomAreaView.CAMERA_LAUNCH_SOURCE_AFFORDANCE;
+    private LockPatternUtils mLockPatternUtils;
+
+    private boolean mStatusBarLockedOnSecureKeyguard;
 
     private Runnable mHeadsUpExistenceChangedRunnable = new Runnable() {
         @Override
@@ -250,6 +256,7 @@ public class NotificationPanelView extends PanelView implements
         mFalsingManager = FalsingManager.getInstance(context);
 
         mSettingsObserver = new SettingsObserver(mHandler);
+        mLockPatternUtils = new LockPatternUtils(mContext);
 
         mQsOverscrollExpansionEnabled =
                 getResources().getBoolean(R.bool.config_enableQuickSettingsOverscrollExpansion);
@@ -541,10 +548,15 @@ public class NotificationPanelView extends PanelView implements
         requestLayout();
     }
 
+    private boolean isQSEventBlocked() {
+        return mLockPatternUtils.isSecure(KeyguardUpdateMonitor.getCurrentUser())
+            && mStatusBarLockedOnSecureKeyguard && mKeyguardOrShadeShowing;
+    }
+
     public void setQsExpansionEnabled(boolean qsExpansionEnabled) {
-        mQsExpansionEnabled = qsExpansionEnabled;
+        mQsExpansionEnabled = qsExpansionEnabled&& !isQSEventBlocked();
         if (mQs == null) return;
-        mQs.setHeaderClickable(qsExpansionEnabled);
+        mQs.setHeaderClickable(mQsExpansionEnabled);
     }
 
     @Override
@@ -1093,11 +1105,14 @@ public class NotificationPanelView extends PanelView implements
             boolean goingToFullShade) {
         int oldState = mStatusBarState;
         boolean keyguardShowing = statusBarState == StatusBarState.KEYGUARD;
+        boolean keyguardOrShadeShowing = statusBarState == StatusBarState.KEYGUARD
+                || statusBarState == StatusBarState.SHADE_LOCKED;
         setKeyguardStatusViewVisibility(statusBarState, keyguardFadingAway, goingToFullShade);
         setKeyguardBottomAreaVisibility(statusBarState, goingToFullShade);
 
         mStatusBarState = statusBarState;
         mKeyguardShowing = keyguardShowing;
+        mKeyguardOrShadeShowing = keyguardOrShadeShowing;
         if (mQs != null) {
             mQs.setKeyguardShowing(mKeyguardShowing);
         }
@@ -2527,6 +2542,9 @@ public class NotificationPanelView extends PanelView implements
                     Settings.System.STATUS_BAR_QUICK_QS_PULLDOWN), false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_SMART_PULLDOWN), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.STATUS_BAR_LOCKED_ON_SECURE_KEYGUARD),
+                    false, this, UserHandle.USER_ALL);	
             update();
         }
 
@@ -2552,6 +2570,9 @@ public class NotificationPanelView extends PanelView implements
                     UserHandle.USER_CURRENT);
             mQsSmartPullDown = Settings.System.getIntForUser(resolver,
                     Settings.System.QS_SMART_PULLDOWN, 0, UserHandle.USER_CURRENT);
+            mStatusBarLockedOnSecureKeyguard = Settings.Secure.getIntForUser(
+                    resolver, Settings.Secure.STATUS_BAR_LOCKED_ON_SECURE_KEYGUARD, 0,
+                    UserHandle.USER_CURRENT) == 1;
         }
     }
 
