@@ -107,4 +107,8 @@
 
     <!-- Whether device has dash charging support -->
     <bool name="config_hasDashCharger">false</bool>
+
+    <!-- Automatic brightness enhancements -->
+    <integer name="config_autoBrightnessBrighteningLightFastDebounce">500</integer>
+
 </resources>
