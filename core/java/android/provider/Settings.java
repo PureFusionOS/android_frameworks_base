@@ -3697,6 +3697,12 @@ public final class Settings {
          */
         public static final String BLUETOOTH_SHOW_BATTERY = "bluetooth_show_battery";
 
+	/**
+         * show the membar in recents
+         *  @hide
+         */
+        public static final String SYSTEMUI_RECENTS_MEM_DISPLAY = "systemui_recents_mem_display";
+
         /**
          * custom carrier label. The value is
          * String.
