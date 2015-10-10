@@ -14,17 +14,20 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-  <!-- Package Manager -->
-  <java-symbol type="array" name="config_disabledComponents" />
-  <java-symbol type="array" name="config_forceEnabledComponents" />
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Defines the shutdown options shown in the reboot dialog. -->
+    <array name="shutdown_reboot_options" translatable="false">
+        <item>@string/reboot_reboot</item>
+        <item>@string/reboot_soft</item>
+        <item>@string/reboot_recovery</item>
+        <item>@string/reboot_bootloader</item>
+    </array>
 
-  <!-- Reboot - Advanced Reboot -->
-  <java-symbol type="array" name="shutdown_reboot_options" />
-  <java-symbol type="array" name="shutdown_reboot_actions" />
-  <java-symbol type="bool" name="config_advanced_reboot" />
-  <java-symbol type="drawable" name="ic_lock_power_reboot" />
-  <java-symbol type="string" name="reboot_confirm" />
-  <java-symbol type="string" name="reboot_progress" />
-  <java-symbol type="string" name="global_action_reboot" />
+    <!-- Defines the shutdown actions passed to the kernel. -->
+    <string-array name="shutdown_reboot_actions" translatable="false">
+        <item></item>
+        <item>soft_reboot</item>
+        <item>recovery</item>
+        <item>bootloader</item>
+     </string-array>
 </resources>
