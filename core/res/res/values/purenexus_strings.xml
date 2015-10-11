@@ -62,4 +62,7 @@
     <!-- On-The-Go -->
     <string name="global_action_onthego">On-The-Go Mode</string>
 
+    <!-- kill app long press back -->
+    <string name="app_killed_message">App killed</string>
+
 </resources>

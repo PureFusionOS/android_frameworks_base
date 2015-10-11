@@ -51,4 +51,8 @@
         <item>org.telegram.messenger.plus</item>
         <item>com.snapchat.android</item>
     </string-array>
+
+    <!-- kill app long press back -->
+    <integer name="config_backKillTimeout">1000</integer>
+
 </resources>
