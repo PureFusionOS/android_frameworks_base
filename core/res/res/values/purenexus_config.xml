@@ -18,6 +18,9 @@
     <!-- Is Advanced Reboot enabled? -->
     <bool name="config_advanced_reboot">true</bool>
 
+    <!-- back kill timeout -->
+    <integer name="config_backKillTimeout">1000</integer>
+
     <!-- Whether doze should invert colors for notifications. If the RRO theme causes
     the NORMAL notification background to be dark and the text to be light, this boolean
     needs to be set to false, to prevent the doze notifications from being light -->

@@ -30,6 +30,10 @@
   <!-- Intent chooser -->
   <java-symbol type="id" name="filtered_item_container" />
 
+  <!-- Kill app back press -->
+  <java-symbol type="string" name="app_killed_message" />
+  <java-symbol type="integer" name="config_backKillTimeout" />
+
   <!-- Notification and battery light -->
   <java-symbol type="bool" name="config_multiColorNotificationLed" />
   <java-symbol type="bool" name="config_intrusiveBatteryLed" />
