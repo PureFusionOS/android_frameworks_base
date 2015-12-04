@@ -47,6 +47,9 @@
          Used to decide if we show pulse settings -->
     <bool name="config_ledCanPulse">true</bool>
 
+    <!-- If this is true, key chords can be used to take a screen record on the device. -->
+    <bool name="config_enableScreenrecordChord">true</bool>
+
     <!-- Vibrator pattern for notifications while alerts
          are disabled -->
     <integer-array name="config_notificationNoAlertsVibePattern">
