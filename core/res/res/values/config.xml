@@ -2230,7 +2230,8 @@
          on the current state of the device.
          Each item must be one of the following strings:
          "power" = Power off
-         "settings" = An action to launch settings
+         "screenshot" = Take screenshot
+         "screenrecord" = Take screen recording
          "airplane" = Airplane mode toggle
          "bugreport" = Take bug report, if available
          "torch" = Toggle torch
