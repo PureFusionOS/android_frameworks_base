@@ -4362,10 +4362,10 @@ public final class Settings {
         public static final String VIBRATE_ON_DISCONNECT = "vibrate_on_disconnect";
 
         /**
-        * Enable proxi check for wake keys - must be implemented in a device
-        * KeyHandler
-        * @hide
-        */
+         * Enable proxi check for wake keys - must be implemented in a device
+         * KeyHandler
+         * @hide
+         */
         public static final String DEVICE_PROXI_CHECK_ENABLED = "device_proxi_check_enabled";
 
         /**
