@@ -29,7 +29,6 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.RemoteException;
 import android.net.ConnectivityManager;
-import android.net.ConnectivityManager;
 import android.view.IWindowManager;
 import android.view.WindowManagerGlobal;
 import android.net.NetworkInfo;
