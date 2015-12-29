@@ -285,7 +285,11 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
             attrs.windowAnimations = R.style.PowerMenuTopAnimation;
             attrs.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
         }
-            
+        if (powermenuAnimations == 3) {
+                attrs.windowAnimations = R.style.PowerMenuRotateAnimation;
+                attrs.gravity = Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL;
+        }
+
         mDialog.getWindow().setAttributes(attrs);
         mDialog.show();
         mWindowManagerFuncs.onGlobalActionsShown();
