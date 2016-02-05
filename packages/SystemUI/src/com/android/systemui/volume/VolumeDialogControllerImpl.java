@@ -111,6 +111,8 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
     private UserActivityListener mUserActivityListener;
     private ToneGenerator mToneGenerators[];
 
+    private ToneGenerator mToneGenerators[];
+
     public VolumeDialogControllerImpl(Context context) {
         mContext = context.getApplicationContext();
         Events.writeEvent(mContext, Events.EVENT_COLLECTION_STARTED);
@@ -704,6 +706,7 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+<<<<<<< HEAD
                 case VOLUME_CHANGED:
                     onVolumeChangedW(msg.arg1, msg.arg2);
                     break;
@@ -894,6 +897,60 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
                         entry.getKey().onAccessibilityModeChanged(show);
                     }
                 });
+            }
+        }
+    }
+
+    protected void onPlaySoundW(int streamType, int flags) {
+
+        if (mWorker.hasMessages(W.STOP_SOUNDS)) {
+            mWorker.removeMessages(W.STOP_SOUNDS);
+            // Force stop right now
+            onStopSoundsW();
+        }
+
+        ToneGenerator toneGen = getOrCreateToneGeneratorW(streamType);
+        if (toneGen != null) {
+            toneGen.startTone(ToneGenerator.TONE_PROP_BEEP);
+            mWorker.sendMessageDelayed(mWorker.obtainMessage(W.STOP_SOUNDS), BEEP_DURATION);
+        }
+
+        mWorker.removeMessages(W.FREE_RESOURCES);
+        mWorker.sendMessageDelayed(mWorker.obtainMessage(W.FREE_RESOURCES), FREE_DELAY);
+    }
+
+    protected void onStopSoundsW() {
+        int numStreamTypes = AudioSystem.getNumStreamTypes();
+        for (int i = numStreamTypes - 1; i >= 0; i--) {
+            ToneGenerator toneGen = mToneGenerators[i];
+            if (toneGen != null) {
+                toneGen.stopTone();
+            }
+        }
+    }
+
+    private ToneGenerator getOrCreateToneGeneratorW(int streamType) {
+        if (mToneGenerators[streamType] == null) {
+            try {
+                mToneGenerators[streamType] = new ToneGenerator(streamType,
+                        ToneGenerator.MAX_VOLUME);
+            } catch (RuntimeException e) {
+                if (false) {
+                    Log.d(TAG, "ToneGenerator constructor failed with "
+                            + "RuntimeException: " + e);
+                }
+            }
+        }
+        return mToneGenerators[streamType];
+    }
+
+    protected void onFreeResourcesW() {
+        synchronized (this) {
+            for (int i = mToneGenerators.length - 1; i >= 0; i--) {
+                if (mToneGenerators[i] != null) {
+                    mToneGenerators[i].release();
+                }
+                mToneGenerators[i] = null;
             }
         }
     }
