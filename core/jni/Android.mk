@@ -284,7 +284,6 @@ LOCAL_CFLAGS += -Wall -Wno-error=deprecated-declarations -Wno-unused -Wno-unreac
 # -Wno-c++11-extensions: Clang warns about Skia using the C++11 override keyword, but this project
 #                        is not being compiled with that level. Remove once this has changed.
 LOCAL_CLANG_CFLAGS += -Wno-c++11-extensions
-LOCAL_CLANG := true
 
 include $(BUILD_SHARED_LIBRARY)
 
