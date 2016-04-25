@@ -1401,6 +1401,7 @@ import java.util.Map;
     <td>16+</td>
     <td>(16+)</td>
     <td>(16+)</td>
+    <td>(16+)</td>
     <td>-</td>
     <td class=fn>{@link #setVideoScalingMode setVideoScalingMode}</td>
     <td>&#9094;</td>
@@ -3114,15 +3115,10 @@ final public class MediaCodec {
     /**
      * If a surface has been specified in a previous call to {@link #configure}
      * specifies the scaling mode to use. The default is "scale to fit".
-     * <p class=note>
-     * The scaling mode may be reset to the <strong>default</strong> each time an
+     * <p class=note>The scaling mode may be reset to the <strong>default</strong> each time an
      * {@link #INFO_OUTPUT_BUFFERS_CHANGED} event is received from the codec; therefore, the client
      * must call this method after every buffer change event (and before the first output buffer is
-     * released for rendering) to ensure consistent scaling mode.
-     * <p class=note>
-     * Since the {@link #INFO_OUTPUT_BUFFERS_CHANGED} event is deprecated, this can also be done
-     * after each {@link #INFO_OUTPUT_FORMAT_CHANGED} event.
-     *
+     * released for rendering) to ensure consistent scaling mode.</p>
      * @throws IllegalArgumentException if mode is not recognized.
      * @throws IllegalStateException if in the Released state.
      */
