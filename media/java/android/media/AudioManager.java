@@ -2790,6 +2790,13 @@ public class AudioManager {
      */
     public static abstract class AudioRecordingCallback {
         /**
+         * This method is deprecated, override {@link #onRecordingConfigChanged(List)} instead.
+         * @param configs
+         * @removed
+         */
+        @Deprecated
+        public void onRecordingConfigChanged(AudioRecordingConfiguration[] configs) {}
+        /**
          * Called whenever the device recording configuration has changed.
          * @param configs list containing the results of
          *      {@link AudioManager#getActiveRecordingConfigurations()}.
