@@ -2145,7 +2145,7 @@ public final class MediaCodecInfo {
                                 case CodecProfileLevel.MPEG2LevelLL:
                                     FR = 30; W = 22; H =  18; MBPS =  11880; FS =   396; BR =  4000; break;
                                 case CodecProfileLevel.MPEG2LevelML:
-                                    FR = 30; W = 45; H =  36; MBPS =  40500; FS =  1620; BR = 15000; break;
+                                    FR = 30; W = 45; H =  36; MBPS =  48600; FS =  1620; BR = 15000; break;
                                 case CodecProfileLevel.MPEG2LevelH14:
                                     FR = 60; W = 90; H =  68; MBPS = 183600; FS =  6120; BR = 60000; break;
                                 case CodecProfileLevel.MPEG2LevelHL:
@@ -2915,10 +2915,14 @@ public final class MediaCodecInfo {
         public static final int MPEG4Level1      = 0x04;
         public static final int MPEG4Level2      = 0x08;
         public static final int MPEG4Level3      = 0x10;
+
+        /** @hide */
         public static final int MPEG4Level3b     = 0x18;
         public static final int MPEG4Level4      = 0x20;
         public static final int MPEG4Level4a     = 0x40;
         public static final int MPEG4Level5      = 0x80;
+
+        /** @hide */
         public static final int MPEG4Level6      = 0x100;
 
         // from OMX_VIDEO_MPEG2PROFILETYPE
@@ -2934,6 +2938,8 @@ public final class MediaCodecInfo {
         public static final int MPEG2LevelML     = 0x01;
         public static final int MPEG2LevelH14    = 0x02;
         public static final int MPEG2LevelHL     = 0x03;
+
+        /** @hide */
         public static final int MPEG2LevelHP     = 0x04;
 
         // from OMX_AUDIO_AACPROFILETYPE
