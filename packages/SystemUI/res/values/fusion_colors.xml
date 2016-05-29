@@ -36,5 +36,20 @@
     <!-- Recents Memory bar -->
     <color name="recents_memory_progress_overall">@*android:color/resize_shadow_start_color</color>
     <color name="recents_memory_progress_free">@*android:color/accent_device_default_light</color>
+    
+    <!-- Screenshot crop and share -->
+    <color name="crop_handle">#E0E0E0</color>
+    <color name="crop_frame">#E0E0E0</color>
+    <color name="crop_guide">#E0E0E0</color>
+    <color name="crop_draw_color_1">@android:color/white</color>
+    <color name="crop_draw_color_2">@android:color/black</color>
+    <color name="crop_draw_color_3">#9E9E9E</color>
+    <color name="crop_draw_color_4">#F44336</color>
+    <color name="crop_draw_color_5">#4CAF50</color>
+    <color name="crop_draw_color_6">#2196F3</color>
+    <color name="crop_draw_color_7">#FF9800</color>
+    <color name="crop_draw_color_8">#FFEB3B</color>
+    <color name="ripple_material_light">#40000000</color>
+    <color name="ripple_material_dark">#40ffffff</color>
 
 </resources>
