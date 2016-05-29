@@ -4118,8 +4118,6 @@ public final class Settings {
         public static final String VOLUME_LINK_NOTIFICATION = "volume_link_notification";
 
         /**
-
-        /**
          * Whether to display roaming indicator for roaming signal connection
          * @hide
          */
@@ -4130,6 +4128,18 @@ public final class Settings {
          * @hide
          */
         public static final String SHOW_FOURG_ICON = "show_fourg_icon";
+		
+        /**
+         * Define if screenshot crop & share is active
+         * @hide
+         */
+        public static final String SCREENSHOT_CROP_AND_SHARE = "screenshot_crop_and_share";
+
+        /**
+         * Define the crop behavior of screenshot crop & share
+         * @hide
+         */
+        public static final String SCREENSHOT_CROP_BEHAVIOR = "screenshot_crop_behavior";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
