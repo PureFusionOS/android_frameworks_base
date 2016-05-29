@@ -26,7 +26,7 @@
     <!-- Membar spacing -->
     <dimen name="recents_membar_spacing">12dp</dimen>
 
-    <!-- QS Hide -->
+    <!-- QS Hide and Screenshot -->
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="text_size_m">24sp</dimen>
