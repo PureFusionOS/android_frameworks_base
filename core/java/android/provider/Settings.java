@@ -3972,6 +3972,12 @@ public final class Settings {
         public static final String SWAP_VOLUME_BUTTONS = "swap_volume_buttons";
 
         /**
+         * Toast icon Switch
+         * @hide
+         */
+        public static final String TOAST_ICON = "toast_icon";
+
+        /**
          * Whether the phone volume up / down effect should be played
          * @hide
          */
