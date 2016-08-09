@@ -3632,6 +3632,12 @@ public final class Settings {
         public static final String BATTERY_LOW_NOTIFICATION = "battery_low_notification";
 
         /**
+         * Enable\Disable Bluetooth Battery bar
+         * @hide
+         */
+        public static final String BLUETOOTH_SHOW_BATTERY = "bluetooth_show_battery";
+
+        /**
          * custom carrier label. The value is
          * String.
          * @hide
