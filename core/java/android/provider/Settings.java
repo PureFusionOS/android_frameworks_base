@@ -4446,6 +4446,12 @@ public final class Settings {
         public static final String TASK_MANAGER_RIGHT_BUTTON = "task_manager_right_button";
 
         /**
+         * Disable dashboard suggestions in Settings
+         * @hide
+         */
+        public static final String DISABLE_SETTINGS_SUGGESTIONS = "disable_settings_suggestions";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
