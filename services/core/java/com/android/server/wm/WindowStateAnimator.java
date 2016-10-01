@@ -1098,7 +1098,7 @@ class WindowStateAnimator {
             mDtDy = tmpFloats[Matrix.MSCALE_Y] * ratio;
             float x = tmpFloats[Matrix.MTRANS_X] * ratio + pendingX;
             float y = tmpFloats[Matrix.MTRANS_Y] * ratio + pendingY;
-            mWin.mShownPosition.set((int) x, (int) y);
+            mWin.mShownPosition.set(Math.round(x), Math.round(y));
 
             // Now set the alpha...  but because our current hardware
             // can't do alpha transformation on a non-opaque surface,
@@ -1191,7 +1191,7 @@ class WindowStateAnimator {
             mDtDy = tmpFloats[Matrix.MSCALE_Y] * ratio;
             float x = tmpFloats[Matrix.MTRANS_X] * ratio + pendingX;
             float y = tmpFloats[Matrix.MTRANS_Y]* ratio + pendingY;
-            mWin.mShownPosition.set((int) x, (int) y);
+            mWin.mShownPosition.set(Math.round(x), Math.round(y));
 
             mShownAlpha = mAlpha;
         } else {
