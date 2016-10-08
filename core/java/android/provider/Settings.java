@@ -3723,6 +3723,12 @@ public final class Settings {
         public static final String DOUBLE_TAP_SLEEP_NAVBAR = "double_tap_sleep_navbar";
 
         /**
+         * Show the four 4g network icon instead of lte
+         * @hide
+         */
+        public static final String SHOW_LTE_FOURGEE = "show_lte_fourgee";
+
+        /**
          * Enable double tap gesture anywhere on the lock screen put device to sleep
          * @hide
          */
