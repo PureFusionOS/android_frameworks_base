@@ -33,4 +33,7 @@
   <java-symbol type="array" name="shutdown_reboot_actions" />
   <java-symbol type="string" name="global_action_reboot" />
 
+  <!-- Whether notify fingerprint client of successful cancelled authentication -->
+  <java-symbol type="bool" name="config_notifyClientOnFingerprintCancelSuccess" />
+
 </resources>
