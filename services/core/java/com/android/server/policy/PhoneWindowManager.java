@@ -166,6 +166,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * WindowManagerPolicy implementation for the Android phone UI.  This
@@ -1594,10 +1595,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     Runnable mBackLongPress = new Runnable() {
         public void run() {
-            if (ActionUtils.killForegroundApp(mContext, mCurrentUserId)) {
+            String killResult = ActionUtils.killForegroundApp(mContext, mCurrentUserId);
+            if (killResult != null) {
                 performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
-                Toast.makeText(mContext, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
             }
+            Toast.makeText(mContext, killResult == null
+                ? mContext.getString(R.string.no_app_killed_message)
+                : String.format(Locale.getDefault(), mContext.getString(R.string.app_killed_message),
+                    killResult), Toast.LENGTH_SHORT).show();
         }
     };
 

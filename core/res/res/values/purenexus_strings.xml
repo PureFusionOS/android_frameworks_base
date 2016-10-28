@@ -40,7 +40,8 @@
     <string name="global_action_voicesearch">Voice Search</string>
 
     <!-- Long-press back kill application -->
-    <string name="app_killed_message">Application killed</string>
+    <string name="app_killed_message"><xliff:g id="string">%s</xliff:g> killed</string>
+    <string name="no_app_killed_message">Nothing to kill</string>
 
     <!-- ADB over network notification -->
     <string name="adb_net_active_notification_title">ADB over network enabled</string>
