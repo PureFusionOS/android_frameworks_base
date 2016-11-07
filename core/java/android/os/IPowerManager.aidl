@@ -73,6 +73,9 @@ interface IPowerManager
     void setKeyboardVisibility(boolean visible);
 
     void setKeyboardLight(boolean on, int key);
+  
+    // blocked wakelock support
+    String getSeenWakeLocks();
 
     // update the uids being synchronized by network socket request manager
     void updateBlockedUids(int uid, boolean isBlocked);
