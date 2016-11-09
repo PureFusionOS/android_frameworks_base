@@ -21,6 +21,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
+import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.app.Notification;
 import android.app.Notification.BigPictureStyle;
@@ -274,37 +275,47 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
             Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
             if(!mIsScreenshotCropShareEnabled){
-            // Create a share intent
-            String subjectDate = DateFormat.getDateTimeInstance().format(new Date(mImageTime));
-            String subject = String.format(SCREENSHOT_SHARE_SUBJECT_TEMPLATE, subjectDate);
-            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-            sharingIntent.setType("image/png");
-            sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
-            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+                // Create a share intent
+                String subjectDate = DateFormat.getDateTimeInstance().format(new Date(mImageTime));
+                String subject = String.format(SCREENSHOT_SHARE_SUBJECT_TEMPLATE, subjectDate);
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("image/png");
+                sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
 
-            // Create a share action for the notification
-            PendingIntent chooseAction = PendingIntent.getBroadcast(context, 0,
-                    new Intent(context, GlobalScreenshot.TargetChosenReceiver.class),
-                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-            Intent chooserIntent = Intent.createChooser(sharingIntent, null,
-                    chooseAction.getIntentSender())
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent shareAction = PendingIntent.getActivity(context, 0, chooserIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT);
-            Notification.Action.Builder shareActionBuilder = new Notification.Action.Builder(
-                    R.drawable.ic_screenshot_share,
-                    r.getString(com.android.internal.R.string.share), shareAction);
-            mNotificationBuilder.addAction(shareActionBuilder.build());
+                // Create a share action for the notification
+                PendingIntent chooseAction = PendingIntent.getBroadcast(context, 0,
+                        new Intent(context, GlobalScreenshot.TargetChosenReceiver.class),
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                Intent chooserIntent = Intent.createChooser(sharingIntent, null,
+                        chooseAction.getIntentSender())
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                PendingIntent shareAction = PendingIntent.getActivity(context, 0, chooserIntent,
+                        PendingIntent.FLAG_CANCEL_CURRENT);
+                Notification.Action.Builder shareActionBuilder = new Notification.Action.Builder(
+                        R.drawable.ic_screenshot_share,
+                        r.getString(com.android.internal.R.string.share), shareAction);
+                mNotificationBuilder.addAction(shareActionBuilder.build());
 
-            // Create a delete action for the notification
-            PendingIntent deleteAction = PendingIntent.getBroadcast(context,  0,
-                    new Intent(context, GlobalScreenshot.DeleteScreenshotReceiver.class)
+                // Create an edit action for the notification
+                final Intent editIntent = new Intent(context, GlobalScreenshot.EditScreenshotActivity.class);
+                editIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+                final PendingIntent editAction = PendingIntent.getActivity(context,  0,
+                            editIntent.putExtra(GlobalScreenshot.SCREENSHOT_FILE_PATH, mImageFilePath),
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                mNotificationBuilder.addAction(R.drawable.ic_image_edit,
+                        r.getString(R.string.action_edit), editAction);
+
+                // Create a delete action for the notification
+                PendingIntent deleteAction = PendingIntent.getBroadcast(context,  0,
+                        new Intent(context, GlobalScreenshot.DeleteScreenshotReceiver.class)
                             .putExtra(GlobalScreenshot.SCREENSHOT_URI_ID, uri != null ? uri.toString() : null),
-                    PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-            Notification.Action.Builder deleteActionBuilder = new Notification.Action.Builder(
-                    R.drawable.ic_screenshot_delete,
-                    r.getString(com.android.internal.R.string.delete), deleteAction);
-            mNotificationBuilder.addAction(deleteActionBuilder.build());
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                Notification.Action.Builder deleteActionBuilder = new Notification.Action.Builder(
+                        R.drawable.ic_screenshot_delete,
+                        r.getString(com.android.internal.R.string.delete), deleteAction);
+                mNotificationBuilder.addAction(deleteActionBuilder.build());
             }
             mParams.imageUri = uri;
             mParams.image = null;
@@ -368,7 +379,7 @@ class SaveImageInBackgroundTask extends AsyncTask<Void, Void, Void> {
                         mNotificationBuilder.build());
             } else{
                 Intent startIntent = new Intent(mParams.context, com.android.systemui.screenshot.ScreenshotEditor.class);
-                startIntent.putExtra("screenshotPath", mImageFilePath);
+                startIntent.putExtra(GlobalScreenshot.SCREENSHOT_FILE_PATH, mImageFilePath);
                 mParams.context.startService(startIntent);
             }
         }
@@ -415,6 +426,7 @@ class DeleteImageInBackgroundTask extends AsyncTask<Uri, Void, Void> {
 
 class GlobalScreenshot {
     static final String SCREENSHOT_URI_ID = "android:screenshot_uri_id";
+    public static final String SCREENSHOT_FILE_PATH = "android:screenshot_file_path";
 
     private static final int SCREENSHOT_FLASH_TO_PEAK_DURATION = 130;
     private static final int SCREENSHOT_DROP_IN_DURATION = 430;
@@ -943,6 +955,29 @@ class GlobalScreenshot {
 
             // And delete the image from the media store
             new DeleteImageInBackgroundTask(context).execute(uri);
+        }
+    }
+
+    // must be an activity to close the notification drawer
+    public static class EditScreenshotActivity extends Activity {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            final Intent intent = getIntent();
+            if (!intent.hasExtra(SCREENSHOT_FILE_PATH)) {
+                return;
+            }
+
+            // Clear the notification
+            final NotificationManager nm =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            final String imageFilePath = intent.getStringExtra(SCREENSHOT_FILE_PATH);
+            nm.cancel(R.id.notification_screenshot);
+
+            Intent startIntent = new Intent(this, com.android.systemui.screenshot.ScreenshotEditor.class);
+            startIntent.putExtra(SCREENSHOT_FILE_PATH, imageFilePath);
+            startService(startIntent);
+            finish();
         }
     }
 }
