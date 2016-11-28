@@ -28,6 +28,9 @@
     <dimen name="qs_panel_top_offset_normal">80dp</dimen>
     <dimen name="qs_panel_top_offset_header">110dp</dimen>
 
+    <!-- QS title visibility -->
+    <dimen name="qs_tile_height_wo_label">48dp</dimen>
+
     <!-- OPA home dimens -->
     <dimen name="halo_inner_radius">10.0dip</dimen>
     <dimen name="halo_thickness">1.0dip</dimen>
