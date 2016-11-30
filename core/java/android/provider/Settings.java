@@ -3598,6 +3598,12 @@ public final class Settings {
          * @hide
          */
 
+          /**
+          * Whether to show the negociated charger current in the lockscreen
+          * @hide
+          */
+         public static final String LOCKSCREEN_CHARGING_CURRENT = "lockscreen_charging_current";
+ 
         /**
          * Control the type of rotation which can be performed using the accelerometer
          * if ACCELEROMETER_ROTATION is enabled.
