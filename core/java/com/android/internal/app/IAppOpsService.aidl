@@ -47,4 +47,25 @@ interface IAppOpsService {
     void setUserRestrictions(in Bundle restrictions, IBinder token, int userHandle);
     void setUserRestriction(int code, boolean restricted, IBinder token, int userHandle, in String[] exceptionPackages);
     void removeUser(int userHandle);
+
+    boolean isControlAllowed(int code, String packageName);
+
+    // Privacy guard methods
+    boolean getPrivacyGuardSettingForPackage(int uid, String packageName);
+    void setPrivacyGuardSettingForPackage(int uid, String packageName, boolean state);
+
+    // AppOps accounting
+    void resetCounters();
+
+    // Pacifier methods
+    Map getPacifierInfo(int reqUserId);
+    void addPacifierActionInfo(int reqUserId, String packageName, int uid, String actionName);
+    void updatePacifierModeFromUid(int reqUserId, String packageName, int uid, int mode);
+    void removePacifierPackageInfoFromUid(int reqUserId, String packageName, int uid);
+
+    // Warden methods
+    Map getWardenInfo(int reqUserId);
+    void addWardenPackageInfo(int reqUserId, String packageName, int uid);
+    void updateWardenModeFromUid(int reqUserId, String packageName, int uid, int mode);
+    void removeWardenPackageInfoFromUid(int reqUserId, String packageName, int uid);
 }

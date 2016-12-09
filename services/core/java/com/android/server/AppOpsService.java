@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2015-2016 The MoKee Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +73,11 @@ import com.android.internal.util.FastXmlSerializer;
 import com.android.internal.util.Preconditions;
 import com.android.internal.util.XmlUtils;
 
+import com.mokee.aegis.PacifierInfo;
+import com.mokee.aegis.PacifierInfo.PacifierInfoCache;
+import com.mokee.aegis.WardenInfo;
+import com.mokee.aegis.WardenInfo.WardenInfoCache;
+
 import libcore.util.EmptyArray;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -107,6 +113,10 @@ public class AppOpsService extends IAppOpsService.Stub {
     };
 
     private final SparseArray<UidState> mUidStates = new SparseArray<>();
+
+    private final PacifierInfoCache mPacifierInfoCache = PacifierInfoCache.getInstance();
+
+    private final WardenInfoCache mWardenInfoCache = WardenInfoCache.getInstance();
 
     /*
      * These are app op restrictions imposed per user from various parties.
@@ -2443,4 +2453,116 @@ public class AppOpsService extends IAppOpsService.Stub {
             return true;
         }
     }
+
+    private void broadcastOpIfNeeded(int op) {
+        switch (op) {
+            case AppOpsManager.OP_SU:
+                mHandler.post(mSuSessionChangedRunner);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void readPolicy() {
+        if (mStrictEnable) {
+            mPolicy = new AppOpsPolicy(new File(DEFAULT_POLICY_FILE), mContext);
+            mPolicy.readPolicy();
+            mPolicy.debugPoilcy();
+        } else {
+            mPolicy = null;
+        }
+    }
+
+    public boolean isControlAllowed(int code, String packageName) {
+        boolean isShow = true;
+        if (mPolicy != null) {
+            isShow = mPolicy.isControlAllowed(code, packageName);
+        }
+        return isShow;
+    }
+
+    @Override
+    public boolean getPrivacyGuardSettingForPackage(int uid, String packageName) {
+        for (int op : PRIVACY_GUARD_OP_STATES) {
+            int switchOp = AppOpsManager.opToSwitch(op);
+            int mode = checkOperation(op, uid, packageName);
+            if (mode != AppOpsManager.MODE_ALLOWED && mode != AppOpsManager.MODE_IGNORED) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void setPrivacyGuardSettingForPackage(int uid, String packageName, boolean state) {
+        for (int op : PRIVACY_GUARD_OP_STATES) {
+            int switchOp = AppOpsManager.opToSwitch(op);
+            setMode(switchOp, uid, packageName, state
+                    ? AppOpsManager.MODE_ASK : AppOpsManager.MODE_ALLOWED);
+        }
+    }
+
+    @Override
+    public void resetCounters() {
+        mContext.enforcePermission(android.Manifest.permission.UPDATE_APP_OPS_STATS,
+                Binder.getCallingPid(), Binder.getCallingUid(), null);
+        synchronized (this) {
+            for (int i=0; i<mUidStates.size(); i++) {
+                final UidState uidState = mUidStates.valueAt(i);
+                for (Map.Entry<String, Ops> ent : uidState.pkgOps.entrySet()) {
+                    String packageName = ent.getKey();
+                    Ops pkgOps = ent.getValue();
+                    for (int j=0; j<pkgOps.size(); j++) {
+                        Op curOp = pkgOps.valueAt(j);
+                        curOp.allowedCount = 0;
+                        curOp.ignoredCount = 0;
+                    }
+                }
+            }
+            // ensure the counter reset persists
+            scheduleWriteLocked();
+        }
+    }
+
+    @Override
+    public synchronized Map<String, PacifierInfo.PackageInfo> getPacifierInfo(int userId) {
+        return mPacifierInfoCache.getPacifierInfo(userId);
+    }
+
+    @Override
+    public void addPacifierActionInfo(int mUserId, String mPackageName, int mUid, String mActionName) {
+        mPacifierInfoCache.addActionInfo(mUserId, mPackageName, mUid, mActionName);
+    }
+
+    @Override
+    public void updatePacifierModeFromUid(int mUserId, String mPackageName, int mUid, int mode) {
+        mPacifierInfoCache.updateModeFromUid(mUserId, mPackageName, mUid, mode);
+    }
+
+    @Override
+    public void removePacifierPackageInfoFromUid(int mUserId, String mPackageName, int uid) {
+        mPacifierInfoCache.removePackageInfoFromUid(mUserId, mPackageName, uid);
+    }
+
+    @Override
+    public synchronized Map<String, WardenInfo.PackageInfo> getWardenInfo(int userId) {
+        return mWardenInfoCache.getWardenInfo(userId);
+    }
+
+    @Override
+    public void removeWardenPackageInfoFromUid(int mUserId, String mPackageName, int uid) {
+        mWardenInfoCache.removePackageInfoFromUid(mUserId, mPackageName, uid);
+    }
+
+    @Override
+    public void updateWardenModeFromUid(int mUserId, String mPackageName, int mUid, int mode) {
+        mWardenInfoCache.updateModeFromUid(mUserId, mPackageName, mUid, mode);
+    }
+
+    @Override
+    public void addWardenPackageInfo(int mUserId, String mPackageName, int mUid) {
+        mWardenInfoCache.addPackageInfo(mUserId, mPackageName, mUid);
+    }
+
 }
