@@ -82,4 +82,5 @@ interface IStatusBarService
      * PureFusionOS
      */
     void toggleCameraFlash();
+    void restartUI();
 }
