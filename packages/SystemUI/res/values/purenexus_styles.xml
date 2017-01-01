@@ -23,6 +23,11 @@
         <item name="android:textColor">@color/status_bar_carrier_color</item>
     </style>
 
+    <!-- Switch bar text appearance -->
+    <style name="TextAppearance.SwitchBar" parent="@android:style/TextAppearance.Material.Title">
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+    </style>
+
     <!-- Base battery metter drawable style -->
     <style name="BatteryMeterViewDrawable">
         <!-- Gravity used for positioning text within the battery meter -->
