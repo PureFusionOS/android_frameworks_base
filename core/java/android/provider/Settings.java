@@ -3891,6 +3891,12 @@ public final class Settings {
                 "notification_light_screen_on_enable";
 
         /**
+         * Whether to enable the pixel navbar animation
+         * @hide
+         */
+        public static final String PIXEL_NAV_ANIMATION = "pixel_nav_animation";
+
+        /**
          * Quick Settings number of columns
          * @hide
          */
