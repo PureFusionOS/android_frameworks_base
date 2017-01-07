@@ -143,4 +143,8 @@
 
   <!-- Pocket bridge -->
   <java-symbol type="string" name="config_pocketBridgeSysfsInpocket" />
+
+  <!-- sRGB mode -->
+  <java-symbol type="string" name="config_srgb_path" />
+
 </resources>
