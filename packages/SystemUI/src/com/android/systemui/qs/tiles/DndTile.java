@@ -105,7 +105,7 @@ public class DndTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     public Intent getLongClickIntent() {
-        return ZEN_SETTINGS;
+        return null;
     }
 
     @Override
@@ -125,6 +125,15 @@ public class DndTile extends QSTile<QSTile.BooleanState> {
             showDetail(true);
             int zen = Prefs.getInt(mContext, Prefs.Key.DND_FAVORITE_ZEN, Global.ZEN_MODE_ALARMS);
             mController.setZen(zen, null, TAG);
+        }
+    }
+
+    @Override
+    public void handleLongClick() {
+        if (mState.value) {
+            showDetail(true);
+        } else {
+            mHost.startActivityDismissingKeyguard(ZEN_SETTINGS);
         }
     }
 
