@@ -74,4 +74,6 @@ interface IPowerManager
 
     void setKeyboardLight(boolean on, int key);
 
+    // update the uids being synchronized by network socket request manager
+    void updateBlockedUids(int uid, boolean isBlocked);
 }
