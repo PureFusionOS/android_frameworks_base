@@ -9843,6 +9843,12 @@ public final class Settings {
         public static final String WAKE_WHEN_PLUGGED_OR_UNPLUGGED = "wake_when_plugged_or_unplugged";
 
         /**
+         * Audio focus mode for ringtones when a wired headset is connected
+         * @hide
+         */
+        public static final String WIRED_RINGTONE_FOCUS_MODE = "wired_ringtone_focus_mode";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
