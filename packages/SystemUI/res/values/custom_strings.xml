@@ -26,6 +26,12 @@
 
     <!-- PiP Tile -->
     <string name="quick_settings_pip_label">PiP</string>
+    
+    <!-- ADB Over Network -->
+    <string name="quick_settings_network_adb_enabled_label">Enabled</string>
+    <string name="quick_settings_network_adb_disabled_label">Disabled</string>
+    <string name="quick_settings_network_adb_label">ADB over network</string>
+    <string name="quick_settings_network_adb_toast">USB debugging is not enabled</string>
 
     <!-- SysUI Tuner -->
     <string name="statusbar_icons_blacklist">Status bar icons</string>
