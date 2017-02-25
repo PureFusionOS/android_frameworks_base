@@ -208,4 +208,7 @@
   <!-- kill app long press back -->
   <java-symbol type="string" name="app_killed_message" />
 
+  <!-- OmniJaws icon -->
+  <java-symbol type="drawable" name="ic_qs_weather_default_on" />
+
 </resources>

@@ -3977,6 +3977,8 @@ message MetricsEvent {
    // PureFusionOS 
    FUSION = 1000;
     LOCKSCREEN_WEATHER_SETTINGS = 998;
+    OMNI_QS_WEATHER = 1001;
+    OMNI_QS_WEATHER_DETAILS = 1002;
 
     // Add new aosp constants above this line.
     // END OF AOSP CONSTANTS
