@@ -133,4 +133,7 @@
     <string name="stream_title_alarm">Alarm</string>
     <string name="stream_title_notification">Notification</string>
     <string name="stream_title_bluetooth">Bluetooth</string>
+
+    <!-- volte icon switch -->
+    <string name="status_bar_volte">VOLTE</string>
 </resources>
