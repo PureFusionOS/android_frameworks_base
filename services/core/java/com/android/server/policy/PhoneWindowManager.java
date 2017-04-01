@@ -1898,12 +1898,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
 
         // Initialise Keypress Boost
-        lIsPerfBoostEnabled = context.getResources().getBoolean(
-                com.android.internal.R.bool.config_enableKeypressBoost);
         mBoostParamValWeak = context.getResources().getIntArray(
-                com.android.internal.R.array.keypressboost_weak_param_value);
+                com.android.internal.R.array.qboost_weak_param_value);
         mBoostParamValStrong = context.getResources().getIntArray(
-                com.android.internal.R.array.keypressboost_strong_param_value);
+                com.android.internal.R.array.qboost_strong_param_value);
+        lIsPerfBoostEnabled = mBoostParamValWeak.length != 0
+                && mBoostParamValStrong.length != 0;
         if (lIsPerfBoostEnabled) {
             mPerf = new BoostFramework();
         }
@@ -6311,8 +6311,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         final boolean canceled = event.isCanceled();
         final int keyCode = event.getKeyCode();
 
+        int flags=0;
+        final int source = event.getSource();
         final int repeatCount = event.getRepeatCount();
         final boolean longPress = (flags & KeyEvent.FLAG_LONG_PRESS) != 0;
+        final boolean isCustomSource = source == InputDevice.SOURCE_CUSTOM;
 
         final boolean isInjected = (policyFlags & WindowManagerPolicy.FLAG_INJECTED) != 0;
 
