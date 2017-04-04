@@ -2726,4 +2726,8 @@
          true will use SystemClock.elapsedRealtimeNanos() to set timestamp. -->
     <bool name="config_useSystemClockforRotationSensor">false</bool>
 
+    <integer name="config_buttonBrightnessSettingDefault">255</integer>
+    <integer name="config_keyboardBrightnessSettingDefault">0</integer>
+    <bool name="config_deviceHasVariableButtonBrightness">false</bool>
+
 </resources>
