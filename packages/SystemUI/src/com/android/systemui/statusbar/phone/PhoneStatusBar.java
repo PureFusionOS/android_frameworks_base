@@ -520,7 +520,10 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_TILE_TITLE_VISIBILITY),
                     false, this, UserHandle.USER_ALL);
-            update();
+           resolver.registerContentObserver(Settings.System.getUriFor(
+                  Settings.System.NAV_BAR_DYNAMIC),
+                  false, this, UserHandle.USER_ALL);
+                update();
         }
 
         @Override
