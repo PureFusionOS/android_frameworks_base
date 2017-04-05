@@ -23,6 +23,7 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources.Theme;
@@ -115,7 +116,26 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.android.internal.utils.du.DUSystemReceiver;
+
 public final class SystemServer {
+
+    StatusBarManagerService statusBar = null;
+
+    private static final String INTENT_RESTART_SYSTEMUI = "restart_systemui";
+
+    private DUSystemReceiver mDUReceiver = new DUSystemReceiver() {
+        @Override
+        protected void onSecureReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action == null || statusBar == null)
+                return;
+            if (INTENT_RESTART_SYSTEMUI.equals(action)) {
+                statusBar.restartUI();
+            }
+        }
+    };
+
     private static final String TAG = "SystemServer";
 
     private static final String ENCRYPTING_STATE = "trigger_restart_min_framework";
@@ -703,7 +723,6 @@ public final class SystemServer {
             Slog.e("System", "************ Failure starting core service", e);
         }
 
-        StatusBarManagerService statusBar = null;
         INotificationManager notification = null;
         LocationManagerService location = null;
         CountryDetectorService countryDetector = null;
@@ -799,6 +818,9 @@ public final class SystemServer {
                 try {
                     statusBar = new StatusBarManagerService(context, wm);
                     ServiceManager.addService(Context.STATUS_BAR_SERVICE, statusBar);
+                    IntentFilter filter = new IntentFilter();
+                    filter.addAction(INTENT_RESTART_SYSTEMUI);
+                    context.registerReceiver(mDUReceiver, filter);
                 } catch (Throwable e) {
                     reportWtf("starting StatusBarManagerService", e);
                 }

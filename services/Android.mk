@@ -33,6 +33,7 @@ services := \
     usb \
     voiceinteraction
 
+LOCAL_JAVA_LIBRARIES := org.dirtyunicorns.utils
 # The convention is to name each service module 'services.$(module_name)'
 LOCAL_STATIC_JAVA_LIBRARIES := $(addprefix services.,$(services))
 
