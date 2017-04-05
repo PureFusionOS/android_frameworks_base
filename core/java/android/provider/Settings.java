@@ -5438,6 +5438,27 @@ public final class Settings {
         public static final int LOCATION_MODE_HIGH_ACCURACY = 3;
 
         /**
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_HEIGHT_LANDSCAPE = "navigation_bar_height_landscape";
+
+        /**
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_HEIGHT = "navigation_bar_height";
+
+        /**
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_WIDTH = "navigation_bar_width";
+
+        /**
+         * Add or remove software navigation bar
+         * @hide
+         */
+        public static final String NAVIGATION_BAR_VISIBLE = "navigation_bar_visible";
+
+        /**
          * A flag containing settings used for biometric weak
          * @hide
          */
@@ -7099,13 +7120,6 @@ public final class Settings {
          * @hide
          */
         public static final String FORCE_AUTHORIZE_SUBSTRATUM_PACKAGES = "force_authorize_substratum_packages";
-
-        /**
-         * Add or remove software navigation bar
-         *
-         * @hide
-         */
-        public static final String NAVIGATION_BAR_VISIBLE = "navigation_bar_visible";
 
         /**
          * This are the settings to be backed up.
