@@ -44,6 +44,7 @@ import android.database.ContentObserver;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.os.Process;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -1322,6 +1323,12 @@ public abstract class BaseStatusBar extends SystemUI implements
     @Override
     public void screenPinningStateChanged(boolean enabled) {
         Log.d(TAG, "StatusBar API screenPinningStateChanged = " + enabled);
+    }
+
+    @Override
+    public void restartUI() {
+        Log.d(TAG, "StatusBar API restartUI! Commiting suicide! Goodbye cruel world!");
+        Process.killProcess(Process.myPid());
     }
 
     protected H createHandler() {
