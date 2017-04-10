@@ -3720,6 +3720,9 @@ public final class Settings {
          */
         public static final String SYSTEMUI_RECENTS_MEM_DISPLAY = "systemui_recents_mem_display";
 
+        public static final String MTP_DIRTY_HACK = "mtp_dirty_hack";
+        public static final String MTP_DIRTY_HACK_SAVE = "mtp_dirty_hack_save";
+
         /**
          * custom carrier label. The value is
          * String.
@@ -4071,6 +4074,7 @@ public final class Settings {
         public static final String SHOW_CLEAR_ALL_RECENTS = "show_clear_all_recents";
 
         /**
+<<<<<<< HEAD
          * location of the clear all rectents button
          * @hide
          */
@@ -4078,6 +4082,9 @@ public final class Settings {
 
         /**
          * show lockscreen alarm
+=======
+         * show the membar in recents
+>>>>>>> a84c2e8... MTP_DIRTY_HACK: Fix USB Tethering
          *  @hide
          */
         public static final String SHOW_LOCKSCREEN_ALARM = "show_lockscreen_alarm";
