@@ -47,4 +47,7 @@
     <!-- Clear-All recents FAB -->
     <color name="fab_color">@*android:color/accent_device_default_light</color>
     <color name="floating_action_button_icon_color">#FFFFFFFF</color>
+
+    <!-- Separate QS text label tint from icon tint -->
+    <color name="qs_tile_label_tint_unavailable">@color/qs_tile_tint_unavailable</color>
 </resources>
