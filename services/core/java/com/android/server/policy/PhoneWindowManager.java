@@ -892,6 +892,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             KeyEvent.changeAction(event, KeyEvent.ACTION_UP));
                     break;
                 }
+                case MSG_DISPATCH_KEYPRESS_BOOST_UNBLOCK:
+                    mKeypressBoostBlocked = false;
+					break;			
                 case HardkeyActionHandler.MSG_FIRE_HOME:
                     launchHomeFromHotKey();
                     break;
