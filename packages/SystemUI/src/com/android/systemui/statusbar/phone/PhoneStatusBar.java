@@ -399,6 +399,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     // settings
     private QSPanel mQSPanel;
 
+    // data disabled icon
+    private boolean mDataDisabledIcon;
+
     // qs headers
     private StatusBarHeaderMachine mStatusBarHeaderMachine;
 
@@ -568,10 +571,13 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.BATTERY_SAVER_MODE_COLOR),
                     false, this, UserHandle.USER_ALL);
-	    resolver.registerContentObserver(Settings.System.getUriFor(
-                 Settings.System.ENABLE_TASK_MANAGER),
-                 false, this, UserHandle.USER_ALL);
-               update();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ENABLE_TASK_MANAGER),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DATA_DISABLED_ICON),
+                    false, this, UserHandle.USER_ALL);
+            update();
         }
 
         @Override
@@ -592,7 +598,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                             Settings.System.SHOW_LTE_FOURGEE,
                             0, UserHandle.USER_CURRENT) == 1;
                     mNetworkController.onConfigurationChanged();
-             } else if (uri.equals(Settings.System.getUriFor(
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.DATA_DISABLED_ICON))) {
+                    mDataDisabledIcon = Settings.System.getIntForUser(
+                    mContext.getContentResolver(),
+                    Settings.System.DATA_DISABLED_ICON,
+                            1, UserHandle.USER_CURRENT) == 1;
+                    mNetworkController.onConfigurationChanged();
+            } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.BATTERY_SAVER_MODE_COLOR))) {
                     mBatterySaverWarningColor = Settings.System.getIntForUser(
                             mContext.getContentResolver(),
@@ -631,6 +644,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 mHeader.updateSettings();
             }
 
+            boolean mDataDisabledIcon = Settings.System.getIntForUser(resolver,
+                    Settings.System.DATA_DISABLED_ICON, 1, UserHandle.USER_CURRENT) == 1;
             boolean showTaskManager = Settings.System.getIntForUser(resolver,
                     Settings.System.ENABLE_TASK_MANAGER, 0, UserHandle.USER_CURRENT) == 1;
             if (mShowTaskManager != showTaskManager) {
