@@ -142,4 +142,9 @@
     <string name="status_bar_volte">VOLTE</string>
 
     <string name="recents_free_ram">Free RAM: %1$d MB</string>
+
+    <!-- HW Keys Tile -->
+    <string name="accessibility_quick_settings_hwkeys_on">HW keys on</string>
+    <string name="accessibility_quick_settings_hwkeys_off">HW keys off</string>
+    <string name="quick_settings_hwkeys_label">HW keys</string>
 </resources>
