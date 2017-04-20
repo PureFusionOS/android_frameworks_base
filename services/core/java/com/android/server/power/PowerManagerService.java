@@ -1155,7 +1155,6 @@ public final class PowerManagerService extends SystemService
 
     protected void notifyWakeLockAcquiredLocked(WakeLock wakeLock) {
       if (mSystemReady && !wakeLock.mDisabled) {
-        if (!wakeLock.isBlocked()) {
             wakeLock.mNotifiedAcquired = true;
             mNotifier.onWakeLockAcquired(wakeLock.mFlags, wakeLock.mTag, wakeLock.mPackageName,
                     wakeLock.mOwnerUid, wakeLock.mOwnerPid, wakeLock.mWorkSource,
@@ -1211,15 +1210,13 @@ public final class PowerManagerService extends SystemService
     }
 
     protected void notifyWakeLockReleasedLocked(WakeLock wakeLock) {
-        if (mSystemReady) {
-            if(!wakeLock.isBlocked() && wakeLock.mNotifiedAcquired) {
+        if (mSystemReady && wakeLock.mNotifiedAcquired) {
             wakeLock.mNotifiedAcquired = false;
             wakeLock.mAcquireTime = 0;
             mNotifier.onWakeLockReleased(wakeLock.mFlags, wakeLock.mTag,
                     wakeLock.mPackageName, wakeLock.mOwnerUid, wakeLock.mOwnerPid,
                     wakeLock.mWorkSource, wakeLock.mHistoryTag);
             notifyWakeLockLongFinishedLocked(wakeLock);
-            }
         }
     }
 

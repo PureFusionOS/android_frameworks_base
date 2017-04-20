@@ -110,7 +110,7 @@ public class HWKeysTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     public int getMetricsCategory() {
-        return MetricsEvent.NITROGEN_SETTINGS;
+        return MetricsEvent.PURE;
     }
 
     @Override
