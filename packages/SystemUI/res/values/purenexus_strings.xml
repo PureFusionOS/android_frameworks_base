@@ -139,7 +139,7 @@
     <string name="stream_title_bluetooth">Bluetooth</string>
 
     <!-- volte icon switch -->
-    <string name="status_bar_volte">VOLTE</string>
+    <string name="status_bar_volte" translatable="false">VOLTE</string>
 
     <string name="recents_free_ram">Free RAM: %1$d MB</string>
 
