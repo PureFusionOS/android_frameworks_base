@@ -751,7 +751,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // use the same delay values as for screenshot
     private boolean mScreenrecordChordEnabled;
     private boolean mScreenrecordChordVolumeUpKeyConsumed;
-    private boolean mScreenrecordChordType;
+    private int mScreenrecordChordType;
 
     /* The number of steps between min and max brightness */
     private static final int BRIGHTNESS_STEPS = 10;
@@ -1648,10 +1648,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mScreenrecordChordVolumeUpKeyConsumed = true;
                 cancelPendingPowerKeyAction();
 
-                if (mScreenrecordChordType) {
+                if (mScreenrecordChordType == 1) {
                     mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_SELECTED_REGION);
                     mHandler.postDelayed(mScreenshotRunnable, getScreenshotChordLongPressDelay());
-                } else {
+                } else if (mScreenrecordChordType == 0) {
                     mHandler.postDelayed(mScreenrecordRunnable, getScreenshotChordLongPressDelay());
                 }
             }
@@ -2432,8 +2432,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.VOLUME_WAKE_SCREEN, 0, UserHandle.USER_CURRENT) == 1);
             mTorchEnabled = (Settings.System.getIntForUser(resolver,
                     Settings.System.KEYGUARD_TOGGLE_TORCH, 0, UserHandle.USER_CURRENT) == 1);
-            mScreenrecordChordType = (Settings.System.getIntForUser(resolver,
-                    Settings.System.SCREENRECORD_CHORD_TYPE, 0, UserHandle.USER_CURRENT) == 1);
+            mScreenrecordChordType = Settings.System.getIntForUser(resolver,
+                    Settings.System.SCREENRECORD_CHORD_TYPE, 0, UserHandle.USER_CURRENT);
 
         }
         synchronized (mWindowManagerFuncs.getWindowManagerLock()) {
