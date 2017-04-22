@@ -558,6 +558,10 @@ public final class PowerManagerService extends SystemService
     private Sensor mProximitySensor;
     private boolean mProximityWakeEnabled;
     private int mProximityTimeOut;
+
+    // Whether proximity check on wake is enabled by default
+    private boolean mProximityWakeEnabledByDefaultConfig;
+
     private boolean mProximityWakeSupported;
     android.os.PowerManager.WakeLock mProximityWakeLock;
     SensorEventListener mProximityListener;
@@ -808,6 +812,8 @@ public final class PowerManagerService extends SystemService
                 com.android.internal.R.integer.config_proximityCheckTimeout);
         mProximityWakeSupported = resources.getBoolean(
                 com.android.internal.R.bool.config_proximityCheckOnWake);
+        mProximityWakeEnabledByDefaultConfig = resources.getBoolean(
+                 com.android.internal.R.bool.config_proximityCheckOnWakeEnabledByDefault);
         if (mProximityWakeSupported) {
             PowerManager powerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
             mProximityWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
@@ -844,7 +850,7 @@ public final class PowerManagerService extends SystemService
                 Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
                 (mWakeUpWhenPluggedOrUnpluggedConfig ? 1 : 0));
         mProximityWakeEnabled = Settings.System.getInt(resolver,
-                Settings.System.PROXIMITY_ON_WAKE, 0) == 1;
+                Settings.System.PROXIMITY_ON_WAKE, mProximityWakeEnabledByDefaultConfig ? 1 : 0) == 1;
 
         if (mSupportsDoubleTapWakeConfig) {
             boolean doubleTapWakeEnabled = Settings.Secure.getIntForUser(resolver,
