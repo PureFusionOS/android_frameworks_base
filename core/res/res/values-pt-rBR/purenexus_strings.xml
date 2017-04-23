@@ -54,6 +54,10 @@
   <!-- Vendor mismatched fingerprint warning [CHAR LIMIT=NONE] -->
   <string name="system_error_vendorprint">Sua imagem de fornecedor não coincide com o sistema. Por favor atualize a imagem de fornecedor para a versão <xliff:g id="string">%s</xliff:g> do seu dispositivo</string>
   <!-- Single handed mode -->
-  <string name="singlehandmode_click_hint_message">Toque fora da tela para sair do Modo Uma Mão</string>
+  <string name="singlehandmode_click_hint_message">Toque fora da tela para sair do modo de uma mão</string>
   <string name="singlehandmode_slide_hint_message">Deslize seu dedo através da barra de navegação para alternar entre os modos de exibição de tela padrão e Modo Uma Mão</string>
+  <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permlab_restartUI">reiniciar as barras do sistema</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_restartUI">Reiniciar a SystemUI para que os recursos do tema sejam carregados corretamente</string>
 </resources>

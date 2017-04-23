@@ -47,10 +47,18 @@
          [CHAR LIMIT=4] -->
   <!-- ADB over network Tile -->
   <string name="quick_settings_adb_network">ADB via rede</string>
+  <string name="quick_settings_network_adb_enabled_label">Habilitado</string>
+  <string name="quick_settings_network_adb_disabled_label">Desativado</string>
   <string name="accessibility_quick_settings_network_adb_off">ADB através da rede desligado.</string>
   <string name="accessibility_quick_settings_network_adb_on">ADB através da rede ligado.</string>
   <string name="accessibility_quick_settings_network_adb_changed_off">ADB através da rede foi desligado.</string>
   <string name="accessibility_quick_settings_network_adb_changed_on">ADB através da rede foi ligado.</string>
+  <!-- Ambient Display QS tile -->
+  <string name="accessibility_quick_settings_ambient_display_off">Tela ambiente desligada</string>
+  <string name="accessibility_quick_settings_ambient_display_on">Tela ambiente ligada</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_off">Tela ambiente foi desligada</string>
+  <string name="accessibility_quick_settings_ambient_display_changed_on">Tela ambiente foi ligada</string>
+  <string name="quick_settings_ambient_display_label">Tela ambiente</string>
   <!-- Brightness QS Tile -->
   <string name="quick_settings_brightness">Brilho</string>
   <!-- Caffeine QS Tile -->
@@ -66,6 +74,8 @@
   <string name="accessibility_quick_settings_heads_up_on">Notificações flutuantes ligadas.</string>
   <string name="accessibility_quick_settings_heads_up_changed_off">Notificações flutuantes foram desligadas.</string>
   <string name="accessibility_quick_settings_heads_up_changed_on">Notificações flutuantes foram ligadas.</string>
+  <!-- IME selector Tile -->
+  <string name="quick_settings_ime_label">Método de entrada</string>
   <!-- Music QS Tile -->
   <string name="quick_settings_music_label">Música</string>
   <string name="quick_settings_music_play">Reproduzir</string>
@@ -106,4 +116,19 @@
   <string name="stream_title_alarm">Alarme</string>
   <string name="stream_title_notification">Notificação</string>
   <string name="stream_title_bluetooth">Bluetooth</string>
+  <!-- Recents Free Ram -->
+  <string name="recents_free_ram">Memória livre: %1$d MB</string>
+  <!-- HW Keys Tile -->
+  <string name="accessibility_quick_settings_hwkeys_on">Teclas físicas ativadas</string>
+  <string name="accessibility_quick_settings_hwkeys_off">Teclas físicas desativadas</string>
+  <string name="quick_settings_hwkeys_label">Teclas físicas</string>
+  <!-- Language\Locale Tile -->
+  <string name="quick_settings_locale_label">Idioma</string>
+  <string name="quick_settings_locale_more_locales_toast">Por favor, configure vários idiomas para usar essa função</string>
+  <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+  <string name="keyguard_indication_dash_charging_time">Carregamento Dash (<xliff:g id="charging_time_left" example="4 horas e 2 minutos">%s</xliff:g> até concluir)</string>
+  <string name="keyguard_plugged_in_dash_charging">Carregamento Dash</string>
+  <!-- Show lte/4g switch -->
+  <string name="show_lte_fourgee_title">Mostrar 4G</string>
+  <string name="show_lte_fourgee_summary">Mostrar 4G em vez de LTE nos ícones de sinal</string>
 </resources>
