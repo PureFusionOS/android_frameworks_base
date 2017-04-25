@@ -106,4 +106,25 @@
   <string name="stream_title_alarm">Будильник</string>
   <string name="stream_title_notification">Уведомления</string>
   <string name="stream_title_bluetooth">Bluetooth</string>
+    <!-- volte icon switch -->
+    <string name="status_bar_volte" translatable="false">VOLTE</string>
+
+    <string name="recents_free_ram">Свободной памяти: %1$d MB</string>
+
+    <!-- HW Keys Tile -->
+    <string name="accessibility_quick_settings_hwkeys_on">Кнопки вкл.</string>
+    <string name="accessibility_quick_settings_hwkeys_off">Кнопки выкл.</string>
+    <string name="quick_settings_hwkeys_label">Аппарат. кнопки</string>
+    <!-- Language\Locale Tile -->
+    <string name="quick_settings_locale_label">Язык</string>
+    <string name="quick_settings_locale_more_locales_toast">Пожалуйста, добавьте несколько системных языков в настройках для работы переключателя</string>
+
+    <!-- Indication on the keyguard that is shown when the device is charging with a dash charger. Should match keyguard_plugged_in_dash_charging [CHAR LIMIT=40]-->
+    <string name="keyguard_indication_dash_charging_time">Быстрая зарядка (<xliff:g id="charging_time_left" example="4 часа и 2 минуты">%s</xliff:g> до полной зарядки)</string>
+    <string name="keyguard_plugged_in_dash_charging">Быстрая зарядка</string>
+
+    <!-- Show lte/4g switch -->
+    <string name="show_lte_fourgee_title">Показывать 4G вместо LTE</string>
+    <string name="show_lte_fourgee_summary">Заменяет индикатор LTE в строке состояния на 4G</string>
+    <string name="statusbar_tuner_category_title">Скрыть элементы строки состояния/string>
 </resources>
