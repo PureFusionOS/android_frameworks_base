@@ -126,5 +126,5 @@
     <!-- Show lte/4g switch -->
     <string name="show_lte_fourgee_title">Показывать 4G вместо LTE</string>
     <string name="show_lte_fourgee_summary">Заменяет индикатор LTE в строке состояния на 4G</string>
-    <string name="statusbar_tuner_category_title">Скрыть элементы строки состояния/string>
+    <string name="statusbar_tuner_category_title">Скрыть элементы строки состояния</string>
 </resources>
