@@ -65,4 +65,7 @@
 
     <!-- The task item height in task list. -->
     <dimen name="task_manager_item_height">40dip</dimen>
+
+    <!-- Recents task locking button -->
+    <dimen name="recents_task_view_header_lock_button_padding">44dp</dimen>
 </resources>
