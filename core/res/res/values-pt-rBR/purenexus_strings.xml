@@ -58,6 +58,12 @@
   <string name="singlehandmode_slide_hint_message">Deslize seu dedo através da barra de navegação para alternar entre os modos de exibição de tela padrão e Modo Uma Mão</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_restartUI">reiniciar as barras do sistema</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_restartUI">Reiniciar a SystemUI para que os recursos do tema sejam carregados corretamente</string>
+  <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+  <string name="permdesc_restartUI">Reiniciar a SystemUI para que os recursos do tema sejam carregados corretamente</string>
+
+  <!-- SOFTAP framework  -->
+  <string name="tethered_notification_no_device_message">Nenhum dispositivo conectado</string>
+  <string name="tethered_notification_one_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivo conectado</string>
+  <string name="tethered_notification_multi_device_message"><xliff:g id="count">%1$s</xliff:g> dispositivos conectados</string>
+
 </resources>
