@@ -131,4 +131,9 @@
   <!-- Show lte/4g switch -->
   <string name="show_lte_fourgee_title">Mostrar 4G</string>
   <string name="show_lte_fourgee_summary">Mostrar 4G em vez de LTE nos ícones de sinal</string>
+  <!-- Wi-Fi hotspot label when enabled -->
+  <plurals name="wifi_hotspot_connected_clients_label">
+      <item quantity="one">%1$d dispositivo</item>
+      <item quantity="other">%1$d dispositivos</item>
+  </plurals>
 </resources>
