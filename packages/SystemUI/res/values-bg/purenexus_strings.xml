@@ -23,7 +23,7 @@
   <!-- statusbar items tuner -->
   <string name="statusbar_icons_blacklist">Икони в лентата за състоянието</string>
   <!-- notification controls -->
-  <string name="tuner_notification_control">Power notification controls</string>
+  <string name="tuner_notification_control">Известия за захранването</string>
   <!-- vpn icon switch -->
   <string name="status_bar_vpn">ВЧМ</string>
   <!-- data saver icon switch -->
@@ -61,11 +61,11 @@
   <string name="quick_settings_expanded_desktop">Разширен</string>
   <string name="quick_settings_expanded_desktop_off">Нормален</string>
   <!-- Heads Up QS Tile -->
-  <string name="quick_settings_heads_up_label">Heads up</string>
-  <string name="accessibility_quick_settings_heads_up_off">Heads up off.</string>
-  <string name="accessibility_quick_settings_heads_up_on">Heads up on.</string>
-  <string name="accessibility_quick_settings_heads_up_changed_off">Heads up turned off.</string>
-  <string name="accessibility_quick_settings_heads_up_changed_on">Heads up turned on.</string>
+  <string name="quick_settings_heads_up_label">Изскачащи известия</string>
+  <string name="accessibility_quick_settings_heads_up_off">Изскачащи известия изкл.</string>
+  <string name="accessibility_quick_settings_heads_up_on">Изскачащи известия вкл.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_off">Изскачащи известия изключени.</string>
+  <string name="accessibility_quick_settings_heads_up_changed_on">Изскачащи известия включени.</string>
   <!-- Music QS Tile -->
   <string name="quick_settings_music_label">Музика</string>
   <string name="quick_settings_music_play">Възпр.</string>
@@ -93,11 +93,12 @@
   <string name="accessibility_quick_settings_sync_changed_off">Синхронизация изключена</string>
   <string name="accessibility_quick_settings_sync_changed_on">Синхронизация включена</string>
   <!-- Heads up snooze toast -->
-  <string name="heads_up_snooze_message_one_minute">Peeking notification from <xliff:g id="string">%s</xliff:g> are snoozing for 1 minute.</string>
-  <string name="heads_up_snooze_message">Peeking notification from <xliff:g id="string">%s</xliff:g> are snoozing for <xliff:g id="number">%d</xliff:g> minutes.</string>
+  <string name="heads_up_snooze_message_one_minute">Изскачащите известия от <xliff:g id="string">%s</xliff:g> се отлагат за 1 минута.</string>
+  <string name="heads_up_snooze_message">Изскачащите известия от <xliff:g id="string">%s</xliff:g> се отлагат с <xliff:g id="number">%d</xliff:g> минути.</string>
   <!-- Path data for portrait battery -->
   <!-- Path data for landscape battery -->
   <!-- Path data for circle battery -->
+  <!-- Path for battery solid -->
   <!-- Volume stream title names -->
   <string name="stream_title_call">Повикване</string>
   <string name="stream_title_system">Система</string>

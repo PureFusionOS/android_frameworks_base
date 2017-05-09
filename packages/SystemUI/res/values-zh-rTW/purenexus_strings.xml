@@ -98,6 +98,7 @@
   <!-- Path data for portrait battery -->
   <!-- Path data for landscape battery -->
   <!-- Path data for circle battery -->
+  <!-- Path for battery solid -->
   <!-- Volume stream title names -->
   <string name="stream_title_call">通話</string>
   <string name="stream_title_system">系統</string>

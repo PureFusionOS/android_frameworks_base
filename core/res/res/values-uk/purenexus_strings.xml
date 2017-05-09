@@ -19,34 +19,34 @@
   <!-- Reboot Dialog -->
   <string name="global_action_reboot">Перезавантаження</string>
   <!-- Button to reboot the phone in reboot menu -->
-  <string name="reboot_reboot">Reboot</string>
+  <string name="reboot_reboot">Перезавантаження</string>
   <!-- Button to reboot the phone into recovery in reboot menu-->
-  <string name="reboot_recovery">Recovery</string>
+  <string name="reboot_recovery">Режим відновлення</string>
   <!-- Button to reboot the phone into bootloader in reboot menu -->
-  <string name="reboot_bootloader">Bootloader</string>
+  <string name="reboot_bootloader">Завантажувач</string>
   <!-- Button to soft reboot the device in reboot menu -->
-  <string name="reboot_soft">Soft reboot</string>
+  <string name="reboot_soft">Перезавантаження інтерфейсу</string>
   <!-- Reboot Confirmation Dialog. -->
-  <string name="reboot_confirm" product="tablet">Your tablet will reboot.</string>
-  <string name="reboot_confirm" product="default">Your phone will reboot.</string>
+  <string name="reboot_confirm" product="tablet">Ваш планшет буде перезавантажено.</string>
+  <string name="reboot_confirm" product="default">Ваш телефон буде перезавантажено.</string>
   <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
-  <string name="reboot_progress">Rebooting\u2026</string>
+  <string name="reboot_progress">Перезавантаження\u2026</string>
   <!-- Global Actions -->
-  <string name="global_action_current_user">Current</string>
-  <string name="global_action_screenshot">Screenshot</string>
-  <string name="global_action_screen_record">Screen record</string>
-  <string name="global_action_search">Search</string>
-  <string name="global_action_torch">Flashlight</string>
-  <string name="global_action_voicesearch">Voice Search</string>
+  <string name="global_action_current_user">Поточний</string>
+  <string name="global_action_screenshot">Знімок екрану</string>
+  <string name="global_action_screen_record">Запис з екрану</string>
+  <string name="global_action_search">Пошук</string>
+  <string name="global_action_torch">Ліхтарик</string>
+  <string name="global_action_voicesearch">Голосовий пошук</string>
   <!-- Long-press back kill application -->
   <string name="app_killed_message"><xliff:g id="string">%s</xliff:g> killed</string>
   <string name="no_app_killed_message">Nothing to kill</string>
   <!-- ADB over network notification -->
-  <string name="adb_net_active_notification_title">ADB over network enabled</string>
+  <string name="adb_net_active_notification_title">Увімкнено функцію ADB по мережі</string>
   <!-- ADB over USB and network notification -->
-  <string name="adb_both_active_notification_title">ADB over USB &amp; network enabled</string>
+  <string name="adb_both_active_notification_title">Увімкнено функцію ADB по USB та мережі</string>
   <!-- ADB notification message-->
-  <string name="adb_active_generic_notification_message">Touch to disable debugging.</string>
+  <string name="adb_active_generic_notification_message">Торкніться, щоб вимкнути налагодження.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permlab_modifyOverlays">modify theme overlays</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

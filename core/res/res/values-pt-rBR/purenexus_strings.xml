@@ -44,7 +44,7 @@
   <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB via rede habilitado</string>
   <!-- ADB over USB and network notification -->
-  <string name="adb_both_active_notification_title">ADB via USB &amp; rede habilitado</string>
+  <string name="adb_both_active_notification_title">ADB via USB e rede habilitados</string>
   <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Toque para desabilitar a depuração.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

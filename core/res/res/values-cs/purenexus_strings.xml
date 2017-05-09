@@ -54,6 +54,6 @@
   <!-- Vendor mismatched fingerprint warning [CHAR LIMIT=NONE] -->
   <string name="system_error_vendorprint"><xliff:g id="string">%s</xliff:g>vendor image pro vaše zařízení</string>
   <!-- Single handed mode -->
-  <string name="singlehandmode_click_hint_message">Touch outside the screen to exit mini screen view</string>
-  <string name="singlehandmode_slide_hint_message">Slide your finger across the navigation bar to switch between the standard and mini screen views</string>
+  <string name="singlehandmode_click_hint_message">Klepněte na místo mimo zobrazení a ukončíte mini obrazovku</string>
+  <string name="singlehandmode_slide_hint_message">Přejetím prstu přes navigační panel přepnete mezi zobrazením obrazovky standard a mini</string>
 </resources>

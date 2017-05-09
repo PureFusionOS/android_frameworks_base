@@ -54,6 +54,6 @@
   <!-- Vendor mismatched fingerprint warning [CHAR LIMIT=NONE] -->
   <string name="system_error_vendorprint">Je fabrieksversie komt niet overeen met het systeem. Gelieve de <xliff:g id="string">%s</xliff:g> fabrieksversie voor jouw apparaat te installeren</string>
   <!-- Single handed mode -->
-  <string name="singlehandmode_click_hint_message">Tik buiten het venster om de mini-schermweergave te verlaten</string>
+  <string name="singlehandmode_click_hint_message">Tik buiten het venster om mini-schermweergave te verlaten</string>
   <string name="singlehandmode_slide_hint_message">Veeg je vinger over de navigatiebalk om te schakelen tussen de standaard- en mini-schermweergave</string>
 </resources>
