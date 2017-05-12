@@ -28,4 +28,9 @@
     <color name="icon_color_split_screen_dark">@android:color/black</color>
     <color name="icon_color_home_dark">@android:color/black</color>
     <color name="icon_color_overview_dark">@android:color/black</color>
+
+     <!-- Recents Memory bar -->
+    <color name="recents_memory_progress_overall">@*android:color/resize_shadow_start_color</color>
+    <color name="recents_memory_progress_free">@*android:color/accent_device_default_light</color>
+
 </resources>
