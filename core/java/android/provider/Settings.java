@@ -3775,7 +3775,6 @@ public final class Settings {
          * @hide
          */
         public static final String REVERSE_LOOKUP_PROVIDER = "reverse_lookup_provider";
->>>>>>> f61aef50dc3... Dialer lookup
 
         /**
          * Enable double tap gesture anywhere on the lock screen put device to sleep
