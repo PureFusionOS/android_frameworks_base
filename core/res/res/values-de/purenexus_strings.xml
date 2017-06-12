@@ -55,5 +55,5 @@
   <string name="system_error_vendorprint">Ihr Vendor-Image entspricht nicht dem System. Bitte flashen sie das <xliff:g id="string">%s</xliff:g> Vendor-Image für ihr Gerät.</string>
   <!-- Single handed mode -->
   <string name="singlehandmode_click_hint_message">Tippen Sie außerhalb des Bildschirms, um die Mini-Ansicht zu beenden</string>
-  <string name="singlehandmode_slide_hint_message">Wischen Sie mit ihrem Finger über die Navigationsleiste, um zwischen Standard und Mini-Bildschirm zu wechseln</string>
+  <string name="singlehandmode_slide_hint_message">Wischen Sie mit ihrem Finger über die Navigationsleiste, um zwischen Standard- und Mini-Ansicht zu wechseln</string>
 </resources>

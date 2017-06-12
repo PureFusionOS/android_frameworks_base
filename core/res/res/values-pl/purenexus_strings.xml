@@ -39,7 +39,7 @@
   <string name="global_action_torch">Latarka</string>
   <string name="global_action_voicesearch">Wyszukiwanie głosowe</string>
   <!-- Long-press back kill application -->
-  <string name="app_killed_message">Aplikacja <xliff:g id="string">%s</xliff:g> zabita</string>
+  <string name="app_killed_message">Aplikacja <xliff:g id="string">%s</xliff:g> została zabita</string>
   <string name="no_app_killed_message">Nic nie zabito</string>
   <!-- ADB over network notification -->
   <string name="adb_net_active_notification_title">ADB przez sieć włączone</string>

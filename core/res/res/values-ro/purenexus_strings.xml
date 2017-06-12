@@ -48,7 +48,7 @@
   <!-- ADB notification message-->
   <string name="adb_active_generic_notification_message">Atingeţi pentru a dezactiva depanarea.</string>
   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-  <string name="permlab_modifyOverlays">modifică tema suprapuneri</string>
+  <string name="permlab_modifyOverlays">modifică tema pe baza de Overlays</string>
   <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
   <string name="permdesc_modifyOverlays">Permite aplicației să facă modificări temelor suprapunerilor folosind OverlayManagerService</string>
   <!-- Vendor mismatched fingerprint warning [CHAR LIMIT=NONE] -->
