@@ -3498,11 +3498,9 @@ final public class MediaCodec {
             mYOffset = yOffset;
             mInfo = info;
 
-            // read media-info.  the size of media info can be 80 or 156/160 depending on
-            // whether it was created on a 32- or 64-bit process.  See MediaImage
-            if (info.remaining() == 80 || info.remaining() == 156 || info.remaining() == 160) {
-                boolean sizeIsLong = info.remaining() != 80;
-                int type = readInt(info, info.remaining() == 160);
+            // read media-info.  See MediaImage2
+            if (info.remaining() == 104) {
+                int type = info.getInt();
                 if (type != TYPE_YUV) {
                     throw new UnsupportedOperationException("unsupported type: " + type);
                 }
