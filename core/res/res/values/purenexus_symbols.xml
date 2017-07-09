@@ -192,4 +192,7 @@
   <java-symbol type="drawable" name="ic_shortcut_action_screenshot" />
   <java-symbol type="drawable" name="ic_shortcut_action_search" />
 
+  <!-- sensor block per-package -->
+  <java-symbol type="array" name="config_blockPackagesSensorDrain" />
+
 </resources>
