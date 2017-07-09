@@ -147,4 +147,7 @@
   <!-- sRGB mode -->
   <java-symbol type="string" name="config_srgb_path" />
 
+  <!-- SystemSensorManager: sensor block per-package -->
+  <java-symbol type="array" name="config_blockPackagesSensorDrain" />
+
 </resources>
