@@ -119,13 +119,8 @@
   <!-- Hardware key binding -->
   <java-symbol type="integer" name="config_deviceHardwareKeys" />
 
-  <java-symbol type="bool" name="config_fingerprintRemoveClientOnCancel" />
-
   <!-- Doze mode -->
   <java-symbol type="bool" name="config_doze_enabled_by_default" />
-
-  <!-- Whether notify fingerprint client of successful cancelled authentication -->
-  <java-symbol type="bool" name="config_notifyClientOnFingerprintCancelSuccess" />
 
   <!-- Whether device has dash charging support -->
   <java-symbol type="bool" name="config_hasDashCharger" />

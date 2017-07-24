@@ -34,7 +34,6 @@ import android.util.Slog;
  */
 public abstract class AuthenticationClient extends ClientMonitor {
     private long mOpId;
-    private boolean mIsCancelled = false;
 
     public abstract boolean handleFailedAttempt();
     public abstract void resetFailedAttempts();
@@ -82,7 +81,6 @@ public abstract class AuthenticationClient extends ClientMonitor {
             // allow system-defined limit of number of attempts before giving up
             boolean inLockoutMode =  handleFailedAttempt();
             // send lockout event in case driver doesn't enforce it.
-            stop(true);
             if (inLockoutMode) {
                 try {
                     Slog.w(TAG, "Forcing lockout (fp driver code should do this!)");
@@ -131,11 +129,6 @@ public abstract class AuthenticationClient extends ClientMonitor {
 
     @Override
     public int stop(boolean initiatedByClient) {
-        if(mIsCancelled) {
-            Slog.e(TAG, "daemon.cancelAuthentication() is called, so return.");
-            return 0;
-        }
-        mIsCancelled = true;
         IFingerprintDaemon daemon = getFingerprintDaemon();
         if (daemon == null) {
             Slog.w(TAG, "stopAuthentication: no fingeprintd!");
@@ -152,7 +145,6 @@ public abstract class AuthenticationClient extends ClientMonitor {
             Slog.e(TAG, "stopAuthentication failed", e);
             return ERROR_ESRCH;
         }
-        mIsCanceling = true;
         return 0; // success
     }
 
