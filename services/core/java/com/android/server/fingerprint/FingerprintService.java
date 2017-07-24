@@ -121,7 +121,6 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
     private ClientMonitor mCurrentClient;
     private ClientMonitor mPendingClient;
     private PerformanceStats mPerformanceStats;
-    private boolean mRemoveClientOnCancel;
 
     // Normal fingerprint authentications are tracked by mPerformanceMap.
     private HashMap<Integer, PerformanceStats> mPerformanceMap
@@ -192,8 +191,6 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
         mContext.registerReceiver(mLockoutReceiver, new IntentFilter(ACTION_LOCKOUT_RESET),
                 RESET_FINGERPRINT_LOCKOUT, null /* handler */);
         mUserManager = UserManager.get(mContext);
-        mRemoveClientOnCancel = context.getResources().getBoolean(
-                com.android.internal.R.bool.config_fingerprintRemoveClientOnCancel);
     }
 
     @Override
@@ -397,10 +394,8 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
     private void startClient(ClientMonitor newClient, boolean initiatedByClient) {
         ClientMonitor currentClient = mCurrentClient;
         if (currentClient != null) {
-            if(!currentClient.getIsCanceling()) {
-                if (DEBUG) Slog.v(TAG, "request stop current client " + currentClient.getOwnerString());
-                currentClient.stop(initiatedByClient);
-            }
+            if (DEBUG) Slog.v(TAG, "request stop current client " + currentClient.getOwnerString());
+            currentClient.stop(initiatedByClient);
             mPendingClient = newClient;
             mHandler.removeCallbacks(mResetClientState);
             mHandler.postDelayed(mResetClientState, CANCEL_TIMEOUT_LIMIT);
@@ -858,15 +853,7 @@ public class FingerprintService extends SystemService implements IBinder.DeathRe
                         if (client instanceof AuthenticationClient) {
                             if (client.getToken() == token) {
                                 if (DEBUG) Slog.v(TAG, "stop client " + client.getOwnerString());
-                                final boolean notifyClient = mContext.getResources().getBoolean(
-                                        com.android.internal.R.bool.config_notifyClientOnFingerprintCancelSuccess);
-                                final int stopResult = client.stop(client.getToken() == token);
-                                if (notifyClient && (stopResult == 0)) {
-                                    handleError(mHalDeviceId, FingerprintManager.FINGERPRINT_ERROR_CANCELED);
-                                }
-                                if (mRemoveClientOnCancel) {
-                                    removeClient(client);
-                                }
+                                client.stop(client.getToken() == token);
                             } else {
                                 if (DEBUG) Slog.v(TAG, "can't stop client "
                                         + client.getOwnerString() + " since tokens don't match");
