@@ -935,7 +935,6 @@ public class UsbDeviceManager {
             boolean hideNotification = "0".equals(SystemProperties.get("persist.adb.notify"))
                     || Settings.Secure.getInt(mContext.getContentResolver(),
                             Settings.Secure.ADB_NOTIFY, 1) == 0;
-
             if (hideNotification) {
                 id = 0;
             } else if (usbAdbActive && netAdbActive) {
@@ -1092,7 +1091,14 @@ public class UsbDeviceManager {
     public void allowUsbDebugging(boolean alwaysAllow, String publicKey) {
         if (mDebuggingManager != null) {
             mDebuggingManager.allowUsbDebugging(alwaysAllow, publicKey);
+
+        if (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.MTP_DIRTY_HACK, 1) == 1) {
+             mUsbDataUnlocked = true;
+            }
+
         }
+
     }
 
     public void denyUsbDebugging() {
