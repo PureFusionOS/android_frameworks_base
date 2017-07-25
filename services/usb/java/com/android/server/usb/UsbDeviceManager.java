@@ -935,6 +935,11 @@ public class UsbDeviceManager {
             boolean hideNotification = "0".equals(SystemProperties.get("persist.adb.notify"))
                     || Settings.Secure.getInt(mContext.getContentResolver(),
                             Settings.Secure.ADB_NOTIFY, 1) == 0;
+ 
+           if (Settings.System.getInt(mContext.getContentResolver(),
+	                  Settings.System.MTP_DIRTY_HACK, 1) == 1) {
+                mUsbDataUnlocked = true;
+            }
 
             if (hideNotification) {
                 id = 0;
