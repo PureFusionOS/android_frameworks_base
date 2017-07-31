@@ -4395,6 +4395,12 @@ public final class Settings {
 
 
         /**
+         * Whether to enable the vibration mode entered vibration indicator
+         * @hide
+         */
+        public static final String VIBRATION_MODE_INDICATION = "vibration_mode_indication";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
