@@ -134,6 +134,9 @@
 
   <!-- Whether notify fingerprint client of successful cancelled authentication -->
   <java-symbol type="bool" name="config_notifyClientOnFingerprintCancelSuccess" />
+  
+  <!-- sensor block per-package -->
+  <java-symbol type="array" name="config_blockPackagesSensorDrain" />
 
 </resources>
 
