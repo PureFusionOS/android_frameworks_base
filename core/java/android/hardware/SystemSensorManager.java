@@ -23,6 +23,8 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.MessageQueue;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -152,10 +154,13 @@ public class SystemSensorManager extends SensorManager {
             String pkgName = mContext.getPackageName();
             for (String blockedPkgName : mContext.getResources().getStringArray(
                     com.android.internal.R.array.config_blockPackagesSensorDrain)) {
-                if (pkgName.equals(blockedPkgName)) {
+                if (pkgName.equals(blockedPkgName) && (Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.System.SHOW_LTE_FOURGEE, 0, UserHandle.USER_CURRENT) != 1)) {
                     Log.w(TAG, "Preventing " + pkgName + "from draining battery using " +
-                                    "significant motion sensor");
+                            "significant motion sensor");
                     return false;
+                } else {
+                    return true;
                 }
             }
         }
