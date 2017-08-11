@@ -18,6 +18,7 @@ package android.hardware;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.impl.CameraMetadataNative;
 import android.hardware.camera2.CaptureResult;
+import android.hardware.camera2.CaptureRequest.Builder;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.impl.CaptureResultExtras;
 import android.hardware.camera2.CameraManager;
@@ -594,7 +595,6 @@ public class Camera {
     }
 
     private int cameraInitVersion(int cameraId, int halVersion) {
-        getNativeCameraMetadata(cameraId);
         mShutterCallback = null;
         mRawImageCallback = null;
         mJpegCallback = null;
@@ -1381,26 +1381,18 @@ public class Camera {
             case CAMERA_MSG_DNG_META_DATA:
                 Log.d(TAG,"CAMERA_MSG_DNG_META_DATA");
                 if (mOneplusCallback != null
-                    &&mCharacteristics!=null&&mMetadata!=null) {
-
-                    /* if (true) {
-                        Log.v(TAG, "metadata:");
-                        Log.v(TAG, "--------------------------------------------------- (start)");
-                        mMetadata.dumpToLog();
-                        Log.v(TAG, "--------------------------------------------------- (end)");
-                    }*/ 
-
-                    CaptureResult result=new CaptureResult(mMetadata,-1);
+                    &&mMetadata!=null) {
+                    mCharacteristics = new CameraCharacteristics(new CameraMetadataNative(mMetadata));
+                    CaptureResult result=new CaptureResult(new CameraMetadataNative(mMetadata),-1);
                     mOneplusCallback.onDngMetadata(mCharacteristics, result, mCamera);
-                    
                 }    
             return;
             
             case CAMERA_MSG_IN_PROCESSING:
                 Log.d(TAG,"CAMERA_MSG_IN_PROCESSING");
-                //if (mProcessCallback != null) {
-                //    mProcessCallback.onProcess();
-                //}
+                if (mProcessCallback != null) {
+                    mProcessCallback.onProcess();
+                }
                 return;
 
             default:
@@ -1697,9 +1689,9 @@ public class Camera {
 
         }
   
-        //if (mProcessCallback != null) {
-        //    msgType |= CAMERA_MSG_IN_PROCESSING;
-        //}
+        if (mProcessCallback != null) {
+            msgType |= CAMERA_MSG_IN_PROCESSING;
+        }
 
         native_takePicture(msgType);
         mFaceDetectionRunning = false;
@@ -2063,6 +2055,12 @@ public class Camera {
          * are.
          */
         public int id = -1;
+
+        public int isSmile = 0;
+
+        public int getIsSmile() {
+            return isSmile;
+        }
 
         /**
          * The coordinates of the center of the left eye. The coordinates are in
@@ -2629,6 +2627,8 @@ public class Camera {
 
         private static final String TRUE = "true";
         private static final String FALSE = "false";
+
+        private static final String KEY_QC_SMILE_DETECTION = "smile-detection";
 
         // Values for white balance settings.
         public static final String WHITE_BALANCE_AUTO = "auto";
@@ -4294,6 +4294,11 @@ public class Camera {
          */
         public boolean isSmoothZoomSupported() {
             String str = get(KEY_SMOOTH_ZOOM_SUPPORTED);
+            return TRUE.equals(str);
+        }
+
+        public boolean isSupportedSmileDetection() {
+            String str = get(KEY_QC_SMILE_DETECTION);
             return TRUE.equals(str);
         }
 
