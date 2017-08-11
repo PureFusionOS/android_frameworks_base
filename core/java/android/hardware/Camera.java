@@ -542,7 +542,9 @@ public class Camera {
                     break;
                 }
             }
-        }
+        } else if (packageName.equals("com.oneplus.camera")) {
+	    halVersion = CAMERA_HAL_API_VERSION_1_0;
+	}
         return native_setup(new WeakReference<Camera>(this), cameraId, halVersion, packageName);
     }
 
