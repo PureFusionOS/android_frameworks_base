@@ -43,6 +43,7 @@ import android.os.Handler;
 import android.os.IBatteryPropertiesListener;
 import android.os.IBatteryPropertiesRegistrar;
 import android.os.IBinder;
+import android.os.IBinder.DeathRecipient;
 import android.os.DropBoxManager;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -51,6 +52,7 @@ import android.os.UEventObserver;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.service.battery.BatteryServiceDumpProto;
+import android.text.format.DateUtils;
 import android.util.EventLog;
 import android.util.Slog;
 import android.util.proto.ProtoOutputStream;
@@ -156,6 +158,10 @@ public final class BatteryService extends SystemService {
 
     private ActivityManagerInternal mActivityManagerInternal;
 
+    private final BatteryListener mBatteryListener;
+
+    private IBatteryPropertiesRegistrar mBatteryPropertiesRegistrar;
+
     public BatteryService(Context context) {
         super(context);
 
@@ -164,6 +170,7 @@ public final class BatteryService extends SystemService {
         mLed = new Led(context, getLocalService(LightsManager.class));
         mBatteryStats = BatteryStatsService.getService();
         mActivityManagerInternal = LocalServices.getService(ActivityManagerInternal.class);
+        mBatteryListener = new BatteryListener();
 
         mCriticalBatteryLevel = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_criticalBatteryWarningLevel);
@@ -194,14 +201,7 @@ public final class BatteryService extends SystemService {
 
     @Override
     public void onStart() {
-        IBinder b = ServiceManager.getService("batteryproperties");
-        final IBatteryPropertiesRegistrar batteryPropertiesRegistrar =
-                IBatteryPropertiesRegistrar.Stub.asInterface(b);
-        try {
-            batteryPropertiesRegistrar.registerListener(new BatteryListener());
-        } catch (RemoteException e) {
-            // Should never happen.
-        }
+        registerBatteryListener();
 
         mBinderService = new BinderService();
         publishBinderService("battery", mBinderService);
@@ -227,6 +227,38 @@ public final class BatteryService extends SystemService {
                         false, obs, UserHandle.USER_ALL);
                 updateBatteryWarningLevelLocked();
             }
+        }
+    }
+
+    private void registerBatteryListener() {
+        IBinder b = ServiceManager.getService("batteryproperties");
+        if (b == null) {
+            Slog.w(TAG, "batteryproperties not found: trying again");
+            mHandler.postDelayed(()-> {
+                registerBatteryListener();
+            }, DateUtils.SECOND_IN_MILLIS);
+            return;
+        }
+
+        try {
+            b.linkToDeath(new DeathRecipient() {
+                @Override
+                public void binderDied() {
+                    Slog.w(TAG, "batteryproperties died; reconnecting");
+                    mHandler.post(()-> {
+                        registerBatteryListener();
+                    });
+                }
+            }, 0);
+
+            mBatteryPropertiesRegistrar = IBatteryPropertiesRegistrar.Stub.asInterface(b);
+            mBatteryPropertiesRegistrar.unregisterListener(mBatteryListener);
+            mBatteryPropertiesRegistrar.registerListener(mBatteryListener);
+        } catch (RemoteException e) {
+            Slog.w(TAG, "batteryproperties error occured: " + e.toString());
+            mHandler.postDelayed(()-> {
+                registerBatteryListener();
+            }, DateUtils.SECOND_IN_MILLIS);
         }
     }
 
