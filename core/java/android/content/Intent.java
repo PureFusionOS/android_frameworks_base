@@ -8984,6 +8984,15 @@ public class Intent implements Parcelable, Cloneable {
     public void prepareToLeaveProcess(Context context) {
         final boolean leavingPackage = (mComponent == null)
                 || !Objects.equals(mComponent.getPackageName(), context.getPackageName());
+        if (mAction != null && mAction.equals("com.google.android.apps.nexuslauncher.updateweather")) {
+            Log.d("Intent", "Google update weather");
+            Intent getHome = new Intent(Intent.ACTION_MAIN);
+            getHome.addCategory(Intent.CATEGORY_HOME);
+            ResolveInfo home = context.getPackageManager().resolveActivity(getHome, PackageManager.MATCH_DEFAULT_ONLY);
+            if (home != null && home.activityInfo.packageName != null)
+                mPackage = home.activityInfo.packageName.intern();
+            Log.d("Intent", "Sending weather to " + mPackage);
+        }
         prepareToLeaveProcess(leavingPackage);
     }
 
