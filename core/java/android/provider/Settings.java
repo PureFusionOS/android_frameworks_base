@@ -3120,7 +3120,7 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
-       
+
         /**
          * Control whether the process CPU usage meter should be shown.
          *
@@ -4109,7 +4109,7 @@ public final class Settings {
         * @hide
         */
         public static final String MEDIA_SCANNER_ON_BOOT = "media_scanner_on_boot";
-		
+
 		/**
           * Volume keys control cursor in text fields (default is 0)
           * 0 - Disabled
@@ -4130,17 +4130,17 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_QUICK_QS_PULLDOWN = "status_bar_quick_qs_pulldown";
-		
+
         /**
          * Quick Settings Smart Pulldown
          * @hide
          */
         public static final String QS_SMART_PULLDOWN = "qs_smart_pulldown";
 
-        /**  
+        /**
          * AOKP Custom System Animations
          * @hide
-         */  
+         */
         public static final String[] ACTIVITY_ANIMATION_CONTROLS = new String[] {
                 "activity_open",
                 "activity_close",
@@ -4153,7 +4153,7 @@ public final class Settings {
                 "wallpaper_intra_open",
                 "wallpaper_intra_close",
                 "task_open_behind",
-        };  
+        };
         public static final String ANIMATION_CONTROLS_DURATION = "animation_controls_duration";
 
         /**
@@ -4167,7 +4167,7 @@ public final class Settings {
          * @hide
          */
         public static final String  RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
-		
+
         /**
          * Wether navigation bar is enabled or not
          * @hide
@@ -4358,7 +4358,7 @@ public final class Settings {
          */
         public static final String NETWORK_TRAFFIC_HIDEARROW = "network_traffic_hidearrow";
 
-        /** Whether to skip music track with volume rocker 
+        /** Whether to skip music track with volume rocker
         /**
          * @hide
          */
@@ -4473,7 +4473,7 @@ public final class Settings {
          * @hide
          */
         public static final String APP_SIDEBAR_SHOW_TRIGGER = "app_sidebar_show_trigger";
-	   /**	
+	   /**
          * Use EdgeGesture Service for system gestures in PhoneWindowManager
          * @hide
          */
@@ -4683,9 +4683,18 @@ public final class Settings {
 
         /**
          * Three Finger Gesture from Oppo
+
          * @hide
          */
         public static final String THREE_FINGER_GESTURE = "three_finger_gesture";
+
+        /**
+        * Whether to use the MTP by default after connecting to PC
+        * @hide
+        */
+        public static final String MTP_DIRTY_HACK = "mtp_dirty_hack";
+        /** @hide */
+        public static final String MTP_DIRTY_HACK_SAVE = "mtp_dirty_hack_save";
 
         /**
          * Whether or not to allow quick settings expansion with one swipe on the fingerprint sensor.
