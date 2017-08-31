@@ -37,6 +37,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.os.UserHandle;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -892,5 +893,11 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
                     Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS, 0, UserHandle.USER_CURRENT) == 1;
             setNavigationIconHints(mNavigationIconHints, true);
         }
+    }
+
+    public void setDoubleTapToSleep() {
+        boolean isDoubleTapEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.DOUBLE_TAP_SLEEP_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
+        ((NavigationBarFrame) getRootView()).setDoubleTapToSleep(isDoubleTapEnabled);
     }
 }
