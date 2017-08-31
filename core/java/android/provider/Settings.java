@@ -3921,6 +3921,12 @@ public final class Settings {
         public static final String ENABLE_SUGGESTIONS = "enable_suggestions";
 
         /**
+         * Whether to use icon pack for Recents
+         * @hide
+         */
+        public static final String RECENTS_ICON_PACK = "recents_icon_pack";
+
+        /**
          * show clear all recents button
          * @hide
          */
