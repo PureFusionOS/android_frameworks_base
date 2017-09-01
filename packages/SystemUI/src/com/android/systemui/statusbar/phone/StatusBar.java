@@ -5423,6 +5423,9 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.RECENTS_ICON_PACK),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -5431,11 +5434,15 @@ public class StatusBar extends SystemUI implements DemoMode,
             if (uri.equals(Settings.System.getUriFor(
                     Settings.System.RECENTS_ICON_PACK))) {
                 updateRecentsIconPack();
+            } else if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN))) {
+                setLockscreenDoubleTapToSleep();
             }
         }
 
         public void update() {
             updateRecentsIconPack();
+            setLockscreenDoubleTapToSleep();
         }
     }
 
@@ -5444,6 +5451,12 @@ public class StatusBar extends SystemUI implements DemoMode,
             Settings.System.RECENTS_ICON_PACK, mCurrentUserId);
         IconPackHelper.getInstance(mContext).updatePrefs(currentIconPack);
         mRecents.resetIconCache();
+    }
+
+    private void setLockscreenDoubleTapToSleep() {
+        if (mStatusBarWindow != null) {
+            mStatusBarWindow.setLockscreenDoubleTapToSleep();
+        }
     }
 
     private RemoteViews.OnClickHandler mOnClickHandler = new RemoteViews.OnClickHandler() {
