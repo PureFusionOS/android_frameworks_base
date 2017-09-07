@@ -3918,25 +3918,25 @@ public final class Settings {
          * Disable dashboard suggestions in settings
          * @hide
          */
-        public static final String ENABLE_SUGGESTIONS = "enable_suggestions";
+       public static final String ENABLE_SUGGESTIONS = "enable_suggestions";
 
         /**
          * Whether to use icon pack for Recents
          * @hide
          */
-        public static final String RECENTS_ICON_PACK = "recents_icon_pack";
+       public static final String RECENTS_ICON_PACK = "recents_icon_pack";
 
         /**
          * show clear all recents button
          * @hide
          */
-        public static final String SHOW_CLEAR_ALL_RECENTS = "show_clear_all_recents";
+       public static final String SHOW_CLEAR_ALL_RECENTS = "show_clear_all_recents";
 
         /**
          * location of the clear all rectents button
          * @hide
          */
-        public static final String  RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
+       public static final String  RECENTS_CLEAR_ALL_LOCATION = "recents_clear_all_location";
 
         /**
 
@@ -3944,19 +3944,36 @@ public final class Settings {
          * Disable dashboard conditions in settings
          * @hide
          */
-        public static final String ENABLE_CONDITIONS = "enable_conditions";
+       public static final String ENABLE_CONDITIONS = "enable_conditions";
 
         /**
          * Whether to show the battery info on the lockscreen while charging
          * @hide
          */
-        public static final String LOCKSCREEN_BATTERY_INFO = "lockscreen_battery_info";
-       
+       public static final String LOCKSCREEN_BATTERY_INFO = "lockscreen_battery_info";
+
         /**
+         * Whether to show the weather info on the lock screen
+         * @hide
+         */
+       public static final String LOCK_SCREEN_SHOW_WEATHER = "lock_screen_show_weather";
+
+        /**
+         * Whether to show the weather location lock screen
+         * @hide
+         */
+       public static final String LOCK_SCREEN_SHOW_WEATHER_LOCATION = "lock_screen_show_weather_location";
+
+        /**
+         * @hide
+         */
+       public static final String OMNIJAWS_WEATHER_ICON_PACK = "omnijaws_weather_icon_pack";
+
+       /**
         * Whether to allow battery light
         * @hide
         */
-        public static final String BATTERY_LIGHT_ENABLED = "battery_light_enabled";
+       public static final String BATTERY_LIGHT_ENABLED = "battery_light_enabled";
 
         /**
         * Whether to show battery light when DND mode is active
