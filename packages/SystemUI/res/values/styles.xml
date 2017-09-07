@@ -405,7 +405,6 @@
     <dimen name="preference_no_icon_padding_start">72dp</dimen>
 
     <style name="TunerSettings" parent="@android:style/Theme.DeviceDefault.Settings">
-        <item name="android:windowActionBar">false</item>
         <item name="dropdownPreferenceStyle">@style/TunerSettings.DropdownPreferenceStyle</item>
         <item name="dialogPreferenceStyle">@style/TunerSettings.DialogPreferenceStyle</item>
         <item name="preferenceCategoryStyle">@style/TunerSettings.PreferenceCategoryStyle</item>
