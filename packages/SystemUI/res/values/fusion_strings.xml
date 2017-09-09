@@ -22,4 +22,7 @@
 
     <string name="recents_free_ram">Free RAM: %1$d MB</string>
 
+    <!-- PiP Tile -->
+    <string name="quick_settings_pip_label">PiP</string>
+
 </resources>
