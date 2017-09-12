@@ -38,6 +38,7 @@ import com.android.systemui.qs.tiles.NightDisplayTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.SyncTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
+import com.android.systemui.qs.tiles.ScreenshotTile;
 import com.android.systemui.qs.tiles.UserTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.qs.tiles.WorkModeTile;
@@ -73,6 +74,7 @@ public class QSFactoryImpl implements QSFactory {
         else if (tileSpec.equals("sync")) return new SyncTile(mHost);
         else if (tileSpec.equals("caffeine")) return new CaffeineTile(mHost);
         else if (tileSpec.equals("usb_tether")) return new UsbTetherTile(mHost);
+        else if (tileSpec.equals("screenshot")) return new ScreenshotTile(mHost);
 
         // Intent tiles.
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(mHost, tileSpec);
