@@ -15,15 +15,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- The list of components which should be automatically disabled. -->
-    <string-array name="config_disabledComponents" translatable="false">
-    </string-array>
 
-    <!-- The list of components which should be forced to be enabled. -->
-    <string-array name="config_forceEnabledComponents" translatable="false">
-    </string-array>
-
-    <!-- Wheter to enable doze always on -->
-    <bool name="config_enableDozeAlwaysOn">false</bool>
 
 </resources>
