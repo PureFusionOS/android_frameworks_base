@@ -22,4 +22,7 @@
   <!-- Power menu -->
   <java-symbol type="string" name="system_error_vendorprint" />
 
+  <!-- Wheter to enable doze always on -->
+  <java-symbol type="bool" name="config_enableDozeAlwaysOn"/>
+
 </resources>
