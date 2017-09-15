@@ -244,6 +244,7 @@ import com.android.internal.util.gesture.EdgeGesturePosition;
 import com.android.internal.util.gesture.EdgeServiceConstants;
 import com.android.internal.util.fusion.ActionUtils;
 import com.android.internal.util.ScreenShapeHelper;
+import com.android.internal.util.fusion.ActionUtils;
 import com.android.internal.util.fusion.DeviceUtils;
 import com.android.internal.widget.PointerLocationView;
 import com.android.server.GestureLauncherService;
@@ -360,6 +361,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private static final int KEY_ACTION_SLEEP = 7;
     private static final int KEY_ACTION_LAST_APP = 8;
     private static final int KEY_ACTION_SPLIT_SCREEN = 9;
+    private static final int KEY_ACTION_SCREENSHOT = 10;
+    private static final int KEY_ACTION_PARTIAL_SCREENSHOT = 11;
+    private static final int KEY_ACTION_PIP = 12;
 
     // Masks for checking presence of hardware keys.
     // Must match values in core/res/res/values/config.xml
@@ -2049,6 +2053,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KEY_ACTION_SPLIT_SCREEN:
                 toggleSplitScreen();
                 break;
+            case KEY_ACTION_SCREENSHOT:
+                ActionUtils.takeScreenshot(true);
+                break;
+            case KEY_ACTION_PARTIAL_SCREENSHOT:
+                ActionUtils.takeScreenshot(false);
+                break;
+            case KEY_ACTION_PIP:
+                DeviceUtils.sendKeycode(171);
+                break;
             default:
                 break;
          }
@@ -2439,14 +2452,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mLongPressOnHomeBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_longPressOnHomeBehavior);
         if (mLongPressOnHomeBehavior < KEY_ACTION_NOTHING ||
-                mLongPressOnHomeBehavior > KEY_ACTION_SLEEP) {
+                mLongPressOnHomeBehavior > KEY_ACTION_PIP) {
             mLongPressOnHomeBehavior = KEY_ACTION_NOTHING;
         }
 
         mDoubleTapOnHomeBehavior = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_doubleTapOnHomeBehavior);
         if (mDoubleTapOnHomeBehavior < KEY_ACTION_NOTHING ||
-                mDoubleTapOnHomeBehavior > KEY_ACTION_SLEEP) {
+                mDoubleTapOnHomeBehavior > KEY_ACTION_PIP) {
             mDoubleTapOnHomeBehavior = KEY_ACTION_NOTHING;
         }
 
@@ -8823,13 +8836,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     public void sendCustomAction(Intent intent) {
         String action = intent.getAction();
         if (action != null) {
-            if (CustomUtils.INTENT_SCREENSHOT.equals(action)) {
+            if (ActionUtils.INTENT_SCREENSHOT.equals(action)) {
                 mContext.enforceCallingOrSelfPermission(Manifest.permission.ACCESS_SURFACE_FLINGER,
                         TAG + "sendCustomAction permission denied");
                 mHandler.removeCallbacks(mScreenshotRunnable);
                 mScreenshotRunnable.setScreenshotType(TAKE_SCREENSHOT_FULLSCREEN);
                 mHandler.post(mScreenshotRunnable);
-            } else if (CustomUtils.INTENT_REGION_SCREENSHOT.equals(action)) {
+            } else if (ActionUtils.INTENT_REGION_SCREENSHOT.equals(action)) {
                 mContext.enforceCallingOrSelfPermission(Manifest.permission.ACCESS_SURFACE_FLINGER,
                         TAG + "sendCustomAction permission denied");
                 mHandler.removeCallbacks(mScreenshotRunnable);
