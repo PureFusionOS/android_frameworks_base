@@ -80,4 +80,7 @@
     <!-- PiP Tile -->
     <string name="quick_settings_pip_label">PiP</string>
 
+    <!-- volte icon switch -->
+    <string name="status_bar_volte">VOLTE</string>
+
 </resources>
