@@ -74,6 +74,9 @@
   <java-symbol type="string" name="adb_both_active_notification_title" />
   <java-symbol type="string" name="adb_active_generic_notification_message" />
 
+  <!-- Whether home button can wake device -->
+  <java-symbol type="bool" name="config_homeCanWake" />
+
   <!-- Unlink notification images -->
   <java-symbol type="drawable" name="ic_audio_notification_new" />
   <java-symbol type="drawable" name="ic_audio_notification_mute_new" />
@@ -152,5 +155,6 @@
 
   <!-- High Brightness Mode -->
   <java-symbol type="bool" name="config_supportHighBrightness" />
+
 
 </resources>

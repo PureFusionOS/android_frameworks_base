@@ -4269,6 +4269,12 @@ public final class Settings {
         public static final String TOAST_ICON = "toast_icon";
 
         /**
+         * Whether to allow waking up screen on taping home button
+         * @hide
+         */
+         public static final String HOME_WAKE_SCREEN = "home_wake_screen";
+
+        /**
          * Whether the phone vibrates on call connect
          * @hide
          */
