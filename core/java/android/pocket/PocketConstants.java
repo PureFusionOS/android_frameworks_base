@@ -19,7 +19,7 @@ public class PocketConstants {
     /**
      * Whether to use light sensor to evaluate pocket state.
      */
-    public static final boolean ENABLE_LIGHT_JUDGE = true;
+    public static final boolean ENABLE_LIGHT_JUDGE = false;
 
 
 }
