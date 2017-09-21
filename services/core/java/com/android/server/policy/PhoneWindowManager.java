@@ -1604,7 +1604,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mPocketManager.setListeningExternal(false);
                 break;
             }
-        } else if (mTorchEnabled && !isScreenOn()) {
+        } else if (mTorchEnabled && !isScreenOn() && !mIsDeviceInPocket) {
            try {
                mCameraManager.setTorchMode(getCameraId(), true);
            } catch (Exception e) {
