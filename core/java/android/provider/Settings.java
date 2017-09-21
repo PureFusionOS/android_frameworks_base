@@ -7473,22 +7473,14 @@ public final class Settings {
         public static final String QS_EASY_TOGGLE = "qs_easy_toggle";
 
         /**
-         * Low brightness level for the advanced night mode tile
+         * Whether to set a lower brightness level when enabling night mode
+         * 0: Disabled
+         * 1: Set the brightness to a very low value
+         * 2: Set the brightness to a low value
+         * 3: Set the brightness to a medium value
          * @hide
          */
-        public static final String QS_NIGHT_BRIGHTNESS_VALUE = "qs_night_brightness_value";
-
-        /**
-         * Allows to store the custom user auto brightness value
-         * @hide
-         */
-        public static final String NIGHT_AUTOBRIGHTNESS_USERVALUE = "night_autobrightness_uservalue";
-
-        /**
-         * Allows to store the custom user manual brightness value
-         * @hide
-         */
-        public static final String NIGHT_MANBRIGHTNESS_USERVALUE = "night_manbrightness_uservalue";
+        public static final String NIGHT_BRIGHTNESS_VALUE = "night_brightness_value";
 
         /**
          * Status bar battery %
