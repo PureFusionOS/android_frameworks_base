@@ -306,5 +306,4 @@ public class Action {
                 InputDevice.SOURCE_KEYBOARD);
         im.injectInputEvent(upEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
     }
-
 }
