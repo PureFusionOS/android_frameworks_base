@@ -165,5 +165,4 @@ public class DeviceUtils {
     public static boolean isTablet(Context con) {
         return getScreenType(con) == DEVICE_TABLET;
     }
-
 }
