@@ -10600,6 +10600,11 @@ public class BatteryStatsImpl extends BatteryStats {
             mDischargePlugLevel = level;
         }
 
+        if (level >= 90 || (mCharging && mLastChargeStepLevel > level)
+                        || (!mCharging && mLastChargeStepLevel < level)) {
+            mLastChargeStepLevel = level;
+        }
+        boolean changed = false;
         if (onBattery != mOnBattery) {
             mHistoryCur.batteryLevel = (byte)level;
             mHistoryCur.batteryStatus = (byte)status;
@@ -10615,8 +10620,10 @@ public class BatteryStatsImpl extends BatteryStats {
             }
             mHistoryCur.batteryChargeUAh = chargeUAh;
             setOnBatteryLocked(elapsedRealtime, uptime, onBattery, oldStatus, level, chargeUAh);
+
+            changed |= setChargingLocked(true);
+            mLastChargeStepLevel = level;
         } else {
-            boolean changed = false;
             if (mHistoryCur.batteryLevel != level) {
                 mHistoryCur.batteryLevel = (byte)level;
                 changed = true;
@@ -10661,8 +10668,8 @@ public class BatteryStatsImpl extends BatteryStats {
             long modeBits = (((long)mInitStepMode) << STEP_LEVEL_INITIAL_MODE_SHIFT)
                     | (((long)mModStepMode) << STEP_LEVEL_MODIFIED_MODE_SHIFT)
                     | (((long)(level&0xff)) << STEP_LEVEL_LEVEL_SHIFT);
+            changed |= setChargingLocked(false);
             if (onBattery) {
-                changed |= setChargingLocked(false);
                 if (mLastDischargeStepLevel != level && mMinDischargeStepLevel > level) {
                     mDischargeStepTracker.addLevelSteps(mLastDischargeStepLevel - level,
                             modeBits, elapsedRealtime);
@@ -10674,28 +10681,6 @@ public class BatteryStatsImpl extends BatteryStats {
                     mModStepMode = 0;
                 }
             } else {
-                if (level >= 90) {
-                    // If the battery level is at least 90%, always consider the device to be
-                    // charging even if it happens to go down a level.
-                    changed |= setChargingLocked(true);
-                    mLastChargeStepLevel = level;
-                } if (!mCharging) {
-                    if (mLastChargeStepLevel < level) {
-                        // We have not reporting that we are charging, but the level has now
-                        // gone up, so consider the state to be charging.
-                        changed |= setChargingLocked(true);
-                        mLastChargeStepLevel = level;
-                    }
-                } else {
-                    if (mLastChargeStepLevel > level) {
-                        // We had reported that the device was charging, but here we are with
-                        // power connected and the level going down.  Looks like the current
-                        // power supplied isn't enough, so consider the device to now be
-                        // discharging.
-                        changed |= setChargingLocked(false);
-                        mLastChargeStepLevel = level;
-                    }
-                }
                 if (mLastChargeStepLevel != level && mMaxChargeStepLevel < level) {
                     mChargeStepTracker.addLevelSteps(level - mLastChargeStepLevel,
                             modeBits, elapsedRealtime);
