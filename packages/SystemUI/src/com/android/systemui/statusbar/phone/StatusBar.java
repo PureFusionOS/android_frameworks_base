@@ -6972,10 +6972,25 @@ public class StatusBar extends SystemUI implements DemoMode,
         mStackScroller.changeViewPosition(mDismissView, mStackScroller.getChildCount() - 1);
         mStackScroller.changeViewPosition(mEmptyShadeView, mStackScroller.getChildCount() - 2);
         mStackScroller.changeViewPosition(mNotificationShelf, mStackScroller.getChildCount() - 3);
+
+        if (onKeyguard) {
+            hideWeatherPanelIfNecessary(visibleNotifications, getMaxKeyguardNotifications(true));
+        }
     }
 
     public boolean shouldShowOnKeyguard(StatusBarNotification sbn) {
         return mShowLockscreenNotifications && !mNotificationData.isAmbient(sbn.getKey());
+    }
+
+    private void hideWeatherPanelIfNecessary(int visibleNotifications, int maxKeyguardNotifications) {
+        final ContentResolver resolver = mContext.getContentResolver();
+        int notifications = visibleNotifications;
+        if (visibleNotifications > 0) {
+            notifications += 1;
+        }
+        Settings.System.putInt(resolver,
+                Settings.System.LOCK_SCREEN_VISIBLE_NOTIFICATIONS, notifications);
+        maxKeyguardNotifications = getMaxKeyguardNotifications(true);
     }
 
     // extended in StatusBar
