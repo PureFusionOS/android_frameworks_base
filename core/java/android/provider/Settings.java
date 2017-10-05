@@ -3931,6 +3931,12 @@ public final class Settings {
         /**
 
         /**
+         * Disable dashboard suggestions in settings
+         * @hide
+         */
+        public static final String ENABLE_SUGGESTIONS = "enable_suggestions";
+
+        /**
          * show clear all recents button
          * @hide
          */
