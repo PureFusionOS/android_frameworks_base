@@ -25,4 +25,7 @@
     <!-- Allow Opa (Pixel navbar) layout -->
     <bool name="config_allowOpaLayout">true</bool>
 
+    <!-- Navigation keys swaped layout -->
+    <string name="config_navBarLayoutSwapped" translatable="false">left,recent;home;back,right</string>
+
 </resources>
