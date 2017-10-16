@@ -14,6 +14,8 @@
      limitations under the License.
 -->
 <resources>
+
     <!-- Keyguard weather colors -->
     <color name="keyguard_default_primary_text_color">#ffffffff</color>
+
 </resources>
