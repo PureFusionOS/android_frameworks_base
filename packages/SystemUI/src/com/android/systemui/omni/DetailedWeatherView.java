@@ -263,7 +263,7 @@ public class DetailedWeatherView extends FrameLayout {
         final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         Typeface font = Typeface.create("sans-serif-condensed", Typeface.NORMAL);
         textPaint.setTypeface(font);
-        textPaint.setColor(Color.BLACK);
+        textPaint.setColor(getTintColor());
         textPaint.setTextAlign(Paint.Align.LEFT);
         final int textSize= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, resources.getDisplayMetrics());
         textPaint.setTextSize(textSize);
@@ -286,6 +286,19 @@ public class DetailedWeatherView extends FrameLayout {
         canvas.drawText(str, width / 2 - bounds.width() / 2, height - textSize / 2, textPaint);
 
         return new BitmapDrawable(resources, bmp);
+    }
+
+    private Drawable applyTint(Drawable icon) {
+        icon = icon.mutate();
+        icon.setTint(getTintColor());
+        return icon;
+    }
+
+    private int getTintColor() {
+        TypedArray array = mContext.obtainStyledAttributes(new int[]{android.R.attr.colorControlNormal});
+        int color = array.getColor(0, 0);
+        array.recycle();
+        return color;
     }
 
     private void forceRefreshWeatherSettings() {
