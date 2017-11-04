@@ -3978,7 +3978,7 @@ message MetricsEvent {
     // END OF AOSP CONSTANTS
 
     // PureFusion Metrics
-    FUSION = 500;
+    FUSION = 999;
 
   }
 }
