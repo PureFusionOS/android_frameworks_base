@@ -33,6 +33,8 @@ import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.view.DisplayInfo;
 import android.view.WindowManager;
+import android.os.PowerManager;
+import android.os.SystemClock;
 
 import com.android.internal.R;
 
@@ -76,6 +78,13 @@ public class PureFusionUtils {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         return (cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE) == false);
+    }
+	
+	public static void switchScreenOff(Context ctx) {
+        PowerManager pm = (PowerManager) ctx.getSystemService(Context.POWER_SERVICE);
+        if (pm!= null) {
+            pm.goToSleep(SystemClock.uptimeMillis());
+        }
     }
 
     public static boolean isPackageInstalled(Context context, String pkg, boolean ignoreState) {
