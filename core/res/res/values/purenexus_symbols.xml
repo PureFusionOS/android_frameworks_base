@@ -118,11 +118,6 @@
   <java-symbol type="style" name="Animation.Toast.SlideRightLeft" />
   <java-symbol type="style" name="Animation.Toast.SlideLeftRight" />
 
-  <!-- Battery light customization -->
-  <java-symbol type="bool" name="config_intrusiveBatteryLed" />
-  <java-symbol type="bool" name="config_multiColorBatteryLed" />
-  <java-symbol type="bool" name="config_ledCanPulse" />
-
   <!-- Power menu Animations  -->
   <java-symbol type="style" name="PowerMenuBottomAnimation" />
   <java-symbol type="style" name="PowerMenuTopAnimation" />
