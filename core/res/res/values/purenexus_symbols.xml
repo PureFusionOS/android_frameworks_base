@@ -216,5 +216,8 @@
   <java-symbol type="bool" name="config_multiColorBatteryLed" />
   <!-- LED pulse -->
   <java-symbol type="bool" name="config_ledCanPulse" />
+  <!-- Omni TaskUtils -->
+  <java-symbol type="anim" name="last_app_in" />
+  <java-symbol type="anim" name="last_app_out" />
 
 </resources>
