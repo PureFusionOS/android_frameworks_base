@@ -23,7 +23,6 @@ import android.content.res.Resources;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.util.ArraySet;
-import android.util.MutableFloat;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.ViewDebug;
@@ -39,6 +38,7 @@ import com.android.systemui.recents.misc.Utilities;
 import com.android.systemui.recents.model.Task;
 import com.android.systemui.recents.model.TaskStack;
 import com.android.systemui.recents.views.grid.TaskGridLayoutAlgorithm;
+
 import java.io.PrintWriter;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -16,9 +16,6 @@
 
 package com.android.systemui.pip;
 
-import static android.content.pm.PackageManager.FEATURE_LEANBACK_ONLY;
-import static android.content.pm.PackageManager.FEATURE_PICTURE_IN_PICTURE;
-
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 
@@ -28,6 +25,9 @@ import com.android.systemui.statusbar.CommandQueue;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+
+import static android.content.pm.PackageManager.FEATURE_LEANBACK_ONLY;
+import static android.content.pm.PackageManager.FEATURE_PICTURE_IN_PICTURE;
 
 /**
  * Controls the picture-in-picture window.

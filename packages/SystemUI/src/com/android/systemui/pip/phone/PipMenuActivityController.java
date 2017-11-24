@@ -16,8 +16,6 @@
 
 package com.android.systemui.pip.phone;
 
-import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
-
 import android.app.ActivityManager.StackInfo;
 import android.app.ActivityOptions;
 import android.app.IActivityManager;
@@ -34,7 +32,6 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.util.Log;
-import android.view.IWindowManager;
 
 import com.android.systemui.pip.phone.PipMediaController.ActionListener;
 import com.android.systemui.recents.events.EventBus;
@@ -44,6 +41,8 @@ import com.android.systemui.recents.misc.ReferenceCountedTrigger;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
 
 /**
  * Manages the PiP menu activity which can show menu options or a scrim.

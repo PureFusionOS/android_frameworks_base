@@ -14,20 +14,6 @@
 
 package com.android.systemui.qs.tileimpl;
 
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_CLICK;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_LONG_PRESS;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_SECONDARY_CLICK;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_QS_POSITION;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_QS_VALUE;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.TYPE_ACTION;
-
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import android.content.Intent;
 import android.metrics.LogMaker;
 import android.support.test.filters.SmallTest;
@@ -46,6 +32,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
+
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_CLICK;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_LONG_PRESS;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_SECONDARY_CLICK;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_QS_POSITION;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_QS_VALUE;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.TYPE_ACTION;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidTestingRunner.class)
 @RunWithLooper

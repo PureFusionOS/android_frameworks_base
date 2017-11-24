@@ -16,9 +16,6 @@
 
 package com.android.systemui.stackdivider;
 
-import static android.app.ITaskStackListener.FORCED_RESIZEABLE_REASON_SECONDARY_DISPLAY;
-import static android.app.ITaskStackListener.FORCED_RESIZEABLE_REASON_SPLIT_SCREEN;
-
 import android.annotation.Nullable;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -30,6 +27,9 @@ import android.view.View.OnTouchListener;
 import android.widget.TextView;
 
 import com.android.systemui.R;
+
+import static android.app.ITaskStackListener.FORCED_RESIZEABLE_REASON_SECONDARY_DISPLAY;
+import static android.app.ITaskStackListener.FORCED_RESIZEABLE_REASON_SPLIT_SCREEN;
 
 /**
  * Translucent activity that gets started on top of a task in multi-window to inform the user that

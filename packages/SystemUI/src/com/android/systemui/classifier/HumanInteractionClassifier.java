@@ -24,11 +24,9 @@ import android.os.Looper;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 
 /**
  * An classifier trying to determine whether it is a human interacting with the phone or not.

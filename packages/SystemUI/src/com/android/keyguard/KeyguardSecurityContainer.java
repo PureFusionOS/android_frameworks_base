@@ -15,7 +15,6 @@
  */
 package com.android.keyguard;
 
-import android.R.style;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;

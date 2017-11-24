@@ -22,7 +22,6 @@ import android.widget.ImageView;
 
 import com.android.internal.util.NotificationColorUtil;
 import com.android.systemui.R;
-import com.android.systemui.statusbar.stack.NotificationChildrenContainer;
 
 /**
  * A util class for various reusable functions

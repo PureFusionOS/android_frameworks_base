@@ -21,7 +21,6 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.IntProperty;
 import android.util.Property;
 import android.view.View;
 

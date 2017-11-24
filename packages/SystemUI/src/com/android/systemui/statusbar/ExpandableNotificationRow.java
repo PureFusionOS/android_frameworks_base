@@ -16,15 +16,12 @@
 
 package com.android.systemui.statusbar;
 
-import static com.android.systemui.statusbar.notification.NotificationInflater.InflationCallback;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.annotation.Nullable;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.AnimationDrawable;
@@ -79,6 +76,8 @@ import com.android.systemui.statusbar.stack.StackScrollState;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.android.systemui.statusbar.notification.NotificationInflater.InflationCallback;
 
 public class ExpandableNotificationRow extends ActivatableNotificationView
         implements PluginListener<NotificationMenuRowPlugin> {

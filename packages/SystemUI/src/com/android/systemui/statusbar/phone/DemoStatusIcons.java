@@ -28,7 +28,6 @@ import com.android.internal.statusbar.StatusBarIcon;
 import com.android.systemui.DemoMode;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.StatusBarIconView;
-import com.android.systemui.statusbar.policy.LocationControllerImpl;
 
 public class DemoStatusIcons extends LinearLayout implements DemoMode {
     private final LinearLayout mStatusIcons;

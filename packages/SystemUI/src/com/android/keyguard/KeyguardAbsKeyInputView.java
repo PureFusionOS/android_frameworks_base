@@ -16,9 +16,6 @@
 
 package com.android.keyguard;
 
-import static com.android.keyguard.LatencyTracker.ACTION_CHECK_CREDENTIAL;
-import static com.android.keyguard.LatencyTracker.ACTION_CHECK_CREDENTIAL_UNLOCKED;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
@@ -31,6 +28,9 @@ import android.widget.LinearLayout;
 
 import com.android.internal.widget.LockPatternChecker;
 import com.android.internal.widget.LockPatternUtils;
+
+import static com.android.keyguard.LatencyTracker.ACTION_CHECK_CREDENTIAL;
+import static com.android.keyguard.LatencyTracker.ACTION_CHECK_CREDENTIAL_UNLOCKED;
 
 /**
  * Base class for PIN and password unlock screens.

@@ -16,16 +16,15 @@
 
 package com.android.systemui.statusbar;
 
+import android.Manifest;
 import android.app.AppGlobals;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
-import android.content.Context;
 import android.graphics.drawable.Icon;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.service.notification.NotificationListenerService;
@@ -37,10 +36,8 @@ import android.util.ArrayMap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
-import android.Manifest;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.messages.nano.SystemMessageProto;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.util.NotificationColorUtil;
 import com.android.systemui.Dependency;

@@ -16,9 +16,6 @@
 
 package com.android.systemui.qs.tiles;
 
-import static android.provider.Settings.Global.ZEN_MODE_ALARMS;
-import static android.provider.Settings.Global.ZEN_MODE_OFF;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +24,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.provider.Settings.Global;
@@ -56,6 +52,9 @@ import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.policy.ZenModeController;
 import com.android.systemui.volume.ZenModePanel;
+
+import static android.provider.Settings.Global.ZEN_MODE_ALARMS;
+import static android.provider.Settings.Global.ZEN_MODE_OFF;
 
 /** Quick settings tile: Do not disturb **/
 public class DndTile extends QSTileImpl<BooleanState> {

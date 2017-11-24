@@ -13,9 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<com.android.systemui.tuner.PreviewNavInflater
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:systemui="http://schemas.android.com/apk/res-auto"
+<com.android.systemui.tuner.PreviewNavInflater xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="@dimen/navigation_bar_size">

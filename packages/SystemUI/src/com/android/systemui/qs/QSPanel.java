@@ -16,8 +16,6 @@
 
 package com.android.systemui.qs;
 
-import static com.android.systemui.qs.tileimpl.QSTileImpl.getColorForState;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -29,7 +27,6 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -54,6 +51,8 @@ import com.android.systemui.tuner.TunerService.Tunable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import static com.android.systemui.qs.tileimpl.QSTileImpl.getColorForState;
 
 /** View that represents the quick settings tile panel. **/
 public class QSPanel extends LinearLayout implements Tunable, Callback {

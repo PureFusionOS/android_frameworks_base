@@ -14,10 +14,6 @@
 
 package com.android.systemui.qs.customize;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 import android.support.test.filters.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
@@ -31,6 +27,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Collections;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidTestingRunner.class)
 @RunWithLooper

@@ -14,12 +14,9 @@
 
 package com.android.systemui;
 
-import android.content.res.Configuration;
-import android.provider.Settings;
 import android.util.Log;
 
 import com.android.systemui.R;
-import com.android.systemui.SystemUI;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;

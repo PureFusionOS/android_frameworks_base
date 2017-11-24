@@ -20,12 +20,8 @@ import android.content.Context;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.os.UserHandle;
-import android.text.TextUtils;
 import android.util.ArraySet;
-import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.android.internal.statusbar.StatusBarIcon;

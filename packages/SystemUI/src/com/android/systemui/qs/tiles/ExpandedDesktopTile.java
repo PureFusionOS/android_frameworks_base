@@ -20,22 +20,17 @@ package com.android.systemui.qs.tiles;
 
 import android.content.ComponentName;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.database.ContentObserver;
-import android.net.Uri;
 import android.os.Handler;
 import android.provider.Settings;
-import android.view.View;
-import android.view.WindowManagerGlobal;
 import android.view.WindowManagerPolicyControl;
 
-import com.android.systemui.R;
-import com.android.systemui.Dependency;
-import com.android.systemui.qs.QSHost;
-import com.android.systemui.plugins.qs.QSTile.BooleanState;
-import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.systemui.R;
+import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.qs.QSHost;
+import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 /** Quick settings tile: Expanded desktop **/
 public class ExpandedDesktopTile extends QSTileImpl<BooleanState> {

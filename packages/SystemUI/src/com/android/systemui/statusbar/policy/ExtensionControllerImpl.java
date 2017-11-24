@@ -14,15 +14,15 @@
 
 package com.android.systemui.statusbar.policy;
 
+import android.content.Context;
+import android.util.ArrayMap;
+
 import com.android.systemui.Dependency;
 import com.android.systemui.plugins.Plugin;
 import com.android.systemui.plugins.PluginListener;
 import com.android.systemui.plugins.PluginManager;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
-
-import android.content.Context;
-import android.util.ArrayMap;
 
 import java.util.ArrayList;
 import java.util.Collections;

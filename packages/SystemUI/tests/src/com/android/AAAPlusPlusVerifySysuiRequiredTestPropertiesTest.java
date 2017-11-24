@@ -14,8 +14,6 @@
 
 package com.android;
 
-import static org.junit.Assert.assertFalse;
-
 import android.support.test.filters.LargeTest;
 import android.support.test.filters.MediumTest;
 import android.support.test.filters.SmallTest;
@@ -37,6 +35,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+
+import static org.junit.Assert.assertFalse;
 
 /**
  * This is named AAAPlusPlusVerifySysuiRequiredTestPropertiesTest for two reasons.

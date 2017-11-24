@@ -16,9 +16,6 @@
 
 package com.android.systemui.stackdivider;
 
-import static com.android.systemui.stackdivider.ForcedResizableInfoActivity
-        .EXTRA_FORCED_RESIZEABLE_REASON;
-
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +32,8 @@ import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.recents.misc.SystemServicesProxy.TaskStackListener;
 import com.android.systemui.stackdivider.events.StartedDragingEvent;
 import com.android.systemui.stackdivider.events.StoppedDragingEvent;
+
+import static com.android.systemui.stackdivider.ForcedResizableInfoActivity.EXTRA_FORCED_RESIZEABLE_REASON;
 
 /**
  * Controller that decides when to show the {@link ForcedResizableInfoActivity}.

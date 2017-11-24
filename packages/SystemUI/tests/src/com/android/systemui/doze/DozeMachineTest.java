@@ -16,6 +16,19 @@
 
 package com.android.systemui.doze;
 
+import android.support.test.filters.SmallTest;
+import android.testing.AndroidTestingRunner;
+import android.testing.UiThreadTest;
+import android.view.Display;
+
+import com.android.internal.hardware.AmbientDisplayConfiguration;
+import com.android.systemui.SysuiTestCase;
+import com.android.systemui.util.wakelock.WakeLockFake;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import static com.android.systemui.doze.DozeMachine.State.DOZE;
 import static com.android.systemui.doze.DozeMachine.State.DOZE_AOD;
 import static com.android.systemui.doze.DozeMachine.State.DOZE_PULSE_DONE;
@@ -24,12 +37,11 @@ import static com.android.systemui.doze.DozeMachine.State.DOZE_REQUEST_PULSE;
 import static com.android.systemui.doze.DozeMachine.State.FINISH;
 import static com.android.systemui.doze.DozeMachine.State.INITIALIZED;
 import static com.android.systemui.doze.DozeMachine.State.UNINITIALIZED;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -37,20 +49,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import android.support.test.filters.SmallTest;
-import android.testing.AndroidTestingRunner;
-import android.view.Display;
-
-import com.android.internal.hardware.AmbientDisplayConfiguration;
-import com.android.systemui.SysuiTestCase;
-import com.android.systemui.util.wakelock.WakeLockFake;
-
-import android.testing.UiThreadTest;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 @SmallTest
 @RunWith(AndroidTestingRunner.class)

@@ -13,13 +13,10 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<com.android.systemui.tuner.ClipboardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:systemui="http://schemas.android.com/apk/res-auto"
+<com.android.systemui.tuner.ClipboardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/navigation_side_padding"
     android:layout_height="match_parent"
     android:layout_weight="0"
     android:scaleType="center"
-    android:contentDescription="@string/clipboard"
-    />
+    android:contentDescription="@string/clipboard" />
 

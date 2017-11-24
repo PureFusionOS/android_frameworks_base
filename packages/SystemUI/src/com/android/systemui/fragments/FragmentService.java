@@ -16,15 +16,11 @@ package com.android.systemui.fragments;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Bundle;
 import android.os.Handler;
 import android.util.ArrayMap;
-import android.util.Log;
 import android.view.View;
 
 import com.android.systemui.ConfigurationChangedReceiver;
-import com.android.systemui.SystemUI;
-import com.android.systemui.SystemUIApplication;
 
 /**
  * Holds a map of root views to FragmentHostStates and generates them as needed.

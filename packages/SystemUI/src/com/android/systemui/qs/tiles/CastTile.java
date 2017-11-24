@@ -16,28 +16,21 @@
 
 package com.android.systemui.qs.tiles;
 
-import static android.media.MediaRouter.ROUTE_TYPE_REMOTE_DISPLAY;
-
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.MediaRouter;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.android.internal.app.MediaRouteChooserDialog;
-import com.android.internal.app.MediaRouteControllerDialog;
 import com.android.internal.app.MediaRouteDialogPresenter;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
@@ -56,6 +49,8 @@ import com.android.systemui.statusbar.policy.KeyguardMonitor;
 
 import java.util.LinkedHashMap;
 import java.util.Set;
+
+import static android.media.MediaRouter.ROUTE_TYPE_REMOTE_DISPLAY;
 
 /** Quick settings tile: Cast **/
 public class CastTile extends QSTileImpl<BooleanState> {

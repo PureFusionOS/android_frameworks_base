@@ -14,15 +14,6 @@
 
 package com.android.systemui.qs.tileimpl;
 
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_CLICK;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_LONG_PRESS;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_SECONDARY_CLICK;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_QS_POSITION;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_QS_VALUE;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.TYPE_ACTION;
-import static com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
-
-import android.R.attr;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -51,6 +42,14 @@ import com.android.systemui.plugins.qs.QSTile.State;
 import com.android.systemui.qs.QSHost;
 
 import java.util.ArrayList;
+
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_CLICK;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_LONG_PRESS;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_SECONDARY_CLICK;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_QS_POSITION;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_QS_VALUE;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.TYPE_ACTION;
+import static com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
 
 /**
  * Base quick-settings tile, extend this to create a new tile.

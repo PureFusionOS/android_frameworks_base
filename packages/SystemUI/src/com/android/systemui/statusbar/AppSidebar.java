@@ -16,9 +16,6 @@
 
 package com.android.systemui.statusbar;
 
-import static android.view.KeyEvent.ACTION_DOWN;
-import static android.view.KeyEvent.KEYCODE_BACK;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -37,26 +34,35 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.systemui.R;
 import com.android.systemui.fusion.TriggerOverlayView;
-import com.android.systemui.statusbar.sidebar.*;
+import com.android.systemui.statusbar.sidebar.AppItemInfo;
+import com.android.systemui.statusbar.sidebar.Folder;
+import com.android.systemui.statusbar.sidebar.FolderIcon;
+import com.android.systemui.statusbar.sidebar.FolderInfo;
+import com.android.systemui.statusbar.sidebar.ItemInfo;
+import com.android.systemui.statusbar.sidebar.SidebarContentProvider;
+import com.android.systemui.statusbar.sidebar.SidebarTable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import static android.view.KeyEvent.ACTION_DOWN;
+import static android.view.KeyEvent.KEYCODE_BACK;
 
 public class AppSidebar extends TriggerOverlayView {
     private static final String TAG = "AppSidebar";

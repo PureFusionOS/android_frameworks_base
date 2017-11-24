@@ -16,12 +16,6 @@
 
 package com.android.systemui.doze;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import android.support.test.filters.SmallTest;
 import android.view.Display;
 
@@ -30,6 +24,12 @@ import com.android.systemui.statusbar.phone.DozeParameters;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SmallTest
 public class DozeScreenStatePreventingAdapterTest extends SysuiTestCase {

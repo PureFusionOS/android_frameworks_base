@@ -26,12 +26,11 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.service.quicksettings.Tile;
 
+import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.systemui.R;
+import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
-import com.android.systemui.plugins.qs.QSTile.BooleanState;
-import com.android.systemui.R;
-
-import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
 /** Quick settings tile: Caffeine **/
 public class CaffeineTile extends QSTileImpl<BooleanState> {

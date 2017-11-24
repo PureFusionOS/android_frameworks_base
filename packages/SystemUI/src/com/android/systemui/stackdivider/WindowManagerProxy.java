@@ -16,9 +16,6 @@
 
 package com.android.systemui.stackdivider;
 
-import static android.app.ActivityManager.StackId.DOCKED_STACK_ID;
-import static android.view.WindowManager.DOCKED_INVALID;
-
 import android.app.ActivityManager;
 import android.graphics.Rect;
 import android.os.RemoteException;
@@ -29,6 +26,9 @@ import com.android.internal.annotations.GuardedBy;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static android.app.ActivityManager.StackId.DOCKED_STACK_ID;
+import static android.view.WindowManager.DOCKED_INVALID;
 
 /**
  * Proxy to simplify calls into window manager/activity manager

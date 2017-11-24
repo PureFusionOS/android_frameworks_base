@@ -16,12 +16,6 @@
 
 package com.android.systemui.statusbar.sidebar;
 
-import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ComponentName;
@@ -65,8 +59,15 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.systemui.R;
 import com.android.systemui.statusbar.AppSidebar;
+
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class SidebarConfigurationActivity extends Activity {
     private static final String TAG = "SidebarConfiguration";

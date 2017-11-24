@@ -14,9 +14,6 @@
 
 package com.android.systemui;
 
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
 import android.app.Fragment;
 import android.app.Instrumentation;
 import android.support.test.InstrumentationRegistry;
@@ -28,6 +25,9 @@ import com.android.systemui.utils.leaks.LeakCheckedTest.SysuiLeakCheck;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
+
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public abstract class SysuiBaseFragmentTest extends BaseFragmentTest {
 

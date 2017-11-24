@@ -15,16 +15,12 @@
  */
 package com.android.systemui;
 
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
 import android.app.Instrumentation;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.MessageQueue;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.filters.SmallTest;
 import android.testing.LeakCheck;
 import android.util.Log;
 
@@ -34,6 +30,9 @@ import org.junit.Rule;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 /**
  * Base class that does System UI specific setup.

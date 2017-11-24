@@ -31,7 +31,8 @@ import android.widget.FrameLayout;
 import android.widget.Switch;
 
 import com.android.systemui.R;
-import com.android.systemui.plugins.qs.*;
+import com.android.systemui.plugins.qs.QSIconView;
+import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
 
 public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {

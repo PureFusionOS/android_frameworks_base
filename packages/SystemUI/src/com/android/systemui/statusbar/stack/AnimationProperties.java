@@ -22,8 +22,6 @@ import android.util.Property;
 import android.view.View;
 import android.view.animation.Interpolator;
 
-import java.util.HashMap;
-
 /**
  * Properties for a View animation
  */

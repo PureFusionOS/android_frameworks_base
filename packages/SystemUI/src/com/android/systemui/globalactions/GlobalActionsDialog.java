@@ -14,35 +14,23 @@
 
 package com.android.systemui.globalactions;
 
-import com.android.internal.R;
-import com.android.internal.app.AlertController;
-import com.android.internal.app.AlertController.AlertParams;
-import com.android.internal.logging.MetricsLogger;
-import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
-import com.android.internal.util.EmergencyAffordanceManager;
-import com.android.internal.telephony.TelephonyIntents;
-import com.android.internal.telephony.TelephonyProperties;
-import com.android.internal.widget.LockPatternUtils;
-import com.android.systemui.plugins.GlobalActions.GlobalActionsManager;
-
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.UserInfo;
 import android.content.ServiceConnection;
+import android.content.pm.UserInfo;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
-import android.hardware.camera2.CameraManager;
-import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraAccessException;
-import android.Manifest;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -77,7 +65,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManagerGlobal;
-import android.view.WindowManagerInternal;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -86,13 +73,33 @@ import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.internal.R;
+import com.android.internal.app.AlertController;
+import com.android.internal.app.AlertController.AlertParams;
+import com.android.internal.logging.MetricsLogger;
+import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.internal.telephony.TelephonyIntents;
+import com.android.internal.telephony.TelephonyProperties;
+import com.android.internal.util.EmergencyAffordanceManager;
+import com.android.internal.util.fusion.OnTheGoActions;
+import com.android.internal.widget.LockPatternUtils;
+import com.android.systemui.plugins.GlobalActions.GlobalActionsManager;
+
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
-import java.util.UUID;
 
-import static com.android.internal.util.cm.PowerMenuConstants.*;
-import com.android.internal.util.fusion.OnTheGoActions;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_AIRPLANE;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_BUGREPORT;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_LOCKDOWN;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_POWER;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_REBOOT;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_SCREENRECORD;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_SCREENSHOT;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_SETTINGS;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_SILENT;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_TORCH;
+import static com.android.internal.util.cm.PowerMenuConstants.GLOBAL_ACTION_KEY_USERS;
 
 /**
  * Helper to show the global actions dialog.  Each item is an {@link Action} that

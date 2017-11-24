@@ -17,7 +17,6 @@
 package com.android.systemui.shortcuts;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.android.internal.view.RotationPolicy;

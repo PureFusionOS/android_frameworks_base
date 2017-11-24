@@ -16,8 +16,6 @@
 
 package com.android.systemui.util.leak;
 
-import static org.junit.Assert.assertEquals;
-
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -25,6 +23,8 @@ import com.android.systemui.SysuiTestCase;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)

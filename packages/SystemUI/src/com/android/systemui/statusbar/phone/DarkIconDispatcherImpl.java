@@ -14,8 +14,6 @@
 
 package com.android.systemui.statusbar.phone;
 
-import static com.android.systemui.statusbar.policy.DarkIconDispatcher.getTint;
-
 import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -25,6 +23,8 @@ import android.widget.ImageView;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.DarkIconDispatcher;
+
+import static com.android.systemui.statusbar.policy.DarkIconDispatcher.getTint;
 
 public class DarkIconDispatcherImpl implements DarkIconDispatcher {
 

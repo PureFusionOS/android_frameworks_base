@@ -14,12 +14,6 @@
 
 package com.android.systemui.statusbar.policy;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 import android.support.test.filters.SmallTest;
 
 import com.android.systemui.Dependency;
@@ -35,6 +29,12 @@ import org.junit.Test;
 
 import java.util.Map;
 import java.util.function.Consumer;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @SmallTest
 public class ExtensionControllerTest extends SysuiTestCase {

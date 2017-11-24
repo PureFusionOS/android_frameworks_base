@@ -16,14 +16,14 @@
 
 package com.android.systemui.statusbar.notification;
 
-import com.android.internal.widget.MessagingLinearLayout;
-import com.android.systemui.statusbar.ExpandableNotificationRow;
-import com.android.systemui.statusbar.TransformableView;
-
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+
+import com.android.internal.widget.MessagingLinearLayout;
+import com.android.systemui.statusbar.ExpandableNotificationRow;
+import com.android.systemui.statusbar.TransformableView;
 
 import java.util.ArrayList;
 

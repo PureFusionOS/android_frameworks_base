@@ -16,14 +16,14 @@
 
 package com.android.systemui.pip.phone;
 
-import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
-
 import android.app.ActivityManager.StackInfo;
 import android.app.IActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.os.RemoteException;
 import android.util.Log;
+
+import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
 
 public class PipUtils {
 

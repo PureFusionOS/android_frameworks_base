@@ -16,8 +16,6 @@
 
 package com.android.systemui.doze;
 
-import static org.junit.Assert.assertFalse;
-
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.support.test.filters.SmallTest;
@@ -29,6 +27,8 @@ import com.android.systemui.SysuiTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertFalse;
 
 @RunWith(AndroidJUnit4.class)
 @SmallTest

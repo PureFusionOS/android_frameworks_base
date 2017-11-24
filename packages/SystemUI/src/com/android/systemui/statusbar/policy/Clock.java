@@ -16,15 +16,12 @@
 
 package com.android.systemui.statusbar.policy;
 
-import libcore.icu.LocaleData;
-
 import android.app.ActivityManager;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -57,6 +54,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import libcore.icu.LocaleData;
 
 /**
  * Digital clock for the status bar.

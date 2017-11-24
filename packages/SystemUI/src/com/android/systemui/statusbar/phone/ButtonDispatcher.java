@@ -14,7 +14,6 @@
 
 package com.android.systemui.statusbar.phone;
 
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.android.systemui.plugins.statusbar.phone.NavBarButtonProvider.ButtonInterface;

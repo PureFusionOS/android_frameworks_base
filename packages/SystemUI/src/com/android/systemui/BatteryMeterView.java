@@ -15,8 +15,6 @@
  */
 package com.android.systemui;
 
-import static android.provider.Settings.System.SHOW_BATTERY_PERCENT;
-
 import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.content.res.Resources;
@@ -51,6 +49,8 @@ import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
 
 import java.text.NumberFormat;
+
+import static android.provider.Settings.System.SHOW_BATTERY_PERCENT;
 
 public class BatteryMeterView extends LinearLayout implements
         BatteryStateChangeCallback, Tunable, DarkReceiver, ConfigurationListener {

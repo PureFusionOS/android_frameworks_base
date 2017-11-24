@@ -22,8 +22,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 
-import com.android.internal.util.fusion.Action;
-
 public class Reboot extends Activity  {
 
     @Override

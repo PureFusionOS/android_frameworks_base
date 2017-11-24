@@ -16,21 +16,20 @@
 
 package com.android.systemui.keyguard;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.android.internal.policy.IKeyguardDismissCallback;
 import com.android.systemui.SysuiTestCase;
-import com.android.systemui.UiOffloadThread;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * runtest systemui -c com.android.systemui.keyguard.DismissCallbackRegistryTest

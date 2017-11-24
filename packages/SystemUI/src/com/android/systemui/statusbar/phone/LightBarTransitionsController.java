@@ -23,8 +23,8 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.TimeUtils;
 
-import com.android.systemui.Dumpable;
 import com.android.systemui.Dependency;
+import com.android.systemui.Dumpable;
 import com.android.systemui.Interpolators;
 import com.android.systemui.SysUiServiceProvider;
 import com.android.systemui.statusbar.CommandQueue;

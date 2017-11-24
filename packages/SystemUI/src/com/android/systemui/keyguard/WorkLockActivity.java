@@ -16,8 +16,6 @@
 
 package com.android.systemui.keyguard;
 
-import static android.app.ActivityManager.TaskDescription;
-
 import android.annotation.ColorInt;
 import android.annotation.UserIdInt;
 import android.app.Activity;
@@ -39,6 +37,8 @@ import android.view.View;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.systemui.R;
+
+import static android.app.ActivityManager.TaskDescription;
 
 /**
  * Bouncer between work activities and the activity used to confirm credentials before unlocking

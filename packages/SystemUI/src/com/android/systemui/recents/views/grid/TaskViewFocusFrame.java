@@ -20,8 +20,8 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
-
 import android.view.ViewTreeObserver.OnGlobalFocusChangeListener;
+
 import com.android.systemui.R;
 import com.android.systemui.recents.model.TaskStack;
 import com.android.systemui.recents.views.TaskStackView;

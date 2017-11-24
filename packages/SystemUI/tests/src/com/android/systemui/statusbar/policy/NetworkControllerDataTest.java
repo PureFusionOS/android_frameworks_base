@@ -1,9 +1,5 @@
 package com.android.systemui.statusbar.policy;
 
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import android.net.NetworkCapabilities;
 import android.os.Looper;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,6 +11,10 @@ import com.android.settingslib.net.DataUsageController;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)

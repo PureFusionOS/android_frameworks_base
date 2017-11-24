@@ -1,10 +1,5 @@
 package com.android.systemui.statusbar;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-
-import static org.mockito.Mockito.mock;
-
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -14,6 +9,10 @@ import com.android.systemui.statusbar.phone.StatusBarIconList;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
+import static org.mockito.Mockito.mock;
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)

@@ -16,8 +16,6 @@
 
 package com.android.systemui.recents.views;
 
-import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
-
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -60,6 +58,8 @@ import com.android.systemui.recents.model.ThumbnailData;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
 
 /**
  * A {@link TaskView} represents a fixed view of a task. Because the TaskView's layout is directed
