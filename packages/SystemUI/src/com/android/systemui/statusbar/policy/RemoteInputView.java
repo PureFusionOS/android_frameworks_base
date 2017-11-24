@@ -65,11 +65,9 @@ import com.android.systemui.statusbar.stack.StackStateAnimator;
  */
 public class RemoteInputView extends LinearLayout implements View.OnClickListener, TextWatcher {
 
-    private static final String TAG = "RemoteInput";
-
     // A marker object that let's us easily find views of this class.
     public static final Object VIEW_TAG = new Object();
-
+    private static final String TAG = "RemoteInput";
     public final Object mToken = new Object();
 
     private RemoteEditText mEditText;
@@ -95,6 +93,18 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
 
     public RemoteInputView(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public static RemoteInputView inflate(Context context, ViewGroup root,
+                                          NotificationData.Entry entry,
+                                          RemoteInputController controller) {
+        RemoteInputView v = (RemoteInputView)
+                LayoutInflater.from(context).inflate(R.layout.remote_input, root, false);
+        v.mController = controller;
+        v.mEntry = entry;
+        v.setTag(VIEW_TAG);
+
+        return v;
     }
 
     @Override
@@ -169,18 +179,6 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         }
     }
 
-    public static RemoteInputView inflate(Context context, ViewGroup root,
-            NotificationData.Entry entry,
-            RemoteInputController controller) {
-        RemoteInputView v = (RemoteInputView)
-                LayoutInflater.from(context).inflate(R.layout.remote_input, root, false);
-        v.mController = controller;
-        v.mEntry = entry;
-        v.setTag(VIEW_TAG);
-
-        return v;
-    }
-
     @Override
     public void onClick(View v) {
         if (v == mSendButton) {
@@ -247,10 +245,6 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         }
         mController.removeRemoteInput(mEntry, mToken);
         mController.removeSpinning(mEntry.key, mToken);
-    }
-
-    public void setPendingIntent(PendingIntent pendingIntent) {
-        mPendingIntent = pendingIntent;
     }
 
     public void setRemoteInput(RemoteInput[] remoteInputs, RemoteInput remoteInput) {
@@ -330,10 +324,12 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
 
     @Override
     public void afterTextChanged(Editable s) {
@@ -439,6 +435,10 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
         return mPendingIntent;
     }
 
+    public void setPendingIntent(PendingIntent pendingIntent) {
+        mPendingIntent = pendingIntent;
+    }
+
     public void setRemoved() {
         mRemoved = true;
     }
@@ -478,8 +478,8 @@ public class RemoteInputView extends LinearLayout implements View.OnClickListene
     public static class RemoteEditText extends EditText {
 
         private final Drawable mBackground;
-        private RemoteInputView mRemoteInputView;
         boolean mShowImeOnInputConnection;
+        private RemoteInputView mRemoteInputView;
 
         public RemoteEditText(Context context, AttributeSet attrs) {
             super(context, attrs);

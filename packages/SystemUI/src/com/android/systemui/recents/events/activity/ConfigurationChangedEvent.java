@@ -29,7 +29,7 @@ public class ConfigurationChangedEvent extends EventBus.AnimatedEvent {
     public final boolean hasStackTasks;
 
     public ConfigurationChangedEvent(boolean fromMultiWindow, boolean fromDeviceOrientationChange,
-            boolean fromDisplayDensityChange, boolean hasStackTasks) {
+                                     boolean fromDisplayDensityChange, boolean hasStackTasks) {
         this.fromMultiWindow = fromMultiWindow;
         this.fromDeviceOrientationChange = fromDeviceOrientationChange;
         this.fromDisplayDensityChange = fromDisplayDensityChange;

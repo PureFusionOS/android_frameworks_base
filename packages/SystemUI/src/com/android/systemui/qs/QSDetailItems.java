@@ -159,6 +159,24 @@ public class QSDetailItems extends FrameLayout {
         }
     }
 
+    public interface Callback {
+        void onDetailItemClick(Item item);
+
+        void onDetailItemDisconnect(Item item);
+    }
+
+    ;
+
+    public static class Item {
+        public int icon;
+        public Drawable overlay;
+        public CharSequence line1;
+        public CharSequence line2;
+        public Object tag;
+        public boolean canDisconnect;
+        public int icon2 = -1;
+    }
+
     private class Adapter extends BaseAdapter {
 
         @Override
@@ -230,7 +248,7 @@ public class QSDetailItems extends FrameLayout {
 
             return view;
         }
-    };
+    }
 
     private class H extends Handler {
         private static final int SET_ITEMS = 1;
@@ -251,20 +269,5 @@ public class QSDetailItems extends FrameLayout {
                 handleSetItemsVisible(msg.arg1 != 0);
             }
         }
-    }
-
-    public static class Item {
-        public int icon;
-        public Drawable overlay;
-        public CharSequence line1;
-        public CharSequence line2;
-        public Object tag;
-        public boolean canDisconnect;
-        public int icon2 = -1;
-    }
-
-    public interface Callback {
-        void onDetailItemClick(Item item);
-        void onDetailItemDisconnect(Item item);
     }
 }

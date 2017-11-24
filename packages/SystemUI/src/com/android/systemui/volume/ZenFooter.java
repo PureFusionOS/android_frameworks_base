@@ -51,6 +51,17 @@ public class ZenFooter extends LinearLayout {
     private int mZen = -1;
     private ZenModeConfig mConfig;
     private ZenModeController mController;
+    private final ZenModeController.Callback mZenCallback = new ZenModeController.Callback() {
+        @Override
+        public void onZenChanged(int zen) {
+            setZen(zen);
+        }
+
+        @Override
+        public void onConfigChanged(ZenModeConfig config) {
+            setConfig(config);
+        }
+    };
 
     public ZenFooter(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -138,17 +149,18 @@ public class ZenFooter extends LinearLayout {
         mIcon.setImageResource(isZenNone() ? R.drawable.ic_dnd_total_silence : R.drawable.ic_dnd);
         final String line1 =
                 isZenPriority() ? mContext.getString(R.string.interruption_level_priority)
-                : isZenAlarms() ? mContext.getString(R.string.interruption_level_alarms)
-                : isZenNone() ? mContext.getString(R.string.interruption_level_none)
-                : null;
+                        : isZenAlarms() ? mContext.getString(R.string.interruption_level_alarms)
+                        : isZenNone() ? mContext.getString(R.string.interruption_level_none)
+                        : null;
         Util.setText(mSummaryLine1, line1);
 
         final CharSequence line2 = ZenModeConfig.getConditionSummary(mContext, mConfig,
-                                mController.getCurrentUser(), true /*shortVersion*/);
+                mController.getCurrentUser(), true /*shortVersion*/);
         Util.setText(mSummaryLine2, line2);
     }
+
     public boolean shouldShowIntroduction() {
-        final boolean confirmed =  Prefs.getBoolean(mContext,
+        final boolean confirmed = Prefs.getBoolean(mContext,
                 Prefs.Key.DND_CONFIRMED_ALARM_INTRODUCTION, false);
         return !confirmed && isZenAlarms();
     }
@@ -160,15 +172,4 @@ public class ZenFooter extends LinearLayout {
     public void onConfigurationChanged() {
         mConfigurableTexts.update();
     }
-
-    private final ZenModeController.Callback mZenCallback = new ZenModeController.Callback() {
-        @Override
-        public void onZenChanged(int zen) {
-            setZen(zen);
-        }
-        @Override
-        public void onConfigChanged(ZenModeConfig config) {
-            setConfig(config);
-        }
-    };
 }

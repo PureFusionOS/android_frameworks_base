@@ -112,7 +112,7 @@ public class TunerServiceImpl extends TunerService {
 
     @Override
     public void setValue(String setting, String value) {
-         Settings.Secure.putStringForUser(mContentResolver, setting, value, mCurrentUser);
+        Settings.Secure.putStringForUser(mContentResolver, setting, value, mCurrentUser);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class TunerServiceImpl extends TunerService {
 
     @Override
     public void setValue(String setting, int value) {
-         Settings.Secure.putIntForUser(mContentResolver, setting, value, mCurrentUser);
+        Settings.Secure.putIntForUser(mContentResolver, setting, value, mCurrentUser);
     }
 
     @Override

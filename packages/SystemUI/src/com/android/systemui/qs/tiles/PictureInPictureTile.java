@@ -24,7 +24,9 @@ import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
-/** Quick settings tile: PictureInPictureTile **/
+/**
+ * Quick settings tile: PictureInPictureTile
+ **/
 public class PictureInPictureTile extends QSTileImpl<BooleanState> {
 
     public PictureInPictureTile(QSHost host) {
@@ -42,7 +44,8 @@ public class PictureInPictureTile extends QSTileImpl<BooleanState> {
     }
 
     @Override
-    public void setListening(boolean listening) {}
+    public void setListening(boolean listening) {
+    }
 
     @Override
     public void handleClick() {
@@ -69,7 +72,7 @@ public class PictureInPictureTile extends QSTileImpl<BooleanState> {
     protected void handleUpdateState(BooleanState state, Object arg) {
         state.label = mContext.getString(R.string.quick_settings_pip_label);
         state.icon = ResourceIcon.get(R.drawable.ic_qs_pip);
-        state.contentDescription =  mContext.getString(
+        state.contentDescription = mContext.getString(
                 R.string.quick_settings_pip_label);
     }
 }

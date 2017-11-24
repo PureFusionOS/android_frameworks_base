@@ -38,7 +38,7 @@ public class DismissViewButton extends AlphaOptimizedButton {
     }
 
     public DismissViewButton(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                             int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

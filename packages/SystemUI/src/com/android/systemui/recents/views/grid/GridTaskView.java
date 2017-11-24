@@ -25,7 +25,9 @@ import com.android.systemui.recents.views.TaskView;
 
 public class GridTaskView extends TaskView {
 
-    /** The height, in pixels, of the header view. */
+    /**
+     * The height, in pixels, of the header view.
+     */
     private int mHeaderHeight;
 
     public GridTaskView(Context context) {
@@ -60,7 +62,7 @@ public class GridTaskView extends TaskView {
     @Override
     protected AnimateableViewBounds createOutlineProvider() {
         return new AnimateableGridViewBounds(this, mContext.getResources().getDimensionPixelSize(
-            R.dimen.recents_task_view_shadow_rounded_corners_radius));
+                R.dimen.recents_task_view_shadow_rounded_corners_radius));
     }
 
     @Override

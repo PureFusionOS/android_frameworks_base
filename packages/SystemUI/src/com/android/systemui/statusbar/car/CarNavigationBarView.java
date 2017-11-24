@@ -44,7 +44,7 @@ class CarNavigationBarView extends NavigationBarView {
         mLightsOutButtons = findViewById(R.id.lights_out);
     }
 
-    public void addButton(CarNavigationButton button, CarNavigationButton lightsOutButton){
+    public void addButton(CarNavigationButton button, CarNavigationButton lightsOutButton) {
         mNavButtons.addView(button);
         mLightsOutButtons.addView(lightsOutButton);
     }

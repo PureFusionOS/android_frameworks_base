@@ -50,10 +50,9 @@ class DockRegion {
  */
 public class RecentsConfiguration {
 
-    private static final int LARGE_SCREEN_MIN_DP = 600;
-    private static final int XLARGE_SCREEN_MIN_DP = 720;
-
-    /** Levels of svelte in increasing severity/austerity. */
+    /**
+     * Levels of svelte in increasing severity/austerity.
+     */
     // No svelting.
     public static final int SVELTE_NONE = 0;
     // Limit thumbnail cache to number of visible thumbnails when Recents was loaded, disable
@@ -64,27 +63,25 @@ public class RecentsConfiguration {
     public static final int SVELTE_DISABLE_CACHE = 2;
     // Disable all thumbnail loading.
     public static final int SVELTE_DISABLE_LOADING = 3;
-
-    // Launch states
-    public RecentsActivityLaunchState mLaunchState = new RecentsActivityLaunchState();
-
+    private static final int LARGE_SCREEN_MIN_DP = 600;
+    private static final int XLARGE_SCREEN_MIN_DP = 720;
     // Since the positions in Recents has to be calculated globally (before the RecentsActivity
     // starts), we need to calculate some resource values ourselves, instead of relying on framework
     // resources.
     public final boolean isLargeScreen;
     public final boolean isXLargeScreen;
     public final int smallestWidth;
-
-    /** Misc **/
+    private final Context mAppContext;
+    // Launch states
+    public RecentsActivityLaunchState mLaunchState = new RecentsActivityLaunchState();
+    /**
+     * Misc
+     **/
     public boolean fakeShadows;
     public int svelteLevel;
-
     // Whether this product supports Grid-based Recents. If this is field is set to true, then
     // Recents will layout task views in a grid mode when there's enough space in the screen.
     public boolean isGridEnabled;
-
-    private final Context mAppContext;
-
     public int fabEnterAnimDuration;
     public int fabEnterAnimDelay;
     public int fabExitAnimDuration;
@@ -122,6 +119,7 @@ public class RecentsConfiguration {
 
     /**
      * Returns the preferred dock states for the current orientation.
+     *
      * @return a list of dock states for device and its orientation
      */
     public TaskStack.DockState[] getDockStatesForCurrentOrientation() {

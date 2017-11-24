@@ -43,7 +43,7 @@ public class BatteryPreference extends DropDownPreference implements TunerServic
     public BatteryPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mBattery = context.getString(com.android.internal.R.string.status_bar_battery);
-        setEntryValues(new CharSequence[] {PERCENT, DEFAULT, DISABLED });
+        setEntryValues(new CharSequence[]{PERCENT, DEFAULT, DISABLED});
     }
 
     @Override

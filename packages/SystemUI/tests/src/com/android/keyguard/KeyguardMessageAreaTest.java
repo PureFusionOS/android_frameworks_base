@@ -39,13 +39,13 @@ public class KeyguardMessageAreaTest extends SysuiTestCase {
     @Before
     public void setUp() throws Exception {
         KeyguardUpdateMonitor monitor = mock(KeyguardUpdateMonitor.class);
-        mHandler.post(()-> mMessageArea = new KeyguardMessageArea(mContext, null, monitor));
+        mHandler.post(() -> mMessageArea = new KeyguardMessageArea(mContext, null, monitor));
         waitForIdleSync();
     }
 
     @Test
     public void clearFollowedByMessage_keepsMessage() {
-        mHandler.post(()-> {
+        mHandler.post(() -> {
             mMessageArea.setMessage("");
             mMessageArea.setMessage("test");
         });
@@ -53,7 +53,7 @@ public class KeyguardMessageAreaTest extends SysuiTestCase {
         waitForIdleSync();
 
         CharSequence[] messageText = new CharSequence[1];
-        mHandler.post(()-> {
+        mHandler.post(() -> {
             messageText[0] = mMessageArea.getText();
         });
 

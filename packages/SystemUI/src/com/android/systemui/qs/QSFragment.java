@@ -46,29 +46,51 @@ public class QSFragment extends Fragment implements QS {
     private static final String EXTRA_LISTENING = "listening";
 
     private final Rect mQsBounds = new Rect();
+    protected QuickStatusBarHeader mHeader;
+    protected QSPanel mQSPanel;
     private boolean mQsExpanded;
     private boolean mHeaderAnimating;
     private boolean mKeyguardShowing;
     private boolean mStackScrollerOverscrolling;
-
     private long mDelay;
-
     private QSAnimator mQSAnimator;
     private HeightListener mPanelView;
-    protected QuickStatusBarHeader mHeader;
     private QSCustomizer mQSCustomizer;
-    protected QSPanel mQSPanel;
     private QSDetail mQSDetail;
     private boolean mListening;
     private QSContainerImpl mContainer;
     private int mLayoutDirection;
     private QSFooter mFooter;
+    private final Animator.AnimatorListener mAnimateHeaderSlidingInListener
+            = new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            mHeaderAnimating = false;
+            updateQsState();
+        }
+    };
+    private final ViewTreeObserver.OnPreDrawListener mStartHeaderSlidingIn
+            = new ViewTreeObserver.OnPreDrawListener() {
+        @Override
+        public boolean onPreDraw() {
+            getView().getViewTreeObserver().removeOnPreDrawListener(this);
+            getView().animate()
+                    .translationY(0f)
+                    .setStartDelay(mDelay)
+                    .setDuration(StackStateAnimator.ANIMATION_DURATION_GO_TO_FULL_SHADE)
+                    .setInterpolator(Interpolators.FAST_OUT_SLOW_IN)
+                    .setListener(mAnimateHeaderSlidingInListener)
+                    .start();
+            getView().setY(-mHeader.getHeight());
+            return true;
+        }
+    };
     private int mGutterHeight;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            Bundle savedInstanceState) {
-        inflater =inflater.cloneInContext(new ContextThemeWrapper(getContext(), R.style.qs_theme));
+                             Bundle savedInstanceState) {
+        inflater = inflater.cloneInContext(new ContextThemeWrapper(getContext(), R.style.qs_theme));
         return inflater.inflate(R.layout.qs_panel, container, false);
     }
 
@@ -119,9 +141,24 @@ public class QSFragment extends Fragment implements QS {
         return mListening;
     }
 
+    public void setListening(boolean listening) {
+        if (DEBUG) Log.d(TAG, "setListening " + listening);
+        mListening = listening;
+        mHeader.setListening(listening);
+        mFooter.setListening(listening);
+        mQSPanel.setListening(mListening && mQsExpanded);
+    }
+
     @VisibleForTesting
     boolean isExpanded() {
         return mQsExpanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        if (DEBUG) Log.d(TAG, "setExpanded " + expanded);
+        mQsExpanded = expanded;
+        mQSPanel.setListening(mListening && mQsExpanded);
+        updateQsState();
     }
 
     @Override
@@ -207,13 +244,6 @@ public class QSFragment extends Fragment implements QS {
         mFooter.getExpandView().setClickable(clickable);
     }
 
-    public void setExpanded(boolean expanded) {
-        if (DEBUG) Log.d(TAG, "setExpanded " + expanded);
-        mQsExpanded = expanded;
-        mQSPanel.setListening(mListening && mQsExpanded);
-        updateQsState();
-    }
-
     public void setKeyguardShowing(boolean keyguardShowing) {
         if (DEBUG) Log.d(TAG, "setKeyguardShowing " + keyguardShowing);
         mKeyguardShowing = keyguardShowing;
@@ -230,14 +260,6 @@ public class QSFragment extends Fragment implements QS {
         if (DEBUG) Log.d(TAG, "setOverscrolling " + stackScrollerOverscrolling);
         mStackScrollerOverscrolling = stackScrollerOverscrolling;
         updateQsState();
-    }
-
-    public void setListening(boolean listening) {
-        if (DEBUG) Log.d(TAG, "setListening " + listening);
-        mListening = listening;
-        mHeader.setListening(listening);
-        mFooter.setListening(listening);
-        mQSPanel.setListening(mListening && mQsExpanded);
     }
 
     public void setHeaderListening(boolean listening) {
@@ -338,7 +360,7 @@ public class QSFragment extends Fragment implements QS {
         if (mQSDetail.isClosingDetail()) {
             LayoutParams layoutParams = (LayoutParams) mQSPanel.getLayoutParams();
             int panelHeight = layoutParams.topMargin + layoutParams.bottomMargin +
-                    + mQSPanel.getMeasuredHeight();
+                    +mQSPanel.getMeasuredHeight();
             return panelHeight + getView().getPaddingBottom() + mGutterHeight;
         } else {
             return getView().getMeasuredHeight() + mGutterHeight;
@@ -359,30 +381,4 @@ public class QSFragment extends Fragment implements QS {
         getView().animate().cancel();
         getView().setY(-mHeader.getHeight());
     }
-
-    private final ViewTreeObserver.OnPreDrawListener mStartHeaderSlidingIn
-            = new ViewTreeObserver.OnPreDrawListener() {
-        @Override
-        public boolean onPreDraw() {
-            getView().getViewTreeObserver().removeOnPreDrawListener(this);
-            getView().animate()
-                    .translationY(0f)
-                    .setStartDelay(mDelay)
-                    .setDuration(StackStateAnimator.ANIMATION_DURATION_GO_TO_FULL_SHADE)
-                    .setInterpolator(Interpolators.FAST_OUT_SLOW_IN)
-                    .setListener(mAnimateHeaderSlidingInListener)
-                    .start();
-            getView().setY(-mHeader.getHeight());
-            return true;
-        }
-    };
-
-    private final Animator.AnimatorListener mAnimateHeaderSlidingInListener
-            = new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(Animator animation) {
-            mHeaderAnimating = false;
-            updateQsState();
-        }
-    };
 }

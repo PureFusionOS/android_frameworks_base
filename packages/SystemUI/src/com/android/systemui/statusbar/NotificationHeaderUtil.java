@@ -36,7 +36,7 @@ public class NotificationHeaderUtil {
 
     private static final TextViewComparator sTextViewComparator = new TextViewComparator();
     private static final VisibilityApplicator sVisibilityApplicator = new VisibilityApplicator();
-    private static  final DataExtractor sIconExtractor = new DataExtractor() {
+    private static final DataExtractor sIconExtractor = new DataExtractor() {
         @Override
         public Object extractData(ExpandableNotificationRow row) {
             return row.getStatusBarNotification().getNotification();
@@ -44,14 +44,14 @@ public class NotificationHeaderUtil {
     };
     private static final IconComparator sIconVisibilityComparator = new IconComparator() {
         public boolean compare(View parent, View child, Object parentData,
-                Object childData) {
+                               Object childData) {
             return hasSameIcon(parentData, childData)
                     && hasSameColor(parentData, childData);
         }
     };
     private static final IconComparator sGreyComparator = new IconComparator() {
         public boolean compare(View parent, View child, Object parentData,
-                Object childData) {
+                               Object childData) {
             return !hasSameIcon(parentData, childData)
                     || hasSameColor(parentData, childData);
         }
@@ -110,7 +110,7 @@ public class NotificationHeaderUtil {
                 new ViewComparator() {
                     @Override
                     public boolean compare(View parent, View child, Object parentData,
-                            Object childData) {
+                                           Object childData) {
                         return parent.getVisibility() != View.GONE;
                     }
 
@@ -186,7 +186,7 @@ public class NotificationHeaderUtil {
         final int childCount = rowHeader.getChildCount();
         View time = rowHeader.findViewById(com.android.internal.R.id.time);
         boolean hasVisibleText = false;
-        for (int i = 1; i < childCount - 1 ; i++) {
+        for (int i = 1; i < childCount - 1; i++) {
             View child = rowHeader.getChildAt(i);
             if (child instanceof TextView
                     && child.getVisibility() != View.GONE
@@ -203,7 +203,7 @@ public class NotificationHeaderUtil {
         time.setVisibility(timeVisibility);
         View left = null;
         View right;
-        for (int i = 1; i < childCount - 1 ; i++) {
+        for (int i = 1; i < childCount - 1; i++) {
             View child = rowHeader.getChildAt(i);
             if (mDividers.contains(Integer.valueOf(child.getId()))) {
                 boolean visible = false;
@@ -234,6 +234,27 @@ public class NotificationHeaderUtil {
         sanitizeHeaderViews(row);
     }
 
+    private interface ViewComparator {
+        /**
+         * @param parent     the parent view
+         * @param child      the child view
+         * @param parentData optional data for the parent
+         * @param childData  optional data for the child
+         * @return whether to views are the same
+         */
+        boolean compare(View parent, View child, Object parentData, Object childData);
+
+        boolean isEmpty(View view);
+    }
+
+    private interface DataExtractor {
+        Object extractData(ExpandableNotificationRow row);
+    }
+
+    private interface ResultApplicator {
+        void apply(View view, boolean apply);
+    }
+
     private static class HeaderProcessor {
         private final int mId;
         private final DataExtractor mExtractor;
@@ -244,13 +265,9 @@ public class NotificationHeaderUtil {
         private ViewComparator mComparator;
         private Object mParentData;
 
-        public static HeaderProcessor forTextView(ExpandableNotificationRow row, int id) {
-            return new HeaderProcessor(row, id, null, sTextViewComparator, sVisibilityApplicator);
-        }
-
         HeaderProcessor(ExpandableNotificationRow row, int id, DataExtractor extractor,
-                ViewComparator comparator,
-                ResultApplicator applicator) {
+                        ViewComparator comparator,
+                        ResultApplicator applicator) {
             mId = id;
             mExtractor = extractor;
             mApplicator = applicator;
@@ -258,11 +275,16 @@ public class NotificationHeaderUtil {
             mParentRow = row;
         }
 
+        public static HeaderProcessor forTextView(ExpandableNotificationRow row, int id) {
+            return new HeaderProcessor(row, id, null, sTextViewComparator, sVisibilityApplicator);
+        }
+
         public void init() {
             mParentView = mParentRow.getNotificationHeader().findViewById(mId);
             mParentData = mExtractor == null ? null : mExtractor.extractData(mParentRow);
             mApply = !mComparator.isEmpty(mParentView);
         }
+
         public void compareToHeader(ExpandableNotificationRow row) {
             if (!mApply) {
                 return;
@@ -300,22 +322,6 @@ public class NotificationHeaderUtil {
                 }
             }
         }
-    }
-
-    private interface ViewComparator {
-        /**
-         * @param parent the parent view
-         * @param child the child view
-         * @param parentData optional data for the parent
-         * @param childData optional data for the child
-         * @return whether to views are the same
-         */
-        boolean compare(View parent, View child, Object parentData, Object childData);
-        boolean isEmpty(View view);
-    }
-
-    private interface DataExtractor {
-        Object extractData(ExpandableNotificationRow row);
     }
 
     private static class TextViewComparator implements ViewComparator {
@@ -357,10 +363,6 @@ public class NotificationHeaderUtil {
         public boolean isEmpty(View view) {
             return false;
         }
-    }
-
-    private interface ResultApplicator {
-        void apply(View view, boolean apply);
     }
 
     private static class VisibilityApplicator implements ResultApplicator {

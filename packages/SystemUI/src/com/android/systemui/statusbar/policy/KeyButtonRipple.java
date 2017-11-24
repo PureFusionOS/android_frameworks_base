@@ -44,7 +44,10 @@ public class KeyButtonRipple extends Drawable {
     private static final float GLOW_MAX_ALPHA_DARK = 0.1f;
     private static final int ANIMATION_DURATION_SCALE = 350;
     private static final int ANIMATION_DURATION_FADE = 450;
-
+    private final Interpolator mInterpolator = new LogInterpolator();
+    private final View mTargetView;
+    private final HashSet<Animator> mRunningAnimations = new HashSet<>();
+    private final ArrayList<Animator> mTmpArray = new ArrayList<>();
     private Paint mRipplePaint;
     private CanvasProperty<Float> mLeftProp;
     private CanvasProperty<Float> mTopProp;
@@ -57,19 +60,24 @@ public class KeyButtonRipple extends Drawable {
     private float mGlowScale = 1f;
     private boolean mPressed;
     private boolean mDrawingHardwareGlow;
+    private final AnimatorListenerAdapter mAnimatorListener =
+            new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mRunningAnimations.remove(animation);
+                    if (mRunningAnimations.isEmpty() && !mPressed) {
+                        mDrawingHardwareGlow = false;
+                        invalidateSelf();
+                    }
+                }
+            };
     private int mMaxWidth;
     private boolean mLastDark;
     private boolean mDark;
-
-    private final Interpolator mInterpolator = new LogInterpolator();
     private boolean mSupportHardware;
-    private final View mTargetView;
-
-    private final HashSet<Animator> mRunningAnimations = new HashSet<>();
-    private final ArrayList<Animator> mTmpArray = new ArrayList<>();
 
     public KeyButtonRipple(Context ctx, View targetView) {
-        mMaxWidth =  ctx.getResources().getDimensionPixelSize(R.dimen.key_button_ripple_max_width);
+        mMaxWidth = ctx.getResources().getDimensionPixelSize(R.dimen.key_button_ripple_max_width);
         mTargetView = targetView;
     }
 
@@ -89,7 +97,7 @@ public class KeyButtonRipple extends Drawable {
     private void drawSoftware(Canvas canvas) {
         if (mGlowAlpha > 0f) {
             final Paint p = getRipplePaint();
-            p.setAlpha((int)(mGlowAlpha * 255f));
+            p.setAlpha((int) (mGlowAlpha * 255f));
 
             final float w = getBounds().width();
             final float h = getBounds().height();
@@ -259,6 +267,10 @@ public class KeyButtonRipple extends Drawable {
         }
     }
 
+    private CanvasProperty<Float> getExtendStart() {
+        return isHorizontal() ? mLeftProp : mTopProp;
+    }
+
     /**
      * Sets the left/top property for the round rect to {@code prop} depending on whether we are
      * horizontal or vertical mode.
@@ -271,8 +283,8 @@ public class KeyButtonRipple extends Drawable {
         }
     }
 
-    private CanvasProperty<Float> getExtendStart() {
-        return isHorizontal() ? mLeftProp : mTopProp;
+    private CanvasProperty<Float> getExtendEnd() {
+        return isHorizontal() ? mRightProp : mBottomProp;
     }
 
     /**
@@ -285,10 +297,6 @@ public class KeyButtonRipple extends Drawable {
         } else {
             mBottomProp = prop;
         }
-    }
-
-    private CanvasProperty<Float> getExtendEnd() {
-        return isHorizontal() ? mRightProp : mBottomProp;
     }
 
     private int getExtendSize() {
@@ -305,7 +313,7 @@ public class KeyButtonRipple extends Drawable {
         mDrawingHardwareGlow = true;
         setExtendStart(CanvasProperty.createFloat(getExtendSize() / 2));
         final RenderNodeAnimator startAnim = new RenderNodeAnimator(getExtendStart(),
-                getExtendSize()/2 - GLOW_MAX_SCALE_FACTOR * getRippleSize()/2);
+                getExtendSize() / 2 - GLOW_MAX_SCALE_FACTOR * getRippleSize() / 2);
         startAnim.setDuration(ANIMATION_DURATION_SCALE);
         startAnim.setInterpolator(mInterpolator);
         startAnim.addListener(mAnimatorListener);
@@ -313,7 +321,7 @@ public class KeyButtonRipple extends Drawable {
 
         setExtendEnd(CanvasProperty.createFloat(getExtendSize() / 2));
         final RenderNodeAnimator endAnim = new RenderNodeAnimator(getExtendEnd(),
-                getExtendSize()/2 + GLOW_MAX_SCALE_FACTOR * getRippleSize()/2);
+                getExtendSize() / 2 + GLOW_MAX_SCALE_FACTOR * getRippleSize() / 2);
         endAnim.setDuration(ANIMATION_DURATION_SCALE);
         endAnim.setInterpolator(mInterpolator);
         endAnim.addListener(mAnimatorListener);
@@ -322,13 +330,13 @@ public class KeyButtonRipple extends Drawable {
         if (isHorizontal()) {
             mTopProp = CanvasProperty.createFloat(0f);
             mBottomProp = CanvasProperty.createFloat(getBounds().height());
-            mRxProp = CanvasProperty.createFloat(getBounds().height()/2);
-            mRyProp = CanvasProperty.createFloat(getBounds().height()/2);
+            mRxProp = CanvasProperty.createFloat(getBounds().height() / 2);
+            mRyProp = CanvasProperty.createFloat(getBounds().height() / 2);
         } else {
             mLeftProp = CanvasProperty.createFloat(0f);
             mRightProp = CanvasProperty.createFloat(getBounds().width());
-            mRxProp = CanvasProperty.createFloat(getBounds().width()/2);
-            mRyProp = CanvasProperty.createFloat(getBounds().width()/2);
+            mRxProp = CanvasProperty.createFloat(getBounds().width() / 2);
+            mRyProp = CanvasProperty.createFloat(getBounds().width() / 2);
         }
 
         mGlowScale = GLOW_MAX_SCALE_FACTOR;
@@ -359,18 +367,6 @@ public class KeyButtonRipple extends Drawable {
 
         invalidateSelf();
     }
-
-    private final AnimatorListenerAdapter mAnimatorListener =
-            new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(Animator animation) {
-            mRunningAnimations.remove(animation);
-            if (mRunningAnimations.isEmpty() && !mPressed) {
-                mDrawingHardwareGlow = false;
-                invalidateSelf();
-            }
-        }
-    };
 
     /**
      * Interpolator with a smooth log deceleration

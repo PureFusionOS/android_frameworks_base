@@ -64,7 +64,7 @@ public class ExtensionControllerTest extends SysuiTestCase {
 
     @Test
     public void testTuner() {
-        String[] keys = new String[] { "key1", "key2" };
+        String[] keys = new String[]{"key1", "key2"};
         TunerFactory<Object> factory = new ExtensionController.TunerFactory() {
             @Override
             public String[] keys() {

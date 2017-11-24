@@ -40,21 +40,30 @@ public class DemoModeFragment extends PreferenceFragment implements OnPreference
     private static final String DEMO_MODE_ON = "sysui_tuner_demo_on";
 
     private static final String[] STATUS_ICONS = {
-        "volume",
-        "bluetooth",
-        "location",
-        "alarm",
-        "zen",
-        "sync",
-        "tty",
-        "eri",
-        "mute",
-        "speakerphone",
-        "managed_profile",
+            "volume",
+            "bluetooth",
+            "location",
+            "alarm",
+            "zen",
+            "sync",
+            "tty",
+            "eri",
+            "mute",
+            "speakerphone",
+            "managed_profile",
     };
 
     private SwitchPreference mEnabledSwitch;
     private SwitchPreference mOnSwitch;
+    private final ContentObserver mDemoModeObserver =
+            new ContentObserver(new Handler(Looper.getMainLooper())) {
+                public void onChange(boolean selfChange) {
+                    updateDemoModeEnabled();
+                    updateDemoModeOn();
+                }
+
+                ;
+            };
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -198,12 +207,4 @@ public class DemoModeFragment extends PreferenceFragment implements OnPreference
     private void setGlobal(String key, int value) {
         Settings.Global.putInt(getContext().getContentResolver(), key, value);
     }
-
-    private final ContentObserver mDemoModeObserver =
-            new ContentObserver(new Handler(Looper.getMainLooper())) {
-        public void onChange(boolean selfChange) {
-            updateDemoModeEnabled();
-            updateDemoModeOn();
-        };
-    };
 }

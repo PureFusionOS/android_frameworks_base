@@ -185,7 +185,7 @@ public class MediaProjectionPermissionActivity extends Activity
     private Intent getMediaProjectionIntent(int uid, String packageName, boolean permanentGrant)
             throws RemoteException {
         IMediaProjection projection = mService.createProjection(uid, packageName,
-                 MediaProjectionManager.TYPE_SCREEN_CAPTURE, permanentGrant);
+                MediaProjectionManager.TYPE_SCREEN_CAPTURE, permanentGrant);
         Intent intent = new Intent();
         intent.putExtra(MediaProjectionManager.EXTRA_MEDIA_PROJECTION, projection.asBinder());
         return intent;

@@ -24,7 +24,8 @@ public abstract class PipTouchGesture {
     /**
      * Handle the touch down.
      */
-    void onDown(PipTouchState touchState) {}
+    void onDown(PipTouchState touchState) {
+    }
 
     /**
      * Handle the touch move, and return whether the event was consumed.

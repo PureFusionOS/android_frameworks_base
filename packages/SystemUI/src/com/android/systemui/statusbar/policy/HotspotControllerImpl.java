@@ -49,18 +49,6 @@ public class HotspotControllerImpl implements HotspotController {
                 Context.CONNECTIVITY_SERVICE);
     }
 
-    @Override
-    public boolean isHotspotSupported() {
-        return mConnectivityManager.isTetheringSupported()
-                && mConnectivityManager.getTetherableWifiRegexs().length != 0
-                && UserManager.get(mContext).isUserAdmin(ActivityManager.getCurrentUser());
-    }
-
-    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-        pw.println("HotspotController state:");
-        pw.print("  mHotspotEnabled="); pw.println(stateToString(mHotspotState));
-    }
-
     private static String stateToString(int hotspotState) {
         switch (hotspotState) {
             case WifiManager.WIFI_AP_STATE_DISABLED:
@@ -75,6 +63,19 @@ public class HotspotControllerImpl implements HotspotController {
                 return "FAILED";
         }
         return null;
+    }
+
+    @Override
+    public boolean isHotspotSupported() {
+        return mConnectivityManager.isTetheringSupported()
+                && mConnectivityManager.getTetherableWifiRegexs().length != 0
+                && UserManager.get(mContext).isUserAdmin(ActivityManager.getCurrentUser());
+    }
+
+    public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
+        pw.println("HotspotController state:");
+        pw.print("  mHotspotEnabled=");
+        pw.println(stateToString(mHotspotState));
     }
 
     @Override
@@ -103,11 +104,6 @@ public class HotspotControllerImpl implements HotspotController {
     }
 
     @Override
-    public boolean isHotspotTransient() {
-        return mWaitingForCallback || (mHotspotState == WifiManager.WIFI_AP_STATE_ENABLING);
-    }
-
-    @Override
     public void setHotspotEnabled(boolean enabled) {
         if (enabled) {
             OnStartTetheringCallback callback = new OnStartTetheringCallback();
@@ -119,6 +115,11 @@ public class HotspotControllerImpl implements HotspotController {
         } else {
             mConnectivityManager.stopTethering(ConnectivityManager.TETHERING_WIFI);
         }
+    }
+
+    @Override
+    public boolean isHotspotTransient() {
+        return mWaitingForCallback || (mHotspotState == WifiManager.WIFI_AP_STATE_ENABLING);
     }
 
     private void fireCallback(boolean isEnabled) {
@@ -143,7 +144,7 @@ public class HotspotControllerImpl implements HotspotController {
             if (DEBUG) Log.d(TAG, "onTetheringFailed");
             mWaitingForCallback = false;
             fireCallback(isHotspotEnabled());
-          // TODO: Show error.
+            // TODO: Show error.
         }
     }
 

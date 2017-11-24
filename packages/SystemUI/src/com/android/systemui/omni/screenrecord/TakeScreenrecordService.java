@@ -41,12 +41,10 @@ import android.os.UserHandle;
 import android.provider.Settings;
 
 public class TakeScreenrecordService extends Service {
-    private static final String TAG = "TakeScreenrecordService";
-
     public static final String ACTION_START = "start";
     public static final String ACTION_STOP = "stop";
     public static final String ACTION_TOGGLE_POINTER = "toggle_pointer";
-
+    private static final String TAG = "TakeScreenrecordService";
     private static GlobalScreenrecord mScreenrecord;
 
     private Handler mHandler = new Handler() {
@@ -80,9 +78,9 @@ public class TakeScreenrecordService extends Service {
                 stopScreenrecord();
             } else if (intent.getAction().equals(ACTION_TOGGLE_POINTER)) {
                 int currentStatus = Settings.System.getIntForUser(getContentResolver(),
-                            Settings.System.SHOW_TOUCHES, 0, UserHandle.USER_CURRENT);
+                        Settings.System.SHOW_TOUCHES, 0, UserHandle.USER_CURRENT);
                 Settings.System.putIntForUser(getContentResolver(), Settings.System.SHOW_TOUCHES,
-                            1 - currentStatus, UserHandle.USER_CURRENT);
+                        1 - currentStatus, UserHandle.USER_CURRENT);
                 mScreenrecord.updateNotification();
             }
         }

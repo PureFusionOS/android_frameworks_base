@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 **
 ** Copyright 2017, The Android Open Source Project
 **
@@ -16,8 +15,7 @@
 ** limitations under the License.
 */
 -->
-<com.android.systemui.pip.tv.PipControlButtonView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.systemui.pip.tv.PipControlButtonView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/picture_in_picture_button_width"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/picture_in_picture_button_start_margin" />

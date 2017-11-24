@@ -36,7 +36,7 @@ public class NotificationMessagingTemplateViewWrapper extends NotificationTempla
     private ArrayList<View> mHistoricMessages = new ArrayList<View>();
 
     protected NotificationMessagingTemplateViewWrapper(Context ctx, View view,
-            ExpandableNotificationRow row) {
+                                                       ExpandableNotificationRow row) {
         super(ctx, view, row);
     }
 

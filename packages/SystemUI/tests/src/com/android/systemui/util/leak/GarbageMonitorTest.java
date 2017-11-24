@@ -111,7 +111,7 @@ public class GarbageMonitorTest extends SysuiTestCase {
         Runnable mReinspectCallback;
 
         public TestableGarbageMonitor(LeakDetector leakDetector,
-                LeakReporter leakReporter) {
+                                      LeakReporter leakReporter) {
             super(null /* bgLooper */, leakDetector, leakReporter);
         }
 

@@ -27,9 +27,9 @@ import java.util.Set;
 /**
  * Like WeakHashMap, but uses identity instead of equality when comparing keys.
  */
-public class WeakIdentityHashMap<K,V> {
+public class WeakIdentityHashMap<K, V> {
 
-    private final HashMap<WeakReference<K>,V> mMap = new HashMap<>();
+    private final HashMap<WeakReference<K>, V> mMap = new HashMap<>();
     private final ReferenceQueue<Object> mRefQueue = new ReferenceQueue<>();
 
     private void cleanUp() {

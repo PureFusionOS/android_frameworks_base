@@ -42,7 +42,7 @@ import static org.junit.Assert.assertFalse;
  * This is named AAAPlusPlusVerifySysuiRequiredTestPropertiesTest for two reasons.
  * a) Its so awesome it deserves an AAA++
  * b) It should run first to draw attention to itself.
- *
+ * <p>
  * For trues though: this test verifies that all the sysui tests extend the right classes.
  * This matters because including tests with different context implementations in the same
  * test suite causes errors, such as the incorrect settings provider being cached.

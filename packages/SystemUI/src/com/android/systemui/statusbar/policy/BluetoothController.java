@@ -24,24 +24,34 @@ import java.util.Collection;
 
 public interface BluetoothController extends CallbackController<Callback>, Dumpable {
     boolean isBluetoothSupported();
+
     boolean isBluetoothEnabled();
+
+    void setBluetoothEnabled(boolean enabled);
 
     int getBluetoothState();
 
     boolean isBluetoothConnected();
+
     boolean isBluetoothConnecting();
+
     String getLastDeviceName();
-    void setBluetoothEnabled(boolean enabled);
+
     Collection<CachedBluetoothDevice> getDevices();
+
     void connect(CachedBluetoothDevice device);
+
     void disconnect(CachedBluetoothDevice device);
+
     boolean canConfigBluetooth();
 
     int getMaxConnectionState(CachedBluetoothDevice device);
+
     int getBondState(CachedBluetoothDevice device);
 
     public interface Callback {
         void onBluetoothStateChange(boolean enabled);
+
         void onBluetoothDevicesChanged();
     }
 }

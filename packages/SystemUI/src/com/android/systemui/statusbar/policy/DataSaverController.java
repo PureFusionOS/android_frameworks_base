@@ -19,6 +19,7 @@ import com.android.systemui.statusbar.policy.DataSaverController.Listener;
 public interface DataSaverController extends CallbackController<Listener> {
 
     boolean isDataSaverEnabled();
+
     void setDataSaverEnabled(boolean enabled);
 
     public interface Listener {

@@ -36,7 +36,7 @@ public abstract class CustomInterpolatorTransformation
 
     @Override
     public boolean transformTo(TransformState ownState, TransformableView notification,
-            float transformationAmount) {
+                               float transformationAmount) {
         if (!hasCustomTransformation()) {
             return false;
         }
@@ -57,7 +57,7 @@ public abstract class CustomInterpolatorTransformation
 
     @Override
     public boolean transformFrom(TransformState ownState,
-            TransformableView notification, float transformationAmount) {
+                                 TransformableView notification, float transformationAmount) {
         if (!hasCustomTransformation()) {
             return false;
         }

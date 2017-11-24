@@ -26,49 +26,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.Map;
 
 public final class Prefs {
-    private Prefs() {} // no instantation
-
-    @Retention(RetentionPolicy.SOURCE)
-    @StringDef({
-        Key.OVERVIEW_LAST_STACK_TASK_ACTIVE_TIME,
-        Key.DEBUG_MODE_ENABLED,
-        Key.HOTSPOT_TILE_LAST_USED,
-        Key.COLOR_INVERSION_TILE_LAST_USED,
-        Key.DND_TILE_VISIBLE,
-        Key.DND_TILE_COMBINED_ICON,
-        Key.DND_CONFIRMED_PRIORITY_INTRODUCTION,
-        Key.DND_CONFIRMED_SILENCE_INTRODUCTION,
-        Key.DND_FAVORITE_BUCKET_INDEX,
-        Key.DND_NONE_SELECTED,
-        Key.DND_FAVORITE_ZEN,
-        Key.QS_HOTSPOT_ADDED,
-        Key.QS_DATA_SAVER_ADDED,
-        Key.QS_DATA_SAVER_DIALOG_SHOWN,
-        Key.QS_INVERT_COLORS_ADDED,
-        Key.QS_WORK_ADDED,
-        Key.QS_NIGHTDISPLAY_ADDED,
-    })
-    public @interface Key {
-        @Deprecated
-        String OVERVIEW_LAST_STACK_TASK_ACTIVE_TIME = "OverviewLastStackTaskActiveTime";
-        String DEBUG_MODE_ENABLED = "debugModeEnabled";
-        String HOTSPOT_TILE_LAST_USED = "HotspotTileLastUsed";
-        String COLOR_INVERSION_TILE_LAST_USED = "ColorInversionTileLastUsed";
-        String DND_TILE_VISIBLE = "DndTileVisible";
-        String DND_TILE_COMBINED_ICON = "DndTileCombinedIcon";
-        String DND_CONFIRMED_PRIORITY_INTRODUCTION = "DndConfirmedPriorityIntroduction";
-        String DND_CONFIRMED_SILENCE_INTRODUCTION = "DndConfirmedSilenceIntroduction";
-        String DND_CONFIRMED_ALARM_INTRODUCTION = "DndConfirmedAlarmIntroduction";
-        String DND_FAVORITE_BUCKET_INDEX = "DndCountdownMinuteIndex";
-        String DND_NONE_SELECTED = "DndNoneSelected";
-        String DND_FAVORITE_ZEN = "DndFavoriteZen";
-        String QS_HOTSPOT_ADDED = "QsHotspotAdded";
-        String QS_DATA_SAVER_ADDED = "QsDataSaverAdded";
-        String QS_DATA_SAVER_DIALOG_SHOWN = "QsDataSaverDialogShown";
-        String QS_INVERT_COLORS_ADDED = "QsInvertColorsAdded";
-        String QS_WORK_ADDED = "QsWorkAdded";
-        String QS_NIGHTDISPLAY_ADDED = "QsNightDisplayAdded";
-    }
+    private Prefs() {
+    } // no instantation
 
     public static boolean getBoolean(Context context, @Key String key, boolean defaultValue) {
         return get(context).getBoolean(key, defaultValue);
@@ -111,16 +70,58 @@ public final class Prefs {
     }
 
     public static void registerListener(Context context,
-            OnSharedPreferenceChangeListener listener) {
+                                        OnSharedPreferenceChangeListener listener) {
         get(context).registerOnSharedPreferenceChangeListener(listener);
     }
 
     public static void unregisterListener(Context context,
-            OnSharedPreferenceChangeListener listener) {
+                                          OnSharedPreferenceChangeListener listener) {
         get(context).unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     private static SharedPreferences get(Context context) {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({
+            Key.OVERVIEW_LAST_STACK_TASK_ACTIVE_TIME,
+            Key.DEBUG_MODE_ENABLED,
+            Key.HOTSPOT_TILE_LAST_USED,
+            Key.COLOR_INVERSION_TILE_LAST_USED,
+            Key.DND_TILE_VISIBLE,
+            Key.DND_TILE_COMBINED_ICON,
+            Key.DND_CONFIRMED_PRIORITY_INTRODUCTION,
+            Key.DND_CONFIRMED_SILENCE_INTRODUCTION,
+            Key.DND_FAVORITE_BUCKET_INDEX,
+            Key.DND_NONE_SELECTED,
+            Key.DND_FAVORITE_ZEN,
+            Key.QS_HOTSPOT_ADDED,
+            Key.QS_DATA_SAVER_ADDED,
+            Key.QS_DATA_SAVER_DIALOG_SHOWN,
+            Key.QS_INVERT_COLORS_ADDED,
+            Key.QS_WORK_ADDED,
+            Key.QS_NIGHTDISPLAY_ADDED,
+    })
+    public @interface Key {
+        @Deprecated
+        String OVERVIEW_LAST_STACK_TASK_ACTIVE_TIME = "OverviewLastStackTaskActiveTime";
+        String DEBUG_MODE_ENABLED = "debugModeEnabled";
+        String HOTSPOT_TILE_LAST_USED = "HotspotTileLastUsed";
+        String COLOR_INVERSION_TILE_LAST_USED = "ColorInversionTileLastUsed";
+        String DND_TILE_VISIBLE = "DndTileVisible";
+        String DND_TILE_COMBINED_ICON = "DndTileCombinedIcon";
+        String DND_CONFIRMED_PRIORITY_INTRODUCTION = "DndConfirmedPriorityIntroduction";
+        String DND_CONFIRMED_SILENCE_INTRODUCTION = "DndConfirmedSilenceIntroduction";
+        String DND_CONFIRMED_ALARM_INTRODUCTION = "DndConfirmedAlarmIntroduction";
+        String DND_FAVORITE_BUCKET_INDEX = "DndCountdownMinuteIndex";
+        String DND_NONE_SELECTED = "DndNoneSelected";
+        String DND_FAVORITE_ZEN = "DndFavoriteZen";
+        String QS_HOTSPOT_ADDED = "QsHotspotAdded";
+        String QS_DATA_SAVER_ADDED = "QsDataSaverAdded";
+        String QS_DATA_SAVER_DIALOG_SHOWN = "QsDataSaverDialogShown";
+        String QS_INVERT_COLORS_ADDED = "QsInvertColorsAdded";
+        String QS_WORK_ADDED = "QsWorkAdded";
+        String QS_NIGHTDISPLAY_ADDED = "QsNightDisplayAdded";
     }
 }

@@ -50,7 +50,7 @@ public class FragmentHostManager {
     private final View mRootView;
     private final InterestingConfigChanges mConfigChanges = new InterestingConfigChanges(
             ActivityInfo.CONFIG_FONT_SCALE | ActivityInfo.CONFIG_LOCALE
-                | ActivityInfo.CONFIG_SCREEN_LAYOUT | ActivityInfo.CONFIG_ASSETS_PATHS);
+                    | ActivityInfo.CONFIG_SCREEN_LAYOUT | ActivityInfo.CONFIG_ASSETS_PATHS);
     private final FragmentService mManager;
     private final PluginFragmentManager mPlugins = new PluginFragmentManager();
 
@@ -65,13 +65,22 @@ public class FragmentHostManager {
         createFragmentHost(null);
     }
 
+    public static FragmentHostManager get(View view) {
+        try {
+            return Dependency.get(FragmentService.class).getFragmentHostManager(view);
+        } catch (ClassCastException e) {
+            // TODO: Some auto handling here?
+            throw e;
+        }
+    }
+
     private void createFragmentHost(Parcelable savedState) {
         mFragments = FragmentController.createController(new HostCallbacks());
         mFragments.attachHost(null);
         mLifecycleCallbacks = new FragmentLifecycleCallbacks() {
             @Override
             public void onFragmentViewCreated(FragmentManager fm, Fragment f, View v,
-                    Bundle savedInstanceState) {
+                                              Bundle savedInstanceState) {
                 FragmentHostManager.this.onFragmentViewCreated(f);
             }
 
@@ -192,12 +201,13 @@ public class FragmentHostManager {
         }
     }
 
-    public static FragmentHostManager get(View view) {
-        try {
-            return Dependency.get(FragmentService.class).getFragmentHostManager(view);
-        } catch (ClassCastException e) {
-            // TODO: Some auto handling here?
-            throw e;
+    private static class PluginState {
+        Context mContext;
+        String mCls;
+
+        private PluginState(String cls, Context context) {
+            mCls = cls;
+            mContext = context;
         }
     }
 
@@ -302,16 +312,6 @@ public class FragmentHostManager {
                 return f;
             }
             return Fragment.instantiate(context, className, arguments);
-        }
-    }
-
-    private static class PluginState {
-        Context mContext;
-        String mCls;
-
-        private PluginState(String cls, Context context) {
-            mCls = cls;
-            mContext = context;
         }
     }
 }

@@ -45,6 +45,19 @@ import static android.net.NetworkTemplate.MATCH_MOBILE_ALL;
 public class NetworkOverLimitActivity extends Activity {
     private static final String TAG = "NetworkOverLimitActivity";
 
+    private static int getLimitedDialogTitleForTemplate(NetworkTemplate template) {
+        switch (template.getMatchRule()) {
+            case MATCH_MOBILE_3G_LOWER:
+                return R.string.data_usage_disabled_dialog_3g_title;
+            case MATCH_MOBILE_4G:
+                return R.string.data_usage_disabled_dialog_4g_title;
+            case MATCH_MOBILE_ALL:
+                return R.string.data_usage_disabled_dialog_mobile_title;
+            default:
+                return R.string.data_usage_disabled_dialog_title;
+        }
+    }
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -80,19 +93,6 @@ public class NetworkOverLimitActivity extends Activity {
             policyService.snoozeLimit(template);
         } catch (RemoteException e) {
             Log.w(TAG, "problem snoozing network policy", e);
-        }
-    }
-
-    private static int getLimitedDialogTitleForTemplate(NetworkTemplate template) {
-        switch (template.getMatchRule()) {
-            case MATCH_MOBILE_3G_LOWER:
-                return R.string.data_usage_disabled_dialog_3g_title;
-            case MATCH_MOBILE_4G:
-                return R.string.data_usage_disabled_dialog_4g_title;
-            case MATCH_MOBILE_ALL:
-                return R.string.data_usage_disabled_dialog_mobile_title;
-            default:
-                return R.string.data_usage_disabled_dialog_title;
         }
     }
 }

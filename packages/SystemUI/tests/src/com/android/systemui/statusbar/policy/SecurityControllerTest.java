@@ -119,7 +119,7 @@ public class SecurityControllerTest extends SysuiTestCase implements SecurityCon
                 .thenReturn(new StringParceledListSlice(Arrays.asList("One CA Alias")));
 
         mSecurityController.new CACertLoader()
-                           .execute(0);
+                .execute(0);
 
         assertTrue(mStateChangedLatch.await(3, TimeUnit.SECONDS));
         assertTrue(mSecurityController.hasCACertInCurrentUser());
@@ -133,7 +133,7 @@ public class SecurityControllerTest extends SysuiTestCase implements SecurityCon
                 .thenReturn(new StringParceledListSlice(new ArrayList<String>()));
 
         mSecurityController.new CACertLoader()
-                           .execute(0);
+                .execute(0);
 
         assertFalse(mStateChangedLatch.await(3, TimeUnit.SECONDS));
         assertTrue(mSecurityController.hasCACertInCurrentUser());

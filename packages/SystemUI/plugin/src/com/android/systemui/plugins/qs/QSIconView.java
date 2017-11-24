@@ -30,6 +30,8 @@ public abstract class QSIconView extends ViewGroup {
     }
 
     public abstract void setIcon(State state);
+
     public abstract void disableAnimation();
+
     public abstract View getIconView();
 }

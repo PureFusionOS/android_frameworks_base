@@ -43,16 +43,16 @@ public class NavigationBarFrame extends FrameLayout {
         super(context, attrs);
         mNavDoubleTapToSleep = new GestureDetector(context,
                 new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                PureFusionUtils.switchScreenOff(context);
-                return true;
-            }
-        });
+                    @Override
+                    public boolean onDoubleTap(MotionEvent e) {
+                        PureFusionUtils.switchScreenOff(context);
+                        return true;
+                    }
+                });
     }
 
     public NavigationBarFrame(@NonNull Context context, @Nullable AttributeSet attrs,
-            @AttrRes int defStyleAttr) {
+                              @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

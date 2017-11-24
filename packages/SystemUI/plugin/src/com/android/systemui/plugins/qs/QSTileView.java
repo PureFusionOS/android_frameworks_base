@@ -33,14 +33,19 @@ public abstract class QSTileView extends LinearLayout {
     }
 
     public abstract View updateAccessibilityOrder(View previousView);
+
     public abstract QSIconView getIcon();
+
     public abstract void init(QSTile tile);
+
     public abstract void onStateChanged(State state);
 
     public abstract int getDetailY();
+
     public void setHideExpand(boolean value) {
         // empty by default
     }
+
     public void setHideLabel(boolean value) {
         // empty by default
     }

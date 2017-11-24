@@ -31,16 +31,14 @@ import java.util.function.Function;
  */
 public class NotificationIconAreaController implements DarkReceiver {
     private final NotificationColorUtil mNotificationColorUtil;
-
+    private final Rect mTintArea = new Rect();
+    protected View mNotificationIconArea;
     private int mIconSize;
     private int mIconHPadding;
     private int mIconTint = Color.WHITE;
-
     private StatusBar mStatusBar;
-    protected View mNotificationIconArea;
     private NotificationIconContainer mNotificationIcons;
     private NotificationIconContainer mShelfIcons;
-    private final Rect mTintArea = new Rect();
     private NotificationStackScrollLayout mNotificationScrollLayout;
     private Context mContext;
 
@@ -111,7 +109,7 @@ public class NotificationIconAreaController implements DarkReceiver {
      * See {@link com.android.systemui.statusbar.policy.DarkIconDispatcher#setIconsDarkArea}.
      * Sets the color that should be used to tint any icons in the notification area.
      *
-     * @param tintArea the area in which to tint the icons, specified in screen coordinates
+     * @param tintArea      the area in which to tint the icons, specified in screen coordinates
      * @param darkIntensity
      */
     public void onDarkChanged(Rect tintArea, float darkIntensity, int iconTint) {
@@ -129,7 +127,7 @@ public class NotificationIconAreaController implements DarkReceiver {
     }
 
     protected boolean shouldShowNotificationIcon(NotificationData.Entry entry,
-            NotificationData notificationData, boolean showAmbient) {
+                                                 NotificationData notificationData, boolean showAmbient) {
         if (notificationData.isAmbient(entry.key) && !showAmbient) {
             return false;
         }
@@ -161,13 +159,13 @@ public class NotificationIconAreaController implements DarkReceiver {
      * host layout will have the same icons like the ones in here.
      *
      * @param notificationData the notification data to look up which notifications are relevant
-     * @param function A function to look up an icon view based on an entry
-     * @param hostLayout which layout should be updated
-     * @param showAmbient should ambient notification icons be shown
+     * @param function         A function to look up an icon view based on an entry
+     * @param hostLayout       which layout should be updated
+     * @param showAmbient      should ambient notification icons be shown
      */
     private void updateIconsForLayout(NotificationData notificationData,
-            Function<NotificationData.Entry, StatusBarIconView> function,
-            NotificationIconContainer hostLayout, boolean showAmbient) {
+                                      Function<NotificationData.Entry, StatusBarIconView> function,
+                                      NotificationIconContainer hostLayout, boolean showAmbient) {
         ArrayList<StatusBarIconView> toShow = new ArrayList<>(
                 mNotificationScrollLayout.getChildCount());
 

@@ -51,7 +51,13 @@ import java.util.Comparator;
 public class TileServices extends IQSService.Stub {
     static final int DEFAULT_MAX_BOUND = 6;
     static final int REDUCED_MAX_BOUND = 1;
-
+    private static final Comparator<TileServiceManager> SERVICE_SORT =
+            new Comparator<TileServiceManager>() {
+                @Override
+                public int compare(TileServiceManager left, TileServiceManager right) {
+                    return -Integer.compare(left.getBindPriority(), right.getBindPriority());
+                }
+            };
     private final ArrayMap<CustomTile, TileServiceManager> mServices = new ArrayMap<>();
     private final ArrayMap<ComponentName, CustomTile> mTiles = new ArrayMap<>();
     private final ArrayMap<IBinder, CustomTile> mTokenMap = new ArrayMap<>();
@@ -59,8 +65,16 @@ public class TileServices extends IQSService.Stub {
     private final Handler mHandler;
     private final Handler mMainHandler;
     private final QSTileHost mHost;
-
     private int mMaxBound = DEFAULT_MAX_BOUND;
+    private final BroadcastReceiver mRequestListeningReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (TileService.ACTION_REQUEST_LISTENING.equals(intent.getAction())) {
+                requestListening(
+                        (ComponentName) intent.getParcelableExtra(Intent.EXTRA_COMPONENT_NAME));
+            }
+        }
+    };
 
     public TileServices(QSTileHost host, Looper looper) {
         mHost = host;
@@ -242,7 +256,7 @@ public class TileServices extends IQSService.Stub {
                 if (info.applicationInfo.isSystemApp()) {
                     final StatusBarIcon statusIcon = icon != null
                             ? new StatusBarIcon(userHandle, packageName, icon, 0, 0,
-                                    contentDescription)
+                            contentDescription)
                             : null;
                     mMainHandler.post(new Runnable() {
                         @Override
@@ -307,22 +321,4 @@ public class TileServices extends IQSService.Stub {
             mContext.unregisterReceiver(mRequestListeningReceiver);
         }
     }
-
-    private final BroadcastReceiver mRequestListeningReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (TileService.ACTION_REQUEST_LISTENING.equals(intent.getAction())) {
-                requestListening(
-                        (ComponentName) intent.getParcelableExtra(Intent.EXTRA_COMPONENT_NAME));
-            }
-        }
-    };
-
-    private static final Comparator<TileServiceManager> SERVICE_SORT =
-            new Comparator<TileServiceManager>() {
-        @Override
-        public int compare(TileServiceManager left, TileServiceManager right) {
-            return -Integer.compare(left.getBindPriority(), right.getBindPriority());
-        }
-    };
 }

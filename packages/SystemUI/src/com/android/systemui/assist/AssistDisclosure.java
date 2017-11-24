@@ -45,6 +45,12 @@ public class AssistDisclosure {
 
     private AssistDisclosureView mView;
     private boolean mViewAdded;
+    private Runnable mShowRunnable = new Runnable() {
+        @Override
+        public void run() {
+            show();
+        }
+    };
 
     public AssistDisclosure(Context context, Handler handler) {
         mContext = context;
@@ -84,30 +90,19 @@ public class AssistDisclosure {
         }
     }
 
-    private Runnable mShowRunnable = new Runnable() {
-        @Override
-        public void run() {
-            show();
-        }
-    };
-
     private class AssistDisclosureView extends View
             implements ValueAnimator.AnimatorUpdateListener {
 
         static final int FULL_ALPHA = 222; // 87%
         static final int ALPHA_IN_ANIMATION_DURATION = 400;
         static final int ALPHA_OUT_ANIMATION_DURATION = 300;
-
-
-        private float mThickness;
-        private float mShadowThickness;
         private final Paint mPaint = new Paint();
         private final Paint mShadowPaint = new Paint();
-
         private final ValueAnimator mAlphaOutAnimator;
         private final ValueAnimator mAlphaInAnimator;
         private final AnimatorSet mAnimator;
-
+        private float mThickness;
+        private float mShadowThickness;
         private int mAlpha = 0;
 
         public AssistDisclosureView(Context context) {
@@ -218,7 +213,7 @@ public class AssistDisclosure {
         }
 
         private void drawBeam(Canvas canvas, float left, float top, float right, float bottom,
-                Paint paint, float padding) {
+                              Paint paint, float padding) {
             canvas.drawRect(left - padding,
                     top - padding,
                     right + padding,

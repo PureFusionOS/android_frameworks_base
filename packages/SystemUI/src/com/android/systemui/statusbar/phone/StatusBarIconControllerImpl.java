@@ -50,13 +50,10 @@ public class StatusBarIconControllerImpl extends StatusBarIconList implements Tu
         ConfigurationListener, Dumpable, CommandQueue.Callbacks, StatusBarIconController {
 
     private final DarkIconDispatcher mDarkIconDispatcher;
-
+    private final ArrayList<IconManager> mIconGroups = new ArrayList<>();
+    private final ArraySet<String> mIconBlacklist = new ArraySet<>();
     private Context mContext;
     private DemoStatusIcons mDemoStatusIcons;
-
-    private final ArrayList<IconManager> mIconGroups = new ArrayList<>();
-
-    private final ArraySet<String> mIconBlacklist = new ArraySet<>();
 
     public StatusBarIconControllerImpl(Context context) {
         super(context.getResources().getStringArray(

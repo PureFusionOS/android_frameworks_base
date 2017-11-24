@@ -41,7 +41,7 @@ public class DragDownHelper implements Gefingerpoken {
     private static final float RUBBERBAND_FACTOR_STATIC = 0.15f;
 
     private static final int SPRING_BACK_ANIMATION_LENGTH_MS = 375;
-
+    private final int[] mTemp2 = new int[2];
     private int mMinDragDistance;
     private ExpandHelper.Callback mCallback;
     private float mInitialTouchX;
@@ -50,14 +50,13 @@ public class DragDownHelper implements Gefingerpoken {
     private float mTouchSlop;
     private DragDownCallback mDragDownCallback;
     private View mHost;
-    private final int[] mTemp2 = new int[2];
     private boolean mDraggedFarEnough;
     private ExpandableView mStartingChild;
     private float mLastHeight;
     private FalsingManager mFalsingManager;
 
     public DragDownHelper(Context context, View host, ExpandHelper.Callback callback,
-            DragDownCallback dragDownCallback) {
+                          DragDownCallback dragDownCallback) {
         mMinDragDistance = context.getResources().getDimensionPixelSize(
                 R.dimen.keyguard_drag_down_min_distance);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
@@ -240,14 +239,18 @@ public class DragDownHelper implements Gefingerpoken {
          * @return true if the interaction is accepted, false if it should be cancelled
          */
         boolean onDraggedDown(View startingChild, int dragLengthY);
+
         void onDragDownReset();
 
         /**
          * The user has dragged either above or below the threshold
+         *
          * @param above whether he dragged above it
          */
         void onCrossedThreshold(boolean above);
+
         void onTouchSlopExceeded();
+
         void setEmptyDragAmount(float amount);
     }
 }

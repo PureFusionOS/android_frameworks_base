@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /* //device/apps/common/assets/res/any/colors.xml
 **
 ** Copyright 2012, The Android Open Source Project
@@ -19,5 +18,5 @@
 -->
 <resources>
     <!-- Alias used to reference one of two possible layouts in keyguard.  -->
-    <item type="layout" name="keyguard_eca">@layout/keyguard_emergency_carrier_area</item>
+    <item name="keyguard_eca" type="layout">@layout/keyguard_emergency_carrier_area</item>
 </resources>

@@ -35,59 +35,61 @@ import com.android.systemui.keyguard.KeyguardViewMediator;
  */
 public class FingerprintUnlockController extends KeyguardUpdateMonitorCallback {
 
-    private static final String TAG = "FingerprintController";
-    private static final boolean DEBUG_FP_WAKELOCK = KeyguardConstants.DEBUG_FP_WAKELOCK;
-    private static final long FINGERPRINT_WAKELOCK_TIMEOUT_MS = 15 * 1000;
-    private static final String FINGERPRINT_WAKE_LOCK_NAME = "wake-and-unlock wakelock";
-
     /**
      * Mode in which we don't need to wake up the device when we get a fingerprint.
      */
     public static final int MODE_NONE = 0;
-
     /**
      * Mode in which we wake up the device, and directly dismiss Keyguard. Active when we acquire
      * a fingerprint while the screen is off and the device was sleeping.
      */
     public static final int MODE_WAKE_AND_UNLOCK = 1;
-
     /**
      * Mode in which we wake the device up, and fade out the Keyguard contents because they were
      * already visible while pulsing in doze mode.
      */
     public static final int MODE_WAKE_AND_UNLOCK_PULSING = 2;
-
     /**
      * Mode in which we wake up the device, but play the normal dismiss animation. Active when we
      * acquire a fingerprint pulsing in doze mode.
      */
     public static final int MODE_SHOW_BOUNCER = 3;
-
     /**
      * Mode in which we only wake up the device, and keyguard was not showing when we acquired a
      * fingerprint.
-     * */
+     */
     public static final int MODE_ONLY_WAKE = 4;
-
     /**
      * Mode in which fingerprint unlocks the device.
      */
     public static final int MODE_UNLOCK = 5;
-
     /**
      * Mode in which fingerprint brings up the bouncer because fingerprint unlocking is currently
      * not allowed.
      */
     public static final int MODE_DISMISS_BOUNCER = 6;
-
+    private static final String TAG = "FingerprintController";
+    private static final boolean DEBUG_FP_WAKELOCK = KeyguardConstants.DEBUG_FP_WAKELOCK;
+    private static final long FINGERPRINT_WAKELOCK_TIMEOUT_MS = 15 * 1000;
+    private static final String FINGERPRINT_WAKE_LOCK_NAME = "wake-and-unlock wakelock";
     /**
      * How much faster we collapse the lockscreen when authenticating with fingerprint.
      */
     private static final float FINGERPRINT_COLLAPSE_SPEEDUP_FACTOR = 1.1f;
-
+    private final UnlockMethodCache mUnlockMethodCache;
+    private final Context mContext;
     private PowerManager mPowerManager;
     private Handler mHandler = new Handler();
     private PowerManager.WakeLock mWakeLock;
+    private final Runnable mReleaseFingerprintWakeLockRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (DEBUG_FP_WAKELOCK) {
+                Log.i(TAG, "fp wakelock: TIMEOUT!!");
+            }
+            releaseFingerprintWakeLock();
+        }
+    };
     private KeyguardUpdateMonitor mUpdateMonitor;
     private int mMode;
     private StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
@@ -96,16 +98,14 @@ public class FingerprintUnlockController extends KeyguardUpdateMonitorCallback {
     private KeyguardViewMediator mKeyguardViewMediator;
     private ScrimController mScrimController;
     private StatusBar mStatusBar;
-    private final UnlockMethodCache mUnlockMethodCache;
-    private final Context mContext;
     private int mPendingAuthenticatedUserId = -1;
 
     public FingerprintUnlockController(Context context,
-            DozeScrimController dozeScrimController,
-            KeyguardViewMediator keyguardViewMediator,
-            ScrimController scrimController,
-            StatusBar statusBar,
-            UnlockMethodCache unlockMethodCache) {
+                                       DozeScrimController dozeScrimController,
+                                       KeyguardViewMediator keyguardViewMediator,
+                                       ScrimController scrimController,
+                                       StatusBar statusBar,
+                                       UnlockMethodCache unlockMethodCache) {
         mContext = context;
         mPowerManager = context.getSystemService(PowerManager.class);
         mUpdateMonitor = KeyguardUpdateMonitor.getInstance(context);
@@ -122,16 +122,6 @@ public class FingerprintUnlockController extends KeyguardUpdateMonitorCallback {
             StatusBarKeyguardViewManager statusBarKeyguardViewManager) {
         mStatusBarKeyguardViewManager = statusBarKeyguardViewManager;
     }
-
-    private final Runnable mReleaseFingerprintWakeLockRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (DEBUG_FP_WAKELOCK) {
-                Log.i(TAG, "fp wakelock: TIMEOUT!!");
-            }
-            releaseFingerprintWakeLock();
-        }
-    };
 
     private void releaseFingerprintWakeLock() {
         if (mWakeLock != null) {

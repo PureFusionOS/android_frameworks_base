@@ -51,17 +51,17 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-/** Platform implementation of the quick settings tile host **/
+/**
+ * Platform implementation of the quick settings tile host
+ **/
 public class QSTileHost implements QSHost, Tunable, PluginListener<QSFactory> {
+    public static final String TILES_SETTING = Secure.QS_TILES;
     private static final String TAG = "QSTileHost";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
-
-    public static final String TILES_SETTING = Secure.QS_TILES;
-
+    protected final ArrayList<String> mTileSpecs = new ArrayList<>();
     private final Context mContext;
     private final StatusBar mStatusBar;
     private final LinkedHashMap<String, QSTile> mTiles = new LinkedHashMap<>();
-    protected final ArrayList<String> mTileSpecs = new ArrayList<>();
     private final TileServices mServices;
 
     private final List<Callback> mCallbacks = new ArrayList<>();
@@ -71,7 +71,7 @@ public class QSTileHost implements QSHost, Tunable, PluginListener<QSFactory> {
     private int mCurrentUser;
 
     public QSTileHost(Context context, StatusBar statusBar,
-            StatusBarIconController iconController) {
+                      StatusBarIconController iconController) {
         mIconController = iconController;
         mContext = context;
         mStatusBar = statusBar;

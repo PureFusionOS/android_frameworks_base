@@ -36,6 +36,14 @@ public class SampleOverlayPlugin implements OverlayPlugin {
     private boolean mInputSetup;
     private boolean mCollapseDesired;
     private float mStatusBarHeight;
+    final OnComputeInternalInsetsListener onComputeInternalInsetsListener = inoutInfo -> {
+        inoutInfo.setTouchableInsets(InternalInsetsInfo.TOUCHABLE_INSETS_REGION);
+        if (mCollapseDesired) {
+            inoutInfo.touchableRegion.set(new Rect(0, 0, 50000, (int) mStatusBarHeight));
+        } else {
+            inoutInfo.touchableRegion.set(new Rect(0, 0, 50000, 50000));
+        }
+    };
 
     @Override
     public void onCreate(Context sysuiContext, Context pluginContext) {
@@ -92,13 +100,4 @@ public class SampleOverlayPlugin implements OverlayPlugin {
         }
         return true;
     }
-
-    final OnComputeInternalInsetsListener onComputeInternalInsetsListener = inoutInfo -> {
-        inoutInfo.setTouchableInsets(InternalInsetsInfo.TOUCHABLE_INSETS_REGION);
-        if (mCollapseDesired) {
-            inoutInfo.touchableRegion.set(new Rect(0, 0, 50000, (int) mStatusBarHeight));
-        } else {
-            inoutInfo.touchableRegion.set(new Rect(0, 0, 50000, 50000));
-        }
-    };
 }

@@ -28,8 +28,8 @@ import android.view.ViewGroup;
  * aligned.
  */
 public final class KeyboardShortcutKeysLayout extends ViewGroup {
-    private int mLineHeight;
     private final Context mContext;
+    private int mLineHeight;
 
     public KeyboardShortcutKeysLayout(Context context) {
         super(context);
@@ -159,7 +159,7 @@ public final class KeyboardShortcutKeysLayout extends ViewGroup {
     }
 
     private void layoutChildrenOnRow(int startIndex, int endIndex, int fullRowWidth, int xPos,
-            int yPos, int lastHorizontalSpacing) {
+                                     int yPos, int lastHorizontalSpacing) {
         if (!isRTL()) {
             xPos = getPaddingLeft() + fullRowWidth - xPos + lastHorizontalSpacing;
         }
@@ -200,7 +200,7 @@ public final class KeyboardShortcutKeysLayout extends ViewGroup {
         public final int mVerticalSpacing;
 
         public LayoutParams(int horizontalSpacing, int verticalSpacing,
-                ViewGroup.LayoutParams viewGroupLayout) {
+                            ViewGroup.LayoutParams viewGroupLayout) {
             super(viewGroupLayout);
             this.mHorizontalSpacing = horizontalSpacing;
             this.mVerticalSpacing = verticalSpacing;

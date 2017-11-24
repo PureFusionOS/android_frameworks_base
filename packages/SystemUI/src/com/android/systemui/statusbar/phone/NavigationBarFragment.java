@@ -97,20 +97,34 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
     private static final boolean DEBUG = false;
     private static final String EXTRA_DISABLE_STATE = "disabled_state";
 
-    /** Allow some time inbetween the long press for back and recents. */
+    /**
+     * Allow some time inbetween the long press for back and recents.
+     */
     private static final int LOCK_TO_APP_GESTURE_TOLERENCE = 200;
-
+    public boolean mHomeBlockedThisTouch;
     protected NavigationBarView mNavigationBarView = null;
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                notifyNavigationBarScreenOn(false);
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                notifyNavigationBarScreenOn(true);
+            }
+        }
+    };
     protected AssistManager mAssistManager;
-
+    // Enable swapped naviagtion keys.
+    protected boolean mUseSwapKey = false;
     private int mNavigationBarWindowState = WINDOW_STATE_SHOWING;
-
     private int mNavigationIconHints = 0;
     private int mNavigationBarMode;
     private AccessibilityManager mAccessibilityManager;
     private MagnificationContentObserver mMagnificationObserver;
     private ContentResolver mContentResolver;
-
+    private final AccessibilityServicesStateChangeListener mAccessibilityListener =
+            this::updateAccessibilityServicesState;
     private int mDisabledFlags1;
     private StatusBar mStatusBar;
     private Recents mRecents;
@@ -118,19 +132,63 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
     private WindowManager mWindowManager;
     private CommandQueue mCommandQueue;
     private long mLastLockToAppLongPress;
-
+    private final Stub mRotationWatcher = new Stub() {
+        @Override
+        public void onRotationChanged(int rotation) throws RemoteException {
+            // We need this to be scheduled as early as possible to beat the redrawing of
+            // window in response to the orientation change.
+            Handler h = getView().getHandler();
+            Message msg = Message.obtain(h, () -> {
+                if (mNavigationBarView != null
+                        && mNavigationBarView.needsReorient(rotation)) {
+                    repositionNavigationBar();
+                }
+            });
+            msg.setAsynchronous(true);
+            h.sendMessageAtFrontOfQueue(msg);
+        }
+    };
     private Locale mLocale;
-    private int mLayoutDirection;
 
+    // ----- Fragment Lifecycle Callbacks -----
+    private int mLayoutDirection;
     private int mSystemUiVisibility;
     private LightBarController mLightBarController;
 
-    public boolean mHomeBlockedThisTouch;
+    public static View create(Context context, FragmentListener listener) {
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_NAVIGATION_BAR,
+                WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
+                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                        | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
+                        | WindowManager.LayoutParams.FLAG_SLIPPERY,
+                PixelFormat.TRANSLUCENT);
+        lp.token = new Binder();
+        // this will allow the navbar to run in an overlay on devices that support this
+        if (ActivityManager.isHighEndGfx()) {
+            lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
+        }
+        lp.setTitle("NavigationBar");
+        lp.windowAnimations = 0;
 
-    // Enable swapped naviagtion keys.
-    protected boolean mUseSwapKey = false;
+        View navigationBarView = LayoutInflater.from(context).inflate(
+                R.layout.navigation_bar_window, null);
 
-    // ----- Fragment Lifecycle Callbacks -----
+        if (DEBUG) Log.v(TAG, "addNavigationBar: about to add " + navigationBarView);
+        if (navigationBarView == null) return null;
+
+        context.getSystemService(WindowManager.class).addView(navigationBarView, lp);
+        FragmentHostManager fragmentHost = FragmentHostManager.get(navigationBarView);
+        NavigationBarFragment fragment = new NavigationBarFragment();
+        fragmentHost.getFragmentManager().beginTransaction()
+                .replace(R.id.navigation_bar_frame, fragment, TAG)
+                .commit();
+        fragmentHost.addTagListener(TAG, listener);
+        return navigationBarView;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -184,7 +242,7 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.navigation_bar, container, false);
     }
 
@@ -210,6 +268,8 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
         PowerManager pm = getContext().getSystemService(PowerManager.class);
         notifyNavigationBarScreenOn(pm.isScreenOn());
     }
+
+    // ----- CommandQueue Callbacks -----
 
     @Override
     public void onDestroyView() {
@@ -263,11 +323,9 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
         }
     }
 
-    // ----- CommandQueue Callbacks -----
-
     @Override
     public void setImeWindowStatus(IBinder token, int vis, int backDisposition,
-            boolean showImeSwitcher) {
+                                   boolean showImeSwitcher) {
         boolean imeShown = (vis & InputMethodService.IME_VISIBLE) != 0;
         int hints = mNavigationIconHints;
         if ((backDisposition == InputMethodService.BACK_DISPOSITION_WILL_DISMISS) || imeShown) {
@@ -297,6 +355,8 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
         }
     }
 
+    // ----- Internal stuffz -----
+
     @Override
     public void setWindowState(int window, int state) {
         if (mNavigationBarView != null
@@ -321,7 +381,7 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
 
     @Override
     public void setSystemUiVisibility(int vis, int fullscreenStackVis, int dockedStackVis,
-            int mask, Rect fullscreenStackBounds, Rect dockedStackBounds) {
+                                      int mask, Rect fullscreenStackBounds, Rect dockedStackBounds) {
         final int oldVal = mSystemUiVisibility;
         final int newVal = (oldVal & ~mask) | (vis & mask);
         final int diff = newVal ^ oldVal;
@@ -360,8 +420,6 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
             if (mNavigationBarView != null) mNavigationBarView.setDisabledFlags(state1);
         }
     }
-
-    // ----- Internal stuffz -----
 
     private void refreshLayout(int layoutDirection) {
         if (mNavigationBarView != null) {
@@ -494,10 +552,10 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
      * This handles long-press of both back and recents.  They are
      * handled together to capture them both being long-pressed
      * at the same time to exit screen pinning (lock task).
-     *
+     * <p>
      * When accessibility mode is on, only a long-press from recents
      * is required to exit.
-     *
+     * <p>
      * In all other circumstances we try to pass through long-press events
      * for Back, so that apps can still use it.  Which can be from two things.
      * 1) Not currently in screen pinning (lock task).
@@ -552,6 +610,8 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
         return false;
     }
 
+    // ----- Methods that StatusBar talks to (should be minimized) -----
+
     private boolean onLongPressRecents() {
         if (mRecents == null || !ActivityManager.supportsMultiWindow(getContext())
                 || !mDivider.getView().getSnapAlgorithm().isSplitScreenFeasible()) {
@@ -601,8 +661,6 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
         mNavigationBarView.setAccessibilityButtonState(showAccessibilityButton, targetSelection);
     }
 
-    // ----- Methods that StatusBar talks to (should be minimized) -----
-
     public void setLightBarController(LightBarController lightBarController) {
         mLightBarController = lightBarController;
         mLightBarController.setNavigationBar(mNavigationBarView.getLightTransitionsController());
@@ -635,8 +693,11 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
         mNavigationBarView.getBarTransitions().finishAnimations();
     }
 
-    private final AccessibilityServicesStateChangeListener mAccessibilityListener =
-            this::updateAccessibilityServicesState;
+    public void setDoubleTapToSleep() {
+        if (mNavigationBarView != null) {
+            mNavigationBarView.setDoubleTapToSleep();
+        }
+    }
 
     private class MagnificationContentObserver extends ContentObserver {
 
@@ -647,76 +708,6 @@ public class NavigationBarFragment extends Fragment implements Callbacks {
         @Override
         public void onChange(boolean selfChange) {
             NavigationBarFragment.this.updateAccessibilityServicesState(mAccessibilityManager);
-        }
-    }
-
-    private final Stub mRotationWatcher = new Stub() {
-        @Override
-        public void onRotationChanged(int rotation) throws RemoteException {
-            // We need this to be scheduled as early as possible to beat the redrawing of
-            // window in response to the orientation change.
-            Handler h = getView().getHandler();
-            Message msg = Message.obtain(h, () -> {
-                if (mNavigationBarView != null
-                        && mNavigationBarView.needsReorient(rotation)) {
-                    repositionNavigationBar();
-                }
-            });
-            msg.setAsynchronous(true);
-            h.sendMessageAtFrontOfQueue(msg);
-        }
-    };
-
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                notifyNavigationBarScreenOn(false);
-            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                notifyNavigationBarScreenOn(true);
-            }
-        }
-    };
-
-    public static View create(Context context, FragmentListener listener) {
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.TYPE_NAVIGATION_BAR,
-                WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
-                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                        | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH
-                        | WindowManager.LayoutParams.FLAG_SLIPPERY,
-                PixelFormat.TRANSLUCENT);
-        lp.token = new Binder();
-        // this will allow the navbar to run in an overlay on devices that support this
-        if (ActivityManager.isHighEndGfx()) {
-            lp.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
-        }
-        lp.setTitle("NavigationBar");
-        lp.windowAnimations = 0;
-
-        View navigationBarView = LayoutInflater.from(context).inflate(
-                R.layout.navigation_bar_window, null);
-
-        if (DEBUG) Log.v(TAG, "addNavigationBar: about to add " + navigationBarView);
-        if (navigationBarView == null) return null;
-
-        context.getSystemService(WindowManager.class).addView(navigationBarView, lp);
-        FragmentHostManager fragmentHost = FragmentHostManager.get(navigationBarView);
-        NavigationBarFragment fragment = new NavigationBarFragment();
-        fragmentHost.getFragmentManager().beginTransaction()
-                .replace(R.id.navigation_bar_frame, fragment, TAG)
-                .commit();
-        fragmentHost.addTagListener(TAG, listener);
-        return navigationBarView;
-    }
-
-    public void setDoubleTapToSleep() {
-        if (mNavigationBarView != null) {
-            mNavigationBarView.setDoubleTapToSleep();
         }
     }
 }

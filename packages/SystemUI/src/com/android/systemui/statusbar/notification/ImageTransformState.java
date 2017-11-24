@@ -29,7 +29,7 @@ import com.android.systemui.statusbar.stack.StackStateAnimator;
 
 /**
  * A transform state of a image view.
-*/
+ */
 public class ImageTransformState extends TransformState {
     public static final long ANIMATION_DURATION_LENGTH = 210;
 
@@ -37,6 +37,22 @@ public class ImageTransformState extends TransformState {
     private static Pools.SimplePool<ImageTransformState> sInstancePool
             = new Pools.SimplePool<>(40);
     private Icon mIcon;
+
+    private static float mapToDuration(float scaleAmount) {
+        // Assuming a linear interpolator, we can easily map it to our new duration
+        scaleAmount = (scaleAmount * StackStateAnimator.ANIMATION_DURATION_STANDARD
+                - (StackStateAnimator.ANIMATION_DURATION_STANDARD - ANIMATION_DURATION_LENGTH))
+                / ANIMATION_DURATION_LENGTH;
+        return Math.max(Math.min(scaleAmount, 1.0f), 0.0f);
+    }
+
+    public static ImageTransformState obtain() {
+        ImageTransformState instance = sInstancePool.acquire();
+        if (instance != null) {
+            return instance;
+        }
+        return new ImageTransformState();
+    }
 
     @Override
     public void initFrom(View view) {
@@ -92,24 +108,8 @@ public class ImageTransformState extends TransformState {
         }
     }
 
-    private static float mapToDuration(float scaleAmount) {
-        // Assuming a linear interpolator, we can easily map it to our new duration
-        scaleAmount = (scaleAmount * StackStateAnimator.ANIMATION_DURATION_STANDARD
-                - (StackStateAnimator.ANIMATION_DURATION_STANDARD - ANIMATION_DURATION_LENGTH))
-                        / ANIMATION_DURATION_LENGTH;
-        return Math.max(Math.min(scaleAmount, 1.0f), 0.0f);
-    }
-
     public Icon getIcon() {
         return mIcon;
-    }
-
-    public static ImageTransformState obtain() {
-        ImageTransformState instance = sInstancePool.acquire();
-        if (instance != null) {
-            return instance;
-        }
-        return new ImageTransformState();
     }
 
     @Override

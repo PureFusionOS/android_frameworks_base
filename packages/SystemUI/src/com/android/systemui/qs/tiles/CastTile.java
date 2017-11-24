@@ -52,7 +52,9 @@ import java.util.Set;
 
 import static android.media.MediaRouter.ROUTE_TYPE_REMOTE_DISPLAY;
 
-/** Quick settings tile: Cast **/
+/**
+ * Quick settings tile: Cast
+ **/
 public class CastTile extends QSTileImpl<BooleanState> {
     private static final Intent CAST_SETTINGS =
             new Intent(Settings.ACTION_CAST_SETTINGS);
@@ -63,6 +65,14 @@ public class CastTile extends QSTileImpl<BooleanState> {
     private final Callback mCallback = new Callback();
     private final ActivityStarter mActivityStarter;
     private Dialog mDialog;
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (mDialog != null) {
+                mDialog.dismiss();
+            }
+        }
+    };
     private boolean mRegistered;
 
     public CastTile(QSHost host) {
@@ -206,6 +216,8 @@ public class CastTile extends QSTileImpl<BooleanState> {
                 : mContext.getString(R.string.quick_settings_cast_device_default_name);
     }
 
+    ;
+
     private final class Callback implements CastController.Callback, KeyguardMonitor.Callback {
         @Override
         public void onCastDevicesChanged() {
@@ -216,16 +228,7 @@ public class CastTile extends QSTileImpl<BooleanState> {
         public void onKeyguardShowingChanged() {
             refreshState();
         }
-    };
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mDialog != null) {
-                mDialog.dismiss();
-            }
-        }
-    };
+    }
 
     private final class CastDetailAdapter implements DetailAdapter, QSDetailItems.Callback {
         private final LinkedHashMap<String, CastDevice> mVisibleOrder = new LinkedHashMap<>();
@@ -243,13 +246,13 @@ public class CastTile extends QSTileImpl<BooleanState> {
         }
 
         @Override
-        public Intent getSettingsIntent() {
-            return CAST_SETTINGS;
+        public void setToggleState(boolean state) {
+            // noop
         }
 
         @Override
-        public void setToggleState(boolean state) {
-            // noop
+        public Intent getSettingsIntent() {
+            return CAST_SETTINGS;
         }
 
         @Override
@@ -297,7 +300,7 @@ public class CastTile extends QSTileImpl<BooleanState> {
                         item.line2 = mContext.getString(R.string.quick_settings_connected);
                         item.tag = device;
                         item.canDisconnect = true;
-                        items = new Item[] { item };
+                        items = new Item[]{item};
                         break;
                     }
                 }

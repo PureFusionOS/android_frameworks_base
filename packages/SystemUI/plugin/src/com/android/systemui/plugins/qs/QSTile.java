@@ -37,28 +37,37 @@ public interface QSTile {
     int VERSION = 1;
 
     DetailAdapter getDetailAdapter();
+
     String getTileSpec();
 
-    boolean isAvailable();
     void setTileSpec(String tileSpec);
 
+    boolean isAvailable();
+
     void clearState();
+
     void refreshState();
 
     void addCallback(Callback callback);
+
     void removeCallback(Callback callback);
+
     void removeCallbacks();
 
     QSIconView createTileView(Context context);
-    
+
     void click();
+
     void secondaryClick();
+
     void longClick();
 
     void userSwitch(int currentUser);
+
     int getMetricsCategory();
 
     void setListening(Object client, boolean listening);
+
     void setDetailListening(boolean show);
 
     void destroy();
@@ -66,6 +75,7 @@ public interface QSTile {
     CharSequence getTileLabel();
 
     State getState();
+
     boolean isDualTarget();
 
     default LogMaker populate(LogMaker logMaker) {
@@ -75,16 +85,22 @@ public interface QSTile {
     @ProvidesInterface(version = Callback.VERSION)
     public interface Callback {
         public static final int VERSION = 1;
+
         void onStateChanged(State state);
+
         void onShowDetail(boolean show);
+
         void onToggleStateChanged(boolean state);
+
         void onScanStateChanged(boolean state);
+
         void onAnnouncementRequested(CharSequence announcement);
     }
 
     @ProvidesInterface(version = Icon.VERSION)
     public static abstract class Icon {
         public static final int VERSION = 1;
+
         abstract public Drawable getDrawable(Context context);
 
         public Drawable getInvisibleDrawable(Context context) {
@@ -121,9 +137,9 @@ public interface QSTile {
                     || !Objects.equals(other.label, label)
                     || !Objects.equals(other.contentDescription, contentDescription)
                     || !Objects.equals(other.dualLabelContentDescription,
-                            dualLabelContentDescription)
+                    dualLabelContentDescription)
                     || !Objects.equals(other.expandedAccessibilityClassName,
-                            expandedAccessibilityClassName)
+                    expandedAccessibilityClassName)
                     || !Objects.equals(other.disabledByPolicy, disabledByPolicy)
                     || !Objects.equals(other.state, state)
                     || !Objects.equals(other.isTransient, isTransient)

@@ -51,50 +51,9 @@ public class RingtonePlayer extends SystemUI {
     private static final boolean LOGD = false;
 
     // TODO: support Uri switching under same IBinder
-
-    private IAudioService mAudioService;
-
     private final NotificationPlayer mAsyncPlayer = new NotificationPlayer(TAG);
     private final HashMap<IBinder, Client> mClients = new HashMap<IBinder, Client>();
-
-    @Override
-    public void start() {
-        mAsyncPlayer.setUsesWakeLock(mContext);
-
-        mAudioService = IAudioService.Stub.asInterface(
-                ServiceManager.getService(Context.AUDIO_SERVICE));
-        try {
-            mAudioService.setRingtonePlayer(mCallback);
-        } catch (RemoteException e) {
-            Log.e(TAG, "Problem registering RingtonePlayer: " + e);
-        }
-    }
-
-    /**
-     * Represents an active remote {@link Ringtone} client.
-     */
-    private class Client implements IBinder.DeathRecipient {
-        private final IBinder mToken;
-        private final Ringtone mRingtone;
-
-        public Client(IBinder token, Uri uri, UserHandle user, AudioAttributes aa) {
-            mToken = token;
-
-            mRingtone = new Ringtone(getContextForUser(user), false);
-            mRingtone.setAudioAttributes(aa);
-            mRingtone.setUri(uri);
-        }
-
-        @Override
-        public void binderDied() {
-            if (LOGD) Log.d(TAG, "binderDied() token=" + mToken);
-            synchronized (mClients) {
-                mClients.remove(mToken);
-            }
-            mRingtone.stop();
-        }
-    }
-
+    private IAudioService mAudioService;
     private IRingtonePlayer mCallback = new IRingtonePlayer.Stub() {
         @Override
         public void play(IBinder token, Uri uri, AudioAttributes aa, float volume, boolean looping)
@@ -195,7 +154,7 @@ public class RingtonePlayer extends SystemUI {
             // other sound from the platform media store, otherwise this opens
             // up arbitrary access to any file on external storage.
             if (uri.toString().startsWith(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString())) {
-                try (Cursor c = resolver.query(uri, new String[] {
+                try (Cursor c = resolver.query(uri, new String[]{
                         MediaStore.Audio.AudioColumns.IS_RINGTONE,
                         MediaStore.Audio.AudioColumns.IS_ALARM,
                         MediaStore.Audio.AudioColumns.IS_NOTIFICATION
@@ -215,6 +174,19 @@ public class RingtonePlayer extends SystemUI {
         }
     };
 
+    @Override
+    public void start() {
+        mAsyncPlayer.setUsesWakeLock(mContext);
+
+        mAudioService = IAudioService.Stub.asInterface(
+                ServiceManager.getService(Context.AUDIO_SERVICE));
+        try {
+            mAudioService.setRingtonePlayer(mCallback);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Problem registering RingtonePlayer: " + e);
+        }
+    }
+
     private Context getContextForUser(UserHandle user) {
         try {
             return mContext.createPackageContextAsUser(mContext.getPackageName(), 0, user);
@@ -233,6 +205,31 @@ public class RingtonePlayer extends SystemUI {
                 pw.print(" mUri=");
                 pw.println(client.mRingtone.getUri());
             }
+        }
+    }
+
+    /**
+     * Represents an active remote {@link Ringtone} client.
+     */
+    private class Client implements IBinder.DeathRecipient {
+        private final IBinder mToken;
+        private final Ringtone mRingtone;
+
+        public Client(IBinder token, Uri uri, UserHandle user, AudioAttributes aa) {
+            mToken = token;
+
+            mRingtone = new Ringtone(getContextForUser(user), false);
+            mRingtone.setAudioAttributes(aa);
+            mRingtone.setUri(uri);
+        }
+
+        @Override
+        public void binderDied() {
+            if (LOGD) Log.d(TAG, "binderDied() token=" + mToken);
+            synchronized (mClients) {
+                mClients.remove(mToken);
+            }
+            mRingtone.stop();
         }
     }
 }

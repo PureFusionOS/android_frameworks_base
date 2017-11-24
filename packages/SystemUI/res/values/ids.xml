@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2014 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,66 +15,66 @@
   -->
 
 <resources>
-    <item type="id" name="translation_x_animator_tag"/>
-    <item type="id" name="translation_y_animator_tag"/>
-    <item type="id" name="translation_z_animator_tag"/>
-    <item type="id" name="alpha_animator_tag"/>
-    <item type="id" name="scale_x_animator_tag"/>
-    <item type="id" name="scale_y_animator_tag"/>
-    <item type="id" name="top_inset_animator_tag"/>
-    <item type="id" name="height_animator_tag"/>
-    <item type="id" name="shadow_alpha_animator_tag"/>
-    <item type="id" name="translation_x_animator_end_value_tag"/>
-    <item type="id" name="translation_y_animator_end_value_tag"/>
-    <item type="id" name="translation_z_animator_end_value_tag"/>
-    <item type="id" name="scale_x_animator_end_value_tag"/>
-    <item type="id" name="scale_y_animator_end_value_tag"/>
-    <item type="id" name="alpha_animator_end_value_tag"/>
-    <item type="id" name="top_inset_animator_end_value_tag"/>
-    <item type="id" name="height_animator_end_value_tag"/>
-    <item type="id" name="shadow_alpha_animator_end_value_tag"/>
-    <item type="id" name="translation_x_animator_start_value_tag"/>
-    <item type="id" name="translation_y_animator_start_value_tag"/>
-    <item type="id" name="translation_z_animator_start_value_tag"/>
-    <item type="id" name="scale_x_animator_start_value_tag"/>
-    <item type="id" name="scale_y_animator_start_value_tag"/>
-    <item type="id" name="alpha_animator_start_value_tag"/>
-    <item type="id" name="top_inset_animator_start_value_tag"/>
-    <item type="id" name="height_animator_start_value_tag"/>
-    <item type="id" name="shadow_alpha_animator_start_value_tag"/>
-    <item type="id" name="doze_saved_filter_tag"/>
-    <item type="id" name="qs_icon_tag"/>
-    <item type="id" name="scrim"/>
-    <item type="id" name="scrim_target"/>
-    <item type="id" name="scrim_alpha_start"/>
-    <item type="id" name="scrim_alpha_end"/>
-    <item type="id" name="notification_power"/>
-    <item type="id" name="notification_screenshot"/>
-    <item type="id" name="notification_hidden"/>
-    <item type="id" name="notification_temperature"/>
-    <item type="id" name="notification_plugin"/>
-    <item type="id" name="transformation_start_x_tag"/>
-    <item type="id" name="transformation_start_y_tag"/>
-    <item type="id" name="transformation_start_scale_x_tag"/>
-    <item type="id" name="transformation_start_scale_y_tag"/>
+    <item name="translation_x_animator_tag" type="id" />
+    <item name="translation_y_animator_tag" type="id" />
+    <item name="translation_z_animator_tag" type="id" />
+    <item name="alpha_animator_tag" type="id" />
+    <item name="scale_x_animator_tag" type="id" />
+    <item name="scale_y_animator_tag" type="id" />
+    <item name="top_inset_animator_tag" type="id" />
+    <item name="height_animator_tag" type="id" />
+    <item name="shadow_alpha_animator_tag" type="id" />
+    <item name="translation_x_animator_end_value_tag" type="id" />
+    <item name="translation_y_animator_end_value_tag" type="id" />
+    <item name="translation_z_animator_end_value_tag" type="id" />
+    <item name="scale_x_animator_end_value_tag" type="id" />
+    <item name="scale_y_animator_end_value_tag" type="id" />
+    <item name="alpha_animator_end_value_tag" type="id" />
+    <item name="top_inset_animator_end_value_tag" type="id" />
+    <item name="height_animator_end_value_tag" type="id" />
+    <item name="shadow_alpha_animator_end_value_tag" type="id" />
+    <item name="translation_x_animator_start_value_tag" type="id" />
+    <item name="translation_y_animator_start_value_tag" type="id" />
+    <item name="translation_z_animator_start_value_tag" type="id" />
+    <item name="scale_x_animator_start_value_tag" type="id" />
+    <item name="scale_y_animator_start_value_tag" type="id" />
+    <item name="alpha_animator_start_value_tag" type="id" />
+    <item name="top_inset_animator_start_value_tag" type="id" />
+    <item name="height_animator_start_value_tag" type="id" />
+    <item name="shadow_alpha_animator_start_value_tag" type="id" />
+    <item name="doze_saved_filter_tag" type="id" />
+    <item name="qs_icon_tag" type="id" />
+    <item name="scrim" type="id" />
+    <item name="scrim_target" type="id" />
+    <item name="scrim_alpha_start" type="id" />
+    <item name="scrim_alpha_end" type="id" />
+    <item name="notification_power" type="id" />
+    <item name="notification_screenshot" type="id" />
+    <item name="notification_hidden" type="id" />
+    <item name="notification_temperature" type="id" />
+    <item name="notification_plugin" type="id" />
+    <item name="transformation_start_x_tag" type="id" />
+    <item name="transformation_start_y_tag" type="id" />
+    <item name="transformation_start_scale_x_tag" type="id" />
+    <item name="transformation_start_scale_y_tag" type="id" />
 
     <!-- Whether the icon is from a notification for which targetSdk < L -->
-    <item type="id" name="icon_is_pre_L"/>
+    <item name="icon_is_pre_L" type="id" />
 
     <!-- For notification icons for which targetSdk < L, this caches whether the icon is grayscale -->
-    <item type="id" name="icon_is_grayscale" />
-    <item type="id" name="clip_children_tag" />
-    <item type="id" name="clip_children_set_tag" />
-    <item type="id" name="clip_to_padding_tag" />
-    <item type="id" name="image_icon_tag" />
-    <item type="id" name="contains_transformed_view" />
-    <item type="id" name="is_clicked_heads_up_tag" />
+    <item name="icon_is_grayscale" type="id" />
+    <item name="clip_children_tag" type="id" />
+    <item name="clip_children_set_tag" type="id" />
+    <item name="clip_to_padding_tag" type="id" />
+    <item name="image_icon_tag" type="id" />
+    <item name="contains_transformed_view" type="id" />
+    <item name="is_clicked_heads_up_tag" type="id" />
 
     <!-- Accessibility actions for the docked stack divider -->
-    <item type="id" name="action_move_tl_full" />
-    <item type="id" name="action_move_tl_70" />
-    <item type="id" name="action_move_tl_50" />
-    <item type="id" name="action_move_tl_30" />
-    <item type="id" name="action_move_rb_full" />
+    <item name="action_move_tl_full" type="id" />
+    <item name="action_move_tl_70" type="id" />
+    <item name="action_move_tl_50" type="id" />
+    <item name="action_move_tl_30" type="id" />
+    <item name="action_move_rb_full" type="id" />
 </resources>
 

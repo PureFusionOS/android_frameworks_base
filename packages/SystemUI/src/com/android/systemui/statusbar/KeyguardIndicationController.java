@@ -76,13 +76,12 @@ public class KeyguardIndicationController {
     private final int mSlowThreshold;
     private final int mFastThreshold;
     private final LockIcon mLockIcon;
+    private final DevicePolicyManager mDevicePolicyManager;
     private StatusBarKeyguardViewManager mStatusBarKeyguardViewManager;
-
     private String mRestingIndication;
     private String mTransientIndication;
     private int mTransientTextColor;
     private boolean mVisible;
-
     private boolean mPowerPluggedIn;
     private boolean mPowerCharged;
     private int mChargingSpeed;
@@ -91,17 +90,35 @@ public class KeyguardIndicationController {
     private int mChargingWattage;
     private int mTemperature;
     private String mMessageToShowOnScreenOn;
-
     private KeyguardUpdateMonitorCallback mUpdateMonitor;
-
-    private final DevicePolicyManager mDevicePolicyManager;
     private boolean mDozing;
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == MSG_HIDE_TRANSIENT) {
+                hideTransientIndication();
+            } else if (msg.what == MSG_CLEAR_FP_MSG) {
+                mLockIcon.setTransientFpError(false);
+                hideTransientIndication();
+            }
+        }
+    };
+    private final BroadcastReceiver mTickReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mHandler.post(() -> {
+                if (mVisible) {
+                    updateIndication();
+                }
+            });
+        }
+    };
 
     /**
      * Creates a new KeyguardIndicationController and registers callbacks.
      */
     public KeyguardIndicationController(Context context, ViewGroup indicationArea,
-            LockIcon lockIcon) {
+                                        LockIcon lockIcon) {
         this(context, indicationArea, lockIcon,
                 WakeLock.createPartial(context, "Doze:KeyguardIndication"));
 
@@ -113,7 +130,7 @@ public class KeyguardIndicationController {
      */
     @VisibleForTesting
     KeyguardIndicationController(Context context, ViewGroup indicationArea, LockIcon lockIcon,
-                WakeLock wakeLock) {
+                                 WakeLock wakeLock) {
         mContext = context;
         mIndicationArea = indicationArea;
         mTextView = (KeyguardIndicationTextView) indicationArea.findViewById(
@@ -148,7 +165,7 @@ public class KeyguardIndicationController {
     /**
      * Gets the {@link KeyguardUpdateMonitorCallback} instance associated with this
      * {@link KeyguardIndicationController}.
-     *
+     * <p>
      * <p>Subclasses may override this method to extend or change the callback behavior by extending
      * the {@link BaseKeyguardCallback}.
      *
@@ -332,7 +349,7 @@ public class KeyguardIndicationController {
 
         String batteryInfo = "";
         boolean showbatteryInfo = Settings.System.getIntForUser(mContext.getContentResolver(),
-            Settings.System.LOCKSCREEN_BATTERY_INFO, 1, UserHandle.USER_CURRENT) == 1;
+                Settings.System.LOCKSCREEN_BATTERY_INFO, 1, UserHandle.USER_CURRENT) == 1;
 
         if (showbatteryInfo) {
             if (mChargingCurrent > 0) {
@@ -366,29 +383,6 @@ public class KeyguardIndicationController {
             StatusBarKeyguardViewManager statusBarKeyguardViewManager) {
         mStatusBarKeyguardViewManager = statusBarKeyguardViewManager;
     }
-
-    private final BroadcastReceiver mTickReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mHandler.post(() -> {
-                if (mVisible) {
-                    updateIndication();
-                }
-            });
-        }
-    };
-
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == MSG_HIDE_TRANSIENT) {
-                hideTransientIndication();
-            } else if (msg.what == MSG_CLEAR_FP_MSG) {
-                mLockIcon.setTransientFpError(false);
-                hideTransientIndication();
-            }
-        }
-    };
 
     public void setDozing(boolean dozing) {
         if (mDozing == dozing) {
@@ -517,5 +511,7 @@ public class KeyguardIndicationController {
                 updateIndication();
             }
         }
-    };
+    }
+
+    ;
 }

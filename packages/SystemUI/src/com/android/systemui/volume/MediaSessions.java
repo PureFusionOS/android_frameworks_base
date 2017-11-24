@@ -63,7 +63,26 @@ public class MediaSessions {
     private final MediaSessionManager mMgr;
     private final Map<Token, MediaControllerRecord> mRecords = new HashMap<>();
     private final Callbacks mCallbacks;
+    private final OnActiveSessionsChangedListener mSessionsListener =
+            new OnActiveSessionsChangedListener() {
+                @Override
+                public void onActiveSessionsChanged(List<MediaController> controllers) {
+                    onActiveSessionsUpdatedH(controllers);
+                }
+            };
+    private final IRemoteVolumeController mRvc = new IRemoteVolumeController.Stub() {
+        @Override
+        public void remoteVolumeChanged(ISessionController session, int flags)
+                throws RemoteException {
+            mHandler.obtainMessage(H.REMOTE_VOLUME_CHANGED, flags, 0, session).sendToTarget();
+        }
 
+        @Override
+        public void updateRemoteController(final ISessionController session)
+                throws RemoteException {
+            mHandler.obtainMessage(H.UPDATE_REMOTE_CONTROLLER, session).sendToTarget();
+        }
+    };
     private boolean mInit;
 
     public MediaSessions(Context context, Looper looper, Callbacks callbacks) {
@@ -73,10 +92,73 @@ public class MediaSessions {
         mCallbacks = callbacks;
     }
 
+    private static boolean isRemote(PlaybackInfo pi) {
+        return pi != null && pi.getPlaybackType() == PlaybackInfo.PLAYBACK_TYPE_REMOTE;
+    }
+
+    private static void dump(int n, PrintWriter writer, MediaController c) {
+        writer.println("  Controller " + n + ": " + c.getPackageName());
+        final Bundle extras = c.getExtras();
+        final long flags = c.getFlags();
+        final MediaMetadata mm = c.getMetadata();
+        final PlaybackInfo pi = c.getPlaybackInfo();
+        final PlaybackState playbackState = c.getPlaybackState();
+        final List<QueueItem> queue = c.getQueue();
+        final CharSequence queueTitle = c.getQueueTitle();
+        final int ratingType = c.getRatingType();
+        final PendingIntent sessionActivity = c.getSessionActivity();
+
+        writer.println("    PlaybackState: " + Util.playbackStateToString(playbackState));
+        writer.println("    PlaybackInfo: " + Util.playbackInfoToString(pi));
+        if (mm != null) {
+            writer.println("  MediaMetadata.desc=" + mm.getDescription());
+        }
+        writer.println("    RatingType: " + ratingType);
+        writer.println("    Flags: " + flags);
+        if (extras != null) {
+            writer.println("    Extras:");
+            for (String key : extras.keySet()) {
+                writer.println("      " + key + "=" + extras.get(key));
+            }
+        }
+        if (queueTitle != null) {
+            writer.println("    QueueTitle: " + queueTitle);
+        }
+        if (queue != null && !queue.isEmpty()) {
+            writer.println("    Queue:");
+            for (QueueItem qi : queue) {
+                writer.println("      " + qi);
+            }
+        }
+        if (pi != null) {
+            writer.println("    sessionActivity: " + sessionActivity);
+        }
+    }
+
+    public static void dumpMediaSessions(Context context) {
+        final MediaSessionManager mgr = (MediaSessionManager) context
+                .getSystemService(Context.MEDIA_SESSION_SERVICE);
+        try {
+            final List<MediaController> controllers = mgr.getActiveSessions(null);
+            final int N = controllers.size();
+            if (D.BUG) Log.d(TAG, N + " controllers");
+            for (int i = 0; i < N; i++) {
+                final StringWriter sw = new StringWriter();
+                final PrintWriter pw = new PrintWriter(sw, true);
+                dump(i + 1, pw, controllers.get(i));
+                if (D.BUG) Log.d(TAG, sw.toString());
+            }
+        } catch (SecurityException e) {
+            Log.w(TAG, "Not allowed to get sessions", e);
+        }
+    }
+
     public void dump(PrintWriter writer) {
         writer.println(getClass().getSimpleName() + " state:");
-        writer.print("  mInit: "); writer.println(mInit);
-        writer.print("  mRecords.size: "); writer.println(mRecords.size());
+        writer.print("  mInit: ");
+        writer.println(mInit);
+        writer.print("  mRecords.size: ");
+        writer.println(mRecords.size());
         int i = 0;
         for (MediaControllerRecord r : mRecords.values()) {
             dump(++i, writer, r.controller);
@@ -162,10 +244,6 @@ public class MediaSessions {
         }
     }
 
-    private static boolean isRemote(PlaybackInfo pi) {
-        return pi != null && pi.getPlaybackType() == PlaybackInfo.PLAYBACK_TYPE_REMOTE;
-    }
-
     protected String getControllerName(MediaController controller) {
         final PackageManager pm = mContext.getPackageManager();
         final String pkg = controller.getPackageName();
@@ -191,7 +269,8 @@ public class MediaSessions {
             if (appLabel.length() > 0) {
                 return appLabel;
             }
-        } catch (NameNotFoundException e) { }
+        } catch (NameNotFoundException e) {
+        }
         return pkg;
     }
 
@@ -201,61 +280,12 @@ public class MediaSessions {
         }
     }
 
-    private static void dump(int n, PrintWriter writer, MediaController c) {
-        writer.println("  Controller " + n + ": " + c.getPackageName());
-        final Bundle extras = c.getExtras();
-        final long flags = c.getFlags();
-        final MediaMetadata mm = c.getMetadata();
-        final PlaybackInfo pi = c.getPlaybackInfo();
-        final PlaybackState playbackState = c.getPlaybackState();
-        final List<QueueItem> queue = c.getQueue();
-        final CharSequence queueTitle = c.getQueueTitle();
-        final int ratingType = c.getRatingType();
-        final PendingIntent sessionActivity = c.getSessionActivity();
+    public interface Callbacks {
+        void onRemoteUpdate(Token token, String name, PlaybackInfo pi);
 
-        writer.println("    PlaybackState: " + Util.playbackStateToString(playbackState));
-        writer.println("    PlaybackInfo: " + Util.playbackInfoToString(pi));
-        if (mm != null) {
-            writer.println("  MediaMetadata.desc=" + mm.getDescription());
-        }
-        writer.println("    RatingType: " + ratingType);
-        writer.println("    Flags: " + flags);
-        if (extras != null) {
-            writer.println("    Extras:");
-            for (String key : extras.keySet()) {
-                writer.println("      " + key + "=" + extras.get(key));
-            }
-        }
-        if (queueTitle != null) {
-            writer.println("    QueueTitle: " + queueTitle);
-        }
-        if (queue != null && !queue.isEmpty()) {
-            writer.println("    Queue:");
-            for (QueueItem qi : queue) {
-                writer.println("      " + qi);
-            }
-        }
-        if (pi != null) {
-            writer.println("    sessionActivity: " + sessionActivity);
-        }
-    }
+        void onRemoteRemoved(Token t);
 
-    public static void dumpMediaSessions(Context context) {
-        final MediaSessionManager mgr = (MediaSessionManager) context
-                .getSystemService(Context.MEDIA_SESSION_SERVICE);
-        try {
-            final List<MediaController> controllers = mgr.getActiveSessions(null);
-            final int N = controllers.size();
-            if (D.BUG) Log.d(TAG, N + " controllers");
-            for (int i = 0; i < N; i++) {
-                final StringWriter sw = new StringWriter();
-                final PrintWriter pw = new PrintWriter(sw, true);
-                dump(i + 1, pw, controllers.get(i));
-                if (D.BUG) Log.d(TAG, sw.toString());
-            }
-        } catch (SecurityException e) {
-            Log.w(TAG, "Not allowed to get sessions", e);
-        }
+        void onRemoteVolumeChanged(Token token, int flags);
     }
 
     private final class MediaControllerRecord extends MediaController.Callback {
@@ -322,28 +352,6 @@ public class MediaSessions {
         }
     }
 
-    private final OnActiveSessionsChangedListener mSessionsListener =
-            new OnActiveSessionsChangedListener() {
-        @Override
-        public void onActiveSessionsChanged(List<MediaController> controllers) {
-            onActiveSessionsUpdatedH(controllers);
-        }
-    };
-
-    private final IRemoteVolumeController mRvc = new IRemoteVolumeController.Stub() {
-        @Override
-        public void remoteVolumeChanged(ISessionController session, int flags)
-                throws RemoteException {
-            mHandler.obtainMessage(H.REMOTE_VOLUME_CHANGED, flags, 0, session).sendToTarget();
-        }
-
-        @Override
-        public void updateRemoteController(final ISessionController session)
-                throws RemoteException {
-            mHandler.obtainMessage(H.UPDATE_REMOTE_CONTROLLER, session).sendToTarget();
-        }
-    };
-
     private final class H extends Handler {
         private static final int UPDATE_SESSIONS = 1;
         private static final int REMOTE_VOLUME_CHANGED = 2;
@@ -367,12 +375,6 @@ public class MediaSessions {
                     break;
             }
         }
-    }
-
-    public interface Callbacks {
-        void onRemoteUpdate(Token token, String name, PlaybackInfo pi);
-        void onRemoteRemoved(Token t);
-        void onRemoteVolumeChanged(Token token, int flags);
     }
 
 }

@@ -36,15 +36,12 @@ import com.android.systemui.statusbar.policy.DarkIconDispatcher.DarkReceiver;
 
 public class QuickStatusBarHeader extends RelativeLayout {
 
-    private ActivityStarter mActivityStarter;
-
-    private QSPanel mQsPanel;
-
-    private boolean mExpanded;
-    private boolean mListening;
-
     protected QuickQSPanel mHeaderQsPanel;
     protected QSTileHost mHost;
+    private ActivityStarter mActivityStarter;
+    private QSPanel mQsPanel;
+    private boolean mExpanded;
+    private boolean mListening;
 
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);

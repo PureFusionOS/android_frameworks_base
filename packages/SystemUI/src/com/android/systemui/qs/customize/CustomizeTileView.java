@@ -28,6 +28,7 @@ public class CustomizeTileView extends QSTileView {
 
     private TextView mAppLabel;
     private int mLabelMinLines;
+
     public CustomizeTileView(Context context, QSIconView icon) {
         super(context, icon);
     }
@@ -45,13 +46,13 @@ public class CustomizeTileView extends QSTileView {
         mLabel.setSingleLine(showAppLabel);
     }
 
+    public TextView getAppLabel() {
+        return mAppLabel;
+    }
+
     public void setAppLabel(CharSequence label) {
         if (!Objects.equal(label, mAppLabel.getText())) {
             mAppLabel.setText(label);
         }
-    }
-
-    public TextView getAppLabel() {
-        return mAppLabel;
     }
 }

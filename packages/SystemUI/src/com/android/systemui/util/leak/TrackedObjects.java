@@ -31,6 +31,10 @@ public class TrackedObjects {
         mTrackedCollections = trackedCollections;
     }
 
+    public static boolean isTrackedObject(Collection<?> collection) {
+        return collection instanceof TrackedClass;
+    }
+
     /**
      * @see LeakDetector#trackInstance(Object)
      */
@@ -46,10 +50,6 @@ public class TrackedObjects {
 
         trackedClass.track(object);
         mTrackedCollections.track(trackedClass, clazz.getName());
-    }
-
-    public static boolean isTrackedObject(Collection<?> collection) {
-        return collection instanceof TrackedClass;
     }
 
     private static class TrackedClass<T> extends AbstractCollection<T> {

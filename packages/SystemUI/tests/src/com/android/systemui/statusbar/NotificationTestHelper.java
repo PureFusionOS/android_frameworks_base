@@ -38,8 +38,8 @@ public class NotificationTestHelper {
 
     private final Context mContext;
     private final Instrumentation mInstrumentation;
-    private int mId;
     private final NotificationGroupManager mGroupManager = new NotificationGroupManager();
+    private int mId;
     private ExpandableNotificationRow mRow;
     private InflationException mException;
 

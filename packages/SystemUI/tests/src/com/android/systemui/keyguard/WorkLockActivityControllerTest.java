@@ -61,12 +61,36 @@ public class WorkLockActivityControllerTest extends SysuiTestCase {
     private static final int USER_ID = 333;
     private static final int TASK_ID = 444;
 
-    private @Mock Context mContext;
-    private @Mock SystemServicesProxy mSystemServicesProxy;
-    private @Mock IActivityManager mIActivityManager;
+    private @Mock
+    Context mContext;
+    private @Mock
+    SystemServicesProxy mSystemServicesProxy;
+    private @Mock
+    IActivityManager mIActivityManager;
 
     private WorkLockActivityController mController;
     private TaskStackListener mTaskStackListener;
+
+    private static ArgumentMatcher<Intent> hasComponent(final Context context,
+                                                        final Class<? extends Activity> activityClass) {
+        return new ArgumentMatcher<Intent>() {
+            @Override
+            public boolean matches(Intent intent) {
+                return new ComponentName(context, activityClass).equals(intent.getComponent());
+            }
+        };
+    }
+
+    private static ArgumentMatcher<Bundle> hasOptions(final int taskId, final boolean overlay) {
+        return new ArgumentMatcher<Bundle>() {
+            @Override
+            public boolean matches(Bundle item) {
+                final ActivityOptions options = ActivityOptions.fromBundle(item);
+                return (options.getLaunchTaskId() == taskId)
+                        && (options.getTaskOverlay() == overlay);
+            }
+        };
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -84,6 +108,9 @@ public class WorkLockActivityControllerTest extends SysuiTestCase {
         verify(mSystemServicesProxy).registerTaskStackListener(listenerCaptor.capture());
         mTaskStackListener = listenerCaptor.getValue();
     }
+
+    // End of tests, start of helpers
+    // ------------------------------
 
     @Test
     public void testOverlayStartedWhenLocked() throws Exception {
@@ -111,9 +138,6 @@ public class WorkLockActivityControllerTest extends SysuiTestCase {
         verifyStartActivity(TASK_ID, true /*taskOverlay*/);
         verify(mSystemServicesProxy).removeTask(TASK_ID);
     }
-
-    // End of tests, start of helpers
-    // ------------------------------
 
     private void setActivityStartCode(int taskId, boolean taskOverlay, int code) throws Exception {
         doReturn(code).when(mIActivityManager).startActivityAsUser(
@@ -143,26 +167,5 @@ public class WorkLockActivityControllerTest extends SysuiTestCase {
                 eq((ProfilerInfo) null),
                 argThat(hasOptions(taskId, taskOverlay)),
                 eq(UserHandle.USER_CURRENT));
-    }
-
-    private static ArgumentMatcher<Intent> hasComponent(final Context context,
-            final Class<? extends Activity> activityClass) {
-        return new ArgumentMatcher<Intent>() {
-            @Override
-            public boolean matches(Intent intent) {
-                return new ComponentName(context, activityClass).equals(intent.getComponent());
-            }
-        };
-    }
-
-    private static ArgumentMatcher<Bundle> hasOptions(final int taskId, final boolean overlay) {
-        return new ArgumentMatcher<Bundle>() {
-            @Override
-            public boolean matches(Bundle item) {
-                final ActivityOptions options = ActivityOptions.fromBundle(item);
-                return (options.getLaunchTaskId() == taskId)
-                        && (options.getTaskOverlay() == overlay);
-            }
-        };
     }
 }

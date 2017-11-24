@@ -16,7 +16,9 @@
 
 package com.android.systemui.statusbar.policy;
 
-/** Common interface for components with an active listening state. **/
+/**
+ * Common interface for components with an active listening state.
+ **/
 public interface Listenable {
     void setListening(boolean listening);
 }

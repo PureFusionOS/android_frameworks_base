@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2006 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2006 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -132,12 +131,9 @@
     </style>
 
 
-    <style name="TextAppearance.StatusBar.HeadsUp"
-        parent="@*android:style/TextAppearance.StatusBar">
-    </style>
+    <style name="TextAppearance.StatusBar.HeadsUp" parent="@*android:style/TextAppearance.StatusBar"></style>
 
-    <style name="TextAppearance.StatusBar.SystemPanel"
-        parent="@*android:style/TextAppearance.StatusBar">
+    <style name="TextAppearance.StatusBar.SystemPanel" parent="@*android:style/TextAppearance.StatusBar">
         <item name="android:textAppearance">?android:attr/textAppearance</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#FF808080</item>
@@ -173,17 +169,16 @@
         <item name="android:textColor">?android:attr/textColorTertiary</item>
     </style>
 
-    <style name="TextAppearance.StatusBar.Expanded.EmergencyCallsOnly"
-           parent="TextAppearance.StatusBar.Expanded.AboveDateTime" />
+    <style name="TextAppearance.StatusBar.Expanded.EmergencyCallsOnly" parent="TextAppearance.StatusBar.Expanded.AboveDateTime" />
 
-    <style name="TextAppearance.StatusBar.Expanded.ChargingInfo"
-            parent="TextAppearance.StatusBar.Expanded.AboveDateTime" />
+    <style name="TextAppearance.StatusBar.Expanded.ChargingInfo" parent="TextAppearance.StatusBar.Expanded.AboveDateTime" />
 
     <style name="TextAppearance.StatusBar.Expanded.UserSwitcher">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
+
     <style name="TextAppearance.StatusBar.Expanded.UserSwitcher.UserName" />
 
     <style name="TextAppearance" />
@@ -287,13 +282,13 @@
     </style>
 
     <!-- Standard animations for hiding and showing the status bar. -->
-    <style name="Animation.StatusBar">
-    </style>
+    <style name="Animation.StatusBar"></style>
 
     <style name="systemui_theme" parent="@*android:style/Theme.DeviceDefault.QuickSettings">
         <item name="lightIconTheme">@style/DualToneLightTheme</item>
         <item name="darkIconTheme">@style/DualToneDarkTheme</item>
     </style>
+
     <style name="qs_theme" parent="systemui_theme">
         <item name="lightIconTheme">@style/QSIconTheme</item>
         <item name="darkIconTheme">@style/QSIconTheme</item>
@@ -313,13 +308,9 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="TextAppearance.Material.Notification.HeaderTitle"
-        parent="@*android:style/TextAppearance.Material.Notification.Info">
-    </style>
+    <style name="TextAppearance.Material.Notification.HeaderTitle" parent="@*android:style/TextAppearance.Material.Notification.Info"></style>
 
-    <style name="TextAppearance.Material.Notification.HybridNotificationDivider"
-        parent="@*android:style/TextAppearance.Material.Notification">
-    </style>
+    <style name="TextAppearance.Material.Notification.HybridNotificationDivider" parent="@*android:style/TextAppearance.Material.Notification"></style>
 
     <style name="SearchPanelCircle">
         <item name="android:layout_width">match_parent</item>
@@ -333,6 +324,7 @@
     <style name="AutoSizingList">
         <item name="enableAutoSizing">true</item>
     </style>
+
     <style name="Theme.AlertDialogHost" parent="android:Theme.DeviceDefault">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -348,11 +340,13 @@
         <item name="fillColor">@color/light_mode_icon_color_dual_tone_fill</item>
         <item name="singleToneColor">@color/light_mode_icon_color_single_tone</item>
     </style>
+
     <style name="DualToneDarkTheme">
         <item name="backgroundColor">@color/dark_mode_icon_color_dual_tone_background</item>
         <item name="fillColor">@color/dark_mode_icon_color_dual_tone_fill</item>
         <item name="singleToneColor">@color/dark_mode_icon_color_single_tone</item>
     </style>
+
     <style name="QSIconTheme">
         <item name="backgroundColor">?android:attr/textColorHint</item>
         <item name="fillColor">?android:attr/textColorPrimary</item>
@@ -415,8 +409,7 @@
         <item name="switchPreferenceStyle">@style/TunerSettings.SwitchPreferenceStyle</item>
     </style>
 
-    <style name="TunerSettings.DialogPreferenceStyle" parent="@style/TunerSettings.PreferenceStyle">
-    </style>
+    <style name="TunerSettings.DialogPreferenceStyle" parent="@style/TunerSettings.PreferenceStyle"></style>
 
     <style name="TunerSettings.DropdownPreferenceStyle" parent="@style/TunerSettings.PreferenceStyle">
         <item name="android:layout">@layout/preference_dropdown_material_settings</item>
@@ -439,8 +432,7 @@
         <item name="android:layout">@layout/preference_material_settings</item>
     </style>
 
-    <style name="TunerSettings.PreferenceTheme">
-    </style>
+    <style name="TunerSettings.PreferenceTheme"></style>
 
     <style name="TunerSettings.SwitchPreferenceStyle" parent="@style/TunerSettings.PreferenceStyle">
         <item name="widgetLayout">@*android:layout/preference_widget_switch</item>

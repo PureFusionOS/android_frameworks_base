@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright 2017, The Android Open Source Project
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +14,16 @@
     limitations under the License.
 -->
 
-<com.android.systemui.statusbar.NotificationSnooze
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.systemui.statusbar.NotificationSnooze xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="@color/notification_guts_bg_color"
+    android:orientation="vertical"
     android:theme="@*android:style/Theme.DeviceDefault.Light">
 
     <RelativeLayout
-        android:layout_width="match_parent"
         android:id="@+id/notification_snooze"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/snooze_snackbar_min_height">
 
         <TextView
@@ -34,16 +32,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:paddingEnd="4dp"
             android:paddingStart="16dp"
-            android:textColor="#DD000000"
-            android:paddingEnd="4dp"/>
+            android:textColor="#DD000000" />
 
         <ImageView
             android:id="@+id/expand_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/snooze_option_default"
             android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/snooze_option_default"
             android:paddingTop="1dp"
             android:tint="#9E9E9E" />
 
@@ -52,9 +50,9 @@
             style="@style/TextAppearance.NotificationInfo.Button"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
-            android:layout_marginEnd="8dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
             android:text="@string/snooze_undo" />
     </RelativeLayout>
 
@@ -68,7 +66,7 @@
         android:id="@+id/snooze_options"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:paddingBottom="8dp" />
 
 </com.android.systemui.statusbar.NotificationSnooze>

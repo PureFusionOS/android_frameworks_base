@@ -33,14 +33,6 @@ import com.android.systemui.statusbar.policy.DarkIconDispatcher;
 
 public interface StatusBarIconController {
 
-    public void addIconGroup(IconManager iconManager);
-    public void removeIconGroup(IconManager iconManager);
-    public void setExternalIcon(String slot);
-    public void setIcon(String slot, int resourceId, CharSequence contentDescription);
-    public void setIcon(String slot, StatusBarIcon icon);
-    public void setIconVisibility(String slotTty, boolean b);
-    public void removeIcon(String slot);
-
     public static final String ICON_BLACKLIST = "icon_blacklist";
 
     public static ArraySet<String> getIconBlacklist(String blackListStr) {
@@ -57,6 +49,19 @@ public interface StatusBarIconController {
         return ret;
     }
 
+    public void addIconGroup(IconManager iconManager);
+
+    public void removeIconGroup(IconManager iconManager);
+
+    public void setExternalIcon(String slot);
+
+    public void setIcon(String slot, int resourceId, CharSequence contentDescription);
+
+    public void setIcon(String slot, StatusBarIcon icon);
+
+    public void setIconVisibility(String slotTty, boolean b);
+
+    public void removeIcon(String slot);
 
     /**
      * Version of ViewGroup that observers state from the DarkIconDispatcher.
@@ -74,7 +79,7 @@ public interface StatusBarIconController {
 
         @Override
         protected void onIconAdded(int index, String slot, boolean blocked,
-                StatusBarIcon icon) {
+                                   StatusBarIcon icon) {
             StatusBarIconView v = addIcon(index, slot, blocked, icon);
             mDarkIconDispatcher.addDarkReceiver(v);
         }
@@ -124,12 +129,12 @@ public interface StatusBarIconController {
         }
 
         protected void onIconAdded(int index, String slot, boolean blocked,
-                StatusBarIcon icon) {
+                                   StatusBarIcon icon) {
             addIcon(index, slot, blocked, icon);
         }
 
         protected StatusBarIconView addIcon(int index, String slot, boolean blocked,
-                StatusBarIcon icon) {
+                                            StatusBarIcon icon) {
             StatusBarIconView view = onCreateStatusBarIconView(slot, blocked);
             view.set(icon);
             mGroup.addView(view, index, onCreateLayoutParams());

@@ -118,15 +118,18 @@ public class ForegroundServiceControllerImpl
     private static class UserServices {
         private String[] mRunning = null;
         private ArrayMap<String, ArraySet<String>> mNotifications = new ArrayMap<>(1);
+
         public void setRunningServices(String[] pkgs) {
             mRunning = pkgs != null ? Arrays.copyOf(pkgs, pkgs.length) : null;
         }
+
         public void addNotification(String pkg, String key) {
             if (mNotifications.get(pkg) == null) {
                 mNotifications.put(pkg, new ArraySet<String>());
             }
             mNotifications.get(pkg).add(key);
         }
+
         public boolean removeNotification(String pkg, String key) {
             final boolean found;
             final ArraySet<String> keys = mNotifications.get(pkg);
@@ -140,6 +143,7 @@ public class ForegroundServiceControllerImpl
             }
             return found;
         }
+
         public boolean isDungeonNeeded() {
             if (mRunning != null) {
                 for (String pkg : mRunning) {

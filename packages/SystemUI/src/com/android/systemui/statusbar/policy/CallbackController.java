@@ -16,5 +16,6 @@ package com.android.systemui.statusbar.policy;
 
 public interface CallbackController<T> {
     void addCallback(T listener);
+
     void removeCallback(T listener);
 }

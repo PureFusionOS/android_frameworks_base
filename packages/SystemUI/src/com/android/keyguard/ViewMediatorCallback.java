@@ -29,8 +29,8 @@ public interface ViewMediatorCallback {
     /**
      * Report that the keyguard is done.
      *
-     * @param strongAuth whether the user has authenticated with strong authentication like
-     *                   pattern, password or PIN but not by trust agents or fingerprint
+     * @param strongAuth   whether the user has authenticated with strong authentication like
+     *                     pattern, password or PIN but not by trust agents or fingerprint
      * @param targetUserId a user that needs to be the foreground user at the completion.
      */
     void keyguardDone(boolean strongAuth, int targetUserId);
@@ -42,6 +42,7 @@ public interface ViewMediatorCallback {
 
     /**
      * Tell ViewMediator that the current view needs IME input
+     *
      * @param needsInput
      */
     void setNeedsInput(boolean needsInput);
@@ -49,8 +50,8 @@ public interface ViewMediatorCallback {
     /**
      * Report that the keyguard is dismissable, pending the next keyguardDone call.
      *
-     * @param strongAuth whether the user has authenticated with strong authentication like
-     *                   pattern, password or PIN but not by trust agents or fingerprint
+     * @param strongAuth   whether the user has authenticated with strong authentication like
+     *                     pattern, password or PIN but not by trust agents or fingerprint
      * @param targetUserId a user that needs to be the foreground user at the completion.
      */
     void keyguardDonePending(boolean strongAuth, int targetUserId);
@@ -82,10 +83,10 @@ public interface ViewMediatorCallback {
 
     /**
      * @return one of the reasons why the bouncer needs to be shown right now and the user can't use
-     *         his normal unlock method like fingerprint or trust agents. See
-     *         {@link KeyguardSecurityView#PROMPT_REASON_NONE},
-     *         {@link KeyguardSecurityView#PROMPT_REASON_RESTART} and
-     *         {@link KeyguardSecurityView#PROMPT_REASON_TIMEOUT}.
+     * his normal unlock method like fingerprint or trust agents. See
+     * {@link KeyguardSecurityView#PROMPT_REASON_NONE},
+     * {@link KeyguardSecurityView#PROMPT_REASON_RESTART} and
+     * {@link KeyguardSecurityView#PROMPT_REASON_TIMEOUT}.
      */
     int getBouncerPromptReason();
 }

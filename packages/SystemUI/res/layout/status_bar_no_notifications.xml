@@ -15,19 +15,18 @@
   -->
 
 <!-- Extends Framelayout -->
-<com.android.systemui.statusbar.EmptyShadeView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        >
+<com.android.systemui.statusbar.EmptyShadeView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="gone">
+
     <TextView
-            android:id="@+id/no_notifications"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:paddingTop="28dp"
-            android:gravity="top|center_horizontal"
-            android:textColor="#e6ffffff"
-            android:textSize="16sp"
-            android:text="@string/empty_shade_text"/>
+        android:id="@+id/no_notifications"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="top|center_horizontal"
+        android:paddingTop="28dp"
+        android:text="@string/empty_shade_text"
+        android:textColor="#e6ffffff"
+        android:textSize="16sp" />
 </com.android.systemui.statusbar.EmptyShadeView>

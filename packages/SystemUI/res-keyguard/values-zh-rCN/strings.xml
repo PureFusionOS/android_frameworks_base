@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"按“菜单”即可解锁。"</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"网络已锁定"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"没有 SIM 卡"</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"平板电脑中没有 SIM 卡。"</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"手机中没有 SIM 卡。"</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"平板电脑中没有 SIM 卡。"</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"手机中没有 SIM 卡。"</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"请插入 SIM 卡。"</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"SIM 卡缺失或无法读取，请插入 SIM 卡。"</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"SIM 卡无法使用。"</string>
@@ -69,34 +68,34 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"请输入 4 到 8 位数的 PIN 码。"</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"PUK 码应至少包含 8 位数字。"</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"请重新输入正确的 PUK 码。如果屡次输入错误，SIM 卡将被永久停用。"</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"PIN 码不匹配"</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"PIN 码不匹配"</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"图案尝试次数过多"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"您已经 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次输错 PIN 码。\n\n请在 <xliff:g id="NUMBER_1">%2$d</xliff:g> 秒后重试。"</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"您已经 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次输错密码。\n\n请在 <xliff:g id="NUMBER_1">%2$d</xliff:g> 秒后重试。"</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"您已经 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次画错解锁图案。\n\n请在 <xliff:g id="NUMBER_1">%2$d</xliff:g> 秒后重试。"</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，平板电脑将会被重置，而这将删除其中的所有数据。"</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，手机将会被重置，而这将删除其中的所有数据。"</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。这部平板电脑将会被重置，而这将删除其中的所有数据。"</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。这部手机将会被重置，而这将删除其中的所有数据。"</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统将移除此用户，而这将删除所有的用户数据。"</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统将移除此用户，而这将删除所有的用户数据。"</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。系统将移除此用户，而这将删除所有的用户数据。"</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。系统将移除此用户，而这将删除所有的用户数据。"</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统将移除此工作资料，而这将删除所有的工作资料数据。"</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统将移除此工作资料，而这将删除所有的工作资料数据。"</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。系统将移除此工作资料，而这将删除所有的工作资料数据。"</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。系统将移除此工作资料，而这将删除所有的工作资料数据。"</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"您已 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次画错解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统就会要求您使用自己的电子邮件帐号解锁平板电脑。\n\n请在 <xliff:g id="NUMBER_2">%3$d</xliff:g> 秒后重试。"</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"您已 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次画错解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统就会要求您使用自己的电子邮件帐号解锁手机。\n\n请在 <xliff:g id="NUMBER_2">%3$d</xliff:g> 秒后重试。"</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，平板电脑将会被重置，而这将删除其中的所有数据。"</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，手机将会被重置，而这将删除其中的所有数据。"</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。这部平板电脑将会被重置，而这将删除其中的所有数据。"</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。这部手机将会被重置，而这将删除其中的所有数据。"</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统将移除此用户，而这将删除所有的用户数据。"</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统将移除此用户，而这将删除所有的用户数据。"</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。系统将移除此用户，而这将删除所有的用户数据。"</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。系统将移除此用户，而这将删除所有的用户数据。"</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统将移除此工作资料，而这将删除所有的工作资料数据。"</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统将移除此工作资料，而这将删除所有的工作资料数据。"</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"您尝试解锁平板电脑后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。系统将移除此工作资料，而这将删除所有的工作资料数据。"</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"您尝试解锁手机后失败的次数已达 <xliff:g id="NUMBER">%d</xliff:g> 次。系统将移除此工作资料，而这将删除所有的工作资料数据。"</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"您已 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次画错解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统就会要求您使用自己的电子邮件帐号解锁平板电脑。\n\n请在 <xliff:g id="NUMBER_2">%3$d</xliff:g> 秒后重试。"</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"您已 <xliff:g id="NUMBER_0">%1$d</xliff:g> 次画错解锁图案。如果再尝试 <xliff:g id="NUMBER_1">%2$d</xliff:g> 次后仍不成功，系统就会要求您使用自己的电子邮件帐号解锁手机。\n\n请在 <xliff:g id="NUMBER_2">%3$d</xliff:g> 秒后重试。"</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"SIM 卡 PIN 码不正确，您现在必须联系运营商为您解锁设备。"</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="other">SIM 卡 PIN 码不正确，您还有 <xliff:g id="NUMBER_1">%d</xliff:g> 次尝试机会。</item>
-      <item quantity="one">SIM 卡 PIN 码不正确，您还有 <xliff:g id="NUMBER_0">%d</xliff:g> 次尝试机会。如果仍不正确，则需要联系运营商帮您解锁设备。</item>
+        <item quantity="other">SIM 卡 PIN 码不正确，您还有 <xliff:g id="NUMBER_1">%d</xliff:g> 次尝试机会。</item>
+        <item quantity="one">SIM 卡 PIN 码不正确，您还有 <xliff:g id="NUMBER_0">%d</xliff:g> 次尝试机会。如果仍不正确，则需要联系运营商帮您解锁设备。</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"SIM 卡无法使用，请与您的运营商联系。"</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="other">SIM 卡 PUK 码不正确，您还有 <xliff:g id="NUMBER_1">%d</xliff:g> 次尝试机会。如果仍不正确，SIM 卡将永远无法使用。</item>
-      <item quantity="one">SIM 卡 PUK 码不正确，您还有 <xliff:g id="NUMBER_0">%d</xliff:g> 次尝试机会。如果仍不正确，SIM 卡将永远无法使用。</item>
+        <item quantity="other">SIM 卡 PUK 码不正确，您还有 <xliff:g id="NUMBER_1">%d</xliff:g> 次尝试机会。如果仍不正确，SIM 卡将永远无法使用。</item>
+        <item quantity="one">SIM 卡 PUK 码不正确，您还有 <xliff:g id="NUMBER_0">%d</xliff:g> 次尝试机会。如果仍不正确，SIM 卡将永远无法使用。</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"SIM 卡 PIN 码操作失败！"</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"SIM 卡 PUK 码操作失败！"</string>
@@ -116,16 +115,16 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"管理员已锁定设备"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"此设备已手动锁定"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="other">设备已保持锁定状态达 <xliff:g id="NUMBER_1">%d</xliff:g> 小时。请确认解锁图案。</item>
-      <item quantity="one">设备已保持锁定状态达 <xliff:g id="NUMBER_0">%d</xliff:g> 小时。请确认解锁图案。</item>
+        <item quantity="other">设备已保持锁定状态达 <xliff:g id="NUMBER_1">%d</xliff:g> 小时。请确认解锁图案。</item>
+        <item quantity="one">设备已保持锁定状态达 <xliff:g id="NUMBER_0">%d</xliff:g> 小时。请确认解锁图案。</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="other">设备已保持锁定状态达 <xliff:g id="NUMBER_1">%d</xliff:g> 小时。请确认 PIN 码。</item>
-      <item quantity="one">设备已保持锁定状态达 <xliff:g id="NUMBER_0">%d</xliff:g> 小时。请确认 PIN 码。</item>
+        <item quantity="other">设备已保持锁定状态达 <xliff:g id="NUMBER_1">%d</xliff:g> 小时。请确认 PIN 码。</item>
+        <item quantity="one">设备已保持锁定状态达 <xliff:g id="NUMBER_0">%d</xliff:g> 小时。请确认 PIN 码。</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="other">设备已保持锁定状态达 <xliff:g id="NUMBER_1">%d</xliff:g> 小时。请确认密码。</item>
-      <item quantity="one">设备已保持锁定状态达 <xliff:g id="NUMBER_0">%d</xliff:g> 小时。请确认密码。</item>
+        <item quantity="other">设备已保持锁定状态达 <xliff:g id="NUMBER_1">%d</xliff:g> 小时。请确认密码。</item>
+        <item quantity="one">设备已保持锁定状态达 <xliff:g id="NUMBER_0">%d</xliff:g> 小时。请确认密码。</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"无法识别"</string>
 </resources>

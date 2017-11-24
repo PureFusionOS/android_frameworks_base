@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
  * Copyright (c) 2014 Google Inc.
  *
@@ -17,10 +16,10 @@
  */
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
-        package="com.android.systemui"
-        android:sharedUserId="android.uid.systemui"
-        coreApp="true">
+    xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
+    coreApp="true"
+    package="com.android.systemui"
+    android:sharedUserId="android.uid.systemui">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -52,7 +51,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
@@ -66,7 +65,7 @@
     <uses-permission android:name="android.permission.READ_NETWORK_USAGE_HISTORY" />
     <uses-permission android:name="android.permission.REQUEST_NETWORK_SCORES" />
     <uses-permission android:name="android.permission.CONTROL_VPN" />
-    <uses-permission android:name="android.permission.PEERS_MAC_ADDRESS"/>
+    <uses-permission android:name="android.permission.PEERS_MAC_ADDRESS" />
     <!-- Physical hardware -->
     <uses-permission android:name="android.permission.MANAGE_USB" />
     <uses-permission android:name="android.permission.DEVICE_POWER" />
@@ -121,7 +120,7 @@
     <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
 
     <!-- Needed for WallpaperManager.clear in ImageWallpaper.updateWallpaperLocked -->
-    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <!-- Recents -->
     <uses-permission android:name="android.permission.BIND_APPWIDGET" />
@@ -144,12 +143,14 @@
     <uses-permission android:name="android.permission.TABLET_MODE" />
 
     <!-- Self permission for internal broadcasts. -->
-    <permission android:name="com.android.systemui.permission.SELF"
-            android:protectionLevel="signature" />
+    <permission
+        android:name="com.android.systemui.permission.SELF"
+        android:protectionLevel="signature" />
     <uses-permission android:name="com.android.systemui.permission.SELF" />
 
-    <permission android:name="com.android.systemui.permission.PLUGIN"
-            android:protectionLevel="signature" />
+    <permission
+        android:name="com.android.systemui.permission.PLUGIN"
+        android:protectionLevel="signature" />
 
     <!-- Adding Quick Settings tiles -->
     <uses-permission android:name="android.permission.BIND_QUICK_SETTINGS_TILE" />
@@ -211,17 +212,17 @@
 
     <application
         android:name=".SystemUIApplication"
-        android:persistent="true"
-        android:allowClearUserData="false"
         android:allowBackup="false"
+        android:allowClearUserData="false"
+        android:defaultToDeviceProtectedStorage="true"
+        android:directBootAware="true"
         android:hardwareAccelerated="true"
-        android:label="@string/app_label"
         android:icon="@drawable/icon"
+        android:label="@string/app_label"
+        android:persistent="true"
         android:process="com.android.systemui"
         android:supportsRtl="true"
-        android:theme="@style/systemui_theme"
-        android:defaultToDeviceProtectedStorage="true"
-        android:directBootAware="true">
+        android:theme="@style/systemui_theme">
         <!-- Keep theme in sync with SystemUIApplication.onCreate().
              Setting the theme on the application does not affect views inflated by services.
              The application theme is set again from onCreate to take effect for those views. -->
@@ -230,28 +231,31 @@
              up everything else.
              TODO: Should have an android:permission attribute
              -->
-        <service android:name="SystemUIService"
-            android:exported="true"
-            />
+        <service
+            android:name="SystemUIService"
+            android:exported="true" />
 
         <!-- Recents depends on every user having their own SystemUI process, so on user switch,
              ensure that the process is created by starting this service.
              -->
-        <service android:name="SystemUISecondaryUserService"
+        <service
+            android:name="SystemUISecondaryUserService"
             android:exported="true"
             android:permission="com.android.systemui.permission.SELF" />
 
 
         <!-- started from PhoneWindowManager
              TODO: Should have an android:permission attribute -->
-        <service android:name=".screenshot.TakeScreenshotService"
-            android:process=":screenshot"
-            android:exported="false" />
+        <service
+            android:name=".screenshot.TakeScreenshotService"
+            android:exported="false"
+            android:process=":screenshot" />
 
         <!-- Called from PhoneWindowManager -->
-        <receiver android:name=".screenshot.ScreenshotServiceErrorReceiver"
-            android:process=":screenshot"
-            android:exported="false">
+        <receiver
+            android:name=".screenshot.ScreenshotServiceErrorReceiver"
+            android:exported="false"
+            android:process=":screenshot">
             <intent-filter>
                 <action android:name="com.android.systemui.screenshot.SHOW_ERROR" />
             </intent-filter>
@@ -259,11 +263,13 @@
 
         <!-- started from PhoneWindowManager
              TODO: Should have an android:permission attribute -->
-        <service android:name=".fusion.onthego.OnTheGoService"
-            android:process=":onthego"
-            android:exported="false" />
+        <service
+            android:name=".fusion.onthego.OnTheGoService"
+            android:exported="false"
+            android:process=":onthego" />
 
-        <receiver android:name=".SysuiRestartReceiver"
+        <receiver
+            android:name=".SysuiRestartReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.android.systemui.action.RESTART" />
@@ -274,63 +280,66 @@
 
         <!-- started from PhoneWindowManager
              TODO: Should have an android:permission attribute -->
-        <service android:name=".omni.screenrecord.TakeScreenrecordService"
-            android:process=":screenrecord"
-            android:exported="false" />
+        <service
+            android:name=".omni.screenrecord.TakeScreenrecordService"
+            android:exported="false"
+            android:process=":screenrecord" />
 
-        <service android:name=".ImageWallpaper"
-                android:permission="android.permission.BIND_WALLPAPER"
-                android:exported="true" />
+        <service
+            android:name=".ImageWallpaper"
+            android:exported="true"
+            android:permission="android.permission.BIND_WALLPAPER" />
 
-        <activity android:name=".tuner.TunerActivity"
-                  android:icon="@drawable/tuner"
-                  android:theme="@style/TunerSettings"
-                  android:label="@string/system_ui_tuner"
-                  android:process=":tuner"
-                  android:parentActivityName="com.fusion.reactor.settings.FusionReactor"
-                  android:exported="true">
-        </activity>
+        <activity
+            android:name=".tuner.TunerActivity"
+            android:exported="true"
+            android:icon="@drawable/tuner"
+            android:label="@string/system_ui_tuner"
+            android:parentActivityName="com.fusion.reactor.settings.FusionReactor"
+            android:process=":tuner"
+            android:theme="@style/TunerSettings"></activity>
 
-        <activity android:name=".tuner.StatusBarIconsTunerActivity"
-                  android:icon="@drawable/tuner"
-                  android:theme="@style/TunerSettings"
-                  android:label="@string/statusbar_icons_blacklist"
-                  android:process=":tuner"
-                  android:parentActivityName="com.fusion.reactor.settings.StatusbarSettings"
-                  android:exported="true">
-        </activity>
+        <activity
+            android:name=".tuner.StatusBarIconsTunerActivity"
+            android:exported="true"
+            android:icon="@drawable/tuner"
+            android:label="@string/statusbar_icons_blacklist"
+            android:parentActivityName="com.fusion.reactor.settings.StatusbarSettings"
+            android:process=":tuner"
+            android:theme="@style/TunerSettings"></activity>
 
-        <activity android:name=".tuner.NavBarTunerActivity"
-                  android:theme="@style/TunerSettings"
-                  android:label="@string/navbar_tuner_activity"
-                  android:process=":tuner"
-                  android:parentActivityName="com.fusion.reactor.settings.NavbarSettings"
-                  android:exported="true">
-        </activity>
+        <activity
+            android:name=".tuner.NavBarTunerActivity"
+            android:exported="true"
+            android:label="@string/navbar_tuner_activity"
+            android:parentActivityName="com.fusion.reactor.settings.NavbarSettings"
+            android:process=":tuner"
+            android:theme="@style/TunerSettings"></activity>
 
-        <activity android:name=".tuner.LockscreenTunerActivity"
-                  android:theme="@style/TunerSettings"
-                  android:label="@string/lockscreen_tuner_activity"
-                  android:process=":tuner"
-                  android:parentActivityName="com.fusion.reactor.settings.LockScreenSettings"
-                  android:exported="true">
-        </activity>
+        <activity
+            android:name=".tuner.LockscreenTunerActivity"
+            android:exported="true"
+            android:label="@string/lockscreen_tuner_activity"
+            android:parentActivityName="com.fusion.reactor.settings.LockScreenSettings"
+            android:process=":tuner"
+            android:theme="@style/TunerSettings"></activity>
 
-        <activity android:name=".tuner.PowerNotificationsTunerActivity"
-                  android:theme="@style/TunerSettings"
-                  android:label="@string/powernotif_tuner_activity"
-                  android:process=":tuner"
-                  android:parentActivityName="com.fusion.reactor.settings.PowerNotificationsSettings"
-                  android:exported="true">
-        </activity>
+        <activity
+            android:name=".tuner.PowerNotificationsTunerActivity"
+            android:exported="true"
+            android:label="@string/powernotif_tuner_activity"
+            android:parentActivityName="com.fusion.reactor.settings.PowerNotificationsSettings"
+            android:process=":tuner"
+            android:theme="@style/TunerSettings"></activity>
 
-        <activity-alias android:name=".DemoMode"
-                  android:targetActivity=".tuner.TunerActivity"
-                  android:icon="@drawable/tuner"
-                  android:theme="@style/TunerSettings"
-                  android:label="@string/demo_mode"
-                  android:process=":tuner"
-                  android:exported="true">
+        <activity-alias
+            android:name=".DemoMode"
+            android:exported="true"
+            android:icon="@drawable/tuner"
+            android:label="@string/demo_mode"
+            android:process=":tuner"
+            android:targetActivity=".tuner.TunerActivity"
+            android:theme="@style/TunerSettings">
             <intent-filter>
                 <action android:name="com.android.settings.action.DEMO_MODE" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -338,21 +347,23 @@
         </activity-alias>
 
         <!-- Service used by secondary users to register themselves with the system user. -->
-        <service android:name=".recents.RecentsSystemUserService"
+        <service
+            android:name=".recents.RecentsSystemUserService"
             android:exported="false"
             android:permission="com.android.systemui.permission.SELF" />
 
         <!-- Alternate Recents -->
-        <activity android:name=".recents.RecentsActivity"
-                  android:label="@string/accessibility_desc_recent_apps"
-                  android:exported="false"
-                  android:launchMode="singleInstance"
-                  android:excludeFromRecents="true"
-                  android:stateNotNeeded="true"
-                  android:resumeWhilePausing="true"
-                  android:resizeableActivity="true"
-                  android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden"
-                  android:theme="@style/RecentsTheme.Wallpaper">
+        <activity
+            android:name=".recents.RecentsActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:label="@string/accessibility_desc_recent_apps"
+            android:launchMode="singleInstance"
+            android:resizeableActivity="true"
+            android:resumeWhilePausing="true"
+            android:stateNotNeeded="true"
+            android:theme="@style/RecentsTheme.Wallpaper">
             <intent-filter>
                 <action android:name="com.android.systemui.recents.TOGGLE_RECENTS" />
             </intent-filter>
@@ -360,147 +371,149 @@
 
         <activity
             android:name=".stackdivider.ForcedResizableInfoActivity"
-            android:theme="@style/ForcedResizableTheme"
-            android:excludeFromRecents="true"
-            android:stateNotNeeded="true"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout"
-            android:exported="false">
-        </activity>
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:stateNotNeeded="true"
+            android:theme="@style/ForcedResizableTheme"></activity>
 
         <!-- Callback for dismissing screenshot notification after a share target is picked -->
-        <receiver android:name=".screenshot.GlobalScreenshot$TargetChosenReceiver"
-                  android:process=":screenshot"
-                  android:exported="false" />
+        <receiver
+            android:name=".screenshot.GlobalScreenshot$TargetChosenReceiver"
+            android:exported="false"
+            android:process=":screenshot" />
 
         <!-- Callback for deleting screenshot notification -->
-        <receiver android:name=".screenshot.GlobalScreenshot$DeleteScreenshotReceiver"
-                  android:process=":screenshot"
-                  android:exported="false" />
+        <receiver
+            android:name=".screenshot.GlobalScreenshot$DeleteScreenshotReceiver"
+            android:exported="false"
+            android:process=":screenshot" />
 
         <!-- Callback for editing screenshot notification -->
-        <activity android:name=".screenshot.GlobalScreenshot$EditScreenshotActivity"
-                  android:process=":screenshot"
-                  android:exported="false"
-                  android:taskAffinity=""
-                  android:excludeFromRecents="true" />
+        <activity
+            android:name=".screenshot.GlobalScreenshot$EditScreenshotActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:process=":screenshot"
+            android:taskAffinity="" />
 
         <!-- started from UsbDeviceSettingsManager -->
-        <activity android:name=".usb.UsbConfirmActivity"
+        <activity
+            android:name=".usb.UsbConfirmActivity"
+            android:excludeFromRecents="true"
             android:exported="true"
-            android:permission="android.permission.MANAGE_USB"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"
             android:finishOnCloseSystemDialogs="true"
-            android:excludeFromRecents="true">
-        </activity>
+            android:permission="android.permission.MANAGE_USB"
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
 
         <!-- started from UsbDeviceSettingsManager -->
-        <activity android:name=".usb.UsbPermissionActivity"
+        <activity
+            android:name=".usb.UsbPermissionActivity"
+            android:excludeFromRecents="true"
             android:exported="true"
-            android:permission="android.permission.MANAGE_USB"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"
             android:finishOnCloseSystemDialogs="true"
-            android:excludeFromRecents="true">
-        </activity>
+            android:permission="android.permission.MANAGE_USB"
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
 
         <!-- started from UsbDeviceSettingsManager -->
-        <activity android:name=".usb.UsbResolverActivity"
+        <activity
+            android:name=".usb.UsbResolverActivity"
+            android:excludeFromRecents="true"
             android:exported="true"
-            android:permission="android.permission.MANAGE_USB"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"
             android:finishOnCloseSystemDialogs="true"
-            android:excludeFromRecents="true">
-        </activity>
+            android:permission="android.permission.MANAGE_USB"
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
 
         <!-- started from UsbDeviceSettingsManager -->
-        <activity android:name=".usb.UsbAccessoryUriActivity"
+        <activity
+            android:name=".usb.UsbAccessoryUriActivity"
+            android:excludeFromRecents="true"
             android:exported="true"
-            android:permission="android.permission.MANAGE_USB"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"
             android:finishOnCloseSystemDialogs="true"
-            android:excludeFromRecents="true">
-        </activity>
+            android:permission="android.permission.MANAGE_USB"
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
 
         <!-- started from UsbDebuggingManager -->
-        <activity android:name=".usb.UsbDebuggingActivity"
+        <activity
+            android:name=".usb.UsbDebuggingActivity"
+            android:excludeFromRecents="true"
+            android:finishOnCloseSystemDialogs="true"
             android:permission="android.permission.MANAGE_USB"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
+        <activity
+            android:name=".usb.UsbDebuggingSecondaryUserActivity"
+            android:excludeFromRecents="true"
             android:finishOnCloseSystemDialogs="true"
-            android:excludeFromRecents="true">
-        </activity>
-        <activity android:name=".usb.UsbDebuggingSecondaryUserActivity"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"
-            android:finishOnCloseSystemDialogs="true"
-            android:excludeFromRecents="true">
-        </activity>
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
 
         <!-- started from NetworkPolicyManagerService -->
         <activity
             android:name=".net.NetworkOverLimitActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:excludeFromRecents="true"
             android:exported="true"
-            android:permission="android.permission.MANAGE_NETWORK_POLICY"
-            android:theme="@android:style/Theme.DeviceDefault.Light.Panel"
             android:finishOnCloseSystemDialogs="true"
             android:launchMode="singleTop"
+            android:permission="android.permission.MANAGE_NETWORK_POLICY"
             android:taskAffinity="com.android.systemui.net"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:excludeFromRecents="true" />
+            android:theme="@android:style/Theme.DeviceDefault.Light.Panel" />
 
         <!-- started from MediaProjectionManager -->
         <activity
             android:name=".media.MediaProjectionPermissionActivity"
+            android:excludeFromRecents="true"
             android:exported="true"
-            android:theme="@style/Theme.AlertDialogHost"
             android:finishOnCloseSystemDialogs="true"
             android:launchMode="singleTop"
-            android:excludeFromRecents="true" />
+            android:theme="@style/Theme.AlertDialogHost" />
 
         <!-- started from PipUI -->
         <activity
             android:name=".pip.tv.PipMenuActivity"
-            android:exported="true"
-            android:theme="@style/PipTheme"
-            android:launchMode="singleTop"
-            android:taskAffinity=""
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|locale|layoutDirection"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTop"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
-            androidprv:alwaysFocusable="true"
-            android:excludeFromRecents="true" />
+            android:taskAffinity=""
+            android:theme="@style/PipTheme"
+            androidprv:alwaysFocusable="true" />
         <activity
             android:name=".pip.tv.PipOverlayActivity"
-            android:exported="true"
-            android:theme="@style/PipTheme"
-            android:taskAffinity=""
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|locale|layoutDirection"
+            android:excludeFromRecents="true"
+            android:exported="true"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
-            android:excludeFromRecents="true" />
+            android:taskAffinity=""
+            android:theme="@style/PipTheme" />
         <activity
             android:name=".pip.tv.PipOnboardingActivity"
+            android:excludeFromRecents="true"
             android:exported="true"
-            android:theme="@style/PipTheme"
             android:launchMode="singleTop"
-            android:excludeFromRecents="true" />
+            android:theme="@style/PipTheme" />
 
         <activity
             android:name=".pip.phone.PipMenuActivity"
-            android:theme="@style/PipPhoneOverlayControlTheme"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout"
             android:excludeFromRecents="true"
             android:exported="false"
-            android:resizeableActivity="true"
-            android:supportsPictureInPicture="true"
-            android:stateNotNeeded="true"
-            android:taskAffinity=""
             android:launchMode="singleTop"
+            android:resizeableActivity="true"
+            android:stateNotNeeded="true"
+            android:supportsPictureInPicture="true"
+            android:taskAffinity=""
+            android:theme="@style/PipPhoneOverlayControlTheme"
             androidprv:alwaysFocusable="true" />
 
         <!-- Slim shortcut picker -->
         <activity
             android:name="com.android.systemui.CreateShortcut"
-            android:label="@string/shortcut_picker"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:icon="@drawable/ic_qs_reboot_recovery"
-            android:configChanges="orientation|keyboardHidden|screenSize" >
+            android:label="@string/shortcut_picker">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -510,11 +523,11 @@
         <!-- extremely secret launcher shortcut -->
         <activity
             android:name="com.android.systemui.shortcuts.ChamberOfSecrets"
-            android:label="@string/shortcut_chamber"
-            android:icon="@drawable/ic_qs_slim_action"
-            android:theme="@android:style/Theme.NoDisplay"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance" >
+            android:icon="@drawable/ic_qs_slim_action"
+            android:label="@string/shortcut_chamber"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT_COS" />
@@ -524,11 +537,11 @@
         <!-- Shortcut activities -->
         <activity
             android:name="com.android.systemui.shortcuts.Reboot"
-            android:label="@string/shortcut_reboot"
-            android:icon="@drawable/ic_qs_reboot"
-            android:theme="@android:style/Theme.NoDisplay"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance" >
+            android:icon="@drawable/ic_qs_reboot"
+            android:label="@string/shortcut_reboot"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT" />
@@ -536,11 +549,11 @@
         </activity>
         <activity
             android:name="com.android.systemui.shortcuts.Recovery"
-            android:label="@string/shortcut_recovery"
-            android:icon="@drawable/ic_qs_reboot_recovery"
-            android:theme="@android:style/Theme.NoDisplay"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance" >
+            android:icon="@drawable/ic_qs_reboot_recovery"
+            android:label="@string/shortcut_recovery"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT" />
@@ -548,11 +561,11 @@
         </activity>
         <activity
             android:name="com.android.systemui.shortcuts.Rotation"
-            android:label="@string/shortcut_rotation"
-            android:icon="@drawable/ic_qs_auto_rotate"
-            android:theme="@android:style/Theme.NoDisplay"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance" >
+            android:icon="@drawable/ic_qs_auto_rotate"
+            android:label="@string/shortcut_rotation"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT" />
@@ -560,11 +573,11 @@
         </activity>
         <activity
             android:name="com.android.systemui.shortcuts.Torch"
-            android:label="@string/shortcut_torch"
-            android:icon="@drawable/ic_signal_flashlight_enable"
-            android:theme="@android:style/Theme.NoDisplay"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance" >
+            android:icon="@drawable/ic_signal_flashlight_enable"
+            android:label="@string/shortcut_torch"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT" />
@@ -572,24 +585,25 @@
         </activity>
         <activity
             android:name="com.android.systemui.shortcuts.SleepScreen"
-            android:label="@string/shortcut_screensleep"
-            android:icon="@drawable/ic_qs_sleep"
-            android:theme="@android:style/Theme.NoDisplay"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance" >
+            android:icon="@drawable/ic_qs_sleep"
+            android:label="@string/shortcut_screensleep"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="com.android.systemui.SHORTCUT" />
                 <category android:name="com.android.systemui.SHORTCUT_EXTRA" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.android.systemui.shortcuts.ClearNotifications"
-            android:label="@string/shortcut_clear_notifications"
-            android:icon="@drawable/ic_qs_clear_notifications"
-            android:theme="@android:style/Theme.NoDisplay"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance" >
+            android:icon="@drawable/ic_qs_clear_notifications"
+            android:label="@string/shortcut_clear_notifications"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.android.systemui.SHORTCUT" />
@@ -599,32 +613,33 @@
         <!-- platform logo easter egg activity -->
         <activity
             android:name=".DessertCase"
+            android:excludeFromRecents="true"
             android:exported="true"
-            android:label="@string/dessert_case"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
             android:hardwareAccelerated="true"
+            android:label="@string/dessert_case"
             android:launchMode="singleInstance"
-            android:screenOrientation="locked"
             android:process=":sweetsweetdesserts"
-            android:excludeFromRecents="true">
+            android:screenOrientation="locked"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".egg.MLandActivity"
-                  android:theme="@android:style/Theme.Material.NoActionBar"
-                  android:exported="true"
-                  android:icon="@drawable/icon"
-                  android:label="@string/mland"
-                  android:hardwareAccelerated="true"
-                  android:launchMode="singleInstance"
-                  android:screenOrientation="locked"
-                  android:process=":sweetsweetdesserts"
-                  android:excludeFromRecents="true">
+        <activity
+            android:name=".egg.MLandActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:icon="@drawable/icon"
+            android:label="@string/mland"
+            android:launchMode="singleInstance"
+            android:process=":sweetsweetdesserts"
+            android:screenOrientation="locked"
+            android:theme="@android:style/Theme.Material.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -632,12 +647,11 @@
         <!-- a gallery of delicious treats -->
         <service
             android:name=".DessertCaseDream"
+            android:enabled="true"
             android:exported="true"
             android:label="@string/dessert_case"
             android:permission="android.permission.BIND_DREAM_SERVICE"
-            android:enabled="true"
-            android:process=":sweetsweetdesserts"
-            >
+            android:process=":sweetsweetdesserts">
             <intent-filter>
                 <action android:name="android.service.dreams.DreamService" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -646,30 +660,31 @@
 
         <service
             android:name=".keyguard.KeyguardService"
-            android:exported="true"
-            android:enabled="@bool/config_enableKeyguardService" />
+            android:enabled="@bool/config_enableKeyguardService"
+            android:exported="true" />
 
-        <activity android:name=".keyguard.WorkLockActivity"
-                  android:label="@string/accessibility_desc_work_lock"
-                  android:permission="android.permission.MANAGE_USERS"
-                  android:exported="false"
-                  android:excludeFromRecents="true"
-                  android:stateNotNeeded="true"
-                  android:resumeWhilePausing="true"
-                  android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".keyguard.WorkLockActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:label="@string/accessibility_desc_work_lock"
+            android:permission="android.permission.MANAGE_USERS"
+            android:resumeWhilePausing="true"
+            android:stateNotNeeded="true"
+            android:theme="@android:style/Theme.Black.NoTitleBar">
             <intent-filter>
                 <action android:name="android.app.action.CONFIRM_DEVICE_CREDENTIAL_WITH_USER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".Somnambulator"
-            android:label="@string/start_dreams"
-            android:icon="@mipmap/ic_launcher_dreams"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
-            android:exported="true"
+        <activity
+            android:name=".Somnambulator"
             android:excludeFromRecents="true"
-            >
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_dreams"
+            android:label="@string/start_dreams"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
@@ -678,44 +693,46 @@
             -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.DESK_DOCK" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".statusbar.sidebar.SidebarConfigurationActivity"
-             android:label="@string/title_activity_sidebar_configuration"
-             android:taskAffinity=""
-             android:excludeFromRecents="true"
-             android:exported="true">
-             <intent-filter>
+        <activity
+            android:name=".statusbar.sidebar.SidebarConfigurationActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="@string/title_activity_sidebar_configuration"
+            android:taskAffinity="">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-             </intent-filter>
+            </intent-filter>
         </activity>
 
         <provider
             android:name=".statusbar.sidebar.SidebarContentProvider"
-            android:authorities="org.chameleonos.sidebar.contentprovider" >
-        </provider>
+            android:authorities="org.chameleonos.sidebar.contentprovider"></provider>
 
         <activity
             android:name=".settings.BrightnessDialog"
-            android:label="@string/quick_settings_brightness_dialog_title"
-            android:theme="@*android:style/Theme.DeviceDefault.QuickSettings.Dialog"
-            android:finishOnCloseSystemDialogs="true"
-            android:launchMode="singleInstance"
             android:excludeFromRecents="true"
-            android:exported="true">
+            android:exported="true"
+            android:finishOnCloseSystemDialogs="true"
+            android:label="@string/quick_settings_brightness_dialog_title"
+            android:launchMode="singleInstance"
+            android:theme="@*android:style/Theme.DeviceDefault.QuickSettings.Dialog">
             <intent-filter>
                 <action android:name="com.android.intent.action.SHOW_BRIGHTNESS_DIALOG" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ForegroundServicesDialog"
-            android:process=":fgservices"
+        <activity
+            android:name=".ForegroundServicesDialog"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
+            android:process=":fgservices"
             android:theme="@*android:style/Theme.DeviceDefault.Settings.Dialog">
             <intent-filter android:priority="1">
                 <action android:name="android.settings.FOREGROUND_SERVICES_SETTINGS" />
@@ -727,8 +744,8 @@
         <service
             android:name=".doze.DozeService"
             android:exported="true"
-            android:singleUser="true"
-            android:permission="android.permission.BIND_DREAM_SERVICE" />
+            android:permission="android.permission.BIND_DREAM_SERVICE"
+            android:singleUser="true" />
 
         <!--<receiver
             android:name=".tuner.TunerService$ClearReceiver"
@@ -748,8 +765,7 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <receiver
-            android:name=".statusbar.KeyboardShortcutsReceiver">
+        <receiver android:name=".statusbar.KeyboardShortcutsReceiver">
             <intent-filter>
                 <action android:name="com.android.intent.action.DISMISS_KEYBOARD_SHORTCUTS" />
                 <action android:name="com.android.intent.action.SHOW_KEYBOARD_SHORTCUTS" />
@@ -757,8 +773,9 @@
         </receiver>
 
         <!-- omni additions start -->
-        <service android:name=".CPUInfoService"
-                android:exported="false" />
+        <service
+            android:name=".CPUInfoService"
+            android:exported="false" />
 
         <receiver android:name=".BootReceiver">
             <intent-filter>

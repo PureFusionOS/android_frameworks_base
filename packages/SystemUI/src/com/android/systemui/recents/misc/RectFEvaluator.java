@@ -31,14 +31,14 @@ public class RectFEvaluator implements TypeEvaluator<RectF> {
      * between the start and end values. The calculation is a simple parametric
      * calculation on each of the separate components in the Rect objects
      * (left, top, right, and bottom).
-     *
+     * <p>
      * <p>The object returned will be the <code>reuseRect</code> passed into the constructor.</p>
      *
      * @param fraction   The fraction from the starting to the ending values
      * @param startValue The start Rect
      * @param endValue   The end Rect
      * @return A linear interpolation between the start and end values, given the
-     *         <code>fraction</code> parameter.
+     * <code>fraction</code> parameter.
      */
     @Override
     public RectF evaluate(float fraction, RectF startValue, RectF endValue) {

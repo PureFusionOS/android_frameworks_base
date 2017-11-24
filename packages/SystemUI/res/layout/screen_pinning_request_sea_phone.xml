@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /**
  * Copyright (c) 2014, The Android Open Source Project
  *
@@ -17,20 +16,20 @@
  */
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="@dimen/screen_pinning_request_width"
     android:layout_width="wrap_content"
+    android:layout_height="@dimen/screen_pinning_request_width"
     android:gravity="left|center_vertical"
     android:orientation="horizontal"
     android:theme="@android:style/Theme.DeviceDefault.Light">
 
     <include
+        layout="@layout/screen_pinning_request_buttons_sea"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/screen_pinning_request_width"
-        layout="@layout/screen_pinning_request_buttons_sea" />
+        android:layout_height="@dimen/screen_pinning_request_width" />
 
     <include
+        layout="@layout/screen_pinning_request_text_area"
         android:layout_width="360dp"
-        android:layout_height="@dimen/screen_pinning_request_width"
-        layout="@layout/screen_pinning_request_text_area" />
+        android:layout_height="@dimen/screen_pinning_request_width" />
 
 </LinearLayout>

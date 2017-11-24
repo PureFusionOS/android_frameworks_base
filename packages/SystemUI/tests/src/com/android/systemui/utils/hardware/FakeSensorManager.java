@@ -40,9 +40,9 @@ import java.util.List;
 
 /**
  * Rudimentary fake for SensorManager
- *
+ * <p>
  * Currently only supports the proximity sensor.
- *
+ * <p>
  * Note that this class ignores the "Handler" argument, so the test is responsible for calling the
  * listener on the right thread.
  */
@@ -94,8 +94,8 @@ public class FakeSensorManager extends SensorManager {
 
     @Override
     protected boolean registerListenerImpl(SensorEventListener listener, Sensor sensor,
-            int delayUs,
-            Handler handler, int maxReportLatencyUs, int reservedFlags) {
+                                           int delayUs,
+                                           Handler handler, int maxReportLatencyUs, int reservedFlags) {
         if (sensor == mMockProximitySensor.sensor) {
             mMockProximitySensor.listeners.add(listener);
             return true;
@@ -110,7 +110,7 @@ public class FakeSensorManager extends SensorManager {
 
     @Override
     protected SensorDirectChannel createDirectChannelImpl(MemoryFile memoryFile,
-            HardwareBuffer hardwareBuffer) {
+                                                          HardwareBuffer hardwareBuffer) {
         return null;
     }
 
@@ -126,7 +126,7 @@ public class FakeSensorManager extends SensorManager {
 
     @Override
     protected void registerDynamicSensorCallbackImpl(DynamicSensorCallback callback,
-            Handler handler) {
+                                                     Handler handler) {
 
     }
 
@@ -143,7 +143,7 @@ public class FakeSensorManager extends SensorManager {
 
     @Override
     protected boolean cancelTriggerSensorImpl(TriggerEventListener listener, Sensor sensor,
-            boolean disable) {
+                                              boolean disable) {
         return false;
     }
 
@@ -154,7 +154,7 @@ public class FakeSensorManager extends SensorManager {
 
     @Override
     protected boolean injectSensorDataImpl(Sensor sensor, float[] values, int accuracy,
-            long timestamp) {
+                                           long timestamp) {
         return false;
     }
 

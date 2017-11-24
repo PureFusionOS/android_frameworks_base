@@ -30,14 +30,12 @@ public class ShortcutKeyServiceProxy extends IShortcutService.Stub {
     private static final int MSG_SHORTCUT_RECEIVED = 1;
 
     private final Object mLock = new Object();
-    private Callbacks mCallbacks;
     private final Handler mHandler = new H();
+    private Callbacks mCallbacks;
 
-    public interface Callbacks {
-        void onShortcutKeyPressed(long shortcutCode);
+    public ShortcutKeyServiceProxy(Callbacks callbacks) {
+        mCallbacks = callbacks;
     }
-
-    public ShortcutKeyServiceProxy(Callbacks callbacks) { mCallbacks = callbacks; }
 
     @Override
     public void notifyShortcutKeyPressed(long shortcutCode) throws RemoteException {
@@ -46,12 +44,16 @@ public class ShortcutKeyServiceProxy extends IShortcutService.Stub {
         }
     }
 
+    public interface Callbacks {
+        void onShortcutKeyPressed(long shortcutCode);
+    }
+
     private final class H extends Handler {
         public void handleMessage(Message msg) {
             final int what = msg.what;
             switch (what) {
                 case MSG_SHORTCUT_RECEIVED:
-                    mCallbacks.onShortcutKeyPressed((Long)msg.obj);
+                    mCallbacks.onShortcutKeyPressed((Long) msg.obj);
                     break;
             }
         }

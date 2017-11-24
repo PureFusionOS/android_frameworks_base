@@ -45,13 +45,32 @@ import com.android.systemui.statusbar.policy.BluetoothController;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/** Quick settings tile: Bluetooth **/
+/**
+ * Quick settings tile: Bluetooth
+ **/
 public class BluetoothTile extends QSTileImpl<BooleanState> {
     private static final Intent BLUETOOTH_SETTINGS = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
 
     private final BluetoothController mController;
     private final BluetoothDetailAdapter mDetailAdapter;
     private final ActivityStarter mActivityStarter;
+    private final BluetoothController.Callback mCallback = new BluetoothController.Callback() {
+        @Override
+        public void onBluetoothStateChange(boolean enabled) {
+            refreshState();
+            if (isShowingDetail()) {
+                mDetailAdapter.updateItems();
+            }
+        }
+
+        @Override
+        public void onBluetoothDevicesChanged() {
+            refreshState();
+            if (isShowingDetail()) {
+                mDetailAdapter.updateItems();
+            }
+        }
+    };
 
     public BluetoothTile(QSHost host) {
         super(host);
@@ -87,7 +106,7 @@ public class BluetoothTile extends QSTileImpl<BooleanState> {
     @Override
     protected void handleClick() {
         // Secondary clicks are header clicks, just toggle.
-        final boolean isEnabled = (Boolean)mState.value;
+        final boolean isEnabled = (Boolean) mState.value;
         mController.setBluetoothEnabled(!isEnabled);
     }
 
@@ -173,24 +192,6 @@ public class BluetoothTile extends QSTileImpl<BooleanState> {
         return mController.isBluetoothSupported();
     }
 
-    private final BluetoothController.Callback mCallback = new BluetoothController.Callback() {
-        @Override
-        public void onBluetoothStateChange(boolean enabled) {
-            refreshState();
-            if (isShowingDetail()) {
-                mDetailAdapter.updateItems();
-            }
-        }
-
-        @Override
-        public void onBluetoothDevicesChanged() {
-            refreshState();
-            if (isShowingDetail()) {
-                mDetailAdapter.updateItems();
-            }
-        }
-    };
-
     @Override
     protected DetailAdapter createDetailAdapter() {
         return new BluetoothDetailAdapter();
@@ -213,6 +214,12 @@ public class BluetoothTile extends QSTileImpl<BooleanState> {
         }
 
         @Override
+        public void setToggleState(boolean state) {
+            MetricsLogger.action(mContext, MetricsEvent.QS_BLUETOOTH_TOGGLE, state);
+            mController.setBluetoothEnabled(state);
+        }
+
+        @Override
         public boolean getToggleEnabled() {
             return mController.getBluetoothState() == BluetoothAdapter.STATE_OFF
                     || mController.getBluetoothState() == BluetoothAdapter.STATE_ON;
@@ -221,12 +228,6 @@ public class BluetoothTile extends QSTileImpl<BooleanState> {
         @Override
         public Intent getSettingsIntent() {
             return BLUETOOTH_SETTINGS;
-        }
-
-        @Override
-        public void setToggleState(boolean state) {
-            MetricsLogger.action(mContext, MetricsEvent.QS_BLUETOOTH_TOGGLE, state);
-            mController.setBluetoothEnabled(state);
         }
 
         @Override

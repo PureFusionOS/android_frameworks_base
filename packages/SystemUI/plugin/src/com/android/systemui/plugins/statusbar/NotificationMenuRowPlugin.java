@@ -39,26 +39,6 @@ public interface NotificationMenuRowPlugin extends Plugin {
     public static final String ACTION = "com.android.systemui.action.PLUGIN_NOTIFICATION_MENU_ROW";
     public static final int VERSION = 2;
 
-    @ProvidesInterface(version = OnMenuEventListener.VERSION)
-    public interface OnMenuEventListener {
-        public static final int VERSION = 1;
-        public void onMenuClicked(View row, int x, int y, MenuItem menu);
-
-        public void onMenuReset(View row);
-
-        public void onMenuShown(View row);
-    }
-
-    @ProvidesInterface(version = MenuItem.VERSION)
-    public interface MenuItem {
-        public static final int VERSION = 1;
-        public View getMenuView();
-
-        public View getGutsView();
-
-        public String getContentDescription();
-    }
-
     /**
      * @return a list of items to populate the menu 'behind' a notification.
      */
@@ -98,5 +78,27 @@ public interface NotificationMenuRowPlugin extends Plugin {
     }
 
     public default void onConfigurationChanged() {
+    }
+
+    @ProvidesInterface(version = OnMenuEventListener.VERSION)
+    public interface OnMenuEventListener {
+        public static final int VERSION = 1;
+
+        public void onMenuClicked(View row, int x, int y, MenuItem menu);
+
+        public void onMenuReset(View row);
+
+        public void onMenuShown(View row);
+    }
+
+    @ProvidesInterface(version = MenuItem.VERSION)
+    public interface MenuItem {
+        public static final int VERSION = 1;
+
+        public View getMenuView();
+
+        public View getGutsView();
+
+        public String getContentDescription();
     }
 }

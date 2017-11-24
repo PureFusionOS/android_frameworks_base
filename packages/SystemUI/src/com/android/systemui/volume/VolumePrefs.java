@@ -22,7 +22,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
 
 /**
- *  Configuration for the volume dialog + related policy.
+ * Configuration for the volume dialog + related policy.
  */
 public class VolumePrefs {
 

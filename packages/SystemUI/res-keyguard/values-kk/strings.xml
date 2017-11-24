@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"Ашу үшін \"Мәзір\" пернесін басыңыз."</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"Желі құлыптаулы"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"SIM картасы салынбаған"</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"Планшетте SIM картасы жоқ."</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"Телефонда SIM картасы жоқ."</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"Планшетте SIM картасы жоқ."</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"Телефонда SIM картасы жоқ."</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"SIM картасын енгізіңіз."</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"SIM картасы жоқ немесе оқылмайды. SIM картасын салыңыз."</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"SIM картасы қолданыстан шыққан."</string>
@@ -69,34 +68,34 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"4-8 саннан тұратын PIN кодын енгізіңіз."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"PUK коды 8 не одан көп саннан тұруы қажет."</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"Дұрыс PUK кодын қайта енгізіңіз. Әрекетті қайталай берсеңіз, SIM картасы өшіріледі."</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"PIN коды сәйкес келмейді"</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"PIN коды сәйкес келмейді"</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"Тым көп өрнек енгізу әрекеті жасалды"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"PIN коды <xliff:g id="NUMBER_0">%1$d</xliff:g> рет қате енгізілді. \n\n<xliff:g id="NUMBER_1">%2$d</xliff:g> секундтан кейін әркетті қайталаңыз."</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"Құпия сөз <xliff:g id="NUMBER_0">%1$d</xliff:g> рет қате енгізілді. \n\n<xliff:g id="NUMBER_1">%2$d</xliff:g> секундтан кейін әрекетті қайталаңыз."</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"Құлыпты ашу өрнегі <xliff:g id="NUMBER_0">%1$d</xliff:g> рет қате енгізілді. \n\n<xliff:g id="NUMBER_1">%2$d</xliff:g> секундтан кейін әрекетті қайталаңыз."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"Планшет құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін осы планшет бастапқы күйіне қайтарылып, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"Телефон құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін осы телефон бастапқы күйіне қайтарылып, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"Планшет құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Осы планшет бастапқы күйіне қайтарылып, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"Телефон құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Осы телефон бастапқы күйіне қайтарылып, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"Планшет құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін пайдаланушы өшіріліп, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"Телефон құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін пайдаланушы өшіріліп, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"Планшет құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Бұл пайдаланушы өшіріліп, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"Телефон құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Бұл пайдаланушы өшіріліп, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"Планшет құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін жұмыс профилі өшіріліп, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"Телефон құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін жұмыс профилі өшіріліп, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"Планшет құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Жұмыс профилі өшіріліп, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"Телефон құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Жұмыс профилі өшіріліп, оның бүкіл деректері жойылады."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"Құлыпты ашу өрнегі <xliff:g id="NUMBER_0">%1$d</xliff:g> рет қате енгізілді. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін планшетті есептік жазба арқылы ашу сұралады. \n\n <xliff:g id="NUMBER_2">%3$d</xliff:g> секундтан кейін әрекетті қайталаңыз."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"Құлыпты ашу өрнегі <xliff:g id="NUMBER_0">%1$d</xliff:g> рет қате енгізілді. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін телефонды есептік жазба арқылы ашу сұралады. \n\n <xliff:g id="NUMBER_2">%3$d</xliff:g> секундтан кейін әрекетті қайталаңыз."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"Планшет құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін осы планшет бастапқы күйіне қайтарылып, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"Телефон құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін осы телефон бастапқы күйіне қайтарылып, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"Планшет құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Осы планшет бастапқы күйіне қайтарылып, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"Телефон құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Осы телефон бастапқы күйіне қайтарылып, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"Планшет құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін пайдаланушы өшіріліп, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"Телефон құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін пайдаланушы өшіріліп, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"Планшет құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Бұл пайдаланушы өшіріліп, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"Телефон құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Бұл пайдаланушы өшіріліп, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"Планшет құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін жұмыс профилі өшіріліп, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"Телефон құлпын ашуға <xliff:g id="NUMBER_0">%1$d</xliff:g> рет сәтсіз әрекет жасалды. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін жұмыс профилі өшіріліп, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"Планшет құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Жұмыс профилі өшіріліп, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"Телефон құлпын ашуға <xliff:g id="NUMBER">%d</xliff:g> рет сәтсіз әрекет жасалды. Жұмыс профилі өшіріліп, оның бүкіл деректері жойылады."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"Құлыпты ашу өрнегі <xliff:g id="NUMBER_0">%1$d</xliff:g> рет қате енгізілді. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін планшетті есептік жазба арқылы ашу сұралады. \n\n <xliff:g id="NUMBER_2">%3$d</xliff:g> секундтан кейін әрекетті қайталаңыз."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"Құлыпты ашу өрнегі <xliff:g id="NUMBER_0">%1$d</xliff:g> рет қате енгізілді. <xliff:g id="NUMBER_1">%2$d</xliff:g> әрекет қалды. Одан кейін телефонды есептік жазба арқылы ашу сұралады. \n\n <xliff:g id="NUMBER_2">%3$d</xliff:g> секундтан кейін әрекетті қайталаңыз."</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"SIM PIN коды дұрыс емес, операторға хабарласып, құрылғының құлпын ашуды сұраңыз."</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="other">SIM PIN коды дұрыс емес. <xliff:g id="NUMBER_1">%d</xliff:g> әрекет қалды.</item>
-      <item quantity="one">SIM PIN коды дұрыс емес. <xliff:g id="NUMBER_0">%d</xliff:g> әрекет қалды. Одан кейін құрылғы құлпын ашу үшін операторға хабарласуға тура келеді.</item>
+        <item quantity="other">SIM PIN коды дұрыс емес. <xliff:g id="NUMBER_1">%d</xliff:g> әрекет қалды.</item>
+        <item quantity="one">SIM PIN коды дұрыс емес. <xliff:g id="NUMBER_0">%d</xliff:g> әрекет қалды. Одан кейін құрылғы құлпын ашу үшін операторға хабарласуға тура келеді.</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"SIM қолданыстан шыққан. Оператормен хабарласыңыз."</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="other">SIM PUK коды дұрыс емес. <xliff:g id="NUMBER_1">%d</xliff:g> әрекет қалды. Одан кейін SIM біржола қолданыстан шығады.</item>
-      <item quantity="one">SIM PUK коды дұрыс емес. <xliff:g id="NUMBER_0">%d</xliff:g> әрекет қалды. Одан кейін SIM біржола қолданыстан шығады.</item>
+        <item quantity="other">SIM PUK коды дұрыс емес. <xliff:g id="NUMBER_1">%d</xliff:g> әрекет қалды. Одан кейін SIM біржола қолданыстан шығады.</item>
+        <item quantity="one">SIM PUK коды дұрыс емес. <xliff:g id="NUMBER_0">%d</xliff:g> әрекет қалды. Одан кейін SIM біржола қолданыстан шығады.</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"SIM PIN кодымен құлпы ашылмады!"</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"SIM PUK кодымен құлпы ашылмады!"</string>
@@ -116,16 +115,16 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"Құрылғыны әкімші құлыптаған"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"Құрылғы қолмен құлыпталды"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="other">Құрылғы құлпы <xliff:g id="NUMBER_1">%d</xliff:g> сағаттан бері ашылмаған. Өрнекті растаңыз.</item>
-      <item quantity="one">Құрылғы құлпы <xliff:g id="NUMBER_0">%d</xliff:g> сағаттан бері ашылмаған. Өрнекті растаңыз.</item>
+        <item quantity="other">Құрылғы құлпы <xliff:g id="NUMBER_1">%d</xliff:g> сағаттан бері ашылмаған. Өрнекті растаңыз.</item>
+        <item quantity="one">Құрылғы құлпы <xliff:g id="NUMBER_0">%d</xliff:g> сағаттан бері ашылмаған. Өрнекті растаңыз.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="other">Құрылғы құлпы <xliff:g id="NUMBER_1">%d</xliff:g> сағаттан бері ашылмаған. PIN кодын растаңыз.</item>
-      <item quantity="one">Құрылғы құлпы <xliff:g id="NUMBER_0">%d</xliff:g> сағаттан бері ашылмаған. PIN кодын растаңыз.</item>
+        <item quantity="other">Құрылғы құлпы <xliff:g id="NUMBER_1">%d</xliff:g> сағаттан бері ашылмаған. PIN кодын растаңыз.</item>
+        <item quantity="one">Құрылғы құлпы <xliff:g id="NUMBER_0">%d</xliff:g> сағаттан бері ашылмаған. PIN кодын растаңыз.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="other">Құрылғы құлпы <xliff:g id="NUMBER_1">%d</xliff:g> сағаттан бері ашылмаған. Құпия сөзді растаңыз.</item>
-      <item quantity="one">Құрылғы құлпы <xliff:g id="NUMBER_0">%d</xliff:g> сағаттан бері ашылмаған. Құпия сөзді растаңыз.</item>
+        <item quantity="other">Құрылғы құлпы <xliff:g id="NUMBER_1">%d</xliff:g> сағаттан бері ашылмаған. Құпия сөзді растаңыз.</item>
+        <item quantity="one">Құрылғы құлпы <xliff:g id="NUMBER_0">%d</xliff:g> сағаттан бері ашылмаған. Құпия сөзді растаңыз.</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"Анықталмады"</string>
 </resources>

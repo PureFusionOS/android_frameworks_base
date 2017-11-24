@@ -22,7 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 
-public class Reboot extends Activity  {
+public class Reboot extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class Reboot extends Activity  {
             public void run() {
                 PowerManager pm =
                         (PowerManager) Reboot.this.getSystemService(
-                        Context.POWER_SERVICE);
+                                Context.POWER_SERVICE);
                 pm.reboot("");
                 Reboot.this.finish();
             }

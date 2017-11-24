@@ -51,7 +51,7 @@ public class VolumeDialogMotion {
     private ValueAnimator mContentsPositionAnimator;
 
     public VolumeDialogMotion(Dialog dialog, View dialogView, ViewGroup contents, View chevron,
-            Callback callback) {
+                              Callback callback) {
         mDialog = dialog;
         mDialogView = dialogView;
         mContents = contents;
@@ -72,6 +72,10 @@ public class VolumeDialogMotion {
                 startShowAnimation();
             }
         });
+    }
+
+    private static int scaledDuration(int base) {
+        return (int) (base * ANIMATION_SCALE);
     }
 
     public boolean isAnimating() {
@@ -164,6 +168,7 @@ public class VolumeDialogMotion {
                 if (D.BUG) Log.d(TAG, "show.onAnimationEnd");
                 setShowing(false);
             }
+
             @Override
             public void onAnimationCancel(Animator animation) {
                 if (D.BUG) Log.d(TAG, "show.onAnimationCancel");
@@ -231,6 +236,7 @@ public class VolumeDialogMotion {
                 })
                 .setListener(new AnimatorListenerAdapter() {
                     private boolean mCancelled;
+
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         if (mCancelled) return;
@@ -246,6 +252,7 @@ public class VolumeDialogMotion {
                         }, PRE_DISMISS_DELAY);
 
                     }
+
                     @Override
                     public void onAnimationCancel(Animator animation) {
                         if (D.BUG) Log.d(TAG, "dismiss.onAnimationCancel");
@@ -254,8 +261,8 @@ public class VolumeDialogMotion {
                 }).start();
     }
 
-    private static int scaledDuration(int base) {
-        return (int) (base * ANIMATION_SCALE);
+    public interface Callback {
+        void onAnimatingChanged(boolean animating);
     }
 
     private static final class LogDecelerateInterpolator implements TimeInterpolator {
@@ -309,9 +316,5 @@ public class VolumeDialogMotion {
         public float getInterpolation(float t) {
             return 1 - computeLog(1 - t, mBase, mDrift) * mLogScale;
         }
-    }
-
-    public interface Callback {
-        void onAnimatingChanged(boolean animating);
     }
 }

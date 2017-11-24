@@ -82,36 +82,19 @@ public class PasswordTextView extends View {
      */
     private final int mTextHeightRaw;
     private final int mGravity;
+    private final Paint mDrawPaint = new Paint();
+    protected QuickUnlockListener mQuickUnlockListener;
     private ArrayList<CharState> mTextChars = new ArrayList<>();
     private String mText = "";
     private Stack<CharState> mCharPool = new Stack<>();
     private int mDotSize;
     private PowerManager mPM;
     private int mCharPadding;
-    private final Paint mDrawPaint = new Paint();
     private Interpolator mAppearInterpolator;
     private Interpolator mDisappearInterpolator;
     private Interpolator mFastOutSlowInInterpolator;
     private boolean mShowPassword;
     private UserActivityListener mUserActivityListener;
-    protected QuickUnlockListener mQuickUnlockListener;
-
-    public interface UserActivityListener {
-        void onUserActivity();
-    }
-
-    /* Quick unlock management for PIN view. */
-    public interface QuickUnlockListener {
-        /**
-         * Validate current password and prepare callback if verified.
-         * @param password The password string to be verified.
-         */
-        void onValidateQuickUnlock(String password);
-    }
-
-    public void setQuickUnlockListener(QuickUnlockListener listener) {
-        mQuickUnlockListener = listener;
-    }
 
     public PasswordTextView(Context context) {
         this(context, null);
@@ -126,7 +109,7 @@ public class PasswordTextView extends View {
     }
 
     public PasswordTextView(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                            int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setFocusableInTouchMode(true);
         setFocusable(true);
@@ -155,6 +138,10 @@ public class PasswordTextView extends View {
         mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(mContext,
                 android.R.interpolator.fast_out_slow_in);
         mPM = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+    }
+
+    public void setQuickUnlockListener(QuickUnlockListener listener) {
+        mQuickUnlockListener = listener;
     }
 
     @Override
@@ -215,7 +202,6 @@ public class PasswordTextView extends View {
         return width;
     }
 
-
     public void append(char c) {
         int visibleChars = mTextChars.size();
         String textbefore = mText;
@@ -275,7 +261,7 @@ public class PasswordTextView extends View {
 
     private CharState obtainCharState(char c) {
         CharState charState;
-        if(mCharPool.isEmpty()) {
+        if (mCharPool.isEmpty()) {
             charState = new CharState();
         } else {
             charState = mCharPool.pop();
@@ -354,6 +340,20 @@ public class PasswordTextView extends View {
         info.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
     }
 
+    public interface UserActivityListener {
+        void onUserActivity();
+    }
+
+    /* Quick unlock management for PIN view. */
+    public interface QuickUnlockListener {
+        /**
+         * Validate current password and prepare callback if verified.
+         *
+         * @param password The password string to be verified.
+         */
+        void onValidateQuickUnlock(String password);
+    }
+
     private class CharState {
         char whichChar;
         ValueAnimator textAnimator;
@@ -368,9 +368,72 @@ public class PasswordTextView extends View {
         boolean isDotSwapPending;
         float currentTextTranslationY = 1.0f;
         ValueAnimator textTranslateAnimator;
-
+        Animator.AnimatorListener dotFinishListener = new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                dotAnimator = null;
+            }
+        };
+        Animator.AnimatorListener textFinishListener = new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                textAnimator = null;
+            }
+        };
+        Animator.AnimatorListener textTranslateFinishListener = new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                textTranslateAnimator = null;
+            }
+        };
+        Animator.AnimatorListener widthFinishListener = new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                widthAnimator = null;
+            }
+        };
+        private ValueAnimator.AnimatorUpdateListener dotSizeUpdater
+                = new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                currentDotSizeFactor = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        };
+        private ValueAnimator.AnimatorUpdateListener textSizeUpdater
+                = new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                currentTextSizeFactor = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        };
+        private ValueAnimator.AnimatorUpdateListener textTranslationUpdater
+                = new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                currentTextTranslationY = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        };
+        private ValueAnimator.AnimatorUpdateListener widthUpdater
+                = new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                currentWidthFactor = (float) animation.getAnimatedValue();
+                invalidate();
+            }
+        };
+        private Runnable dotSwapperRunnable = new Runnable() {
+            @Override
+            public void run() {
+                performSwap();
+                isDotSwapPending = false;
+            }
+        };
         Animator.AnimatorListener removeEndListener = new AnimatorListenerAdapter() {
             private boolean mCancelled;
+
             @Override
             public void onAnimationCancel(Animator animation) {
                 mCancelled = true;
@@ -390,78 +453,6 @@ public class PasswordTextView extends View {
             @Override
             public void onAnimationStart(Animator animation) {
                 mCancelled = false;
-            }
-        };
-
-        Animator.AnimatorListener dotFinishListener = new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                dotAnimator = null;
-            }
-        };
-
-        Animator.AnimatorListener textFinishListener = new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                textAnimator = null;
-            }
-        };
-
-        Animator.AnimatorListener textTranslateFinishListener = new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                textTranslateAnimator = null;
-            }
-        };
-
-        Animator.AnimatorListener widthFinishListener = new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                widthAnimator = null;
-            }
-        };
-
-        private ValueAnimator.AnimatorUpdateListener dotSizeUpdater
-                = new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                currentDotSizeFactor = (float) animation.getAnimatedValue();
-                invalidate();
-            }
-        };
-
-        private ValueAnimator.AnimatorUpdateListener textSizeUpdater
-                = new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                currentTextSizeFactor = (float) animation.getAnimatedValue();
-                invalidate();
-            }
-        };
-
-        private ValueAnimator.AnimatorUpdateListener textTranslationUpdater
-                = new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                currentTextTranslationY = (float) animation.getAnimatedValue();
-                invalidate();
-            }
-        };
-
-        private ValueAnimator.AnimatorUpdateListener widthUpdater
-                = new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                currentWidthFactor = (float) animation.getAnimatedValue();
-                invalidate();
-            }
-        };
-
-        private Runnable dotSwapperRunnable = new Runnable() {
-            @Override
-            public void run() {
-                performSwap();
-                isDotSwapPending = false;
             }
         };
 
@@ -664,7 +655,7 @@ public class PasswordTextView extends View {
          * @return The width this character contributes, including padding.
          */
         public float draw(Canvas canvas, float currentDrawPosition, int charHeight, float yPosition,
-                float charLength) {
+                          float charLength) {
             boolean textVisible = currentTextSizeFactor > 0;
             boolean dotVisible = currentDotSizeFactor > 0;
             float charWidth = charLength * currentWidthFactor;

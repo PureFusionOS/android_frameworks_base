@@ -50,19 +50,17 @@ import java.util.Objects;
 
 public class MobileSignalController extends SignalController<
         MobileSignalController.MobileState, MobileSignalController.MobileIconGroup> {
+    @VisibleForTesting
+    final PhoneStateListener mPhoneStateListener;
+    // Save entire info for logging, we only use the id.
+    final SubscriptionInfo mSubscriptionInfo;
+    // @VisibleForDemoMode
+    final SparseArray<MobileIconGroup> mNetworkToIconLookup;
     private final TelephonyManager mPhone;
     private final SubscriptionDefaults mDefaults;
     private final String mNetworkNameDefault;
     private final String mNetworkNameSeparator;
     private final ContentObserver mObserver;
-    @VisibleForTesting
-    final PhoneStateListener mPhoneStateListener;
-    // Save entire info for logging, we only use the id.
-    final SubscriptionInfo mSubscriptionInfo;
-
-    // @VisibleForDemoMode
-    final SparseArray<MobileIconGroup> mNetworkToIconLookup;
-
     // Since some pieces of the phone state are interdependent we store it locally,
     // this could potentially become part of MobileState for simplification/complication
     // of code.
@@ -76,9 +74,9 @@ public class MobileSignalController extends SignalController<
     // TODO: Reduce number of vars passed in, if we have the NetworkController, probably don't
     // need listener lists anymore.
     public MobileSignalController(Context context, Config config, boolean hasMobileData,
-            TelephonyManager phone, CallbackHandler callbackHandler,
-            NetworkControllerImpl networkController, SubscriptionInfo info,
-            SubscriptionDefaults defaults, Looper receiverLooper) {
+                                  TelephonyManager phone, CallbackHandler callbackHandler,
+                                  NetworkControllerImpl networkController, SubscriptionInfo info,
+                                  SubscriptionDefaults defaults, Looper receiverLooper) {
         super("MobileSignalController(" + info.getSubscriptionId() + ")", context,
                 NetworkCapabilities.TRANSPORT_CELLULAR, callbackHandler,
                 networkController);
@@ -392,7 +390,7 @@ public class MobileSignalController extends SignalController<
      * Updates the network's name based on incoming spn and plmn.
      */
     void updateNetworkName(boolean showSpn, String spn, String dataSpn,
-            boolean showPlmn, String plmn) {
+                           boolean showPlmn, String plmn) {
         if (CHATTY) {
             Log.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn
                     + " spn=" + spn + " dataSpn=" + dataSpn
@@ -496,6 +494,88 @@ public class MobileSignalController extends SignalController<
         pw.println("  mDataNetType=" + mDataNetType + ",");
     }
 
+    static class MobileIconGroup extends SignalController.IconGroup {
+        final int mDataContentDescription; // mContentDescriptionDataType
+        final int mDataType;
+        final boolean mIsWide;
+        final int mQsDataType;
+
+        public MobileIconGroup(String name, int[][] sbIcons, int[][] qsIcons, int[] contentDesc,
+                               int sbNullState, int qsNullState, int sbDiscState, int qsDiscState,
+                               int discContentDesc, int dataContentDesc, int dataType, boolean isWide,
+                               int qsDataType) {
+            super(name, sbIcons, qsIcons, contentDesc, sbNullState, qsNullState, sbDiscState,
+                    qsDiscState, discContentDesc);
+            mDataContentDescription = dataContentDesc;
+            mDataType = dataType;
+            mIsWide = isWide;
+            mQsDataType = qsDataType;
+        }
+    }
+
+    ;
+
+    static class MobileState extends SignalController.State {
+        String networkName;
+        String networkNameData;
+        boolean dataSim;
+        boolean dataConnected;
+        boolean isEmergency;
+        boolean airplaneMode;
+        boolean carrierNetworkChangeMode;
+        boolean isDefault;
+        boolean userSetup;
+        boolean roaming;
+
+        @Override
+        public void copyFrom(State s) {
+            super.copyFrom(s);
+            MobileState state = (MobileState) s;
+            dataSim = state.dataSim;
+            networkName = state.networkName;
+            networkNameData = state.networkNameData;
+            dataConnected = state.dataConnected;
+            isDefault = state.isDefault;
+            isEmergency = state.isEmergency;
+            airplaneMode = state.airplaneMode;
+            carrierNetworkChangeMode = state.carrierNetworkChangeMode;
+            userSetup = state.userSetup;
+            roaming = state.roaming;
+        }
+
+        @Override
+        protected void toString(StringBuilder builder) {
+            super.toString(builder);
+            builder.append(',');
+            builder.append("dataSim=").append(dataSim).append(',');
+            builder.append("networkName=").append(networkName).append(',');
+            builder.append("networkNameData=").append(networkNameData).append(',');
+            builder.append("dataConnected=").append(dataConnected).append(',');
+            builder.append("roaming=").append(roaming).append(',');
+            builder.append("isDefault=").append(isDefault).append(',');
+            builder.append("isEmergency=").append(isEmergency).append(',');
+            builder.append("airplaneMode=").append(airplaneMode).append(',');
+            builder.append("carrierNetworkChangeMode=").append(carrierNetworkChangeMode)
+                    .append(',');
+            builder.append("userSetup=").append(userSetup);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return super.equals(o)
+                    && Objects.equals(((MobileState) o).networkName, networkName)
+                    && Objects.equals(((MobileState) o).networkNameData, networkNameData)
+                    && ((MobileState) o).dataSim == dataSim
+                    && ((MobileState) o).dataConnected == dataConnected
+                    && ((MobileState) o).isEmergency == isEmergency
+                    && ((MobileState) o).airplaneMode == airplaneMode
+                    && ((MobileState) o).carrierNetworkChangeMode == carrierNetworkChangeMode
+                    && ((MobileState) o).userSetup == userSetup
+                    && ((MobileState) o).isDefault == isDefault
+                    && ((MobileState) o).roaming == roaming;
+        }
+    }
+
     class MobilePhoneStateListener extends PhoneStateListener {
         public MobilePhoneStateListener(int subId, Looper looper) {
             super(subId, looper);
@@ -557,86 +637,6 @@ public class MobileSignalController extends SignalController<
             mCurrentState.carrierNetworkChangeMode = active;
 
             updateTelephony();
-        }
-    };
-
-    static class MobileIconGroup extends SignalController.IconGroup {
-        final int mDataContentDescription; // mContentDescriptionDataType
-        final int mDataType;
-        final boolean mIsWide;
-        final int mQsDataType;
-
-        public MobileIconGroup(String name, int[][] sbIcons, int[][] qsIcons, int[] contentDesc,
-                int sbNullState, int qsNullState, int sbDiscState, int qsDiscState,
-                int discContentDesc, int dataContentDesc, int dataType, boolean isWide,
-                int qsDataType) {
-            super(name, sbIcons, qsIcons, contentDesc, sbNullState, qsNullState, sbDiscState,
-                    qsDiscState, discContentDesc);
-            mDataContentDescription = dataContentDesc;
-            mDataType = dataType;
-            mIsWide = isWide;
-            mQsDataType = qsDataType;
-        }
-    }
-
-    static class MobileState extends SignalController.State {
-        String networkName;
-        String networkNameData;
-        boolean dataSim;
-        boolean dataConnected;
-        boolean isEmergency;
-        boolean airplaneMode;
-        boolean carrierNetworkChangeMode;
-        boolean isDefault;
-        boolean userSetup;
-        boolean roaming;
-
-        @Override
-        public void copyFrom(State s) {
-            super.copyFrom(s);
-            MobileState state = (MobileState) s;
-            dataSim = state.dataSim;
-            networkName = state.networkName;
-            networkNameData = state.networkNameData;
-            dataConnected = state.dataConnected;
-            isDefault = state.isDefault;
-            isEmergency = state.isEmergency;
-            airplaneMode = state.airplaneMode;
-            carrierNetworkChangeMode = state.carrierNetworkChangeMode;
-            userSetup = state.userSetup;
-            roaming = state.roaming;
-        }
-
-        @Override
-        protected void toString(StringBuilder builder) {
-            super.toString(builder);
-            builder.append(',');
-            builder.append("dataSim=").append(dataSim).append(',');
-            builder.append("networkName=").append(networkName).append(',');
-            builder.append("networkNameData=").append(networkNameData).append(',');
-            builder.append("dataConnected=").append(dataConnected).append(',');
-            builder.append("roaming=").append(roaming).append(',');
-            builder.append("isDefault=").append(isDefault).append(',');
-            builder.append("isEmergency=").append(isEmergency).append(',');
-            builder.append("airplaneMode=").append(airplaneMode).append(',');
-            builder.append("carrierNetworkChangeMode=").append(carrierNetworkChangeMode)
-                    .append(',');
-            builder.append("userSetup=").append(userSetup);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return super.equals(o)
-                    && Objects.equals(((MobileState) o).networkName, networkName)
-                    && Objects.equals(((MobileState) o).networkNameData, networkNameData)
-                    && ((MobileState) o).dataSim == dataSim
-                    && ((MobileState) o).dataConnected == dataConnected
-                    && ((MobileState) o).isEmergency == isEmergency
-                    && ((MobileState) o).airplaneMode == airplaneMode
-                    && ((MobileState) o).carrierNetworkChangeMode == carrierNetworkChangeMode
-                    && ((MobileState) o).userSetup == userSetup
-                    && ((MobileState) o).isDefault == isDefault
-                    && ((MobileState) o).roaming == roaming;
         }
     }
 }

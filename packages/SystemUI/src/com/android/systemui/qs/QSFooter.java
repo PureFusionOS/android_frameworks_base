@@ -66,35 +66,26 @@ public class QSFooter extends FrameLayout implements
         NextAlarmChangeCallback, OnClickListener, OnUserInfoChangedListener, EmergencyListener,
         SignalCallback {
     private static final float EXPAND_INDICATOR_THRESHOLD = .93f;
-
+    protected ExpandableIndicator mExpandIndicator;
+    protected MultiUserSwitch mMultiUserSwitch;
+    protected TouchAnimator mSettingsAlpha;
+    protected View mEdit;
     private ActivityStarter mActivityStarter;
     private NextAlarmController mNextAlarmController;
     private UserInfoController mUserInfoController;
     private View mSettingsButton;
-
     private TextView mAlarmStatus;
     private View mAlarmStatusCollapsed;
     private View mDate;
-
     private QSPanel mQsPanel;
-
     private boolean mExpanded;
     private boolean mAlarmShowing;
-
-    protected ExpandableIndicator mExpandIndicator;
-
     private boolean mListening;
     private AlarmManager.AlarmClockInfo mNextAlarm;
-
     private boolean mShowEmergencyCallsOnly;
-    protected MultiUserSwitch mMultiUserSwitch;
     private ImageView mMultiUserAvatar;
     private boolean mAlwaysShowMultiUserSwitch;
-
-    protected TouchAnimator mSettingsAlpha;
     private float mExpansionAmount;
-
-    protected View mEdit;
     private boolean mShowEditIcon;
     private TouchAnimator mAnimator;
     private View mDateTimeGroup;
@@ -151,7 +142,7 @@ public class QSFooter extends FrameLayout implements
         mUserInfoController = Dependency.get(UserInfoController.class);
         mActivityStarter = Dependency.get(ActivityStarter.class);
         addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight,
-                oldBottom) -> updateAnimator(right - left));
+                                   oldBottom) -> updateAnimator(right - left));
     }
 
     private void updateAnimator(int width) {
@@ -215,7 +206,7 @@ public class QSFooter extends FrameLayout implements
             mDate.addOnLayoutChangeListener(new OnLayoutChangeListener() {
                 @Override
                 public void onLayoutChange(View v, int left, int top, int right, int bottom,
-                        int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                                           int oldLeft, int oldTop, int oldRight, int oldBottom) {
                     mDate.setPivotX(getWidth());
                     mDate.removeOnLayoutChangeListener(this);
                 }
@@ -362,7 +353,8 @@ public class QSFooter extends FrameLayout implements
         if (v == mSettingsButton) {
             if (!Dependency.get(DeviceProvisionedController.class).isCurrentUserSetup()) {
                 // If user isn't setup just unlock the device and dump them back at SUW.
-                mActivityStarter.postQSRunnableDismissingKeyguard(() -> { });
+                mActivityStarter.postQSRunnableDismissingKeyguard(() -> {
+                });
                 return;
             }
             MetricsLogger.action(mContext,

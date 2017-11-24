@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"Odomknete stlačením tlačidla ponuky."</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"Sieť je zablokovaná"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"Žiadna SIM karta"</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"V tablete nie je žiadna SIM karta."</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"V telefóne nie je žiadna SIM karta."</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"V tablete nie je žiadna SIM karta."</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"V telefóne nie je žiadna SIM karta."</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"Vložte SIM kartu."</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"SIM karta chýba alebo sa z nej nedá čítať. Vložte SIM kartu."</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"SIM karta je nepoužiteľná."</string>
@@ -69,38 +68,38 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"Zadajte kód PIN s dĺžkou 4 až 8 číslic."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"Kód PUK musí obsahovať 8 alebo viac číslic."</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"Znova zadajte správny kód PUK. Opakované pokusy zakážu SIM kartu natrvalo."</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"Kódy PIN sa nezhodujú"</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"Kódy PIN sa nezhodujú"</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"Príliš veľa pokusov o nakreslenie vzoru"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"Už <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát ste zadali nesprávny kód PIN. \n\nSkúste to znova o <xliff:g id="NUMBER_1">%2$d</xliff:g> s."</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"Už <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát ste zadali nesprávne heslo. \n\nSkúste to znova o <xliff:g id="NUMBER_1">%2$d</xliff:g> s."</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"Už <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát ste použili nesprávny bezpečnostný vzor. \n\nSkúste to znova o <xliff:g id="NUMBER_1">%2$d</xliff:g> s."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"Tablet ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude tento tablet obnovený a všetky údaje, ktoré sú v ňom uložené, budú odstránené."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"Telefón ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude tento telefón obnovený a všetky údaje, ktoré sú v ňom uložené, budú odstránené."</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"Tablet ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Tablet bude obnovený a všetky údaje, ktoré sú v ňom uložené, budú odstránené."</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"Telefón ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Telefón bude obnovený a všetky údaje, ktoré sú v ňom uložené, budú odstránené."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"Tablet ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude tento používateľ odstránený a spolu s ním všetky jeho údaje."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"Telefón ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude tento používateľ odstránený a spolu s ním všetky jeho údaje."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"Tablet ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Používateľ bude odstránený a spolu s ním všetky jeho údaje."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"Telefón ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Používateľ bude odstránený a spolu s ním všetky jeho údaje."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"Tablet ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude pracovný profil odstránený a spolu s ním všetky údaje profilu."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"Telefón ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude pracovný profil odstránený a spolu s ním všetky údaje profilu."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"Tablet ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Pracovný profil bude odstránený spolu so všetkými údajmi."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"Telefón ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Pracovný profil bude odstránený spolu so všetkými údajmi."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"Už ste <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne nakreslili svoj bezpečnostný vzor. Po ďalších <xliff:g id="NUMBER_1">%2$d</xliff:g> neúspešných pokusoch sa zobrazí výzva na odomknutie tabletu pomocou e-mailového účtu.\n\n Skúste to znova o <xliff:g id="NUMBER_2">%3$d</xliff:g> s."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"Už ste <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne nakreslili svoj bezpečnostný vzor. Po <xliff:g id="NUMBER_1">%2$d</xliff:g> ďalších neúspešných pokusoch sa zobrazí výzva na odomknutie telefónu pomocou e-mailového účtu.\n\n Skúste to znova o <xliff:g id="NUMBER_2">%3$d</xliff:g>} s."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"Tablet ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude tento tablet obnovený a všetky údaje, ktoré sú v ňom uložené, budú odstránené."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"Telefón ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude tento telefón obnovený a všetky údaje, ktoré sú v ňom uložené, budú odstránené."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"Tablet ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Tablet bude obnovený a všetky údaje, ktoré sú v ňom uložené, budú odstránené."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"Telefón ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Telefón bude obnovený a všetky údaje, ktoré sú v ňom uložené, budú odstránené."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"Tablet ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude tento používateľ odstránený a spolu s ním všetky jeho údaje."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"Telefón ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude tento používateľ odstránený a spolu s ním všetky jeho údaje."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"Tablet ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Používateľ bude odstránený a spolu s ním všetky jeho údaje."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"Telefón ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Používateľ bude odstránený a spolu s ním všetky jeho údaje."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"Tablet ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude pracovný profil odstránený a spolu s ním všetky údaje profilu."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"Telefón ste sa pokúsili <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne odomknúť. Po ďalších neúspešných pokusoch (počet: <xliff:g id="NUMBER_1">%2$d</xliff:g>) bude pracovný profil odstránený a spolu s ním všetky údaje profilu."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"Tablet ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Pracovný profil bude odstránený spolu so všetkými údajmi."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"Telefón ste sa pokúsili <xliff:g id="NUMBER">%d</xliff:g>-krát nesprávne odomknúť. Pracovný profil bude odstránený spolu so všetkými údajmi."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"Už ste <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne nakreslili svoj bezpečnostný vzor. Po ďalších <xliff:g id="NUMBER_1">%2$d</xliff:g> neúspešných pokusoch sa zobrazí výzva na odomknutie tabletu pomocou e-mailového účtu.\n\n Skúste to znova o <xliff:g id="NUMBER_2">%3$d</xliff:g> s."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"Už ste <xliff:g id="NUMBER_0">%1$d</xliff:g>-krát nesprávne nakreslili svoj bezpečnostný vzor. Po <xliff:g id="NUMBER_1">%2$d</xliff:g> ďalších neúspešných pokusoch sa zobrazí výzva na odomknutie telefónu pomocou e-mailového účtu.\n\n Skúste to znova o <xliff:g id="NUMBER_2">%3$d</xliff:g>} s."</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"Nesprávny kód PIN SIM karty. Teraz musíte kontaktovať svojho operátora, aby vám odomkol zariadenie."</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="few">Nesprávny kód PIN SIM karty. Zostávajú vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusy.</item>
-      <item quantity="many">Nesprávny kód PIN SIM karty. Zostáva vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusu.</item>
-      <item quantity="other">Nesprávny kód PIN SIM karty. Zostáva vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusov.</item>
-      <item quantity="one">Nesprávny kód PIN SIM karty. Zostáva vám <xliff:g id="NUMBER_0">%d</xliff:g> pokus. Potom budete musieť kontaktovať operátora, aby vám odomkol zariadenie.</item>
+        <item quantity="few">Nesprávny kód PIN SIM karty. Zostávajú vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusy.</item>
+        <item quantity="many">Nesprávny kód PIN SIM karty. Zostáva vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusu.</item>
+        <item quantity="other">Nesprávny kód PIN SIM karty. Zostáva vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusov.</item>
+        <item quantity="one">Nesprávny kód PIN SIM karty. Zostáva vám <xliff:g id="NUMBER_0">%d</xliff:g> pokus. Potom budete musieť kontaktovať operátora, aby vám odomkol zariadenie.</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"SIM karta je nepoužiteľná. Kontaktujte svojho operátora."</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="few">Nesprávny kód PUK SIM karty. Zostávajú vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusy. Potom sa SIM karta natrvalo zablokuje.</item>
-      <item quantity="many">Nesprávny kód PUK SIM karty. Zostáva vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusu. Potom sa SIM karta natrvalo zablokuje.</item>
-      <item quantity="other">Nesprávny kód PUK SIM karty. Zostáva vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusov. Potom sa SIM karta natrvalo zablokuje.</item>
-      <item quantity="one">Nesprávny kód PUK SIM karty. Zostáva vám <xliff:g id="NUMBER_0">%d</xliff:g> pokus. Potom sa vaša SIM karta natrvalo zablokuje.</item>
+        <item quantity="few">Nesprávny kód PUK SIM karty. Zostávajú vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusy. Potom sa SIM karta natrvalo zablokuje.</item>
+        <item quantity="many">Nesprávny kód PUK SIM karty. Zostáva vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusu. Potom sa SIM karta natrvalo zablokuje.</item>
+        <item quantity="other">Nesprávny kód PUK SIM karty. Zostáva vám <xliff:g id="NUMBER_1">%d</xliff:g> pokusov. Potom sa SIM karta natrvalo zablokuje.</item>
+        <item quantity="one">Nesprávny kód PUK SIM karty. Zostáva vám <xliff:g id="NUMBER_0">%d</xliff:g> pokus. Potom sa vaša SIM karta natrvalo zablokuje.</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"Operácia kódu PIN SIM karty zlyhala!"</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"Operácia kódu PUK SIM karty zlyhala!"</string>
@@ -120,22 +119,22 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"Zariadenie zamkol správca"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"Zariadenie bolo uzamknuté ručne"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="few">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte vzor.</item>
-      <item quantity="many">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte vzor.</item>
-      <item quantity="other">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodín. Potvrďte vzor.</item>
-      <item quantity="one">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_0">%d</xliff:g> hodinu. Potvrďte vzor.</item>
+        <item quantity="few">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte vzor.</item>
+        <item quantity="many">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte vzor.</item>
+        <item quantity="other">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodín. Potvrďte vzor.</item>
+        <item quantity="one">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_0">%d</xliff:g> hodinu. Potvrďte vzor.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="few">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte kód PIN.</item>
-      <item quantity="many">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte kód PIN.</item>
-      <item quantity="other">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodín. Potvrďte kód PIN.</item>
-      <item quantity="one">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_0">%d</xliff:g> hodinu. Potvrďte kód PIN.</item>
+        <item quantity="few">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte kód PIN.</item>
+        <item quantity="many">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte kód PIN.</item>
+        <item quantity="other">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodín. Potvrďte kód PIN.</item>
+        <item quantity="one">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_0">%d</xliff:g> hodinu. Potvrďte kód PIN.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="few">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte heslo.</item>
-      <item quantity="many">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte heslo.</item>
-      <item quantity="other">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodín. Potvrďte heslo.</item>
-      <item quantity="one">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_0">%d</xliff:g> hodinu. Potvrďte heslo.</item>
+        <item quantity="few">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte heslo.</item>
+        <item quantity="many">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodiny. Potvrďte heslo.</item>
+        <item quantity="other">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_1">%d</xliff:g> hodín. Potvrďte heslo.</item>
+        <item quantity="one">Zariadenie nebolo odomknuté <xliff:g id="NUMBER_0">%d</xliff:g> hodinu. Potvrďte heslo.</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"Nerozpoznané"</string>
 </resources>

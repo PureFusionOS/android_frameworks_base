@@ -64,7 +64,9 @@ import java.util.Locale;
 
 import static android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED;
 
-/** Platform implementation of the network controller. **/
+/**
+ * Platform implementation of the network controller.
+ **/
 public class NetworkControllerImpl extends BroadcastReceiver
         implements NetworkController, DemoMode, DataUsageController.NetworkNameProvider,
         ConfigurationChangedReceiver, Dumpable {
@@ -72,14 +74,20 @@ public class NetworkControllerImpl extends BroadcastReceiver
     static final String TAG = "NetworkController";
     static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
     // additional diagnostics, but not logspew
-    static final boolean CHATTY =  Log.isLoggable(TAG + "Chat", Log.DEBUG);
+    static final boolean CHATTY = Log.isLoggable(TAG + "Chat", Log.DEBUG);
 
     private static final int EMERGENCY_NO_CONTROLLERS = 0;
     private static final int EMERGENCY_FIRST_CONTROLLER = 100;
     private static final int EMERGENCY_VOICE_CONTROLLER = 200;
     private static final int EMERGENCY_NO_SUB = 300;
     private static final int EMERGENCY_ASSUMED_VOICE_CONTROLLER = 400;
-
+    // Subcontrollers.
+    @VisibleForTesting
+    final WifiSignalController mWifiSignalController;
+    @VisibleForTesting
+    final EthernetSignalController mEthernetSignalController;
+    @VisibleForTesting
+    final SparseArray<MobileSignalController> mMobileSignalControllers = new SparseArray<>();
     private final Context mContext;
     private final TelephonyManager mPhone;
     private final WifiManager mWifiManager;
@@ -89,63 +97,57 @@ public class NetworkControllerImpl extends BroadcastReceiver
     private final SubscriptionDefaults mSubDefaults;
     private final DataSaverController mDataSaverController;
     private final CurrentUserTracker mUserTracker;
-    private Config mConfig;
     private final NetworkScoreManager mNetworkScoreManager;
-
-    // Subcontrollers.
-    @VisibleForTesting
-    final WifiSignalController mWifiSignalController;
-
-    @VisibleForTesting
-    final EthernetSignalController mEthernetSignalController;
-
-    @VisibleForTesting
-    final SparseArray<MobileSignalController> mMobileSignalControllers = new SparseArray<>();
-    // When no SIMs are around at setup, and one is added later, it seems to default to the first
-    // SIM for most actions.  This may be null if there aren't any SIMs around.
-    private MobileSignalController mDefaultSignalController;
     private final AccessPointControllerImpl mAccessPoints;
     private final DataUsageController mDataUsageController;
-
-    private boolean mInetCondition; // Used for Logging and demo.
-
     // BitSets indicating which network transport types (e.g., TRANSPORT_WIFI, TRANSPORT_MOBILE) are
     // connected and validated, respectively.
     private final BitSet mConnectedTransports = new BitSet();
     private final BitSet mValidatedTransports = new BitSet();
-
+    // Handler that all broadcasts are received on.
+    private final Handler mReceiverHandler;
+    // Handler that all callbacks are made on.
+    private final CallbackHandler mCallbackHandler;
+    @VisibleForTesting
+    boolean mListening;
+    @VisibleForTesting
+    ServiceState mLastServiceState;
+    private Config mConfig;
+    // When no SIMs are around at setup, and one is added later, it seems to default to the first
+    // SIM for most actions.  This may be null if there aren't any SIMs around.
+    private MobileSignalController mDefaultSignalController;
+    private boolean mInetCondition; // Used for Logging and demo.
     // States that don't belong to a subcontroller.
     private boolean mAirplaneMode = false;
     private boolean mHasNoSims;
     private Locale mLocale = null;
     // This list holds our ordering.
     private List<SubscriptionInfo> mCurrentSubscriptions = new ArrayList<>();
-
-    @VisibleForTesting
-    boolean mListening;
-
     // The current user ID.
     private int mCurrentUserId;
-
     private OnSubscriptionsChangedListener mSubscriptionListener;
-
-    // Handler that all broadcasts are received on.
-    private final Handler mReceiverHandler;
-    // Handler that all callbacks are made on.
-    private final CallbackHandler mCallbackHandler;
-
+    /**
+     * Used to register listeners from the BG Looper, this way the PhoneStateListeners that
+     * get created will also run on the BG Looper.
+     */
+    private final Runnable mRegisterListeners = new Runnable() {
+        @Override
+        public void run() {
+            registerListeners();
+        }
+    };
     private int mEmergencySource;
     private boolean mIsEmergency;
-
-    @VisibleForTesting
-    ServiceState mLastServiceState;
     private boolean mUserSetup;
+    private boolean mDemoMode;
+    private boolean mDemoInetCondition;
+    private WifiSignalController.WifiState mDemoWifiState;
 
     /**
      * Construct this controller object and register for updates.
      */
     public NetworkControllerImpl(Context context, Looper bgLooper,
-            DeviceProvisionedController deviceProvisionedController) {
+                                 DeviceProvisionedController deviceProvisionedController) {
         this(context, (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE),
                 context.getSystemService(NetworkScoreManager.class),
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE),
@@ -163,17 +165,17 @@ public class NetworkControllerImpl extends BroadcastReceiver
 
     @VisibleForTesting
     NetworkControllerImpl(Context context, ConnectivityManager connectivityManager,
-            NetworkScoreManager networkScoreManager,
-            TelephonyManager telephonyManager,
-            WifiManager wifiManager,
-            SubscriptionManager subManager,
-            Config config,
-            Looper bgLooper,
-            CallbackHandler callbackHandler,
-            AccessPointControllerImpl accessPointController,
-            DataUsageController dataUsageController,
-            SubscriptionDefaults defaultsHandler,
-            DeviceProvisionedController deviceProvisionedController) {
+                          NetworkScoreManager networkScoreManager,
+                          TelephonyManager telephonyManager,
+                          WifiManager wifiManager,
+                          SubscriptionManager subManager,
+                          Config config,
+                          Looper bgLooper,
+                          CallbackHandler callbackHandler,
+                          AccessPointControllerImpl accessPointController,
+                          DataUsageController dataUsageController,
+                          SubscriptionDefaults defaultsHandler,
+                          DeviceProvisionedController deviceProvisionedController) {
         mContext = context;
         mConfig = config;
         mReceiverHandler = new Handler(bgLooper);
@@ -225,6 +227,22 @@ public class NetworkControllerImpl extends BroadcastReceiver
                         deviceProvisionedController.getCurrentUser()));
             }
         });
+    }
+
+    private static final String emergencyToString(int emergencySource) {
+        if (emergencySource > EMERGENCY_NO_SUB) {
+            return "ASSUMED_VOICE_CONTROLLER(" + (emergencySource - EMERGENCY_VOICE_CONTROLLER)
+                    + ")";
+        } else if (emergencySource > EMERGENCY_NO_SUB) {
+            return "NO_SUB(" + (emergencySource - EMERGENCY_NO_SUB) + ")";
+        } else if (emergencySource > EMERGENCY_VOICE_CONTROLLER) {
+            return "VOICE_CONTROLLER(" + (emergencySource - EMERGENCY_VOICE_CONTROLLER) + ")";
+        } else if (emergencySource > EMERGENCY_FIRST_CONTROLLER) {
+            return "FIRST_CONTROLLER(" + (emergencySource - EMERGENCY_FIRST_CONTROLLER) + ")";
+        } else if (emergencySource == EMERGENCY_NO_CONTROLLERS) {
+            return "NO_CONTROLLERS";
+        }
+        return "UNKNOWN_SOURCE";
     }
 
     public DataSaverController getDataSaverController() {
@@ -717,26 +735,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
         mAccessPoints.dump(pw);
     }
 
-    private static final String emergencyToString(int emergencySource) {
-        if (emergencySource > EMERGENCY_NO_SUB) {
-            return "ASSUMED_VOICE_CONTROLLER(" + (emergencySource - EMERGENCY_VOICE_CONTROLLER)
-                    + ")";
-        } else if (emergencySource > EMERGENCY_NO_SUB) {
-            return "NO_SUB(" + (emergencySource - EMERGENCY_NO_SUB) + ")";
-        } else if (emergencySource > EMERGENCY_VOICE_CONTROLLER) {
-            return "VOICE_CONTROLLER(" + (emergencySource - EMERGENCY_VOICE_CONTROLLER) + ")";
-        } else if (emergencySource > EMERGENCY_FIRST_CONTROLLER) {
-            return "FIRST_CONTROLLER(" + (emergencySource - EMERGENCY_FIRST_CONTROLLER) + ")";
-        } else if (emergencySource == EMERGENCY_NO_CONTROLLERS) {
-            return "NO_CONTROLLERS";
-        }
-        return "UNKNOWN_SOURCE";
-    }
-
-    private boolean mDemoMode;
-    private boolean mDemoInetCondition;
-    private WifiSignalController.WifiState mDemoWifiState;
-
     @Override
     public void dispatchDemoCommand(String command, Bundle args) {
         if (!mDemoMode && command.equals(COMMAND_ENTER)) {
@@ -857,17 +855,17 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 if (datatype != null) {
                     controller.getState().iconGroup =
                             datatype.equals("1x") ? TelephonyIcons.ONE_X :
-                            datatype.equals("3g") ? TelephonyIcons.THREE_G :
-                            datatype.equals("4g") ? TelephonyIcons.FOUR_G :
-                            datatype.equals("4g+") ? TelephonyIcons.FOUR_G_PLUS :
-                            datatype.equals("e") ? TelephonyIcons.E :
-                            datatype.equals("g") ? TelephonyIcons.G :
-                            datatype.equals("h") ? TelephonyIcons.H :
-                            datatype.equals("h+") ? TelephonyIcons.HP :
-                            datatype.equals("lte") ? TelephonyIcons.LTE :
-                            datatype.equals("lte+") ? TelephonyIcons.LTE_PLUS :
-                            datatype.equals("dis") ? TelephonyIcons.DATA_DISABLED :
-                            TelephonyIcons.UNKNOWN;
+                                    datatype.equals("3g") ? TelephonyIcons.THREE_G :
+                                            datatype.equals("4g") ? TelephonyIcons.FOUR_G :
+                                                    datatype.equals("4g+") ? TelephonyIcons.FOUR_G_PLUS :
+                                                            datatype.equals("e") ? TelephonyIcons.E :
+                                                                    datatype.equals("g") ? TelephonyIcons.G :
+                                                                            datatype.equals("h") ? TelephonyIcons.H :
+                                                                                    datatype.equals("h+") ? TelephonyIcons.HP :
+                                                                                            datatype.equals("lte") ? TelephonyIcons.LTE :
+                                                                                                    datatype.equals("lte+") ? TelephonyIcons.LTE_PLUS :
+                                                                                                            datatype.equals("dis") ? TelephonyIcons.DATA_DISABLED :
+                                                                                                                    TelephonyIcons.UNKNOWN;
                 }
                 if (args.containsKey("roam")) {
                     controller.getState().roaming = "show".equals(args.getString("roam"));
@@ -876,7 +874,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 if (level != null) {
                     controller.getState().level = level.equals("null") ? -1
                             : Math.min(Integer.parseInt(level),
-                                    SignalStrength.NUM_SIGNAL_STRENGTH_BINS);
+                            SignalStrength.NUM_SIGNAL_STRENGTH_BINS);
                     controller.getState().connected = controller.getState().level >= 0;
                 }
                 String activity = args.getString("activity");
@@ -932,24 +930,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
         return !mAirplaneMode;
     }
 
-    private class SubListener extends OnSubscriptionsChangedListener {
-        @Override
-        public void onSubscriptionsChanged() {
-            updateMobileControllers();
-        }
-    }
-
-    /**
-     * Used to register listeners from the BG Looper, this way the PhoneStateListeners that
-     * get created will also run on the BG Looper.
-     */
-    private final Runnable mRegisterListeners = new Runnable() {
-        @Override
-        public void run() {
-            registerListeners();
-        }
-    };
-
     public static class SubscriptionDefaults {
         public int getDefaultVoiceSubId() {
             return SubscriptionManager.getDefaultVoiceSubscriptionId();
@@ -978,6 +958,13 @@ public class NetworkControllerImpl extends BroadcastReceiver
                     res.getBoolean(R.bool.config_hspa_data_distinguishable);
             config.hideLtePlus = res.getBoolean(R.bool.config_hideLtePlus);
             return config;
+        }
+    }
+
+    private class SubListener extends OnSubscriptionsChangedListener {
+        @Override
+        public void onSubscriptionsChanged() {
+            updateMobileControllers();
         }
     }
 }

@@ -57,7 +57,7 @@ import java.util.List;
 import static android.view.KeyEvent.ACTION_DOWN;
 import static android.view.KeyEvent.KEYCODE_BACK;
 
-@ChaosLab(name="GestureAnywhere", classification=Classification.NEW_CLASS)
+@ChaosLab(name = "GestureAnywhere", classification = Classification.NEW_CLASS)
 public class GestureAnywhereView extends TriggerOverlayView implements GestureOverlayView.OnGestureListener {
     private static final String TAG = "GestureAnywhere";
     private final File mStoreFile = new File(Environment.getExternalStorageDirectory(), "ga_gestures");
@@ -70,76 +70,48 @@ public class GestureAnywhereView extends TriggerOverlayView implements GestureOv
     private boolean mTriggerVisible = false;
     private TranslateAnimation mSlideIn;
     private TranslateAnimation mSlideOut;
-
+    OnClickListener mCancelButtonListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mState != State.Collapsed) {
+                switchToState(State.Closing);
+            }
+        }
+    };
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_SCREEN_OFF.equals(action) && mState != State.Collapsed) {
+                switchToState(State.Closing);
+            }
+        }
+    };
     // Reference to the status bar
     private StatusBar mBar;
-
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.GESTURE_ANYWHERE_ENABLED), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.GESTURE_ANYWHERE_POSITION), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.GESTURE_ANYWHERE_CHANGED), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.GESTURE_ANYWHERE_TRIGGER_WIDTH), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.GESTURE_ANYWHERE_TRIGGER_TOP), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.GESTURE_ANYWHERE_TRIGGER_HEIGHT), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.GESTURE_ANYWHERE_SHOW_TRIGGER), false, this);
-            update();
-        }
-
-        void unobserve() {
-            mContext.getContentResolver().unregisterContentObserver(this);
+    private Animation.AnimationListener mAnimListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
         }
 
         @Override
-        public void onChange(boolean selfChange) {
-            update();
-        }
-
-        public void update() {
-            ContentResolver resolver = mContext.getContentResolver();
-
-            boolean enabled = Settings.System.getInt(
-                    resolver, Settings.System.GESTURE_ANYWHERE_ENABLED, 0) == 1;
-            setVisibility(enabled ? View.VISIBLE : View.GONE);
-
-            int position = Settings.System.getInt(
-                    resolver, Settings.System.GESTURE_ANYWHERE_POSITION, Gravity.LEFT);
-            setPosition(position);
-
-            long gestureChangedTime = Settings.System.getLong(resolver,
-                    Settings.System.GESTURE_ANYWHERE_CHANGED, System.currentTimeMillis());
-            if (mGestureLoadedTime < gestureChangedTime) {
-                reloadGestures();
+        public void onAnimationEnd(Animation animation) {
+            animation.cancel();
+            mContent.clearAnimation();
+            switch (mState) {
+                case Closing:
+                    switchToState(State.Collapsed);
+                    break;
+                case Opening:
+                    switchToState(State.Expanded);
+                    break;
             }
-
-            int width = Settings.System.getInt(
-                    resolver, Settings.System.GESTURE_ANYWHERE_TRIGGER_WIDTH, 10);
-            if (mTriggerWidth != width)
-                setTriggerWidth(width);
-            setTopPercentage(Settings.System.getInt(
-                    resolver, Settings.System.GESTURE_ANYWHERE_TRIGGER_TOP, 0) / 100f);
-            setBottomPercentage(Settings.System.getInt(
-                    resolver, Settings.System.GESTURE_ANYWHERE_TRIGGER_HEIGHT, 100) / 100f);
-            mTriggerVisible = Settings.System.getInt(
-                    resolver, Settings.System.GESTURE_ANYWHERE_SHOW_TRIGGER, 0) == 1;
-            if (mTriggerVisible)
-                showTriggerRegion();
-            else
-                hideTriggerRegion();
         }
-    }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
+    };
 
     public GestureAnywhereView(Context context) {
         this(context, null);
@@ -160,15 +132,6 @@ public class GestureAnywhereView extends TriggerOverlayView implements GestureOv
             mStore.load();
         }
     }
-
-    OnClickListener mCancelButtonListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (mState != State.Collapsed) {
-                switchToState(State.Closing);
-            }
-        }
-    };
 
     @Override
     protected void onFinishInflate() {
@@ -250,7 +213,7 @@ public class GestureAnywhereView extends TriggerOverlayView implements GestureOv
             case Collapsed:
                 reduceToTriggerRegion();
                 mGestureView.clear(false);
-                if(mTriggerVisible) {
+                if (mTriggerVisible) {
                     showTriggerRegion();
                 } else {
                     hideTriggerRegion();
@@ -307,40 +270,6 @@ public class GestureAnywhereView extends TriggerOverlayView implements GestureOv
         mSlideOut.setAnimationListener(mAnimListener);
     }
 
-    private Animation.AnimationListener mAnimListener = new Animation.AnimationListener() {
-        @Override
-        public void onAnimationStart(Animation animation) {
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-            animation.cancel();
-            mContent.clearAnimation();
-            switch (mState) {
-                case Closing:
-                    switchToState(State.Collapsed);
-                    break;
-                case Opening:
-                    switchToState(State.Expanded);
-                    break;
-            }
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-        }
-    };
-
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (Intent.ACTION_SCREEN_OFF.equals(action) && mState != State.Collapsed) {
-                switchToState(State.Closing);
-            }
-        }
-    };
-
     @Override
     public void onGesture(GestureOverlayView overlay, MotionEvent event) {
     }
@@ -371,4 +300,71 @@ public class GestureAnywhereView extends TriggerOverlayView implements GestureOv
     }
 
     private enum State {Collapsed, Expanded, Gesturing, Opening, Closing}
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GESTURE_ANYWHERE_ENABLED), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GESTURE_ANYWHERE_POSITION), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GESTURE_ANYWHERE_CHANGED), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GESTURE_ANYWHERE_TRIGGER_WIDTH), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GESTURE_ANYWHERE_TRIGGER_TOP), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GESTURE_ANYWHERE_TRIGGER_HEIGHT), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.GESTURE_ANYWHERE_SHOW_TRIGGER), false, this);
+            update();
+        }
+
+        void unobserve() {
+            mContext.getContentResolver().unregisterContentObserver(this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            boolean enabled = Settings.System.getInt(
+                    resolver, Settings.System.GESTURE_ANYWHERE_ENABLED, 0) == 1;
+            setVisibility(enabled ? View.VISIBLE : View.GONE);
+
+            int position = Settings.System.getInt(
+                    resolver, Settings.System.GESTURE_ANYWHERE_POSITION, Gravity.LEFT);
+            setPosition(position);
+
+            long gestureChangedTime = Settings.System.getLong(resolver,
+                    Settings.System.GESTURE_ANYWHERE_CHANGED, System.currentTimeMillis());
+            if (mGestureLoadedTime < gestureChangedTime) {
+                reloadGestures();
+            }
+
+            int width = Settings.System.getInt(
+                    resolver, Settings.System.GESTURE_ANYWHERE_TRIGGER_WIDTH, 10);
+            if (mTriggerWidth != width)
+                setTriggerWidth(width);
+            setTopPercentage(Settings.System.getInt(
+                    resolver, Settings.System.GESTURE_ANYWHERE_TRIGGER_TOP, 0) / 100f);
+            setBottomPercentage(Settings.System.getInt(
+                    resolver, Settings.System.GESTURE_ANYWHERE_TRIGGER_HEIGHT, 100) / 100f);
+            mTriggerVisible = Settings.System.getInt(
+                    resolver, Settings.System.GESTURE_ANYWHERE_SHOW_TRIGGER, 0) == 1;
+            if (mTriggerVisible)
+                showTriggerRegion();
+            else
+                hideTriggerRegion();
+        }
+    }
 }

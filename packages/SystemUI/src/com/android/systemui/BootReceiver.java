@@ -34,6 +34,26 @@ public class BootReceiver extends BroadcastReceiver {
     private SettingsObserver mSettingsObserver;
     private Context mContext;
 
+    @Override
+    public void onReceive(final Context context, Intent intent) {
+        try {
+            mContext = context;
+            if (mSettingsObserver == null) {
+                mSettingsObserver = new SettingsObserver(mHandler);
+                mSettingsObserver.observe();
+            }
+
+            // Start the cpu info overlay, if activated
+            if (Settings.Global.getInt(mContext.getContentResolver(), Settings.Global.SHOW_CPU_OVERLAY, 0) != 0) {
+                Intent cpuinfo = new Intent(mContext, com.android.systemui.CPUInfoService.class);
+                mContext.startService(cpuinfo);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Can't start load average service", e);
+        }
+    }
+
     private class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -58,26 +78,6 @@ public class BootReceiver extends BroadcastReceiver {
             } else {
                 mContext.stopService(cpuinfo);
             }
-        }
-    }
-
-    @Override
-    public void onReceive(final Context context, Intent intent) {
-        try {
-            mContext = context;
-            if (mSettingsObserver ==  null) {
-                mSettingsObserver = new SettingsObserver(mHandler);
-                mSettingsObserver.observe();
-            }
-
-            // Start the cpu info overlay, if activated
-            if (Settings.Global.getInt(mContext.getContentResolver(), Settings.Global.SHOW_CPU_OVERLAY, 0) != 0) {
-                Intent cpuinfo = new Intent(mContext, com.android.systemui.CPUInfoService.class);
-                mContext.startService(cpuinfo);
-            }
-
-        } catch (Exception e) {
-            Log.e(TAG, "Can't start load average service", e);
         }
     }
 }

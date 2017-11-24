@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,8 +12,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -28,48 +26,47 @@
             android:id="@+id/ends_group"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:clipChildren="false" />
+            android:clipChildren="false"
+            android:orientation="horizontal" />
 
         <LinearLayout
             android:id="@+id/center_group"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipChildren="false"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:clipChildren="false" />
+            android:orientation="horizontal" />
 
     </FrameLayout>
 
     <com.android.systemui.statusbar.policy.DeadZone
         android:id="@+id/deadzone"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="top"
-        systemui:minSize="@dimen/navigation_bar_deadzone_size"
-        systemui:maxSize="@dimen/navigation_bar_deadzone_size_max"
-        systemui:holdTime="@integer/navigation_bar_deadzone_hold"
         systemui:decayTime="@integer/navigation_bar_deadzone_decay"
-        systemui:orientation="horizontal"
-        />
+        systemui:holdTime="@integer/navigation_bar_deadzone_hold"
+        systemui:maxSize="@dimen/navigation_bar_deadzone_size_max"
+        systemui:minSize="@dimen/navigation_bar_deadzone_size"
+        systemui:orientation="horizontal" />
 
     <RelativeLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <com.android.systemui.statusbar.policy.BatteryBarController
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_alignParentTop="true"
             android:visibility="gone"
-            systemui:viewLocation="2"
-            android:layout_alignParentTop="true" />
+            systemui:viewLocation="2" />
 
         <com.android.systemui.statusbar.policy.BatteryBarController
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
             android:visibility="gone"
-            systemui:viewLocation="3"
-            android:layout_alignParentBottom="true" />
+            systemui:viewLocation="3" />
 
     </RelativeLayout>
 

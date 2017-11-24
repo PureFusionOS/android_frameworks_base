@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 **
 ** Copyright 2006, The Android Open Source Project
 **
@@ -17,13 +16,12 @@
 */
 -->
 
-<com.android.systemui.statusbar.phone.NotificationPanelView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.systemui.statusbar.phone.NotificationPanelView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
     android:id="@+id/notification_panel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent" >
+    android:background="@android:color/transparent">
 
     <include
         layout="@layout/keyguard_status_view"
@@ -31,21 +29,21 @@
         android:visibility="gone" />
 
     <com.android.systemui.statusbar.phone.NotificationsQuickSettingsContainer
+        android:id="@+id/notification_container_parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="@integer/notification_panel_layout_gravity"
-        android:id="@+id/notification_container_parent"
-        android:clipToPadding="false"
-        android:clipChildren="false">
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <FrameLayout
             android:id="@+id/qs_frame"
-            android:layout="@layout/qs_panel"
             android:layout_width="@dimen/notification_panel_width"
             android:layout_height="match_parent"
             android:layout_gravity="@integer/notification_panel_layout_gravity"
-            android:clipToPadding="false"
             android:clipChildren="false"
+            android:clipToPadding="false"
+            android:layout="@layout/qs_panel"
             systemui:viewType="com.android.systemui.plugins.qs.QS" />
 
         <com.android.systemui.statusbar.stack.NotificationStackScrollLayout
@@ -58,9 +56,9 @@
 
         <ViewStub
             android:id="@+id/keyguard_user_switcher"
-            android:layout="@layout/keyguard_user_switcher"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_width="match_parent" />
+            android:layout="@layout/keyguard_user_switcher" />
 
         <include
             layout="@layout/keyguard_status_bar"
@@ -82,10 +80,10 @@
 
     <com.android.systemui.statusbar.AlphaOptimizedView
         android:id="@+id/qs_navbar_scrim"
-        android:layout_height="96dp"
         android:layout_width="match_parent"
+        android:layout_height="96dp"
         android:layout_gravity="bottom"
-        android:visibility="invisible"
-        android:background="@drawable/qs_navbar_scrim" />
+        android:background="@drawable/qs_navbar_scrim"
+        android:visibility="invisible" />
 
 </com.android.systemui.statusbar.phone.NotificationPanelView>

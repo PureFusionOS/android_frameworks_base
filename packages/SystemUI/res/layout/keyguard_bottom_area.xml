@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2014 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,18 +16,18 @@
 
 <com.android.systemui.statusbar.phone.KeyguardBottomAreaView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/keyguard_bottom_area"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:outlineProvider="none"
-    android:elevation="5dp"> <!-- Put it above the status bar header -->
+    android:layout_height="match_parent"
+    android:elevation="5dp"
+    android:outlineProvider="none"> <!-- Put it above the status bar header -->
 
     <LinearLayout
         android:id="@+id/keyguard_indication_area"
-        android:forceHasOverlappingRendering="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/keyguard_indication_margin_bottom"
         android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/keyguard_indication_margin_bottom"
+        android:forceHasOverlappingRendering="false"
         android:orientation="vertical">
 
         <com.android.systemui.statusbar.phone.KeyguardIndicationTextView
@@ -36,54 +35,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textStyle="italic"
-            android:textColor="#ffffff"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#ffffff"
+            android:textStyle="italic"
             android:visibility="gone" />
 
         <com.android.systemui.statusbar.phone.KeyguardIndicationTextView
             android:id="@+id/keyguard_indication_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:accessibilityLiveRegion="polite"
             android:gravity="center_horizontal"
-            android:textStyle="italic"
-            android:textColor="#ffffff"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:accessibilityLiveRegion="polite" />
+            android:textColor="#ffffff"
+            android:textStyle="italic" />
 
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/preview_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"></FrameLayout>
 
     <com.android.systemui.statusbar.KeyguardAffordanceView
         android:id="@+id/camera_button"
-        android:layout_height="@dimen/keyguard_affordance_height"
         android:layout_width="@dimen/keyguard_affordance_width"
+        android:layout_height="@dimen/keyguard_affordance_height"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_camera_alt_24dp"
+        android:contentDescription="@string/accessibility_camera_button"
         android:scaleType="center"
-        android:contentDescription="@string/accessibility_camera_button" />
+        android:src="@drawable/ic_camera_alt_24dp" />
 
     <com.android.systemui.statusbar.KeyguardAffordanceView
         android:id="@+id/left_button"
-        android:layout_height="@dimen/keyguard_affordance_height"
         android:layout_width="@dimen/keyguard_affordance_width"
+        android:layout_height="@dimen/keyguard_affordance_height"
         android:layout_gravity="bottom|start"
-        android:src="@drawable/ic_phone_24dp"
+        android:contentDescription="@string/accessibility_phone_button"
         android:scaleType="center"
-        android:contentDescription="@string/accessibility_phone_button" />
+        android:src="@drawable/ic_phone_24dp" />
 
     <com.android.systemui.statusbar.phone.LockIcon
         android:id="@+id/lock_icon"
         android:layout_width="@dimen/keyguard_affordance_width"
         android:layout_height="@dimen/keyguard_affordance_height"
         android:layout_gravity="bottom|center_horizontal"
-        android:src="@drawable/ic_lock_24dp"
         android:contentDescription="@string/accessibility_unlock_button"
-        android:scaleType="center" />
+        android:scaleType="center"
+        android:src="@drawable/ic_lock_24dp" />
 
 </com.android.systemui.statusbar.phone.KeyguardBottomAreaView>

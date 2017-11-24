@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 **
 ** Copyright 2016, The Android Open Source Project
 **
@@ -17,34 +16,33 @@
 */
 -->
 
-<com.android.systemui.statusbar.car.CarNavigationBarView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
+<com.android.systemui.statusbar.car.CarNavigationBarView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:gravity="center"
-    android:background="@drawable/system_bar_background">
+    android:layout_height="match_parent"
+    android:background="@drawable/system_bar_background"
+    android:gravity="center">
 
     <!-- phone.NavigationBarView has rot0 and rot90 but we expect the car head unit to have a fixed
          rotation so skip this level of the heirarchy.
     -->
     <LinearLayout
-        android:layout_height="match_parent"
+        android:id="@+id/nav_buttons"
         android:layout_width="@dimen/car_navigation_bar_width"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:id="@+id/nav_buttons"
-        android:animateLayoutChanges="true">
+        android:orientation="horizontal">
 
         <!-- Buttons get populated here from a car_arrays.xml. -->
     </LinearLayout>
 
     <!-- lights out layout to match exactly -->
     <LinearLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
         android:id="@+id/lights_out"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:visibility="gone">
         <!-- Must match nav_buttons. -->
     </LinearLayout>

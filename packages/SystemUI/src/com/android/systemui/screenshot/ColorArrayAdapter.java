@@ -33,17 +33,17 @@ public class ColorArrayAdapter extends ArrayAdapter<Integer> {
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        return  createColorImage(position);
+        return createColorImage(position);
     }
 
-    private ImageView createColorImage(int position){
+    private ImageView createColorImage(int position) {
         ImageView imageView = new ImageView(getContext());
         final int width = getContext().getResources().getDimensionPixelSize(R.dimen.crop_buttons);
         final int contentWidth = getContext().getResources().getDimensionPixelSize(R.dimen.crop_buttons_inlet);
         final int color = colors[position];
 
         final Canvas canvas = new Canvas();
-        canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG,Paint.FILTER_BITMAP_FLAG));
+        canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG, Paint.FILTER_BITMAP_FLAG));
         final Bitmap bmp = Bitmap.createBitmap(contentWidth, contentWidth, Bitmap.Config.ARGB_8888);
         canvas.setBitmap(bmp);
         final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);

@@ -53,15 +53,14 @@ import static com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
 
 /**
  * Base quick-settings tile, extend this to create a new tile.
- *
+ * <p>
  * State management done on a looper provided by the host.  Tiles should update state in
  * handleUpdateState.  Callbacks affecting state should use refreshState to trigger another
  * state update pass on tile looper.
  */
 public abstract class QSTileImpl<TState extends State> implements QSTile {
-    protected final String TAG = "Tile." + getClass().getSimpleName();
     protected static final boolean DEBUG = Log.isLoggable("Tile", Log.DEBUG);
-
+    protected final String TAG = "Tile." + getClass().getSimpleName();
     protected final QSHost mHost;
     protected final Context mContext;
     protected final H mHandler = new H(Dependency.get(Dependency.BG_LOOPER));
@@ -71,20 +70,39 @@ public abstract class QSTileImpl<TState extends State> implements QSTile {
 
     private final ArrayList<Callback> mCallbacks = new ArrayList<>();
     protected TState mState = newTileState();
+    protected Vibrator mVibrator;
     private TState mTmpState = newTileState();
     private boolean mAnnounceNextStateChange;
-
     private String mTileSpec;
     private EnforcedAdmin mEnforcedAdmin;
     private boolean mShowingDetail;
+
+    protected QSTileImpl(QSHost host) {
+        mHost = host;
+        mContext = host.getContext();
+        mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+    }
+
+    public static int getColorForState(Context context, int state) {
+        switch (state) {
+            case Tile.STATE_UNAVAILABLE:
+                return Utils.getDisabled(context,
+                        Utils.getColorAttr(context, android.R.attr.colorForeground));
+            case Tile.STATE_INACTIVE:
+                return Utils.getColorAttr(context, android.R.attr.textColorHint);
+            case Tile.STATE_ACTIVE:
+                return Utils.getColorAttr(context, android.R.attr.textColorPrimary);
+            default:
+                Log.e("QSTile", "Invalid state " + state);
+                return 0;
+        }
+    }
 
     public abstract TState newTileState();
 
     abstract protected void handleClick();
 
     abstract protected void handleUpdateState(TState state, Object arg);
-
-    protected Vibrator mVibrator;
 
     @Override
     public boolean isDualTarget() {
@@ -93,17 +111,11 @@ public abstract class QSTileImpl<TState extends State> implements QSTile {
 
     /**
      * Declare the category of this tile.
-     *
+     * <p>
      * Categories are defined in {@link com.android.internal.logging.nano.MetricsProto.MetricsEvent}
      * by editing frameworks/base/proto/src/metrics_constants.proto.
      */
     abstract public int getMetricsCategory();
-
-    protected QSTileImpl(QSHost host) {
-        mHost = host;
-        mContext = host.getContext();
-        mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-    }
 
     /**
      * Adds or removes a listening client for the tile. If the tile has one or more
@@ -147,6 +159,8 @@ public abstract class QSTileImpl<TState extends State> implements QSTile {
         throw new UnsupportedOperationException();
     }
 
+    // safe to call from any thread
+
     /**
      * Is a startup check whether this device currently supports this tile.
      * Should not be used to conditionally hide tiles.  Only checked on tile
@@ -156,17 +170,19 @@ public abstract class QSTileImpl<TState extends State> implements QSTile {
         return true;
     }
 
-    // safe to call from any thread
-
     public boolean isVibrationEnabled() {
         return (Settings.Secure.getIntForUser(mContext.getContentResolver(),
                 Settings.Secure.QUICK_SETTINGS_TILES_VIBRATE, 0, UserHandle.USER_CURRENT) == 1);
     }
 
     public void vibrateTile(int duration) {
-        if (!isVibrationEnabled()) { return; }
+        if (!isVibrationEnabled()) {
+            return;
+        }
         if (mVibrator != null) {
-            if (mVibrator.hasVibrator()) { mVibrator.vibrate(duration); }
+            if (mVibrator.hasVibrator()) {
+                mVibrator.vibrate(duration);
+            }
         }
     }
 
@@ -243,11 +259,11 @@ public abstract class QSTileImpl<TState extends State> implements QSTile {
         return mState;
     }
 
+    // call only on tile worker looper
+
     public void setDetailListening(boolean listening) {
         // optional
     }
-
-    // call only on tile worker looper
 
     private void handleAddCallback(Callback callback) {
         mCallbacks.add(callback);
@@ -362,18 +378,76 @@ public abstract class QSTileImpl<TState extends State> implements QSTile {
 
     public abstract CharSequence getTileLabel();
 
-    public static int getColorForState(Context context, int state) {
-        switch (state) {
-            case Tile.STATE_UNAVAILABLE:
-                return Utils.getDisabled(context,
-                        Utils.getColorAttr(context, android.R.attr.colorForeground));
-            case Tile.STATE_INACTIVE:
-                return Utils.getColorAttr(context, android.R.attr.textColorHint);
-            case Tile.STATE_ACTIVE:
-                return Utils.getColorAttr(context, android.R.attr.textColorPrimary);
-            default:
-                Log.e("QSTile", "Invalid state " + state);
-                return 0;
+    public static class DrawableIcon extends Icon {
+        protected final Drawable mDrawable;
+        protected final Drawable mInvisibleDrawable;
+
+        public DrawableIcon(Drawable drawable) {
+            mDrawable = drawable;
+            mInvisibleDrawable = drawable.getConstantState().newDrawable();
+        }
+
+        @Override
+        public Drawable getDrawable(Context context) {
+            return mDrawable;
+        }
+
+        @Override
+        public Drawable getInvisibleDrawable(Context context) {
+            return mInvisibleDrawable;
+        }
+    }
+
+    public static class DrawableIconWithRes extends DrawableIcon {
+        private final int mId;
+
+        public DrawableIconWithRes(Drawable drawable, int id) {
+            super(drawable);
+            mId = id;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof DrawableIconWithRes && ((DrawableIconWithRes) o).mId == mId;
+        }
+    }
+
+    public static class ResourceIcon extends Icon {
+        private static final SparseArray<Icon> ICONS = new SparseArray<Icon>();
+
+        protected final int mResId;
+
+        private ResourceIcon(int resId) {
+            mResId = resId;
+        }
+
+        public static Icon get(int resId) {
+            Icon icon = ICONS.get(resId);
+            if (icon == null) {
+                icon = new ResourceIcon(resId);
+                ICONS.put(resId, icon);
+            }
+            return icon;
+        }
+
+        @Override
+        public Drawable getDrawable(Context context) {
+            return context.getDrawable(mResId);
+        }
+
+        @Override
+        public Drawable getInvisibleDrawable(Context context) {
+            return context.getDrawable(mResId);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof ResourceIcon && ((ResourceIcon) o).mResId == mResId;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("ResourceIcon[resId=0x%08x]", mResId);
         }
     }
 
@@ -458,79 +532,6 @@ public abstract class QSTileImpl<TState extends State> implements QSTile {
                 Log.w(TAG, error, t);
                 mHost.warn(error, t);
             }
-        }
-    }
-
-    public static class DrawableIcon extends Icon {
-        protected final Drawable mDrawable;
-        protected final Drawable mInvisibleDrawable;
-
-        public DrawableIcon(Drawable drawable) {
-            mDrawable = drawable;
-            mInvisibleDrawable = drawable.getConstantState().newDrawable();
-        }
-
-        @Override
-        public Drawable getDrawable(Context context) {
-            return mDrawable;
-        }
-
-        @Override
-        public Drawable getInvisibleDrawable(Context context) {
-            return mInvisibleDrawable;
-        }
-    }
-
-    public static class DrawableIconWithRes extends DrawableIcon {
-        private final int mId;
-
-        public DrawableIconWithRes(Drawable drawable, int id) {
-            super(drawable);
-            mId = id;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return o instanceof DrawableIconWithRes && ((DrawableIconWithRes) o).mId == mId;
-        }
-    }
-
-    public static class ResourceIcon extends Icon {
-        private static final SparseArray<Icon> ICONS = new SparseArray<Icon>();
-
-        protected final int mResId;
-
-        private ResourceIcon(int resId) {
-            mResId = resId;
-        }
-
-        public static Icon get(int resId) {
-            Icon icon = ICONS.get(resId);
-            if (icon == null) {
-                icon = new ResourceIcon(resId);
-                ICONS.put(resId, icon);
-            }
-            return icon;
-        }
-
-        @Override
-        public Drawable getDrawable(Context context) {
-            return context.getDrawable(mResId);
-        }
-
-        @Override
-        public Drawable getInvisibleDrawable(Context context) {
-            return context.getDrawable(mResId);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            return o instanceof ResourceIcon && ((ResourceIcon) o).mResId == mResId;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("ResourceIcon[resId=0x%08x]", mResId);
         }
     }
 

@@ -29,7 +29,7 @@ import com.android.systemui.volume.car.CarVolumeDialogController;
 public class CarSystemUIFactory extends SystemUIFactory {
     @Override
     public void injectDependencies(ArrayMap<Object, DependencyProvider> providers,
-            Context context) {
+                                   Context context) {
         super.injectDependencies(providers, context);
         providers.put(VolumeDialogController.class, () -> new CarVolumeDialogController(context));
     }

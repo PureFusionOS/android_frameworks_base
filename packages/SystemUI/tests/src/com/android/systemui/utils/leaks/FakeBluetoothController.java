@@ -40,6 +40,11 @@ public class FakeBluetoothController extends BaseLeakChecker<Callback> implement
     }
 
     @Override
+    public void setBluetoothEnabled(boolean enabled) {
+
+    }
+
+    @Override
     public int getBluetoothState() {
         return 0;
     }
@@ -57,11 +62,6 @@ public class FakeBluetoothController extends BaseLeakChecker<Callback> implement
     @Override
     public String getLastDeviceName() {
         return null;
-    }
-
-    @Override
-    public void setBluetoothEnabled(boolean enabled) {
-
     }
 
     @Override

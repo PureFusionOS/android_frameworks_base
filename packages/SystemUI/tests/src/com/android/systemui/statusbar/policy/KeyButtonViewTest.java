@@ -71,7 +71,7 @@ public class KeyButtonViewTest extends SysuiTestCase {
                         && checkField("subtype", argument.getSubtype(), code)
                         && checkField("FIELD_FLAGS", argument.getTaggedData(FIELD_FLAGS), flags)
                         && checkField("FIELD_NAV_ACTION", argument.getTaggedData(FIELD_NAV_ACTION),
-                                action);
+                        action);
             }
 
             private boolean checkField(String field, Object val, Object val2) {

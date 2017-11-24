@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2017 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +15,12 @@
   -->
 
 <!-- Loaded into BatteryMeterView as necessary -->
-<TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/battery_percentage_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
-        android:textColor="?android:attr/textColorPrimary"
-        android:gravity="center_vertical|start"
-        android:paddingEnd="@dimen/battery_level_padding_start"
-        />
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/battery_percentage_view"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|start"
+    android:paddingEnd="@dimen/battery_level_padding_start"
+    android:singleLine="true"
+    android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
+    android:textColor="?android:attr/textColorPrimary" />

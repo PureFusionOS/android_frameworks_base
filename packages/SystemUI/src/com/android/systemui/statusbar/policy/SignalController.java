@@ -32,14 +32,12 @@ import static com.android.systemui.statusbar.policy.NetworkControllerImpl.TAG;
  */
 public abstract class SignalController<T extends SignalController.State,
         I extends SignalController.IconGroup> {
+    protected static final boolean DEBUG = NetworkControllerImpl.DEBUG;
+    protected static final boolean CHATTY = NetworkControllerImpl.CHATTY;
     // Save the previous SignalController.States of all SignalControllers for dumps.
     static final boolean RECORD_HISTORY = true;
     // If RECORD_HISTORY how many to save, must be a power of 2.
     static final int HISTORY_SIZE = 64;
-
-    protected static final boolean DEBUG = NetworkControllerImpl.DEBUG;
-    protected static final boolean CHATTY = NetworkControllerImpl.CHATTY;
-
     protected final String mTag;
     protected final T mCurrentState;
     protected final T mLastState;
@@ -58,7 +56,7 @@ public abstract class SignalController<T extends SignalController.State,
     private int mHistoryIndex;
 
     public SignalController(String tag, Context context, int type, CallbackHandler callbackHandler,
-            NetworkControllerImpl networkController) {
+                            NetworkControllerImpl networkController) {
         mTag = TAG + "." + tag;
         mNetworkController = networkController;
         mTransportType = type;
@@ -87,7 +85,7 @@ public abstract class SignalController<T extends SignalController.State,
      * Used at the end of demo mode to clear out any ugly state that it has created.
      * Since we haven't had any callbacks, then isDirty will not have been triggered,
      * so we can just take the last good state directly from there.
-     *
+     * <p>
      * Used for demo mode.
      */
     public void resetLastState() {
@@ -193,7 +191,7 @@ public abstract class SignalController<T extends SignalController.State,
             }
             // Print out the previous states in ordered number.
             for (int i = mHistoryIndex + HISTORY_SIZE - 1;
-                    i >= mHistoryIndex + HISTORY_SIZE - size; i--) {
+                 i >= mHistoryIndex + HISTORY_SIZE - size; i--) {
                 pw.println("  Previous State(" + (mHistoryIndex + HISTORY_SIZE - i) + "): "
                         + mHistory[i & (HISTORY_SIZE - 1)]);
             }
@@ -234,8 +232,8 @@ public abstract class SignalController<T extends SignalController.State,
         final String mName;
 
         public IconGroup(String name, int[][] sbIcons, int[][] qsIcons, int[] contentDesc,
-                int sbNullState, int qsNullState, int sbDiscState, int qsDiscState,
-                int discContentDesc) {
+                         int sbNullState, int qsNullState, int sbDiscState, int qsDiscState,
+                         int discContentDesc) {
             mName = name;
             mSbIcons = sbIcons;
             mQsIcons = qsIcons;

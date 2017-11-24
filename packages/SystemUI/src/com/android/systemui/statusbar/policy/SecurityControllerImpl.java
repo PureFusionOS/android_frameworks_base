@@ -82,9 +82,37 @@ public class SecurityControllerImpl extends CurrentUserTracker implements Securi
     private final ArrayList<SecurityControllerCallback> mCallbacks = new ArrayList<>();
 
     private SparseArray<VpnConfig> mCurrentVpns = new SparseArray<>();
-    private int mCurrentUserId;
-    private int mVpnUserId;
+    private final NetworkCallback mNetworkCallback = new NetworkCallback() {
+        @Override
+        public void onAvailable(Network network) {
+            if (DEBUG) Log.d(TAG, "onAvailable " + network.netId);
+            updateState();
+            fireCallbacks();
+        }
 
+        ;
+
+        // TODO Find another way to receive VPN lost.  This may be delayed depending on
+        // how long the VPN connection is held on to.
+        @Override
+        public void onLost(Network network) {
+            if (DEBUG) Log.d(TAG, "onLost " + network.netId);
+            updateState();
+            fireCallbacks();
+        }
+
+        ;
+    };
+    private int mCurrentUserId;
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (KeyChain.ACTION_TRUST_STORE_CHANGED.equals(intent.getAction())) {
+                refreshCACerts();
+            }
+        }
+    };
+    private int mVpnUserId;
     // Key: userId, Value: whether the user has CACerts installed
     // Needs to be cached here since the query has to be asynchronous
     private ArrayMap<Integer, Boolean> mHasCACerts = new ArrayMap<Integer, Boolean>();
@@ -116,7 +144,7 @@ public class SecurityControllerImpl extends CurrentUserTracker implements Securi
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("SecurityController state:");
         pw.print("  mCurrentVpns={");
-        for (int i = 0 ; i < mCurrentVpns.size(); i++) {
+        for (int i = 0; i < mCurrentVpns.size(); i++) {
             if (i > 0) {
                 pw.print(", ");
             }
@@ -350,7 +378,7 @@ public class SecurityControllerImpl extends CurrentUserTracker implements Securi
         boolean isBranded;
         try {
             ApplicationInfo info = mPackageManager.getApplicationInfo(packageName,
-                PackageManager.GET_META_DATA);
+                    PackageManager.GET_META_DATA);
             if (info == null || info.metaData == null || !info.isSystemApp()) {
                 return false;
             }
@@ -361,38 +389,12 @@ public class SecurityControllerImpl extends CurrentUserTracker implements Securi
         return isBranded;
     }
 
-    private final NetworkCallback mNetworkCallback = new NetworkCallback() {
-        @Override
-        public void onAvailable(Network network) {
-            if (DEBUG) Log.d(TAG, "onAvailable " + network.netId);
-            updateState();
-            fireCallbacks();
-        };
-
-        // TODO Find another way to receive VPN lost.  This may be delayed depending on
-        // how long the VPN connection is held on to.
-        @Override
-        public void onLost(Network network) {
-            if (DEBUG) Log.d(TAG, "onLost " + network.netId);
-            updateState();
-            fireCallbacks();
-        };
-    };
-
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override public void onReceive(Context context, Intent intent) {
-            if (KeyChain.ACTION_TRUST_STORE_CHANGED.equals(intent.getAction())) {
-                refreshCACerts();
-            }
-        }
-    };
-
-    protected class CACertLoader extends AsyncTask<Integer, Void, Pair<Integer, Boolean> > {
+    protected class CACertLoader extends AsyncTask<Integer, Void, Pair<Integer, Boolean>> {
 
         @Override
         protected Pair<Integer, Boolean> doInBackground(Integer... userId) {
             try (KeyChainConnection conn = KeyChain.bindAsUser(mContext,
-                                                               UserHandle.of(userId[0]))) {
+                    UserHandle.of(userId[0]))) {
                 boolean hasCACerts = !(conn.getService().getUserCaAliases().getList().isEmpty());
                 return new Pair<Integer, Boolean>(userId[0], hasCACerts);
             } catch (RemoteException | InterruptedException | AssertionError e) {

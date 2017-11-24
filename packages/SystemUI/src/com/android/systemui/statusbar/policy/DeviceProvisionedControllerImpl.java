@@ -35,6 +35,18 @@ public class DeviceProvisionedControllerImpl extends CurrentUserTracker implemen
     private final Context mContext;
     private final Uri mDeviceProvisionedUri;
     private final Uri mUserSetupUri;
+    protected final ContentObserver mSettingsObserver = new ContentObserver(Dependency.get(
+            Dependency.MAIN_HANDLER)) {
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri, int userId) {
+            if (mUserSetupUri.equals(uri)) {
+                notifySetupChanged();
+            } else {
+                notifyProvisionedChanged();
+            }
+        }
+    };
 
     public DeviceProvisionedControllerImpl(Context context) {
         super(context);
@@ -112,17 +124,4 @@ public class DeviceProvisionedControllerImpl extends CurrentUserTracker implemen
     private void notifyProvisionedChanged() {
         mListeners.forEach(c -> c.onDeviceProvisionedChanged());
     }
-
-    protected final ContentObserver mSettingsObserver = new ContentObserver(Dependency.get(
-            Dependency.MAIN_HANDLER)) {
-
-        @Override
-        public void onChange(boolean selfChange, Uri uri, int userId) {
-            if (mUserSetupUri.equals(uri)) {
-                notifySetupChanged();
-            } else {
-                notifyProvisionedChanged();
-            }
-        }
-    };
 }

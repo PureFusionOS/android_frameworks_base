@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 Copyright (C) 2015 The Android Open Source Project
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +13,5 @@ Copyright (C) 2015 The Android Open Source Project
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<pathInterpolator
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<pathInterpolator xmlns:android="http://schemas.android.com/apk/res/android"
     android:pathData="M 0.0,0.0 l 0.254777070064,0.0 c 0.00007,0.0 0.447133757962,1.0 0.745222929936,1.0 L 1.0,1.0" />

@@ -49,18 +49,18 @@ public class RecentsViewTouchHandler {
 
     private RecentsView mRv;
 
-    @ViewDebug.ExportedProperty(deepExport=true, prefix="drag_task")
+    @ViewDebug.ExportedProperty(deepExport = true, prefix = "drag_task")
     private Task mDragTask;
-    @ViewDebug.ExportedProperty(deepExport=true, prefix="drag_task_view_")
+    @ViewDebug.ExportedProperty(deepExport = true, prefix = "drag_task_view_")
     private TaskView mTaskView;
 
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private Point mTaskViewOffset = new Point();
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private Point mDownPos = new Point();
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private boolean mDragRequested;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private boolean mIsDragging;
     private float mDragSlop;
     private int mDeviceId = -1;
@@ -96,13 +96,17 @@ public class RecentsViewTouchHandler {
         return mVisibleDockStates;
     }
 
-    /** Touch preprocessing for handling below */
+    /**
+     * Touch preprocessing for handling below
+     */
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         handleTouchEvent(ev);
         return mDragRequested;
     }
 
-    /** Handles touch events once we have intercepted them */
+    /**
+     * Handles touch events once we have intercepted them
+     */
     public boolean onTouchEvent(MotionEvent ev) {
         handleTouchEvent(ev);
         if (ev.getAction() == MotionEvent.ACTION_UP && mRv.getStack().getStackTaskCount() == 0) {

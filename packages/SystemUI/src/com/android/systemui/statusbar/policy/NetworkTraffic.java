@@ -45,6 +45,7 @@ public class NetworkTraffic extends TextView {
     private static final int KILOBYTE = 1024;
 
     private static DecimalFormat decimalFormat = new DecimalFormat("##0.#");
+
     static {
         decimalFormat.setMaximumIntegerDigits(3);
         decimalFormat.setMaximumFractionDigits(1);
@@ -68,7 +69,12 @@ public class NetworkTraffic extends TextView {
     private int mLightModeBackgroundColor;
     private int mLightModeFillColor;
     private int mIconTint = Color.WHITE;
-
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mTrafficHandler.sendEmptyMessage(0);
+        }
+    };
     private Handler mTrafficHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -127,8 +133,8 @@ public class NetworkTraffic extends TextView {
                 }
 
                 // Update view if there's anything new to show
-                if (! output.contentEquals(getText())) {
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, (float)textSize);
+                if (!output.contentEquals(getText())) {
+                    setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) textSize);
                     setText(output);
                 }
                 setVisibility(View.VISIBLE);
@@ -142,66 +148,38 @@ public class NetworkTraffic extends TextView {
         }
 
         private String formatOutput(long timeDelta, long data, String symbol) {
-            long speed = (long)(data / (timeDelta / 1000F));
+            long speed = (long) (data / (timeDelta / 1000F));
             if (speed < KB) {
                 return decimalFormat.format(speed) + symbol;
             } else if (speed < MB) {
-                return decimalFormat.format(speed / (float)KB) + 'k' + symbol;
+                return decimalFormat.format(speed / (float) KB) + 'k' + symbol;
             } else if (speed < GB) {
-                return decimalFormat.format(speed / (float)MB) + 'M' + symbol;
+                return decimalFormat.format(speed / (float) MB) + 'M' + symbol;
             }
-            return decimalFormat.format(speed / (float)GB) + 'G' + symbol;
+            return decimalFormat.format(speed / (float) GB) + 'G' + symbol;
         }
 
         private boolean shouldHide(long rxData, long txData, long timeDelta) {
-            long speedTxKB = (long)(txData / (timeDelta / 1000f)) / KILOBYTE;
-            long speedRxKB = (long)(rxData / (timeDelta / 1000f)) / KILOBYTE;
+            long speedTxKB = (long) (txData / (timeDelta / 1000f)) / KILOBYTE;
+            long speedRxKB = (long) (rxData / (timeDelta / 1000f)) / KILOBYTE;
             int mState = 2;
-                return mAutoHide &&
-                   (mState == MASK_DOWN && speedRxKB <= mAutoHideThreshold ||
-                    mState == MASK_UP && speedTxKB <= mAutoHideThreshold ||
-                    mState == MASK_UP + MASK_DOWN &&
-                       speedRxKB <= mAutoHideThreshold &&
-                       speedTxKB <= mAutoHideThreshold);
+            return mAutoHide &&
+                    (mState == MASK_DOWN && speedRxKB <= mAutoHideThreshold ||
+                            mState == MASK_UP && speedTxKB <= mAutoHideThreshold ||
+                            mState == MASK_UP + MASK_DOWN &&
+                                    speedRxKB <= mAutoHideThreshold &&
+                                    speedTxKB <= mAutoHideThreshold);
         }
     };
-
-    private Runnable mRunnable = new Runnable() {
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
-        public void run() {
-            mTrafficHandler.sendEmptyMessage(0);
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action != null && action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                updateSettings();
+            }
         }
     };
-
-    class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = mContext.getContentResolver();
-            Uri uri = Settings.System.getUriFor(Settings.System.NETWORK_TRAFFIC_STATE);
-            resolver.registerContentObserver(uri, false,
-                    this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.NETWORK_TRAFFIC_AUTOHIDE), false,
-                    this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.NETWORK_TRAFFIC_HIDEARROW), false,
-                    this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System
-                    .getUriFor(Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD), false,
-                    this, UserHandle.USER_ALL);
-        }
-
-        /*
-         *  @hide
-         */
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
-        }
-    }
 
     /*
      *  @hide
@@ -237,6 +215,15 @@ public class NetworkTraffic extends TextView {
         updateSettings();
     }
 
+    private static boolean isSet(int intState, int intMask) {
+        return (intState & intMask) == intMask;
+    }
+
+    private static int getInterval(int intState) {
+        int intInterval = intState >>> 16;
+        return (intInterval >= 250 && intInterval <= 32750) ? intInterval : 1000;
+    }
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -258,23 +245,12 @@ public class NetworkTraffic extends TextView {
         }
     }
 
-    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action != null && action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                updateSettings();
-            }
-        }
-    };
-
     private boolean getConnectAvailable() {
         ConnectivityManager connManager =
                 (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo network = (connManager != null) ? connManager.getActiveNetworkInfo() : null;
         return network != null && network.isConnected();
     }
-
 
     private void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
@@ -295,7 +271,7 @@ public class NetworkTraffic extends TextView {
 
         int mNetworkTrafficColor = mIconTint;
 
-	    setTextColor(mNetworkTrafficColor);
+        setTextColor(mNetworkTrafficColor);
 
         if (isSet(mState, MASK_UNIT)) {
             KB = KILOBYTE;
@@ -320,15 +296,6 @@ public class NetworkTraffic extends TextView {
             clearHandlerCallbacks();
         }
         setVisibility(View.GONE);
-    }
-
-    private static boolean isSet(int intState, int intMask) {
-        return (intState & intMask) == intMask;
-    }
-
-    private static int getInterval(int intState) {
-        int intInterval = intState >>> 16;
-        return (intInterval >= 250 && intInterval <= 32750) ? intInterval : 1000;
     }
 
     private void clearHandlerCallbacks() {
@@ -369,5 +336,35 @@ public class NetworkTraffic extends TextView {
         mIconTint = getColorForDarkIntensity(
                 darkIntensity, mLightModeFillColor, mDarkModeFillColor);
         updateSettings();
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            Uri uri = Settings.System.getUriFor(Settings.System.NETWORK_TRAFFIC_STATE);
+            resolver.registerContentObserver(uri, false,
+                    this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.NETWORK_TRAFFIC_AUTOHIDE), false,
+                    this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.NETWORK_TRAFFIC_HIDEARROW), false,
+                    this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD), false,
+                    this, UserHandle.USER_ALL);
+        }
+
+        /*
+         *  @hide
+         */
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
     }
 }

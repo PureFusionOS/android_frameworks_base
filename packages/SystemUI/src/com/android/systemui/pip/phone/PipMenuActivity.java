@@ -74,15 +74,13 @@ import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STAT
  */
 public class PipMenuActivity extends Activity {
 
-    private static final String TAG = "PipMenuActivity";
-
     public static final int MESSAGE_SHOW_MENU = 1;
     public static final int MESSAGE_POKE_MENU = 2;
     public static final int MESSAGE_HIDE_MENU = 3;
     public static final int MESSAGE_UPDATE_ACTIONS = 4;
     public static final int MESSAGE_UPDATE_DISMISS_FRACTION = 5;
     public static final int MESSAGE_ANIMATION_ENDED = 6;
-
+    private static final String TAG = "PipMenuActivity";
     private static final long INITIAL_DISMISS_DELAY = 3500;
     private static final long POST_INTERACTION_DISMISS_DELAY = 2000;
     private static final long MENU_FADE_DURATION = 125;
@@ -91,13 +89,10 @@ public class PipMenuActivity extends Activity {
     private static final float DISMISS_BACKGROUND_ALPHA = 0.6f;
 
     private static final float DISABLED_ACTION_ALPHA = 0.54f;
-
+    private final List<RemoteAction> mActions = new ArrayList<>();
     private int mMenuState;
     private boolean mAllowMenuTimeout = true;
     private boolean mAllowTouches = true;
-
-    private final List<RemoteAction> mActions = new ArrayList<>();
-
     private View mViewRoot;
     private Drawable mBackgroundDrawable;
     private View mMenuContainer;
@@ -113,7 +108,7 @@ public class PipMenuActivity extends Activity {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     final float alpha = (float) animation.getAnimatedValue();
-                    mBackgroundDrawable.setAlpha((int) (MENU_BACKGROUND_ALPHA*alpha*255));
+                    mBackgroundDrawable.setAlpha((int) (MENU_BACKGROUND_ALPHA * alpha * 255));
                 }
             };
 
@@ -121,6 +116,12 @@ public class PipMenuActivity extends Activity {
     private PointF mDownDelta = new PointF();
     private ViewConfiguration mViewConfig;
     private Handler mHandler = new Handler();
+    private final Runnable mFinishRunnable = new Runnable() {
+        @Override
+        public void run() {
+            hideMenu();
+        }
+    };
     private Messenger mToControllerMessenger;
     private Messenger mMessenger = new Messenger(new Handler() {
         @Override
@@ -159,13 +160,6 @@ public class PipMenuActivity extends Activity {
             }
         }
     });
-
-    private final Runnable mFinishRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hideMenu();
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -306,7 +300,7 @@ public class PipMenuActivity extends Activity {
     }
 
     private void showMenu(int menuState, Rect stackBounds, Rect movementBounds,
-            boolean allowMenuTimeout) {
+                          boolean allowMenuTimeout) {
         mAllowMenuTimeout = allowMenuTimeout;
         if (mMenuState != menuState) {
             boolean deferTouchesUntilAnimationEnds = (mMenuState == MENU_STATE_FULL) ||

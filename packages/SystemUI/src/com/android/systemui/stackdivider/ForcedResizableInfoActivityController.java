@@ -47,29 +47,13 @@ public class ForcedResizableInfoActivityController {
     private final Handler mHandler = new Handler();
     private final ArraySet<PendingTaskRecord> mPendingTasks = new ArraySet<>();
     private final ArraySet<String> mPackagesShownInSession = new ArraySet<>();
-    private boolean mDividerDraging;
-
     private final Runnable mTimeoutRunnable = new Runnable() {
         @Override
         public void run() {
             showPending();
         }
     };
-
-    /** Record of force resized task that's pending to be handled. */
-    private class PendingTaskRecord {
-        int taskId;
-        /**
-         * {@link android.app.ITaskStackListener#FORCED_RESIZEABLE_REASON_SPLIT_SCREEN} or
-         * {@link android.app.ITaskStackListener#FORCED_RESIZEABLE_REASON_SECONDARY_DISPLAY}
-         */
-        int reason;
-
-        PendingTaskRecord(int taskId, int reason) {
-            this.taskId = taskId;
-            this.reason = reason;
-        }
-    }
+    private boolean mDividerDraging;
 
     public ForcedResizableInfoActivityController(Context context) {
         mContext = context;
@@ -78,7 +62,7 @@ public class ForcedResizableInfoActivityController {
                 new TaskStackListener() {
                     @Override
                     public void onActivityForcedResizable(String packageName, int taskId,
-                            int reason) {
+                                                          int reason) {
                         activityForcedResizable(packageName, taskId, reason);
                     }
 
@@ -168,5 +152,22 @@ public class ForcedResizableInfoActivityController {
         boolean debounce = mPackagesShownInSession.contains(packageName);
         mPackagesShownInSession.add(packageName);
         return debounce;
+    }
+
+    /**
+     * Record of force resized task that's pending to be handled.
+     */
+    private class PendingTaskRecord {
+        int taskId;
+        /**
+         * {@link android.app.ITaskStackListener#FORCED_RESIZEABLE_REASON_SPLIT_SCREEN} or
+         * {@link android.app.ITaskStackListener#FORCED_RESIZEABLE_REASON_SECONDARY_DISPLAY}
+         */
+        int reason;
+
+        PendingTaskRecord(int taskId, int reason) {
+            this.taskId = taskId;
+            this.reason = reason;
+        }
     }
 }

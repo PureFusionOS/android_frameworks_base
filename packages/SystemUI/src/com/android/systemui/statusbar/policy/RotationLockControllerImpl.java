@@ -23,7 +23,9 @@ import com.android.internal.view.RotationPolicy;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/** Platform implementation of the rotation lock controller. **/
+/**
+ * Platform implementation of the rotation lock controller.
+ **/
 public final class RotationLockControllerImpl implements RotationLockController {
     private final Context mContext;
     private final CopyOnWriteArrayList<RotationLockControllerCallback> mCallbacks =
@@ -31,11 +33,11 @@ public final class RotationLockControllerImpl implements RotationLockController 
 
     private final RotationPolicy.RotationPolicyListener mRotationPolicyListener =
             new RotationPolicy.RotationPolicyListener() {
-        @Override
-        public void onChange() {
-            notifyChanged();
-        }
-    };
+                @Override
+                public void onChange() {
+                    notifyChanged();
+                }
+            };
 
     public RotationLockControllerImpl(Context context) {
         mContext = context;

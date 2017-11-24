@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2015 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +14,12 @@
   ~ limitations under the License
   -->
 
-<set
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="233"
+        android:interpolator="@interpolator/lockscreen_fingerprint_error_state_to_fp_animation_interpolator_1"
         android:propertyName="rotation"
         android:valueFrom="0.0"
         android:valueTo="-289.0"
-        android:valueType="floatType"
-        android:interpolator="@interpolator/lockscreen_fingerprint_error_state_to_fp_animation_interpolator_1" />
+        android:valueType="floatType" />
 </set>

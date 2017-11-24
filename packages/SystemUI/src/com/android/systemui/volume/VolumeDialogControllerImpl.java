@@ -58,11 +58,11 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- *  Source of truth for all state / events related to the volume dialog.  No presentation.
- *
- *  All work done on a dedicated background worker thread & associated worker.
- *
- *  Methods ending in "W" must be called on the worker thread.
+ * Source of truth for all state / events related to the volume dialog.  No presentation.
+ * <p>
+ * All work done on a dedicated background worker thread & associated worker.
+ * <p>
+ * Methods ending in "W" must be called on the worker thread.
  */
 public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpable {
     private static final String TAG = Util.logTag(VolumeDialogControllerImpl.class);
@@ -74,6 +74,7 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
     private static final int BEEP_DURATION = 150;
 
     private static final ArrayMap<Integer, Integer> STREAMS = new ArrayMap<>();
+
     static {
         STREAMS.put(AudioSystem.STREAM_ALARM, R.string.stream_alarm);
         STREAMS.put(AudioSystem.STREAM_BLUETOOTH_SCO, R.string.stream_bluetooth_sco);
@@ -88,10 +89,10 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         STREAMS.put(AudioSystem.STREAM_VOICE_CALL, R.string.stream_voice_call);
     }
 
+    protected final VC mVolumeController = new VC();
     private final HandlerThread mWorkerThread;
     private final W mWorker;
     private final Context mContext;
-    private AudioManager mAudio;
     private final NotificationManager mNoMan;
     private final SettingObserver mObserver;
     private final Receiver mReceiver = new Receiver();
@@ -101,16 +102,13 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
     private final MediaSessionsCallbacks mMediaSessionsCallbacksW = new MediaSessionsCallbacks();
     private final Vibrator mVibrator;
     private final boolean mHasVibrator;
+    private AudioManager mAudio;
     private boolean mShowA11yStream;
-
     private boolean mDestroyed;
     private VolumePolicy mVolumePolicy;
     private boolean mShowDndTile = true;
     @GuardedBy("this")
     private UserActivityListener mUserActivityListener;
-
-    protected final VC mVolumeController = new VC();
-
     private ToneGenerator mToneGenerators[];
 
     public VolumeDialogControllerImpl(Context context) {
@@ -129,6 +127,38 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         mReceiver.init();
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         mHasVibrator = mVibrator != null && mVibrator.hasVibrator();
+    }
+
+    private static boolean isLogWorthy(int stream) {
+        switch (stream) {
+            case AudioSystem.STREAM_ALARM:
+            case AudioSystem.STREAM_BLUETOOTH_SCO:
+            case AudioSystem.STREAM_MUSIC:
+            case AudioSystem.STREAM_RING:
+            case AudioSystem.STREAM_SYSTEM:
+            case AudioSystem.STREAM_VOICE_CALL:
+                return true;
+        }
+        return false;
+    }
+
+    private static boolean isRinger(int stream) {
+        return stream == AudioManager.STREAM_RING || stream == AudioManager.STREAM_NOTIFICATION;
+    }
+
+    private static String getApplicationName(Context context, ComponentName component) {
+        if (component == null) return null;
+        final PackageManager pm = context.getPackageManager();
+        final String pkg = component.getPackageName();
+        try {
+            final ApplicationInfo ai = pm.getApplicationInfo(pkg, 0);
+            final String rt = Objects.toString(ai.loadLabel(pm), "").trim();
+            if (rt.length() > 0) {
+                return rt;
+            }
+        } catch (NameNotFoundException e) {
+        }
+        return pkg;
     }
 
     public AudioManager getAudioManager() {
@@ -186,7 +216,7 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
     }
 
     protected MediaSessions createMediaSessions(Context context, Looper looper,
-            MediaSessions.Callbacks callbacks) {
+                                                MediaSessions.Callbacks callbacks) {
         return new MediaSessions(context, looper, callbacks);
     }
 
@@ -203,14 +233,21 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println(VolumeDialogControllerImpl.class.getSimpleName() + " state:");
-        pw.print("  mDestroyed: "); pw.println(mDestroyed);
-        pw.print("  mVolumePolicy: "); pw.println(mVolumePolicy);
-        pw.print("  mState: "); pw.println(mState.toString(4));
-        pw.print("  mShowDndTile: "); pw.println(mShowDndTile);
-        pw.print("  mHasVibrator: "); pw.println(mHasVibrator);
-        pw.print("  mRemoteStreams: "); pw.println(mMediaSessionsCallbacksW.mRemoteStreams
+        pw.print("  mDestroyed: ");
+        pw.println(mDestroyed);
+        pw.print("  mVolumePolicy: ");
+        pw.println(mVolumePolicy);
+        pw.print("  mState: ");
+        pw.println(mState.toString(4));
+        pw.print("  mShowDndTile: ");
+        pw.println(mShowDndTile);
+        pw.print("  mHasVibrator: ");
+        pw.println(mHasVibrator);
+        pw.print("  mRemoteStreams: ");
+        pw.println(mMediaSessionsCallbacksW.mRemoteStreams
                 .values());
-        pw.print("  mShowA11yStream: "); pw.println(mShowA11yStream);
+        pw.print("  mShowA11yStream: ");
+        pw.println(mShowA11yStream);
         pw.println();
         mMediaSessions.dump(pw);
     }
@@ -318,8 +355,8 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
             final boolean routedToBluetooth =
                     (mAudio.getDevicesForStream(AudioManager.STREAM_MUSIC) &
                             (AudioManager.DEVICE_OUT_BLUETOOTH_A2DP |
-                            AudioManager.DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
-                            AudioManager.DEVICE_OUT_BLUETOOTH_A2DP_SPEAKER)) != 0;
+                                    AudioManager.DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
+                                    AudioManager.DEVICE_OUT_BLUETOOTH_A2DP_SPEAKER)) != 0;
             changed |= updateStreamRoutedToBluetoothW(stream, routedToBluetooth);
         }
         return changed;
@@ -424,19 +461,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         return true;
     }
 
-    private static boolean isLogWorthy(int stream) {
-        switch (stream) {
-            case AudioSystem.STREAM_ALARM:
-            case AudioSystem.STREAM_BLUETOOTH_SCO:
-            case AudioSystem.STREAM_MUSIC:
-            case AudioSystem.STREAM_RING:
-            case AudioSystem.STREAM_SYSTEM:
-            case AudioSystem.STREAM_VOICE_CALL:
-                return true;
-        }
-        return false;
-    }
-
     private boolean updateStreamMuteW(int stream, boolean muted) {
         final StreamState ss = streamStateW(stream);
         if (ss.muted == muted) return false;
@@ -450,10 +474,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         return true;
     }
 
-    private static boolean isRinger(int stream) {
-        return stream == AudioManager.STREAM_RING || stream == AudioManager.STREAM_NOTIFICATION;
-    }
-
     private boolean updateEffectsSuppressorW(ComponentName effectsSuppressor) {
         if (Objects.equals(mState.effectsSuppressor, effectsSuppressor)) return false;
         mState.effectsSuppressor = effectsSuppressor;
@@ -461,20 +481,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         Events.writeEvent(mContext, Events.EVENT_SUPPRESSOR_CHANGED, mState.effectsSuppressor,
                 mState.effectsSuppressorName);
         return true;
-    }
-
-    private static String getApplicationName(Context context, ComponentName component) {
-        if (component == null) return null;
-        final PackageManager pm = context.getPackageManager();
-        final String pkg = component.getPackageName();
-        try {
-            final ApplicationInfo ai = pm.getApplicationInfo(pkg, 0);
-            final String rt = Objects.toString(ai.loadLabel(pm), "").trim();
-            if (rt.length() > 0) {
-                return rt;
-            }
-        } catch (NameNotFoundException e) {}
-        return pkg;
     }
 
     private boolean updateZenModeW() {
@@ -545,6 +551,70 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
     public void showDndTile(boolean visible) {
         if (D.BUG) Log.d(TAG, "showDndTile");
         DndTile.setVisible(mContext, visible);
+    }
+
+    protected void onPlaySoundW(int streamType, int flags) {
+
+        // If preference is no sound - just exit here
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.VOLUME_ADJUST_SOUNDS_ENABLED, 1) == 0) {
+            return;
+        }
+
+        if (mWorker.hasMessages(W.STOP_SOUNDS)) {
+            mWorker.removeMessages(W.STOP_SOUNDS);
+            // Force stop right now
+            onStopSoundsW();
+        }
+
+        ToneGenerator toneGen = getOrCreateToneGeneratorW(streamType);
+        if (toneGen != null) {
+            toneGen.startTone(ToneGenerator.TONE_PROP_BEEP);
+            mWorker.sendMessageDelayed(mWorker.obtainMessage(W.STOP_SOUNDS), BEEP_DURATION);
+        }
+
+        mWorker.removeMessages(W.FREE_RESOURCES);
+        mWorker.sendMessageDelayed(mWorker.obtainMessage(W.FREE_RESOURCES), FREE_DELAY);
+    }
+
+    protected void onStopSoundsW() {
+        int numStreamTypes = AudioSystem.getNumStreamTypes();
+        for (int i = numStreamTypes - 1; i >= 0; i--) {
+            ToneGenerator toneGen = mToneGenerators[i];
+            if (toneGen != null) {
+                toneGen.stopTone();
+            }
+        }
+    }
+
+    private ToneGenerator getOrCreateToneGeneratorW(int streamType) {
+        if (mToneGenerators[streamType] == null) {
+            try {
+                mToneGenerators[streamType] = new ToneGenerator(streamType,
+                        ToneGenerator.MAX_VOLUME);
+            } catch (RuntimeException e) {
+                if (false) {
+                    Log.d(TAG, "ToneGenerator constructor failed with "
+                            + "RuntimeException: " + e);
+                }
+            }
+        }
+        return mToneGenerators[streamType];
+    }
+
+    protected void onFreeResourcesW() {
+        synchronized (this) {
+            for (int i = mToneGenerators.length - 1; i >= 0; i--) {
+                if (mToneGenerators[i] != null) {
+                    mToneGenerators[i].release();
+                }
+                mToneGenerators[i] = null;
+            }
+        }
+    }
+
+    public interface UserActivityListener {
+        void onUserActivity();
     }
 
     private final class VC extends IVolumeController.Stub {
@@ -634,24 +704,59 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case VOLUME_CHANGED: onVolumeChangedW(msg.arg1, msg.arg2); break;
-                case DISMISS_REQUESTED: onDismissRequestedW(msg.arg1); break;
-                case GET_STATE: onGetStateW(); break;
-                case SET_RINGER_MODE: onSetRingerModeW(msg.arg1, msg.arg2 != 0); break;
-                case SET_ZEN_MODE: onSetZenModeW(msg.arg1); break;
-                case SET_EXIT_CONDITION: onSetExitConditionW((Condition) msg.obj); break;
-                case SET_STREAM_MUTE: onSetStreamMuteW(msg.arg1, msg.arg2 != 0); break;
-                case LAYOUT_DIRECTION_CHANGED: mCallbacks.onLayoutDirectionChanged(msg.arg1); break;
-                case CONFIGURATION_CHANGED: mCallbacks.onConfigurationChanged(); break;
-                case SET_STREAM_VOLUME: onSetStreamVolumeW(msg.arg1, msg.arg2); break;
-                case SET_ACTIVE_STREAM: onSetActiveStreamW(msg.arg1); break;
-                case NOTIFY_VISIBLE: onNotifyVisibleW(msg.arg1 != 0); break;
-                case USER_ACTIVITY: onUserActivityW(); break;
-                case SHOW_SAFETY_WARNING: onShowSafetyWarningW(msg.arg1); break;
-                case ACCESSIBILITY_MODE_CHANGED: onAccessibilityModeChanged((Boolean) msg.obj);
-                case PLAY_SOUND: onPlaySoundW(msg.arg1, msg.arg2); break;
-                case STOP_SOUNDS: onStopSoundsW(); break;
-                case FREE_RESOURCES: onFreeResourcesW(); break;
+                case VOLUME_CHANGED:
+                    onVolumeChangedW(msg.arg1, msg.arg2);
+                    break;
+                case DISMISS_REQUESTED:
+                    onDismissRequestedW(msg.arg1);
+                    break;
+                case GET_STATE:
+                    onGetStateW();
+                    break;
+                case SET_RINGER_MODE:
+                    onSetRingerModeW(msg.arg1, msg.arg2 != 0);
+                    break;
+                case SET_ZEN_MODE:
+                    onSetZenModeW(msg.arg1);
+                    break;
+                case SET_EXIT_CONDITION:
+                    onSetExitConditionW((Condition) msg.obj);
+                    break;
+                case SET_STREAM_MUTE:
+                    onSetStreamMuteW(msg.arg1, msg.arg2 != 0);
+                    break;
+                case LAYOUT_DIRECTION_CHANGED:
+                    mCallbacks.onLayoutDirectionChanged(msg.arg1);
+                    break;
+                case CONFIGURATION_CHANGED:
+                    mCallbacks.onConfigurationChanged();
+                    break;
+                case SET_STREAM_VOLUME:
+                    onSetStreamVolumeW(msg.arg1, msg.arg2);
+                    break;
+                case SET_ACTIVE_STREAM:
+                    onSetActiveStreamW(msg.arg1);
+                    break;
+                case NOTIFY_VISIBLE:
+                    onNotifyVisibleW(msg.arg1 != 0);
+                    break;
+                case USER_ACTIVITY:
+                    onUserActivityW();
+                    break;
+                case SHOW_SAFETY_WARNING:
+                    onShowSafetyWarningW(msg.arg1);
+                    break;
+                case ACCESSIBILITY_MODE_CHANGED:
+                    onAccessibilityModeChanged((Boolean) msg.obj);
+                case PLAY_SOUND:
+                    onPlaySoundW(msg.arg1, msg.arg2);
+                    break;
+                case STOP_SOUNDS:
+                    onStopSoundsW();
+                    break;
+                case FREE_RESOURCES:
+                    onFreeResourcesW();
+                    break;
             }
         }
     }
@@ -789,66 +894,6 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
                         entry.getKey().onAccessibilityModeChanged(show);
                     }
                 });
-            }
-        }
-    }
-
-    protected void onPlaySoundW(int streamType, int flags) {
-
-        // If preference is no sound - just exit here
-        if (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.VOLUME_ADJUST_SOUNDS_ENABLED, 1) == 0) {
-            return;
-        }
-
-        if (mWorker.hasMessages(W.STOP_SOUNDS)) {
-            mWorker.removeMessages(W.STOP_SOUNDS);
-            // Force stop right now
-            onStopSoundsW();
-        }
-
-        ToneGenerator toneGen = getOrCreateToneGeneratorW(streamType);
-        if (toneGen != null) {
-            toneGen.startTone(ToneGenerator.TONE_PROP_BEEP);
-            mWorker.sendMessageDelayed(mWorker.obtainMessage(W.STOP_SOUNDS), BEEP_DURATION);
-        }
-
-        mWorker.removeMessages(W.FREE_RESOURCES);
-        mWorker.sendMessageDelayed(mWorker.obtainMessage(W.FREE_RESOURCES), FREE_DELAY);
-    }
-
-    protected void onStopSoundsW() {
-        int numStreamTypes = AudioSystem.getNumStreamTypes();
-        for (int i = numStreamTypes - 1; i >= 0; i--) {
-            ToneGenerator toneGen = mToneGenerators[i];
-            if (toneGen != null) {
-                toneGen.stopTone();
-            }
-        }
-    }
-
-    private ToneGenerator getOrCreateToneGeneratorW(int streamType) {
-        if (mToneGenerators[streamType] == null) {
-            try {
-                mToneGenerators[streamType] = new ToneGenerator(streamType,
-                        ToneGenerator.MAX_VOLUME);
-            } catch (RuntimeException e) {
-                if (false) {
-                    Log.d(TAG, "ToneGenerator constructor failed with "
-                            + "RuntimeException: " + e);
-                }
-            }
-        }
-        return mToneGenerators[streamType];
-    }
-
-    protected void onFreeResourcesW() {
-        synchronized (this) {
-            for (int i = mToneGenerators.length - 1; i >= 0; i--) {
-                if (mToneGenerators[i] != null) {
-                    mToneGenerators[i].release();
-                }
-                mToneGenerators[i] = null;
             }
         }
     }
@@ -1042,9 +1087,5 @@ public class VolumeDialogControllerImpl implements VolumeDialogController, Dumpa
             }
             return null;
         }
-    }
-
-    public interface UserActivityListener {
-        void onUserActivity();
     }
 }

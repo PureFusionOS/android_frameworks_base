@@ -26,11 +26,23 @@ import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
-/** Quick settings tile: Sync **/
+/**
+ * Quick settings tile: Sync
+ **/
 public class SyncTile extends QSTileImpl<BooleanState> {
 
     private Object mSyncObserverHandle = null;
     private boolean mListening;
+    private SyncStatusObserver mSyncObserver = new SyncStatusObserver() {
+        public void onStatusChanged(int which) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    refreshState();
+                }
+            });
+        }
+    };
 
     public SyncTile(QSHost host) {
         super(host);
@@ -74,11 +86,11 @@ public class SyncTile extends QSTileImpl<BooleanState> {
         state.label = mContext.getString(R.string.quick_settings_sync_label);
         if (state.value) {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_sync_on);
-            state.contentDescription =  mContext.getString(
+            state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_sync_on);
         } else {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_sync_off);
-            state.contentDescription =  mContext.getString(
+            state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_sync_off);
         }
     }
@@ -105,16 +117,5 @@ public class SyncTile extends QSTileImpl<BooleanState> {
             mSyncObserverHandle = null;
         }
     }
-
-    private SyncStatusObserver mSyncObserver = new SyncStatusObserver() {
-        public void onStatusChanged(int which) {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    refreshState();
-                }
-            });
-        }
-    };
 }
 

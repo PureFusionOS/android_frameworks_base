@@ -72,29 +72,27 @@ public class TileLifecycleManager extends BroadcastReceiver implements
     private final UserHandle mUser;
     private final IBinder mToken = new Binder();
     private final PackageManagerAdapter mPackageManagerAdapter;
-
+    boolean mReceiverRegistered;
     private Set<Integer> mQueuedMessages = new ArraySet<>();
     private QSTileServiceWrapper mWrapper;
     private boolean mListening;
     private IBinder mClickBinder;
-
     private int mBindTryCount;
     private int mBindRetryDelay = DEFAULT_BIND_RETRY_DELAY;
     private boolean mBound;
-    boolean mReceiverRegistered;
     private boolean mUnbindImmediate;
     private TileChangeListener mChangeListener;
     // Return value from bindServiceAsUser, determines whether safe to call unbind.
     private boolean mIsBound;
 
     public TileLifecycleManager(Handler handler, Context context, IQSService service, Tile tile,
-            Intent intent, UserHandle user) {
+                                Intent intent, UserHandle user) {
         this(handler, context, service, tile, intent, user, new PackageManagerAdapter(context));
     }
 
     @VisibleForTesting
     TileLifecycleManager(Handler handler, Context context, IQSService service, Tile tile,
-            Intent intent, UserHandle user, PackageManagerAdapter packageManagerAdapter) {
+                         Intent intent, UserHandle user, PackageManagerAdapter packageManagerAdapter) {
         mContext = context;
         mHandler = handler;
         mIntent = intent;
@@ -103,6 +101,15 @@ public class TileLifecycleManager extends BroadcastReceiver implements
         mUser = user;
         mPackageManagerAdapter = packageManagerAdapter;
         if (DEBUG) Log.d(TAG, "Creating " + mIntent + " " + mUser);
+    }
+
+    public static boolean isTileAdded(Context context, ComponentName component) {
+        return context.getSharedPreferences(TILES, 0).getBoolean(component.flattenToString(), false);
+    }
+
+    public static void setTileAdded(Context context, ComponentName component, boolean added) {
+        context.getSharedPreferences(TILES, 0).edit().putBoolean(component.flattenToString(),
+                added).commit();
     }
 
     public ComponentName getComponent() {
@@ -423,14 +430,5 @@ public class TileLifecycleManager extends BroadcastReceiver implements
 
     public interface TileChangeListener {
         void onTileChanged(ComponentName tile);
-    }
-
-    public static boolean isTileAdded(Context context, ComponentName component) {
-        return context.getSharedPreferences(TILES, 0).getBoolean(component.flattenToString(), false);
-    }
-
-    public static void setTileAdded(Context context, ComponentName component, boolean added) {
-        context.getSharedPreferences(TILES, 0).edit().putBoolean(component.flattenToString(),
-                added).commit();
     }
 }

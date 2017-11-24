@@ -56,7 +56,9 @@ import com.android.systemui.volume.ZenModePanel;
 import static android.provider.Settings.Global.ZEN_MODE_ALARMS;
 import static android.provider.Settings.Global.ZEN_MODE_OFF;
 
-/** Quick settings tile: Do not disturb **/
+/**
+ * Quick settings tile: Do not disturb
+ **/
 public class DndTile extends QSTileImpl<BooleanState> {
 
     private static final Intent ZEN_SETTINGS =
@@ -80,7 +82,57 @@ public class DndTile extends QSTileImpl<BooleanState> {
 
     private final ZenModeController mController;
     private final DndDetailAdapter mDetailAdapter;
+    private final OnSharedPreferenceChangeListener mPrefListener
+            = new OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+                                              @Prefs.Key String key) {
+            if (Prefs.Key.DND_TILE_COMBINED_ICON.equals(key) ||
+                    Prefs.Key.DND_TILE_VISIBLE.equals(key)) {
+                refreshState();
+            }
+        }
+    };
+    private final ZenModeController.Callback mZenCallback = new ZenModeController.Callback() {
+        public void onZenChanged(int zen) {
+            refreshState(zen);
+            if (isShowingDetail()) {
+                mDetailAdapter.updatePanel();
+            }
+        }
 
+        @Override
+        public void onConfigChanged(ZenModeConfig config) {
+            if (isShowingDetail()) {
+                mDetailAdapter.updatePanel();
+            }
+        }
+    };
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final boolean visible = intent.getBooleanExtra(EXTRA_VISIBLE, false);
+            setVisible(mContext, visible);
+            refreshState();
+        }
+    };
+    private final ZenModePanel.Callback mZenModePanelCallback = new ZenModePanel.Callback() {
+        @Override
+        public void onPrioritySettings() {
+            Dependency.get(ActivityStarter.class).postStartActivityDismissingKeyguard(
+                    ZEN_PRIORITY_SETTINGS, 0);
+        }
+
+        @Override
+        public void onInteraction() {
+            // noop
+        }
+
+        @Override
+        public void onExpanded(boolean expanded) {
+            // noop
+        }
+    };
     private boolean mListening;
     private boolean mShowingDetail;
     private boolean mReceiverRegistered;
@@ -91,20 +143,6 @@ public class DndTile extends QSTileImpl<BooleanState> {
         mDetailAdapter = new DndDetailAdapter();
         mContext.registerReceiver(mReceiver, new IntentFilter(ACTION_SET_VISIBLE));
         mReceiverRegistered = true;
-    }
-
-    @Override
-    protected void handleDestroy() {
-        super.handleDestroy();
-        if (mReceiverRegistered) {
-            mContext.unregisterReceiver(mReceiver);
-            mReceiverRegistered = false;
-        }
-    }
-
-    @Override
-    public boolean isDualTarget() {
-        return true;
     }
 
     public static void setVisible(Context context, boolean visible) {
@@ -122,6 +160,20 @@ public class DndTile extends QSTileImpl<BooleanState> {
     public static boolean isCombinedIcon(Context context) {
         return Prefs.getBoolean(context, Prefs.Key.DND_TILE_COMBINED_ICON,
                 false /* defaultValue */);
+    }
+
+    @Override
+    protected void handleDestroy() {
+        super.handleDestroy();
+        if (mReceiverRegistered) {
+            mContext.unregisterReceiver(mReceiver);
+            mReceiverRegistered = false;
+        }
+    }
+
+    @Override
+    public boolean isDualTarget() {
+        return true;
     }
 
     @Override
@@ -242,43 +294,6 @@ public class DndTile extends QSTileImpl<BooleanState> {
         return isVisible(mContext);
     }
 
-    private final OnSharedPreferenceChangeListener mPrefListener
-            = new OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-                @Prefs.Key String key) {
-            if (Prefs.Key.DND_TILE_COMBINED_ICON.equals(key) ||
-                    Prefs.Key.DND_TILE_VISIBLE.equals(key)) {
-                refreshState();
-            }
-        }
-    };
-
-    private final ZenModeController.Callback mZenCallback = new ZenModeController.Callback() {
-        public void onZenChanged(int zen) {
-            refreshState(zen);
-            if (isShowingDetail()) {
-                mDetailAdapter.updatePanel();
-            }
-        }
-
-        @Override
-        public void onConfigChanged(ZenModeConfig config) {
-            if (isShowingDetail()) {
-                mDetailAdapter.updatePanel();
-            }
-        }
-    };
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final boolean visible = intent.getBooleanExtra(EXTRA_VISIBLE, false);
-            setVisible(mContext, visible);
-            refreshState();
-        }
-    };
-
     private final class DndDetailAdapter implements DetailAdapter, OnAttachStateChangeListener {
 
         private ZenModePanel mZenPanel;
@@ -295,11 +310,6 @@ public class DndTile extends QSTileImpl<BooleanState> {
         }
 
         @Override
-        public Intent getSettingsIntent() {
-            return ZEN_SETTINGS;
-        }
-
-        @Override
         public void setToggleState(boolean state) {
             MetricsLogger.action(mContext, MetricsEvent.QS_DND_TOGGLE, state);
             if (!state) {
@@ -313,6 +323,11 @@ public class DndTile extends QSTileImpl<BooleanState> {
         }
 
         @Override
+        public Intent getSettingsIntent() {
+            return ZEN_SETTINGS;
+        }
+
+        @Override
         public int getMetricsCategory() {
             return MetricsEvent.QS_DND_DETAILS;
         }
@@ -321,7 +336,7 @@ public class DndTile extends QSTileImpl<BooleanState> {
         public View createDetailView(Context context, View convertView, ViewGroup parent) {
             mZenPanel = convertView != null ? (ZenModePanel) convertView
                     : (ZenModePanel) LayoutInflater.from(context).inflate(
-                            R.layout.zen_mode_panel, parent, false);
+                    R.layout.zen_mode_panel, parent, false);
             if (convertView == null) {
                 mZenPanel.init(mController);
                 mZenPanel.addOnAttachStateChangeListener(this);
@@ -391,23 +406,5 @@ public class DndTile extends QSTileImpl<BooleanState> {
             mZenPanel = null;
         }
     }
-
-    private final ZenModePanel.Callback mZenModePanelCallback = new ZenModePanel.Callback() {
-        @Override
-        public void onPrioritySettings() {
-            Dependency.get(ActivityStarter.class).postStartActivityDismissingKeyguard(
-                    ZEN_PRIORITY_SETTINGS, 0);
-        }
-
-        @Override
-        public void onInteraction() {
-            // noop
-        }
-
-        @Override
-        public void onExpanded(boolean expanded) {
-            // noop
-        }
-    };
 
 }

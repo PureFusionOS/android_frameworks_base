@@ -19,7 +19,9 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController.DeviceP
 public interface DeviceProvisionedController extends CallbackController<DeviceProvisionedListener> {
 
     boolean isDeviceProvisioned();
+
     boolean isUserSetup(int currentUser);
+
     int getCurrentUser();
 
     default boolean isCurrentUserSetup() {
@@ -27,10 +29,14 @@ public interface DeviceProvisionedController extends CallbackController<DevicePr
     }
 
     interface DeviceProvisionedListener {
-        default void onDeviceProvisionedChanged() { }
+        default void onDeviceProvisionedChanged() {
+        }
+
         default void onUserSwitched() {
             onUserSetupChanged();
         }
-        default void onUserSetupChanged() { }
+
+        default void onUserSetupChanged() {
+        }
     }
 }

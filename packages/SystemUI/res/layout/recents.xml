@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,8 +12,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -22,19 +20,19 @@
     <com.android.systemui.recents.views.RecentsView
         android:id="@+id/recents_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.android.systemui.recents.views.RecentsView>
+        android:layout_height="match_parent"></com.android.systemui.recents.views.RecentsView>
 
 
     <include layout="@layout/recents_membar" />
 
     <!-- Incompatible task overlay -->
-    <ViewStub android:id="@+id/incompatible_app_overlay_stub"
-        android:inflatedId="@+id/incompatible_app_overlay"
-        android:layout="@layout/recents_incompatible_app_overlay"
+    <ViewStub
+        android:id="@+id/incompatible_app_overlay_stub"
         android:layout_width="match_parent"
         android:layout_height="128dp"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_gravity="center_horizontal|top"
+        android:inflatedId="@+id/incompatible_app_overlay"
+        android:layout="@layout/recents_incompatible_app_overlay" />
 
     <!-- Nav Bar Scrim View -->
     <ImageView
@@ -45,5 +43,5 @@
         android:scaleType="fitXY"
         android:src="@drawable/recents_lower_gradient" />
 
-	<include layout="@layout/floating_action_button"/>
+    <include layout="@layout/floating_action_button" />
 </FrameLayout>

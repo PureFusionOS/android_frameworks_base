@@ -21,7 +21,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.SystemClock;
 
-public class SleepScreen extends Activity  {
+public class SleepScreen extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

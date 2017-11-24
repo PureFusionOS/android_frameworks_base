@@ -39,9 +39,9 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
  * Controls the docked stack divider.
  */
 public class Divider extends SystemUI {
+    private final DividerState mDividerState = new DividerState();
     private DividerWindowManager mWindowManager;
     private DividerView mView;
-    private final DividerState mDividerState = new DividerState();
     private DockDividerVisibilityListener mDockDividerVisibilityListener;
     private boolean mVisible = false;
     private boolean mMinimized = false;
@@ -125,7 +125,7 @@ public class Divider extends SystemUI {
     }
 
     private void updateMinimizedDockedStack(final boolean minimized, final long animDuration,
-            final boolean isHomeStackResizable) {
+                                            final boolean isHomeStackResizable) {
         mView.post(new Runnable() {
             @Override
             public void run() {
@@ -170,9 +170,12 @@ public class Divider extends SystemUI {
 
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-        pw.print("  mVisible="); pw.println(mVisible);
-        pw.print("  mMinimized="); pw.println(mMinimized);
-        pw.print("  mAdjustedForIme="); pw.println(mAdjustedForIme);
+        pw.print("  mVisible=");
+        pw.println(mVisible);
+        pw.print("  mMinimized=");
+        pw.println(mMinimized);
+        pw.print("  mAdjustedForIme=");
+        pw.println(mAdjustedForIme);
     }
 
     class DockDividerVisibilityListener extends IDockedStackListener.Stub {
@@ -189,7 +192,7 @@ public class Divider extends SystemUI {
 
         @Override
         public void onDockedStackMinimizedChanged(boolean minimized, long animDuration,
-                boolean isHomeStackResizable) throws RemoteException {
+                                                  boolean isHomeStackResizable) throws RemoteException {
             mHomeStackResizable = isHomeStackResizable;
             updateMinimizedDockedStack(minimized, animDuration, isHomeStackResizable);
         }

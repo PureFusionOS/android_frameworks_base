@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +13,18 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<set xmlns:android="http://schemas.android.com/apk/res/android" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="350"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="pathData"
         android:valueFrom="M 6.44050598145,1.9430847168 c 0.0,0.0 0.374984741211,0.399978637695 0.374984741211,0.399978637695 "
         android:valueTo="M 6.44050598145,1.9430847168 c 0.0,0.0 33.5749816895,33.4499664307 33.5749816895,33.4499664307 "
-        android:valueType="pathType"
-        android:interpolator="@android:interpolator/fast_out_slow_in" />
+        android:valueType="pathType" />
     <objectAnimator
         android:duration="17"
+        android:interpolator="@android:interpolator/linear"
         android:propertyName="strokeAlpha"
         android:valueFrom="0"
-        android:valueTo="1"
-        android:interpolator="@android:interpolator/linear" />
+        android:valueTo="1" />
 </set>

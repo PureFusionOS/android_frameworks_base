@@ -37,6 +37,9 @@ import static com.android.keyguard.LatencyTracker.ACTION_CHECK_CREDENTIAL_UNLOCK
  */
 public abstract class KeyguardAbsKeyInputView extends LinearLayout
         implements KeyguardSecurityView, EmergencyButton.EmergencyButtonCallback {
+    // To avoid accidental lockout due to events while the device in in the pocket, ignore
+    // any passwords with length less than or equal to this length.
+    protected static final int MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT = 3;
     protected KeyguardSecurityCallback mCallback;
     protected LockPatternUtils mLockPatternUtils;
     protected AsyncTask<?, ?, ?> mPendingLockCheck;
@@ -45,10 +48,6 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     protected boolean mEnableHaptics;
     private boolean mDismissing;
     private CountDownTimer mCountdownTimer = null;
-
-    // To avoid accidental lockout due to events while the device in in the pocket, ignore
-    // any passwords with length less than or equal to this length.
-    protected static final int MINIMUM_PASSWORD_LENGTH_BEFORE_REPORT = 3;
 
     public KeyguardAbsKeyInputView(Context context) {
         this(context, null);
@@ -90,6 +89,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     }
 
     protected abstract int getPasswordTextViewId();
+
     protected abstract void resetState();
 
     @Override
@@ -183,7 +183,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     }
 
     private void onPasswordChecked(int userId, boolean matched, int timeoutMs,
-            boolean isValidPassword) {
+                                   boolean isValidPassword) {
         boolean dismissKeyguard = KeyguardUpdateMonitor.getCurrentUser() == userId;
         if (matched) {
             mCallback.reportUnlockAttempt(userId, true, 0);
@@ -208,8 +208,11 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     }
 
     protected abstract void resetPasswordText(boolean animate, boolean announce);
+
     protected abstract String getPasswordText();
+
     protected abstract void setPasswordEntryEnabled(boolean enabled);
+
     protected abstract void setPasswordEntryInputEnabled(boolean enabled);
 
     // Prevent user from using the PIN/Password entry until scheduled deadline.
@@ -298,7 +301,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
         if (mEnableHaptics) {
             performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,
                     HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
-                    | HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            | HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
     }
 

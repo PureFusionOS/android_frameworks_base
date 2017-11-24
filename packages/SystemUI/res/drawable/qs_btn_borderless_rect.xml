@@ -13,12 +13,10 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<inset
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:insetTop="4dp"
-    android:insetBottom="4dp">
-    <ripple
-        android:color="?android:attr/colorControlHighlight" >
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetBottom="4dp"
+    android:insetTop="4dp">
+    <ripple android:color="?android:attr/colorControlHighlight">
 
         <item android:id="@android:id/mask">
             <shape>

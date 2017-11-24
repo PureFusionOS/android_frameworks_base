@@ -94,14 +94,14 @@ import java.util.function.Consumer;
 /**
  * Class to handle ugly dependencies throughout sysui until we determine the
  * long-term dependency injection solution.
- *
+ * <p>
  * Classes added here should be things that are expected to live the lifetime of sysui,
  * and are generally applicable to many parts of sysui. They will be lazily
  * initialized to ensure they aren't created on form factors that don't need them
  * (e.g. HotspotController on TV). Despite being lazily initialized, it is expected
  * that all dependencies will be gotten during sysui startup, and not during runtime
  * to avoid jank.
- *
+ * <p>
  * All classes used here are expected to manage their own lifecycle, meaning if
  * they have no clients they should not have any registered resources like bound
  * services, registered receivers, etc.
@@ -127,9 +127,46 @@ public class Dependency extends SystemUI {
      */
     public static final DependencyKey<String> LEAK_REPORT_EMAIL
             = new DependencyKey<>("leak_report_email");
-
+    private static Dependency sDependency;
     private final ArrayMap<Object, Object> mDependencies = new ArrayMap<>();
     private final ArrayMap<Object, DependencyProvider> mProviders = new ArrayMap<>();
+
+    /**
+     * Used in separate processes (like tuner settings) to init the dependencies.
+     */
+    public static void initDependencies(Context context) {
+        if (sDependency != null) return;
+        Dependency d = new Dependency();
+        d.mContext = context;
+        d.mComponents = new HashMap<>();
+        d.start();
+    }
+
+    /**
+     * Used in separate process teardown to ensure the context isn't leaked.
+     * <p>
+     * TODO: Remove once PreferenceFragment doesn't reference getActivity()
+     * anymore and these context hacks are no longer needed.
+     */
+    public static void clearDependencies() {
+        sDependency = null;
+    }
+
+    /**
+     * Checks to see if a dependency is instantiated, if it is it removes it from
+     * the cache and calls the destroy callback.
+     */
+    public static <T> void destroy(Class<T> cls, Consumer<T> destroy) {
+        sDependency.destroyDependency(cls, destroy);
+    }
+
+    public static <T> T get(Class<T> cls) {
+        return sDependency.getDependency(cls);
+    }
+
+    public static <T> T get(DependencyKey<T> cls) {
+        return sDependency.getDependency(cls);
+    }
 
     @Override
     public void start() {
@@ -323,12 +360,6 @@ public class Dependency extends SystemUI {
         return provider.createDependency();
     }
 
-    private static Dependency sDependency;
-
-    public interface DependencyProvider<T> {
-        T createDependency();
-    }
-
     private <T> void destroyDependency(Class<T> cls, Consumer<T> destroy) {
         T dep = (T) mDependencies.remove(cls);
         if (dep != null && destroy != null) {
@@ -336,41 +367,8 @@ public class Dependency extends SystemUI {
         }
     }
 
-    /**
-     * Used in separate processes (like tuner settings) to init the dependencies.
-     */
-    public static void initDependencies(Context context) {
-        if (sDependency != null) return;
-        Dependency d = new Dependency();
-        d.mContext = context;
-        d.mComponents = new HashMap<>();
-        d.start();
-    }
-
-    /**
-     * Used in separate process teardown to ensure the context isn't leaked.
-     *
-     * TODO: Remove once PreferenceFragment doesn't reference getActivity()
-     * anymore and these context hacks are no longer needed.
-     */
-    public static void clearDependencies() {
-        sDependency = null;
-    }
-
-    /**
-     * Checks to see if a dependency is instantiated, if it is it removes it from
-     * the cache and calls the destroy callback.
-     */
-    public static <T> void destroy(Class<T> cls, Consumer<T> destroy) {
-        sDependency.destroyDependency(cls, destroy);
-    }
-
-    public static <T> T get(Class<T> cls) {
-        return sDependency.getDependency(cls);
-    }
-
-    public static <T> T get(DependencyKey<T> cls) {
-        return sDependency.getDependency(cls);
+    public interface DependencyProvider<T> {
+        T createDependency();
     }
 
     public static final class DependencyKey<V> {

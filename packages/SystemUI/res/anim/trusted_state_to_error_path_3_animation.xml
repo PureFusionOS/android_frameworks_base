@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 Copyright (C) 2015 The Android Open Source Project
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,26 +13,25 @@ Copyright (C) 2015 The Android Open Source Project
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<set
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="200"
+        android:interpolator="@interpolator/trusted_state_to_error_animation_interpolator_3"
         android:propertyName="pathData"
         android:valueFrom="M 5.00619506836,-6.046875 c 0.0,-2.76000976562 -2.23999023438,-5.0 -5.0,-5.0 c -2.76000976562,0.0 -5.0,2.23999023438 -5.0,5.0 c 0.0,0.0 1.89999389648,0.0 1.89999389648,0.0 c 0.0,-1.71002197266 1.38999938965,-3.09997558594 3.10000610352,-3.09997558594 c 1.71000671387,0.0 3.10000610352,1.38995361328 3.10000610352,3.09997558594 c 0.0,0.0 0.0,2.0 0.0,2.0 c 0.0,0.0 1.89999389648,0.0 1.89999389648,0.0 c 0.0,0.0 0.0,-2.0 0.0,-2.0 Z"
         android:valueTo="M 5.01239013672,3.390625 c 0.0,-2.76000976562 -2.23999023438,-5.0 -5.0,-5.0 c -2.76000976562,0.0 -5.0,2.23999023438 -5.0,5.0 c 0.0,0.0 1.89999389648,0.0 1.89999389648,0.0 c 0.0,-1.71002197266 1.38999938965,-3.09997558594 3.10000610352,-3.09997558594 c 1.71000671387,0.0 3.10000610352,1.38995361328 3.10000610352,3.09997558594 c 0.0,0.0 0.0,2.0 0.0,2.0 c 0.0,0.0 1.89999389648,0.0 1.89999389648,0.0 c 0.0,0.0 0.0,-2.0 0.0,-2.0 Z"
-        android:valueType="pathType"
-        android:interpolator="@interpolator/trusted_state_to_error_animation_interpolator_3" />
+        android:valueType="pathType" />
     <objectAnimator
         android:duration="600"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="fillColor"
         android:valueFrom="#FFFFFFFF"
-        android:valueTo="#FFF3511E"
-        android:interpolator="@android:interpolator/fast_out_slow_in" />
+        android:valueTo="#FFF3511E" />
     <objectAnimator
         android:duration="600"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="fillAlpha"
         android:valueFrom="0.5"
         android:valueTo="1.0"
-        android:valueType="floatType"
-        android:interpolator="@android:interpolator/fast_out_slow_in" />
+        android:valueType="floatType" />
 </set>

@@ -73,13 +73,14 @@ public class FolderInfo extends ItemInfo {
             listener.onTitleChanged(title);
         }
     }
-/*
-    @Override
-    void onAddToDatabase(ContentValues values) {
-        super.onAddToDatabase(values);
-        values.put(LauncherSettings.Favorites.TITLE, title.toString());
-    }
-*/
+
+    /*
+        @Override
+        void onAddToDatabase(ContentValues values) {
+            super.onAddToDatabase(values);
+            values.put(LauncherSettings.Favorites.TITLE, title.toString());
+        }
+    */
     public void addListener(FolderListener listener) {
         listeners.add(listener);
     }
@@ -102,8 +103,11 @@ public class FolderInfo extends ItemInfo {
 
     interface FolderListener {
         public void onAdd(AppItemInfo item);
+
         public void onRemove(AppItemInfo item);
+
         public void onTitleChanged(CharSequence title);
+
         public void onItemsChanged();
     }
 }

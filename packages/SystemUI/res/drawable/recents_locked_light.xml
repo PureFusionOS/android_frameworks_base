@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2017 The LineageOS Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,28 +13,27 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<animated-vector
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt">
     <aapt:attr name="android:drawable">
         <vector
             android:width="24dp"
             android:height="24dp"
-            android:viewportWidth="24"
+            android:alpha="1"
             android:viewportHeight="24"
-            android:alpha="1">
+            android:viewportWidth="24">
             <path
                 android:name="lock"
-                android:pathData="M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z"
-                android:fillColor="@color/recents_task_bar_light_icon_color"/>
+                android:fillColor="@color/recents_task_bar_light_icon_color"
+                android:pathData="M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z" />
             <group
                 android:name="group"
                 android:pivotX="8"
                 android:pivotY="6">
                 <path
                     android:name="line"
-                    android:pathData="M 7, 6 L 9, 6 L 9, 8 L 7, 8 L 7, 6"
-                    android:fillColor="@color/recents_task_bar_light_icon_color"/>
+                    android:fillColor="@color/recents_task_bar_light_icon_color"
+                    android:pathData="M 7, 6 L 9, 6 L 9, 8 L 7, 8 L 7, 6" />
             </group>
         </vector>
     </aapt:attr>
@@ -43,12 +41,12 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:name="group"
-                android:propertyName="scaleY"
                 android:duration="350"
+                android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+                android:propertyName="scaleY"
                 android:valueFrom="0"
                 android:valueTo="1"
-                android:valueType="floatType"
-                android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+                android:valueType="floatType" />
         </aapt:attr>
     </target>
 </animated-vector>

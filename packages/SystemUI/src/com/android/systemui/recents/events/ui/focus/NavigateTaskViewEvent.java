@@ -24,11 +24,8 @@ import com.android.systemui.recents.events.EventBus;
  * Navigates the task view by arrow keys.
  */
 public class NavigateTaskViewEvent extends EventBus.Event {
-    public enum Direction {
-        UNDEFINED, UP, DOWN, LEFT, RIGHT;
-    }
-
     public Direction direction;
+
     public NavigateTaskViewEvent(Direction direction) {
         this.direction = direction;
     }
@@ -46,5 +43,9 @@ public class NavigateTaskViewEvent extends EventBus.Event {
             default:
                 return Direction.UNDEFINED;
         }
+    }
+
+    public enum Direction {
+        UNDEFINED, UP, DOWN, LEFT, RIGHT;
     }
 }

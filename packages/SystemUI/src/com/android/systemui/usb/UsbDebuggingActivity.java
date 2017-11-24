@@ -39,7 +39,7 @@ import com.android.internal.app.AlertController;
 import com.android.systemui.R;
 
 public class UsbDebuggingActivity extends AlertActivity
-                                  implements DialogInterface.OnClickListener {
+        implements DialogInterface.OnClickListener {
     private static final String TAG = "UsbDebuggingActivity";
 
     private CheckBox mAlwaysAllow;
@@ -74,30 +74,11 @@ public class UsbDebuggingActivity extends AlertActivity
         // add "always allow" checkbox
         LayoutInflater inflater = LayoutInflater.from(ap.mContext);
         View checkbox = inflater.inflate(com.android.internal.R.layout.always_use_checkbox, null);
-        mAlwaysAllow = (CheckBox)checkbox.findViewById(com.android.internal.R.id.alwaysUse);
+        mAlwaysAllow = (CheckBox) checkbox.findViewById(com.android.internal.R.id.alwaysUse);
         mAlwaysAllow.setText(getString(R.string.usb_debugging_always));
         ap.mView = checkbox;
 
         setupAlert();
-    }
-
-    private class UsbDisconnectedReceiver extends BroadcastReceiver {
-        private final Activity mActivity;
-        public UsbDisconnectedReceiver(Activity activity) {
-            mActivity = activity;
-        }
-
-        @Override
-        public void onReceive(Context content, Intent intent) {
-            String action = intent.getAction();
-            if (!UsbManager.ACTION_USB_STATE.equals(action)) {
-                return;
-            }
-            boolean connected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
-            if (!connected) {
-                mActivity.finish();
-            }
-        }
     }
 
     @Override
@@ -131,5 +112,25 @@ public class UsbDebuggingActivity extends AlertActivity
             Log.e(TAG, "Unable to notify Usb service", e);
         }
         finish();
+    }
+
+    private class UsbDisconnectedReceiver extends BroadcastReceiver {
+        private final Activity mActivity;
+
+        public UsbDisconnectedReceiver(Activity activity) {
+            mActivity = activity;
+        }
+
+        @Override
+        public void onReceive(Context content, Intent intent) {
+            String action = intent.getAction();
+            if (!UsbManager.ACTION_USB_STATE.equals(action)) {
+                return;
+            }
+            boolean connected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
+            if (!connected) {
+                mActivity.finish();
+            }
+        }
     }
 }

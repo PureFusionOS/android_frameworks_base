@@ -61,10 +61,10 @@ public class PowerNotificationWarnings implements PowerUI.WarningsUI {
     private static final int SHOWING_WARNING = 1;
     private static final int SHOWING_INVALID_CHARGER = 3;
     private static final String[] SHOWING_STRINGS = {
-        "SHOWING_NOTHING",
-        "SHOWING_WARNING",
-        "SHOWING_SAVER",
-        "SHOWING_INVALID_CHARGER",
+            "SHOWING_NOTHING",
+            "SHOWING_WARNING",
+            "SHOWING_SAVER",
+            "SHOWING_INVALID_CHARGER",
     };
 
     private static final String ACTION_SHOW_BATTERY_SETTINGS = "PNW.batterySettings";
@@ -88,14 +88,22 @@ public class PowerNotificationWarnings implements PowerUI.WarningsUI {
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Receiver mReceiver = new Receiver();
     private final Intent mOpenBatterySettings = settings(Intent.ACTION_POWER_USAGE_SUMMARY);
-
+    private final OnClickListener mStartSaverMode = new OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    setSaverMode(true);
+                }
+            });
+        }
+    };
     private int mBatteryLevel;
     private int mBucket;
     private long mScreenOffTime;
     private int mShowing;
-
     private long mBucketDroppedNegativeTimeMs;
-
     private boolean mWarning;
     private boolean mPlaySound;
     private boolean mInvalidCharger;
@@ -105,22 +113,37 @@ public class PowerNotificationWarnings implements PowerUI.WarningsUI {
     private SystemUIDialog mThermalShutdownDialog;
 
     public PowerNotificationWarnings(Context context, NotificationManager notificationManager,
-            StatusBar statusBar) {
+                                     StatusBar statusBar) {
         mContext = context;
         mNoMan = notificationManager;
         mPowerMan = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mReceiver.init();
     }
 
+    private static Intent settings(String action) {
+        return new Intent(action).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+                | Intent.FLAG_ACTIVITY_NO_HISTORY
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    }
+
     @Override
     public void dump(PrintWriter pw) {
-        pw.print("mWarning="); pw.println(mWarning);
-        pw.print("mPlaySound="); pw.println(mPlaySound);
-        pw.print("mInvalidCharger="); pw.println(mInvalidCharger);
-        pw.print("mShowing="); pw.println(SHOWING_STRINGS[mShowing]);
-        pw.print("mSaverConfirmation="); pw.println(mSaverConfirmation != null ? "not null" : null);
-        pw.print("mHighTempWarning="); pw.println(mHighTempWarning);
-        pw.print("mHighTempDialog="); pw.println(mHighTempDialog != null ? "not null" : null);
+        pw.print("mWarning=");
+        pw.println(mWarning);
+        pw.print("mPlaySound=");
+        pw.println(mPlaySound);
+        pw.print("mInvalidCharger=");
+        pw.println(mInvalidCharger);
+        pw.print("mShowing=");
+        pw.println(SHOWING_STRINGS[mShowing]);
+        pw.print("mSaverConfirmation=");
+        pw.println(mSaverConfirmation != null ? "not null" : null);
+        pw.print("mHighTempWarning=");
+        pw.println(mHighTempWarning);
+        pw.print("mHighTempDialog=");
+        pw.println(mHighTempDialog != null ? "not null" : null);
         pw.print("mThermalShutdownDialog=");
         pw.println(mThermalShutdownDialog != null ? "not null" : null);
     }
@@ -204,14 +227,6 @@ public class PowerNotificationWarnings implements PowerUI.WarningsUI {
     private PendingIntent pendingBroadcast(String action) {
         return PendingIntent.getBroadcastAsUser(mContext,
                 0, new Intent(action), 0, UserHandle.CURRENT);
-    }
-
-    private static Intent settings(String action) {
-        return new Intent(action).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-                | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
-                | Intent.FLAG_ACTIVITY_NO_HISTORY
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
     @Override
@@ -335,7 +350,7 @@ public class PowerNotificationWarnings implements PowerUI.WarningsUI {
     public void showLowBatteryWarning(boolean playSound) {
         Slog.i(TAG,
                 "show low battery warning: level=" + mBatteryLevel
-                + " [" + mBucket + "] playSound=" + playSound);
+                        + " [" + mBucket + "] playSound=" + playSound);
         mPlaySound = playSound;
         mWarning = true;
         updateNotification();
@@ -456,16 +471,4 @@ public class PowerNotificationWarnings implements PowerUI.WarningsUI {
             }
         }
     }
-
-    private final OnClickListener mStartSaverMode = new OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    setSaverMode(true);
-                }
-            });
-        }
-    };
 }

@@ -22,7 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 
-public class Recovery extends Activity  {
+public class Recovery extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class Recovery extends Activity  {
             public void run() {
                 PowerManager pm =
                         (PowerManager) Recovery.this.getSystemService(
-                        Context.POWER_SERVICE);
+                                Context.POWER_SERVICE);
                 pm.reboot("recovery");
                 Recovery.this.finish();
             }

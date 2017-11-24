@@ -37,6 +37,30 @@ public class ResizingSpace extends View {
         mHeight = a.getResourceId(android.R.styleable.ViewGroup_Layout_layout_height, 0);
     }
 
+    /**
+     * Compare to: {@link View#getDefaultSize(int, int)}
+     * If mode is AT_MOST, return the child size instead of the parent size
+     * (unless it is too big).
+     */
+    private static int getDefaultSize2(int size, int measureSpec) {
+        int result = size;
+        int specMode = MeasureSpec.getMode(measureSpec);
+        int specSize = MeasureSpec.getSize(measureSpec);
+
+        switch (specMode) {
+            case MeasureSpec.UNSPECIFIED:
+                result = size;
+                break;
+            case MeasureSpec.AT_MOST:
+                result = Math.min(size, specSize);
+                break;
+            case MeasureSpec.EXACTLY:
+                result = specSize;
+                break;
+        }
+        return result;
+    }
+
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -68,30 +92,6 @@ public class ResizingSpace extends View {
      */
     @Override
     public void draw(Canvas canvas) {
-    }
-
-    /**
-     * Compare to: {@link View#getDefaultSize(int, int)}
-     * If mode is AT_MOST, return the child size instead of the parent size
-     * (unless it is too big).
-     */
-    private static int getDefaultSize2(int size, int measureSpec) {
-        int result = size;
-        int specMode = MeasureSpec.getMode(measureSpec);
-        int specSize = MeasureSpec.getSize(measureSpec);
-
-        switch (specMode) {
-            case MeasureSpec.UNSPECIFIED:
-                result = size;
-                break;
-            case MeasureSpec.AT_MOST:
-                result = Math.min(size, specSize);
-                break;
-            case MeasureSpec.EXACTLY:
-                result = specSize;
-                break;
-        }
-        return result;
     }
 
     @Override

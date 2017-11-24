@@ -41,7 +41,7 @@ public class NotificationViewWrapperTest extends SysuiTestCase {
 
     static class TestableNotificationViewWrapper extends NotificationViewWrapper {
         protected TestableNotificationViewWrapper(Context ctx, View view,
-                ExpandableNotificationRow row) {
+                                                  ExpandableNotificationRow row) {
             super(ctx, view, row);
         }
     }

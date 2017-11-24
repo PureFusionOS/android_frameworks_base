@@ -44,6 +44,18 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
 
     private boolean mUsbTethered = false;
     private boolean mUsbConnected = false;
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mUsbConnected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
+            if (mUsbConnected && mConnectivityManager.isTetheringSupported()) {
+                updateState();
+            } else {
+                mUsbTethered = false;
+            }
+            refreshState();
+        }
+    };
 
     public UsbTetherTile(QSHost host) {
         super(host);
@@ -93,19 +105,6 @@ public class UsbTetherTile extends QSTileImpl<BooleanState> {
             }
         }
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mUsbConnected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
-            if (mUsbConnected && mConnectivityManager.isTetheringSupported()) {
-                updateState();
-            } else {
-                mUsbTethered = false;
-            }
-            refreshState();
-        }
-    };
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {

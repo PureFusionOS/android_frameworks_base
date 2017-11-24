@@ -47,7 +47,7 @@ public interface TransformableView {
     /**
      * Transform to the given view by a specified amount.
      *
-     * @param notification the view to transform to
+     * @param notification         the view to transform to
      * @param transformationAmount how much transformation should be done
      */
     void transformTo(TransformableView notification, float transformationAmount);
@@ -62,7 +62,7 @@ public interface TransformableView {
     /**
      * Transform to this view from the given view by a specified amount.
      *
-     * @param notification the view to transform from
+     * @param notification         the view to transform from
      * @param transformationAmount how much transformation should be done
      */
     void transformFrom(TransformableView notification, float transformationAmount);

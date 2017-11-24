@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 import com.android.systemui.R;
 
-public class ChamberOfSecrets extends Activity  {
+public class ChamberOfSecrets extends Activity {
 
     private static final int SYSTEM_INT = 0;
     private static final int SECURE_INT = 1;
@@ -36,6 +36,7 @@ public class ChamberOfSecrets extends Activity  {
     private static final int GLOBAL_INT = 6;
     private static final int GLOBAL_LONG = 7;
     private static final int GLOBAL_FLOAT = 8;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +59,7 @@ public class ChamberOfSecrets extends Activity  {
             if (setting != null && array != null) {
                 switch (type) {
                     case SYSTEM_INT:
-                        current= Settings.System.getIntForUser(getContentResolver(),
+                        current = Settings.System.getIntForUser(getContentResolver(),
                                 setting, 0, UserHandle.USER_CURRENT);
                         Settings.System.putInt(getContentResolver(),
                                 setting, getNewInt(array, current));
@@ -70,7 +71,7 @@ public class ChamberOfSecrets extends Activity  {
                                 setting, getNewInt(array, current));
                         break;
                     case SYSTEM_LONG:
-                        curLong= Settings.System.getIntForUser(getContentResolver(),
+                        curLong = Settings.System.getIntForUser(getContentResolver(),
                                 setting, 0, UserHandle.USER_CURRENT);
                         Settings.System.putLong(getContentResolver(),
                                 setting, getNewLong(array, curLong));
@@ -82,7 +83,7 @@ public class ChamberOfSecrets extends Activity  {
                                 setting, getNewLong(array, curLong));
                         break;
                     case SYSTEM_FLOAT:
-                        curFloat= Settings.System.getLongForUser(getContentResolver(),
+                        curFloat = Settings.System.getLongForUser(getContentResolver(),
                                 setting, 0, UserHandle.USER_CURRENT);
                         Settings.System.putFloat(getContentResolver(),
                                 setting, getNewFloat(array, curFloat));

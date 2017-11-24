@@ -20,19 +20,11 @@ import android.util.Pools;
 
 /**
  * A transform state of a progress view.
-*/
+ */
 public class ProgressTransformState extends TransformState {
 
     private static Pools.SimplePool<ProgressTransformState> sInstancePool
             = new Pools.SimplePool<>(40);
-
-    @Override
-    protected boolean sameAs(TransformState otherState) {
-        if (otherState instanceof ProgressTransformState) {
-            return true;
-        }
-        return super.sameAs(otherState);
-    }
 
     public static ProgressTransformState obtain() {
         ProgressTransformState instance = sInstancePool.acquire();
@@ -40,6 +32,14 @@ public class ProgressTransformState extends TransformState {
             return instance;
         }
         return new ProgressTransformState();
+    }
+
+    @Override
+    protected boolean sameAs(TransformState otherState) {
+        if (otherState instanceof ProgressTransformState) {
+            return true;
+        }
+        return super.sameAs(otherState);
     }
 
     @Override

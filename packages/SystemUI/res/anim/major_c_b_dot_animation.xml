@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +13,12 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<set
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="250"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="pathData"
         android:valueFrom="M 0.0,-2.75 l 0.0,0.0 c 1.51878306195,0.0 2.75,1.23121693805 2.75,2.75 l 0.0,0.0 c 0.0,1.51878306195 -1.23121693805,2.75 -2.75,2.75 l 0.0,0.0 c -1.51878306195,0.0 -2.75,-1.23121693805 -2.75,-2.75 l 0.0,0.0 c 0.0,-1.51878306195 1.23121693805,-2.75 2.75,-2.75 Z"
         android:valueTo="M -4.75,-2.75 l 9.5,0.0 c 1.51878306195,0.0 2.75,1.23121693805 2.75,2.75 l 0.0,0.0 c 0.0,1.51878306195 -1.23121693805,2.75 -2.75,2.75 l -9.5,0.0 c -1.51878306195,0.0 -2.75,-1.23121693805 -2.75,-2.75 l 0.0,0.0 c 0.0,-1.51878306195 1.23121693805,-2.75 2.75,-2.75 Z"
-        android:valueType="pathType"
-        android:interpolator="@android:interpolator/fast_out_slow_in" />
+        android:valueType="pathType" />
 </set>

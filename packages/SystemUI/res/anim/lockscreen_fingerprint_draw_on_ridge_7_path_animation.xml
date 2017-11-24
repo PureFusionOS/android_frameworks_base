@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2015 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,23 +13,21 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License
   -->
-<set
-    xmlns:android="http://schemas.android.com/apk/res/android" >
-    <set
-        android:ordering="sequentially" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <set android:ordering="sequentially">
         <objectAnimator
             android:duration="83"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="trimPathEnd"
             android:valueFrom="0.0"
             android:valueTo="0.0"
-            android:valueType="floatType"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueType="floatType" />
         <objectAnimator
             android:duration="483"
+            android:interpolator="@interpolator/lockscreen_fingerprint_draw_on_animation_interpolator_1"
             android:propertyName="trimPathEnd"
             android:valueFrom="0.0"
             android:valueTo="1.0"
-            android:valueType="floatType"
-            android:interpolator="@interpolator/lockscreen_fingerprint_draw_on_animation_interpolator_1" />
+            android:valueType="floatType" />
     </set>
 </set>

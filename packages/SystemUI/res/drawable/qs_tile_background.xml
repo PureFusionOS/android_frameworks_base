@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
 ** Copyright 2012, The Android Open Source Project
 **
@@ -18,7 +17,7 @@
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
-	<color android:color="#212121" />
+        <color android:color="#212121" />
     </item>
     <item>
         <color android:color="#161616" />

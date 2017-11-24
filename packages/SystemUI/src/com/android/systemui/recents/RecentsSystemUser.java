@@ -39,11 +39,10 @@ import com.android.systemui.recents.misc.ForegroundThread;
 public class RecentsSystemUser extends IRecentsSystemUserCallbacks.Stub {
 
     private static final String TAG = "RecentsSystemUser";
-
-    private Context mContext;
-    private RecentsImpl mImpl;
     private final SparseArray<IRecentsNonSystemUserCallbacks> mNonSystemUserRecents =
             new SparseArray<>();
+    private Context mContext;
+    private RecentsImpl mImpl;
 
     public RecentsSystemUser(Context context, RecentsImpl impl) {
         mContext = context;
@@ -52,7 +51,7 @@ public class RecentsSystemUser extends IRecentsSystemUserCallbacks.Stub {
 
     @Override
     public void registerNonSystemUserCallbacks(final IBinder nonSystemUserCallbacks,
-            final int userId) {
+                                               final int userId) {
         try {
             final IRecentsNonSystemUserCallbacks callback =
                     IRecentsNonSystemUserCallbacks.Stub.asInterface(nonSystemUserCallbacks);

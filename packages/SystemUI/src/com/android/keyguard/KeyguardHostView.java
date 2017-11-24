@@ -42,68 +42,66 @@ import java.io.File;
  * reset the state of your view.  Use the {@link KeyguardViewCallback} via
  * {@link #getCallback()} to send information back (such as poking the wake lock,
  * or finishing the keyguard).
- *
+ * <p>
  * Handles intercepting of media keys that still work when the keyguard is
  * showing.
  */
 public class KeyguardHostView extends FrameLayout implements SecurityCallback {
 
-    public interface OnDismissAction {
-        /**
-         * @return true if the dismiss should be deferred
-         */
-        boolean onDismiss();
-    }
-
-    private AudioManager mAudioManager;
-    private TelephonyManager mTelephonyManager = null;
-    protected ViewMediatorCallback mViewMediatorCallback;
-    protected LockPatternUtils mLockPatternUtils;
-    private OnDismissAction mDismissAction;
-    private Runnable mCancelAction;
-
-    private final KeyguardUpdateMonitorCallback mUpdateCallback =
-            new KeyguardUpdateMonitorCallback() {
-
-        @Override
-        public void onUserSwitchComplete(int userId) {
-            getSecurityContainer().showPrimarySecurityScreen(false /* turning off */);
-        }
-
-        @Override
-        public void onTrustGrantedWithFlags(int flags, int userId) {
-            if (userId != KeyguardUpdateMonitor.getCurrentUser()) return;
-            if (!isAttachedToWindow()) return;
-            boolean bouncerVisible = isVisibleToUser();
-            boolean initiatedByUser =
-                    (flags & TrustAgentService.FLAG_GRANT_TRUST_INITIATED_BY_USER) != 0;
-            boolean dismissKeyguard =
-                    (flags & TrustAgentService.FLAG_GRANT_TRUST_DISMISS_KEYGUARD) != 0;
-
-            if (initiatedByUser || dismissKeyguard) {
-                if (mViewMediatorCallback.isScreenOn() && (bouncerVisible || dismissKeyguard)) {
-                    if (!bouncerVisible) {
-                        // The trust agent dismissed the keyguard without the user proving
-                        // that they are present (by swiping up to show the bouncer). That's fine if
-                        // the user proved presence via some other way to the trust agent.
-                        Log.i(TAG, "TrustAgent dismissed Keyguard.");
-                    }
-                    dismiss(false /* authenticated */, userId);
-                } else {
-                    mViewMediatorCallback.playTrustedSound();
-                }
-            }
-        }
-    };
-
+    public static final boolean DEBUG = KeyguardConstants.DEBUG;
     // Whether the volume keys should be handled by keyguard. If true, then
     // they will be handled here for specific media types such as music, otherwise
     // the audio service will bring up the volume dialog.
     private static final boolean KEYGUARD_MANAGES_VOLUME = false;
-    public static final boolean DEBUG = KeyguardConstants.DEBUG;
     private static final String TAG = "KeyguardViewBase";
-
+    /**
+     * In general, we enable unlocking the insecure keyguard with the menu key. However, there are
+     * some cases where we wish to disable it, notably when the menu button placement or technology
+     * is prone to false positives.
+     *
+     * @return true if the menu key should be enabled
+     */
+    private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
+    protected ViewMediatorCallback mViewMediatorCallback;
+    protected LockPatternUtils mLockPatternUtils;
+    private AudioManager mAudioManager;
+    private TelephonyManager mTelephonyManager = null;
+    private OnDismissAction mDismissAction;
+    private Runnable mCancelAction;
     private KeyguardSecurityContainer mSecurityContainer;
+    private final KeyguardUpdateMonitorCallback mUpdateCallback =
+            new KeyguardUpdateMonitorCallback() {
+
+                @Override
+                public void onUserSwitchComplete(int userId) {
+                    getSecurityContainer().showPrimarySecurityScreen(false /* turning off */);
+                }
+
+                @Override
+                public void onTrustGrantedWithFlags(int flags, int userId) {
+                    if (userId != KeyguardUpdateMonitor.getCurrentUser()) return;
+                    if (!isAttachedToWindow()) return;
+                    boolean bouncerVisible = isVisibleToUser();
+                    boolean initiatedByUser =
+                            (flags & TrustAgentService.FLAG_GRANT_TRUST_INITIATED_BY_USER) != 0;
+                    boolean dismissKeyguard =
+                            (flags & TrustAgentService.FLAG_GRANT_TRUST_DISMISS_KEYGUARD) != 0;
+
+                    if (initiatedByUser || dismissKeyguard) {
+                        if (mViewMediatorCallback.isScreenOn() && (bouncerVisible || dismissKeyguard)) {
+                            if (!bouncerVisible) {
+                                // The trust agent dismissed the keyguard without the user proving
+                                // that they are present (by swiping up to show the bouncer). That's fine if
+                                // the user proved presence via some other way to the trust agent.
+                                Log.i(TAG, "TrustAgent dismissed Keyguard.");
+                            }
+                            dismiss(false /* authenticated */, userId);
+                        } else {
+                            mViewMediatorCallback.playTrustedSound();
+                        }
+                    }
+                }
+            };
 
     public KeyguardHostView(Context context) {
         this(context, null);
@@ -177,6 +175,7 @@ public class KeyguardHostView extends FrameLayout implements SecurityCallback {
 
     /**
      * Dismisses the keyguard by going to the next screen or making it gone.
+     *
      * @param targetUserId a user that needs to be the foreground user at the dismissal completion.
      * @return True if the keyguard is done.
      */
@@ -215,8 +214,8 @@ public class KeyguardHostView extends FrameLayout implements SecurityCallback {
      * Authentication has happened and it's time to dismiss keyguard. This function
      * should clean up and inform KeyguardViewMediator.
      *
-     * @param strongAuth whether the user has authenticated with strong authentication like
-     *                   pattern, password or PIN but not by trust agents or fingerprint
+     * @param strongAuth   whether the user has authenticated with strong authentication like
+     *                     pattern, password or PIN but not by trust agents or fingerprint
      * @param targetUserId a user that needs to be the foreground user at the dismissal completion.
      */
     @Override
@@ -308,6 +307,7 @@ public class KeyguardHostView extends FrameLayout implements SecurityCallback {
      * Allows the media keys to work when the keyguard is showing.
      * The media keys should be of no interest to the actual keyguard view(s),
      * so intercepting them here should not be of any harm.
+     *
      * @param event The key event
      * @return whether the event was consumed as a media key.
      */
@@ -406,14 +406,6 @@ public class KeyguardHostView extends FrameLayout implements SecurityCallback {
         }
     }
 
-    /**
-     * In general, we enable unlocking the insecure keyguard with the menu key. However, there are
-     * some cases where we wish to disable it, notably when the menu button placement or technology
-     * is prone to false positives.
-     *
-     * @return true if the menu key should be enabled
-     */
-    private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
     public boolean shouldEnableMenuKey() {
         final Resources res = getResources();
         final boolean configDisabled = res.getBoolean(R.bool.config_disableMenuKeyInLockScreen);
@@ -439,5 +431,12 @@ public class KeyguardHostView extends FrameLayout implements SecurityCallback {
 
     public SecurityMode getCurrentSecurityMode() {
         return mSecurityContainer.getCurrentSecurityMode();
+    }
+
+    public interface OnDismissAction {
+        /**
+         * @return true if the dismiss should be deferred
+         */
+        boolean onDismiss();
     }
 }

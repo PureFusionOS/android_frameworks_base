@@ -75,7 +75,7 @@ public class UserGridView extends GridView {
         setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent,
-                    View view, int position, long id) {
+                                           View view, int position, long id) {
                 UserSwitcherController.UserRecord record = mAdapter.getItem(position);
                 if (record == null || record.isAddUser) {
                     return false;
@@ -135,7 +135,7 @@ public class UserGridView extends GridView {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater)getContext().getSystemService
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService
                         (Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.car_fullscreen_user_pod, null);
             }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"Press Menu to unlock."</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"Network locked"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"No SIM card"</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"No SIM card in tablet."</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"No SIM card in phone."</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"No SIM card in tablet."</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"No SIM card in phone."</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"Insert a SIM card."</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"The SIM card is missing or not readable. Insert a SIM card."</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"Unusable SIM card."</string>
@@ -69,34 +68,34 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"Type a PIN that is 4 to 8 numbers."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"PUK code should be 8 numbers or more."</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"Re-enter the correct PUK code. Repeated attempts will permanently disable the SIM."</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"PIN codes do not match"</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"PIN codes do not match"</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"Too many pattern attempts"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"You have incorrectly typed your PIN <xliff:g id="NUMBER_0">%1$d</xliff:g> times. \n\nTry again in <xliff:g id="NUMBER_1">%2$d</xliff:g> seconds."</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"You have incorrectly typed your password <xliff:g id="NUMBER_0">%1$d</xliff:g> times. \n\nTry again in <xliff:g id="NUMBER_1">%2$d</xliff:g> seconds."</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"You have incorrectly drawn your unlock pattern <xliff:g id="NUMBER_0">%1$d</xliff:g> times. \n\nTry again in <xliff:g id="NUMBER_1">%2$d</xliff:g> seconds."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, this tablet will be reset, which will delete all its data."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, this phone will be reset, which will delete all its data."</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER">%d</xliff:g> times. This tablet will be reset, which will delete all its data."</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER">%d</xliff:g> times. This phone will be reset, which will delete all its data."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, this user will be removed, which will delete all user data."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, this user will be removed, which will delete all user data."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER">%d</xliff:g> times. This user will be removed, which will delete all user data."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER">%d</xliff:g> times. This user will be removed, which will delete all user data."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, the work profile will be removed, which will delete all profile data."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, the work profile will be removed, which will delete all profile data."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER">%d</xliff:g> times. The work profile will be removed, which will delete all profile data."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER">%d</xliff:g> times. The work profile will be removed, which will delete all profile data."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"You have incorrectly drawn your unlock pattern <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, you will be asked to unlock your tablet using an email account.\n\n Try again in <xliff:g id="NUMBER_2">%3$d</xliff:g> seconds."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"You have incorrectly drawn your unlock pattern <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, you will be asked to unlock your phone using an email account.\n\n Try again in <xliff:g id="NUMBER_2">%3$d</xliff:g> seconds."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, this tablet will be reset, which will delete all its data."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, this phone will be reset, which will delete all its data."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER">%d</xliff:g> times. This tablet will be reset, which will delete all its data."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER">%d</xliff:g> times. This phone will be reset, which will delete all its data."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, this user will be removed, which will delete all user data."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, this user will be removed, which will delete all user data."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER">%d</xliff:g> times. This user will be removed, which will delete all user data."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER">%d</xliff:g> times. This user will be removed, which will delete all user data."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, the work profile will be removed, which will delete all profile data."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, the work profile will be removed, which will delete all profile data."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"You have incorrectly attempted to unlock the tablet <xliff:g id="NUMBER">%d</xliff:g> times. The work profile will be removed, which will delete all profile data."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"You have incorrectly attempted to unlock the phone <xliff:g id="NUMBER">%d</xliff:g> times. The work profile will be removed, which will delete all profile data."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"You have incorrectly drawn your unlock pattern <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, you will be asked to unlock your tablet using an email account.\n\n Try again in <xliff:g id="NUMBER_2">%3$d</xliff:g> seconds."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"You have incorrectly drawn your unlock pattern <xliff:g id="NUMBER_0">%1$d</xliff:g> times. After <xliff:g id="NUMBER_1">%2$d</xliff:g> more unsuccessful attempts, you will be asked to unlock your phone using an email account.\n\n Try again in <xliff:g id="NUMBER_2">%3$d</xliff:g> seconds."</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"Incorrect SIM PIN code; you must now contact your operator to unlock your device."</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="other">Incorrect SIM PIN code. You have <xliff:g id="NUMBER_1">%d</xliff:g> remaining attempts.</item>
-      <item quantity="one">Incorrect SIM PIN code. You have <xliff:g id="NUMBER_0">%d</xliff:g> remaining attempt before you must contact your provider to unlock your device.</item>
+        <item quantity="other">Incorrect SIM PIN code. You have <xliff:g id="NUMBER_1">%d</xliff:g> remaining attempts.</item>
+        <item quantity="one">Incorrect SIM PIN code. You have <xliff:g id="NUMBER_0">%d</xliff:g> remaining attempt before you must contact your provider to unlock your device.</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"SIM is unusable. Contact your operator."</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="other">Incorrect SIM PUK code. You have <xliff:g id="NUMBER_1">%d</xliff:g> remaining attempts before SIM becomes permanently unusable.</item>
-      <item quantity="one">Incorrect SIM PUK code. You have <xliff:g id="NUMBER_0">%d</xliff:g> remaining attempt before SIM becomes permanently unusable.</item>
+        <item quantity="other">Incorrect SIM PUK code. You have <xliff:g id="NUMBER_1">%d</xliff:g> remaining attempts before SIM becomes permanently unusable.</item>
+        <item quantity="one">Incorrect SIM PUK code. You have <xliff:g id="NUMBER_0">%d</xliff:g> remaining attempt before SIM becomes permanently unusable.</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"SIM PIN operation failed!"</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"SIM PUK operation failed!"</string>
@@ -116,16 +115,16 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"Device locked by admin"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"Device was locked manually"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="other">Device hasn\'t been unlocked for <xliff:g id="NUMBER_1">%d</xliff:g> hours. Confirm pattern.</item>
-      <item quantity="one">Device hasn\'t been unlocked for <xliff:g id="NUMBER_0">%d</xliff:g> hour. Confirm pattern.</item>
+        <item quantity="other">Device hasn\'t been unlocked for <xliff:g id="NUMBER_1">%d</xliff:g> hours. Confirm pattern.</item>
+        <item quantity="one">Device hasn\'t been unlocked for <xliff:g id="NUMBER_0">%d</xliff:g> hour. Confirm pattern.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="other">Device hasn\'t been unlocked for <xliff:g id="NUMBER_1">%d</xliff:g> hours. Confirm PIN.</item>
-      <item quantity="one">Device hasn\'t been unlocked for <xliff:g id="NUMBER_0">%d</xliff:g> hour. Confirm PIN.</item>
+        <item quantity="other">Device hasn\'t been unlocked for <xliff:g id="NUMBER_1">%d</xliff:g> hours. Confirm PIN.</item>
+        <item quantity="one">Device hasn\'t been unlocked for <xliff:g id="NUMBER_0">%d</xliff:g> hour. Confirm PIN.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="other">Device hasn\'t been unlocked for <xliff:g id="NUMBER_1">%d</xliff:g> hours. Confirm password.</item>
-      <item quantity="one">Device hasn\'t been unlocked for <xliff:g id="NUMBER_0">%d</xliff:g> hour. Confirm password.</item>
+        <item quantity="other">Device hasn\'t been unlocked for <xliff:g id="NUMBER_1">%d</xliff:g> hours. Confirm password.</item>
+        <item quantity="one">Device hasn\'t been unlocked for <xliff:g id="NUMBER_0">%d</xliff:g> hour. Confirm password.</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"Not recognised"</string>
 </resources>

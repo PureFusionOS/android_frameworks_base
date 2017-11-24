@@ -28,5 +28,6 @@ public interface InflationTask {
      *
      * @param task the task that was previously running
      */
-    default void supersedeTask(InflationTask task) {}
+    default void supersedeTask(InflationTask task) {
+    }
 }

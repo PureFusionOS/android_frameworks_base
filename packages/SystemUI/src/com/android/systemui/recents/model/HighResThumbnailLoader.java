@@ -40,14 +40,55 @@ public class HighResThumbnailLoader implements TaskCallbacks {
     private final ArrayDeque<Task> mLoadQueue = new ArrayDeque<>();
     @GuardedBy("mLoadQueue")
     private final ArraySet<Task> mLoadingTasks = new ArraySet<>();
-    @GuardedBy("mLoadQueue")
-    private boolean mLoaderIdling;
-
     private final ArrayList<Task> mVisibleTasks = new ArrayList<>();
     private final Thread mLoadThread;
     private final Handler mMainThreadHandler;
     private final SystemServicesProxy mSystemServicesProxy;
+    @GuardedBy("mLoadQueue")
+    private boolean mLoaderIdling;
     private boolean mLoading;
+    private final Runnable mLoader = new Runnable() {
+
+        @Override
+        public void run() {
+            setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND + 1);
+            while (true) {
+                Task next = null;
+                synchronized (mLoadQueue) {
+                    if (!mLoading || mLoadQueue.isEmpty()) {
+                        try {
+                            mLoaderIdling = true;
+                            mLoadQueue.wait();
+                            mLoaderIdling = false;
+                        } catch (InterruptedException e) {
+                            // Don't care.
+                        }
+                    } else {
+                        next = mLoadQueue.poll();
+                        if (next != null) {
+                            mLoadingTasks.add(next);
+                        }
+                    }
+                }
+                if (next != null) {
+                    loadTask(next);
+                }
+            }
+        }
+
+        private void loadTask(Task t) {
+            ThumbnailData thumbnail = mSystemServicesProxy.getTaskThumbnail(t.key.id,
+                    false /* reducedResolution */);
+            mMainThreadHandler.post(() -> {
+                synchronized (mLoadQueue) {
+                    mLoadingTasks.remove(t);
+                }
+                if (mVisibleTasks.contains(t)) {
+                    t.notifyTaskDataLoaded(thumbnail, t.icon);
+                }
+            });
+        }
+    };
     private boolean mVisible;
     private boolean mFlingingFast;
     private boolean mTaskLoadQueueIdle;
@@ -86,10 +127,6 @@ public class HighResThumbnailLoader implements TaskCallbacks {
         return mLoading;
     }
 
-    private void updateLoading() {
-        setLoading(mVisible && !mFlingingFast && mTaskLoadQueueIdle);
-    }
-
     private void setLoading(boolean loading) {
         if (loading == mLoading) {
             return;
@@ -102,6 +139,10 @@ public class HighResThumbnailLoader implements TaskCallbacks {
                 startLoading();
             }
         }
+    }
+
+    private void updateLoading() {
+        setLoading(mVisible && !mFlingingFast && mTaskLoadQueueIdle);
     }
 
     @GuardedBy("mLoadQueue")
@@ -179,47 +220,4 @@ public class HighResThumbnailLoader implements TaskCallbacks {
     @Override
     public void onTaskStackIdChanged() {
     }
-
-    private final Runnable mLoader = new Runnable() {
-
-        @Override
-        public void run() {
-            setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND + 1);
-            while (true) {
-                Task next = null;
-                synchronized (mLoadQueue) {
-                    if (!mLoading || mLoadQueue.isEmpty()) {
-                        try {
-                            mLoaderIdling = true;
-                            mLoadQueue.wait();
-                            mLoaderIdling = false;
-                        } catch (InterruptedException e) {
-                            // Don't care.
-                        }
-                    } else {
-                        next = mLoadQueue.poll();
-                        if (next != null) {
-                            mLoadingTasks.add(next);
-                        }
-                    }
-                }
-                if (next != null) {
-                    loadTask(next);
-                }
-            }
-        }
-
-        private void loadTask(Task t) {
-            ThumbnailData thumbnail = mSystemServicesProxy.getTaskThumbnail(t.key.id,
-                    false /* reducedResolution */);
-            mMainThreadHandler.post(() -> {
-                synchronized (mLoadQueue) {
-                    mLoadingTasks.remove(t);
-                }
-                if (mVisibleTasks.contains(t)) {
-                    t.notifyTaskDataLoaded(thumbnail, t.icon);
-                }
-            });
-        }
-    };
 }

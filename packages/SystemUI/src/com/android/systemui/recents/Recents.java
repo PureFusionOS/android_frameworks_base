@@ -76,73 +76,44 @@ import static com.android.systemui.statusbar.phone.StatusBar.SYSTEM_DIALOG_REASO
 public class Recents extends SystemUI
         implements RecentsComponent, CommandQueue.Callbacks {
 
-    private final static String TAG = "Recents";
-    private final static boolean DEBUG = false;
-
     public final static int EVENT_BUS_PRIORITY = 1;
     public final static int BIND_TO_SYSTEM_USER_RETRY_DELAY = 5000;
     public final static int RECENTS_GROW_TARGET_INVALID = -1;
-
     public final static Set<String> RECENTS_ACTIVITIES = new HashSet<>();
-    static {
-        RECENTS_ACTIVITIES.add(RecentsImpl.RECENTS_ACTIVITY);
-    }
-
     public final static Set<Task> sLockedTasks = new HashSet<>();
-
+    private final static String TAG = "Recents";
+    private final static boolean DEBUG = false;
     // Purely for experimentation
     private final static String RECENTS_OVERRIDE_SYSPROP_KEY = "persist.recents_override_pkg";
     private final static String ACTION_SHOW_RECENTS = "com.android.systemui.recents.ACTION_SHOW";
     private final static String ACTION_HIDE_RECENTS = "com.android.systemui.recents.ACTION_HIDE";
     private final static String ACTION_TOGGLE_RECENTS = "com.android.systemui.recents.ACTION_TOGGLE";
-
     private static final String COUNTER_WINDOW_SUPPORTED = "window_enter_supported";
     private static final String COUNTER_WINDOW_UNSUPPORTED = "window_enter_unsupported";
     private static final String COUNTER_WINDOW_INCOMPATIBLE = "window_enter_incompatible";
-
     private static SystemServicesProxy sSystemServicesProxy;
     private static RecentsDebugFlags sDebugFlags;
     private static RecentsTaskLoader sTaskLoader;
     private static RecentsConfiguration sConfiguration;
 
+    static {
+        RECENTS_ACTIVITIES.add(RecentsImpl.RECENTS_ACTIVITY);
+    }
+
+    // The set of runnables to run after binding to the system user's service.
+    private final ArrayList<Runnable> mOnConnectRunnables = new ArrayList<>();
     // For experiments only, allows another package to handle recents if it is defined in the system
     // properties.  This is limited to show/toggle/hide, and does not tie into the ActivityManager,
     // and does not reside in the home stack.
     private String mOverrideRecentsPackageName;
-
     private Handler mHandler;
     private RecentsImpl mImpl;
     private int mDraggingInRecentsCurrentUser;
-
     // Only For system user, this is the callbacks instance we return to each secondary user
     private RecentsSystemUser mSystemToUserCallbacks;
-
     // Only for secondary users, this is the callbacks instance provided by the system user to make
     // calls back
     private IRecentsSystemUserCallbacks mUserToSystemCallbacks;
-
-    // The set of runnables to run after binding to the system user's service.
-    private final ArrayList<Runnable> mOnConnectRunnables = new ArrayList<>();
-
-    // Only for secondary users, this is the death handler for the binder from the system user
-    private final IBinder.DeathRecipient mUserToSystemCallbacksDeathRcpt = new IBinder.DeathRecipient() {
-        @Override
-        public void binderDied() {
-            mUserToSystemCallbacks = null;
-            EventLog.writeEvent(EventLogTags.SYSUI_RECENTS_CONNECTION,
-                    EventLogConstants.SYSUI_RECENTS_CONNECTION_USER_SYSTEM_UNBOUND,
-                    sSystemServicesProxy.getProcessUser());
-
-            // Retry after a fixed duration
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    registerWithSystemUser();
-                }
-            }, BIND_TO_SYSTEM_USER_RETRY_DELAY);
-        }
-    };
-
     // Only for secondary users, this is the service connection we use to connect to the system user
     private final ServiceConnection mUserToSystemServiceConnection = new ServiceConnection() {
         @Override
@@ -175,18 +146,28 @@ public class Recents extends SystemUI
             // Do nothing
         }
     };
+    // Only for secondary users, this is the death handler for the binder from the system user
+    private final IBinder.DeathRecipient mUserToSystemCallbacksDeathRcpt = new IBinder.DeathRecipient() {
+        @Override
+        public void binderDied() {
+            mUserToSystemCallbacks = null;
+            EventLog.writeEvent(EventLogTags.SYSUI_RECENTS_CONNECTION,
+                    EventLogConstants.SYSUI_RECENTS_CONNECTION_USER_SYSTEM_UNBOUND,
+                    sSystemServicesProxy.getProcessUser());
 
-    /**
-     * Returns the callbacks interface that non-system users can call.
-     */
-    public IBinder getSystemUserCallbacks() {
-        return mSystemToUserCallbacks;
-    }
+            // Retry after a fixed duration
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    registerWithSystemUser();
+                }
+            }, BIND_TO_SYSTEM_USER_RETRY_DELAY);
+        }
+    };
 
     public static RecentsTaskLoader getTaskLoader() {
         return sTaskLoader;
     }
-
 
     public static SystemServicesProxy getSystemServices() {
         return sSystemServicesProxy;
@@ -198,6 +179,33 @@ public class Recents extends SystemUI
 
     public static RecentsDebugFlags getDebugFlags() {
         return sDebugFlags;
+    }
+
+    public static void logDockAttempt(Context ctx, ComponentName activity, int resizeMode) {
+        if (resizeMode == ActivityInfo.RESIZE_MODE_UNRESIZEABLE) {
+            MetricsLogger.action(ctx, MetricsEvent.ACTION_WINDOW_DOCK_UNRESIZABLE,
+                    activity.flattenToShortString());
+        }
+        MetricsLogger.count(ctx, getMetricsCounterForResizeMode(resizeMode), 1);
+    }
+
+    private static String getMetricsCounterForResizeMode(int resizeMode) {
+        switch (resizeMode) {
+            case ActivityInfo.RESIZE_MODE_FORCE_RESIZEABLE:
+                return COUNTER_WINDOW_UNSUPPORTED;
+            case ActivityInfo.RESIZE_MODE_RESIZEABLE:
+            case ActivityInfo.RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION:
+                return COUNTER_WINDOW_SUPPORTED;
+            default:
+                return COUNTER_WINDOW_INCOMPATIBLE;
+        }
+    }
+
+    /**
+     * Returns the callbacks interface that non-system users can call.
+     */
+    public IBinder getSystemUserCallbacks() {
+        return mSystemToUserCallbacks;
     }
 
     public void resetIconCache() {
@@ -425,7 +433,7 @@ public class Recents extends SystemUI
 
     @Override
     public boolean dockTopTask(int dragMode, int stackCreateMode, Rect initialBounds,
-            int metricsDockAction) {
+                               int metricsDockAction) {
         // Ensure the device has been provisioned before allowing the user to interact with
         // recents
         if (!isUserSetup()) {
@@ -479,26 +487,6 @@ public class Recents extends SystemUI
             }
         } else {
             return false;
-        }
-    }
-
-    public static void logDockAttempt(Context ctx, ComponentName activity, int resizeMode) {
-        if (resizeMode == ActivityInfo.RESIZE_MODE_UNRESIZEABLE) {
-            MetricsLogger.action(ctx, MetricsEvent.ACTION_WINDOW_DOCK_UNRESIZABLE,
-                    activity.flattenToShortString());
-        }
-        MetricsLogger.count(ctx, getMetricsCounterForResizeMode(resizeMode), 1);
-    }
-
-    private static String getMetricsCounterForResizeMode(int resizeMode) {
-        switch (resizeMode) {
-            case ActivityInfo.RESIZE_MODE_FORCE_RESIZEABLE:
-                return COUNTER_WINDOW_UNSUPPORTED;
-            case ActivityInfo.RESIZE_MODE_RESIZEABLE:
-            case ActivityInfo.RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION:
-                return COUNTER_WINDOW_SUPPORTED;
-            default:
-                return COUNTER_WINDOW_INCOMPATIBLE;
         }
     }
 
@@ -780,6 +768,7 @@ public class Recents extends SystemUI
 
     /**
      * Attempts to proxy the following action to the override recents package.
+     *
      * @return whether the proxying was successful
      */
     private boolean proxyToOverridePackage(String action) {

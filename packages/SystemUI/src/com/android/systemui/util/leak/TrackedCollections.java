@@ -53,12 +53,27 @@ public class TrackedCollections {
         collectionState.lastUptime = SystemClock.uptimeMillis();
     }
 
+    public synchronized void dump(PrintWriter pw, Predicate<Collection<?>> filter) {
+        for (Map.Entry<WeakReference<Collection<?>>, CollectionState> entry
+                : mCollections.entrySet()) {
+            Collection<?> key = entry.getKey().get();
+            if (filter == null || key != null && filter.test(key)) {
+                entry.getValue().dump(pw);
+                pw.println();
+            }
+        }
+    }
+
     private static class CollectionState {
         String tag;
         long startUptime;
-        /** The number of elements in the collection at startUptime + HALFWAY_DELAY */
+        /**
+         * The number of elements in the collection at startUptime + HALFWAY_DELAY
+         */
         int halfwayCount = -1;
-        /** The number of elements in the collection at lastUptime */
+        /**
+         * The number of elements in the collection at lastUptime
+         */
         int lastCount = -1;
         long lastUptime;
 
@@ -66,9 +81,9 @@ public class TrackedCollections {
          * Dump statistics about the tracked collection:
          * - the tag
          * - average elements inserted per hour during
-         *   - the first 30min of its existence
-         *   - after the first 30min
-         *   - overall
+         * - the first 30min of its existence
+         * - after the first 30min
+         * - overall
          * - the current size of the collection
          */
         void dump(PrintWriter pw) {
@@ -88,17 +103,6 @@ public class TrackedCollections {
                 return Float.NaN;
             }
             return ((float) count2 - count1) / (uptime2 - uptime1) * 60 * MILLIS_IN_MINUTE;
-        }
-    }
-
-    public synchronized void dump(PrintWriter pw, Predicate<Collection<?>> filter) {
-        for (Map.Entry<WeakReference<Collection<?>>, CollectionState> entry
-                : mCollections.entrySet()) {
-            Collection<?> key = entry.getKey().get();
-            if (filter == null || key != null && filter.test(key)) {
-                entry.getValue().dump(pw);
-                pw.println();
-            }
         }
     }
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 **
 ** Copyright 2016, The Android Open Source Project
 **
@@ -20,34 +19,37 @@
 <!-- Layout for {@link com.android.systemui.pip.tv.PipControlButtonView}. -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView android:id="@+id/button"
+    <ImageView
+        android:id="@+id/button"
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:focusable="true"
-        android:src="@drawable/tv_pip_button_focused"
-        android:importantForAccessibility="yes" />
+        android:importantForAccessibility="yes"
+        android:src="@drawable/tv_pip_button_focused" />
 
-    <ImageView android:id="@+id/icon"
+    <ImageView
+        android:id="@+id/icon"
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:padding="5dp"
-        android:importantForAccessibility="no" />
+        android:importantForAccessibility="no"
+        android:padding="5dp" />
 
-    <TextView android:id="@+id/desc"
+    <TextView
+        android:id="@+id/desc"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/icon"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="3dp"
-        android:gravity="center"
-        android:text="@string/pip_fullscreen"
         android:alpha="0"
         android:fontFamily="sans-serif"
-        android:textSize="12sp"
+        android:gravity="center"
+        android:importantForAccessibility="no"
+        android:text="@string/pip_fullscreen"
         android:textColor="#EEEEEE"
-        android:importantForAccessibility="no" />
+        android:textSize="12sp" />
 </merge>

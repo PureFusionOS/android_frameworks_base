@@ -29,6 +29,7 @@ import com.android.systemui.R;
 public class NotificationUtils {
     private static final int[] sLocationBase = new int[2];
     private static final int[] sLocationOffset = new int[2];
+
     public static boolean isGrayscale(ImageView v, NotificationColorUtil colorUtil) {
         Object isGrayscale = v.getTag(R.id.icon_is_grayscale);
         if (isGrayscale != null) {

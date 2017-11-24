@@ -41,6 +41,12 @@ public class TunerZenModePanel extends LinearLayout implements OnClickListener {
     private int mZenMode;
     private ZenModeController mController;
     private View mButtons;
+    private final Runnable mUpdate = new Runnable() {
+        @Override
+        public void run() {
+            updatePanel();
+        }
+    };
     private View mMoreSettings;
     private View mDone;
     private OnClickListener mDoneListener;
@@ -131,11 +137,4 @@ public class TunerZenModePanel extends LinearLayout implements OnClickListener {
         mZenModePanel.setVisibility(zenOn ? View.VISIBLE : View.GONE);
         mButtons.setVisibility(zenOn ? View.VISIBLE : View.GONE);
     }
-
-    private final Runnable mUpdate = new Runnable() {
-        @Override
-        public void run() {
-            updatePanel();
-        }
-    };
 }

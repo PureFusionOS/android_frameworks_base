@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +13,16 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<com.android.keyguard.AlphaOptimizedLinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.keyguard.AlphaOptimizedLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/qs_detail_header_padding"
-    android:paddingTop="@dimen/qs_detail_header_padding"
+    android:background="@drawable/btn_borderless_rect"
+    android:gravity="center"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/qs_detail_items_padding_top"
     android:paddingEnd="@dimen/qs_panel_padding"
-    android:background="@drawable/btn_borderless_rect"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:paddingLeft="@dimen/qs_detail_header_padding"
+    android:paddingTop="@dimen/qs_detail_header_padding">
 
     <com.android.systemui.ResizingSpace
         android:layout_width="match_parent"
@@ -37,12 +35,12 @@
 
         <TextView
             android:id="@android:id/title"
-            android:paddingStart="@dimen/qs_detail_header_text_padding"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textDirection="locale"
-            android:textAppearance="@style/TextAppearance.QS.DetailHeader" />
+            android:paddingStart="@dimen/qs_detail_header_text_padding"
+            android:textAppearance="@style/TextAppearance.QS.DetailHeader"
+            android:textDirection="locale" />
 
         <ImageView
             android:id="@+id/settings"
@@ -51,7 +49,7 @@
             android:background="?android:attr/selectableItemBackground"
             android:padding="@dimen/qs_detail_image_padding"
             android:src="@drawable/ic_settings"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Switch
             android:id="@android:id/toggle"

@@ -87,7 +87,7 @@ public final class KeyboardShortcuts {
     private final SparseArray<Drawable> mModifierDrawables = new SparseArray<>();
     // Ordered list of modifiers that are supported. All values in this array must exist in
     // mModifierNames.
-    private final int[] mModifierList = new int[] {
+    private final int[] mModifierList = new int[]{
             KeyEvent.META_META_ON, KeyEvent.META_CTRL_ON, KeyEvent.META_ALT_ON,
             KeyEvent.META_SHIFT_ON, KeyEvent.META_SYM_ON, KeyEvent.META_FUNCTION_ON
     };
@@ -95,11 +95,6 @@ public final class KeyboardShortcuts {
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Context mContext;
     private final IPackageManager mPackageManager;
-    private final OnClickListener mDialogCloseListener = new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int id) {
-            dismissKeyboardShortcuts();
-        }
-    };
     private final Comparator<KeyboardShortcutInfo> mApplicationItemsComparator =
             new Comparator<KeyboardShortcutInfo>() {
                 @Override
@@ -121,8 +116,12 @@ public final class KeyboardShortcuts {
                             ksh2.getLabel().toString());
                 }
             };
-
     private Dialog mKeyboardShortcutsDialog;
+    private final OnClickListener mDialogCloseListener = new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+            dismissKeyboardShortcuts();
+        }
+    };
     private KeyCharacterMap mKeyCharacterMap;
     private KeyCharacterMap mBackupKeyCharacterMap;
 
@@ -589,7 +588,7 @@ public final class KeyboardShortcuts {
     }
 
     private void populateKeyboardShortcuts(LinearLayout keyboardShortcutsLayout,
-            List<KeyboardShortcutGroup> keyboardShortcutGroups) {
+                                           List<KeyboardShortcutGroup> keyboardShortcutGroups) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         final int keyboardShortcutGroupsSize = keyboardShortcutGroups.size();
         TextView shortcutsKeyView = (TextView) inflater.inflate(
@@ -735,7 +734,7 @@ public final class KeyboardShortcuts {
         if (modifiers == 0) {
             return shortcutKeys;
         }
-        for(int i = 0; i < mModifierList.length; ++i) {
+        for (int i = 0; i < mModifierList.length; ++i) {
             final int supportedModifier = mModifierList[i];
             if ((modifiers & supportedModifier) != 0) {
                 shortcutKeys.add(new StringDrawableContainer(
@@ -751,6 +750,18 @@ public final class KeyboardShortcuts {
         return shortcutKeys;
     }
 
+    private static final class StringDrawableContainer {
+        @NonNull
+        public String mString;
+        @Nullable
+        public Drawable mDrawable;
+
+        StringDrawableContainer(String string, Drawable drawable) {
+            mString = string;
+            mDrawable = drawable;
+        }
+    }
+
     private final class ShortcutKeyAccessibilityDelegate extends AccessibilityDelegate {
         private String mContentDescription;
 
@@ -764,18 +775,6 @@ public final class KeyboardShortcuts {
             if (mContentDescription != null) {
                 info.setContentDescription(mContentDescription.toLowerCase());
             }
-        }
-    }
-
-    private static final class StringDrawableContainer {
-        @NonNull
-        public String mString;
-        @Nullable
-        public Drawable mDrawable;
-
-        StringDrawableContainer(String string, Drawable drawable) {
-            mString = string;
-            mDrawable = drawable;
         }
     }
 }

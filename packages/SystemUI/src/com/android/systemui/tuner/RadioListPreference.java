@@ -47,17 +47,17 @@ public class RadioListPreference extends CustomListPreference {
     }
 
     @Override
-    public void setSummary(CharSequence summary) {
-        super.setSummary(summary);
-        mSummary = summary;
-    }
-
-    @Override
     public CharSequence getSummary() {
         if (mSummary == null || mSummary.toString().contains("%s")) {
             return super.getSummary();
         }
         return mSummary;
+    }
+
+    @Override
+    public void setSummary(CharSequence summary) {
+        super.setSummary(summary);
+        mSummary = summary;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class RadioListPreference extends CustomListPreference {
 
     @Override
     protected void onDialogStateRestored(DialogFragment fragment, Dialog dialog,
-            Bundle savedInstanceState) {
+                                         Bundle savedInstanceState) {
         super.onDialogStateRestored(fragment, dialog, savedInstanceState);
         View view = dialog.findViewById(R.id.content);
         RadioFragment radioFragment = (RadioFragment) FragmentHostManager.get(view)

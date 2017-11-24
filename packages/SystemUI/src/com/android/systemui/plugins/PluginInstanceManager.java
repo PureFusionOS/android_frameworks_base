@@ -45,35 +45,32 @@ import java.util.List;
 
 public class PluginInstanceManager<T extends Plugin> {
 
-    private static final boolean DEBUG = false;
-
-    private static final String TAG = "PluginInstanceManager";
     public static final String PLUGIN_PERMISSION = "com.android.systemui.permission.PLUGIN";
-
+    private static final boolean DEBUG = false;
+    private static final String TAG = "PluginInstanceManager";
+    @VisibleForTesting
+    final MainHandler mMainHandler;
+    @VisibleForTesting
+    final PluginHandler mPluginHandler;
     private final Context mContext;
     private final PluginListener<T> mListener;
     private final String mAction;
     private final boolean mAllowMultiple;
     private final VersionInfo mVersion;
-
-    @VisibleForTesting
-    final MainHandler mMainHandler;
-    @VisibleForTesting
-    final PluginHandler mPluginHandler;
     private final boolean isDebuggable;
     private final PackageManager mPm;
     private final PluginManagerImpl mManager;
 
     PluginInstanceManager(Context context, String action, PluginListener<T> listener,
-            boolean allowMultiple, Looper looper, VersionInfo version, PluginManagerImpl manager) {
+                          boolean allowMultiple, Looper looper, VersionInfo version, PluginManagerImpl manager) {
         this(context, context.getPackageManager(), action, listener, allowMultiple, looper, version,
                 manager, Build.IS_DEBUGGABLE);
     }
 
     @VisibleForTesting
     PluginInstanceManager(Context context, PackageManager pm, String action,
-            PluginListener<T> listener, boolean allowMultiple, Looper looper, VersionInfo version,
-            PluginManagerImpl manager, boolean debuggable) {
+                          PluginListener<T> listener, boolean allowMultiple, Looper looper, VersionInfo version,
+                          PluginManagerImpl manager, boolean debuggable) {
         mMainHandler = new MainHandler(Looper.getMainLooper());
         mPluginHandler = new PluginHandler(looper);
         mManager = manager;
@@ -165,6 +162,49 @@ public class PluginInstanceManager<T extends Plugin> {
             }
         }
         return false;
+    }
+
+    public static class PluginContextWrapper extends ContextWrapper {
+        private final ClassLoader mClassLoader;
+        private LayoutInflater mInflater;
+
+        public PluginContextWrapper(Context base, ClassLoader classLoader) {
+            super(base);
+            mClassLoader = classLoader;
+        }
+
+        @Override
+        public ClassLoader getClassLoader() {
+            return mClassLoader;
+        }
+
+        @Override
+        public Object getSystemService(String name) {
+            if (LAYOUT_INFLATER_SERVICE.equals(name)) {
+                if (mInflater == null) {
+                    mInflater = LayoutInflater.from(getBaseContext()).cloneInContext(this);
+                }
+                return mInflater;
+            }
+            return getBaseContext().getSystemService(name);
+        }
+    }
+
+    static class PluginInfo<T> {
+        private final Context mPluginContext;
+        private final VersionInfo mVersion;
+        T mPlugin;
+        String mPackage;
+        private String mClass;
+
+        public PluginInfo(String pkg, String cls, T plugin, Context pluginContext,
+                          VersionInfo info) {
+            mPlugin = plugin;
+            mClass = cls;
+            mPackage = pkg;
+            mPluginContext = pluginContext;
+            mVersion = info;
+        }
     }
 
     private class MainHandler extends Handler {
@@ -320,12 +360,12 @@ public class PluginInstanceManager<T extends Plugin> {
                             "system_notification_accent_color", "color", "android");
                     final Notification.Builder nb = new Notification.Builder(mContext,
                             PluginManager.NOTIFICATION_CHANNEL_ID)
-                                    .setStyle(new Notification.BigTextStyle())
-                                    .setSmallIcon(icon)
-                                    .setWhen(0)
-                                    .setShowWhen(false)
-                                    .setVisibility(Notification.VISIBILITY_PUBLIC)
-                                    .setColor(mContext.getColor(color));
+                            .setStyle(new Notification.BigTextStyle())
+                            .setSmallIcon(icon)
+                            .setWhen(0)
+                            .setShowWhen(false)
+                            .setVisibility(Notification.VISIBILITY_PUBLIC)
+                            .setColor(mContext.getColor(color));
                     String label = cls;
                     try {
                         label = mPm.getServiceInfo(component, 0).loadLabel(mPm).toString();
@@ -373,49 +413,6 @@ public class PluginInstanceManager<T extends Plugin> {
                 return null;
             }
             return pv;
-        }
-    }
-
-    public static class PluginContextWrapper extends ContextWrapper {
-        private final ClassLoader mClassLoader;
-        private LayoutInflater mInflater;
-
-        public PluginContextWrapper(Context base, ClassLoader classLoader) {
-            super(base);
-            mClassLoader = classLoader;
-        }
-
-        @Override
-        public ClassLoader getClassLoader() {
-            return mClassLoader;
-        }
-
-        @Override
-        public Object getSystemService(String name) {
-            if (LAYOUT_INFLATER_SERVICE.equals(name)) {
-                if (mInflater == null) {
-                    mInflater = LayoutInflater.from(getBaseContext()).cloneInContext(this);
-                }
-                return mInflater;
-            }
-            return getBaseContext().getSystemService(name);
-        }
-    }
-
-    static class PluginInfo<T> {
-        private final Context mPluginContext;
-        private final VersionInfo mVersion;
-        private String mClass;
-        T mPlugin;
-        String mPackage;
-
-        public PluginInfo(String pkg, String cls, T plugin, Context pluginContext,
-                VersionInfo info) {
-            mPlugin = plugin;
-            mClass = cls;
-            mPackage = pkg;
-            mPluginContext = pluginContext;
-            mVersion = info;
         }
     }
 }

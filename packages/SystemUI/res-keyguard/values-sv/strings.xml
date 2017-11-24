@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"Lås upp genom att trycka på Meny."</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"Nätverk låst"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"Inget SIM-kort"</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"Inget SIM-kort i surfplattan."</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"Inget SIM-kort i mobilen."</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"Inget SIM-kort i surfplattan."</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"Inget SIM-kort i mobilen."</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"Sätt i ett SIM-kort."</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"SIM-kort saknas eller kan inte läsas. Sätt i ett SIM-kort."</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"Oanvändbart SIM-kort."</string>
@@ -69,34 +68,34 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"Ange en pinkod med fyra till åtta siffror."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"PUK-koden ska vara minst åtta siffror."</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"Ange rätt PUK-kod. Om försöken upprepas inaktiveras SIM-kortet permanent."</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"Pinkoderna stämmer inte överens"</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"Pinkoderna stämmer inte överens"</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"För många försök med grafiskt lösenord"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"Du har angett fel pinkod <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. \n\nFörsök igen om <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunder."</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"Du har angett fel lösenord <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. \n\nFörsök igen om <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunder."</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"Du har ritat ditt grafiska lösenord fel <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. \n\nFörsök igen om <xliff:g id="NUMBER_1">%2$d</xliff:g> sekunder."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök återställs surfplattan och all data raderas."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök återställs mobilen och all data raderas."</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Surfplattan återställs och all data raderas."</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Mobilen återställs och all data raderas."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök tas användaren bort och all användardata raderas."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök tas användaren bort och all användardata raderas."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Användaren tas bort och all användardata raderas."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Användaren tas bort och all användardata raderas."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök tas jobbprofilen bort och all profildata raderas."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök tas jobbprofilen bort och all profildata raderas."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Jobbprofilen tas bort och all profildata raderas."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Jobbprofilen tas bort och all profildata raderas."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"Du har ritat ditt grafiska lösenord fel <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök måste du låsa upp surfplattan med hjälp av ett e-postkonto.\n\n Försök igen om <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunder."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"Du har ritat ditt grafiska lösenord fel <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök måste du låsa upp mobilen med hjälp av ett e-postkonto.\n\n Försök igen om <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunder."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök återställs surfplattan och all data raderas."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök återställs mobilen och all data raderas."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Surfplattan återställs och all data raderas."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Mobilen återställs och all data raderas."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök tas användaren bort och all användardata raderas."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök tas användaren bort och all användardata raderas."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Användaren tas bort och all användardata raderas."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Användaren tas bort och all användardata raderas."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök tas jobbprofilen bort och all profildata raderas."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök tas jobbprofilen bort och all profildata raderas."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"Du har försökt låsa upp surfplattan på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Jobbprofilen tas bort och all profildata raderas."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"Du har försökt låsa upp mobilen på ett felaktigt sätt <xliff:g id="NUMBER">%d</xliff:g> gånger. Jobbprofilen tas bort och all profildata raderas."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"Du har ritat ditt grafiska lösenord fel <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök måste du låsa upp surfplattan med hjälp av ett e-postkonto.\n\n Försök igen om <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunder."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"Du har ritat ditt grafiska lösenord fel <xliff:g id="NUMBER_0">%1$d</xliff:g> gånger. Efter ytterligare <xliff:g id="NUMBER_1">%2$d</xliff:g> försök måste du låsa upp mobilen med hjälp av ett e-postkonto.\n\n Försök igen om <xliff:g id="NUMBER_2">%3$d</xliff:g> sekunder."</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"Du angav fel pinkod för SIM-kortet och måste nu kontakta operatören för att låsa upp enheten."</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="other">Du angav fel pinkod för SIM-kortet. <xliff:g id="NUMBER_1">%d</xliff:g> försök återstår.</item>
-      <item quantity="one">Du angav fel pinkod för SIM-kortet. <xliff:g id="NUMBER_0">%d</xliff:g> försök återstår innan du måste kontakta operatören för att låsa upp enheten.</item>
+        <item quantity="other">Du angav fel pinkod för SIM-kortet. <xliff:g id="NUMBER_1">%d</xliff:g> försök återstår.</item>
+        <item quantity="one">Du angav fel pinkod för SIM-kortet. <xliff:g id="NUMBER_0">%d</xliff:g> försök återstår innan du måste kontakta operatören för att låsa upp enheten.</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"SIM-kortet är obrukbart. Kontakta operatören."</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="other">Du angav fel PUK-kod för SIM-kortet. <xliff:g id="NUMBER_1">%d</xliff:g> försök återstår innan SIM-kortet blir obrukbart.</item>
-      <item quantity="one">Du angav fel PUK-kod för SIM-kortet. <xliff:g id="NUMBER_0">%d</xliff:g> försök återstår innan SIM-kortet blir obrukbart.</item>
+        <item quantity="other">Du angav fel PUK-kod för SIM-kortet. <xliff:g id="NUMBER_1">%d</xliff:g> försök återstår innan SIM-kortet blir obrukbart.</item>
+        <item quantity="one">Du angav fel PUK-kod för SIM-kortet. <xliff:g id="NUMBER_0">%d</xliff:g> försök återstår innan SIM-kortet blir obrukbart.</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"Det gick inte att låsa upp med pinkoden för SIM-kortet."</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"Det gick inte att låsa upp med PUK-koden för SIM-kortet."</string>
@@ -116,16 +115,16 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"Administratören har låst enheten"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"Enheten har låsts manuellt"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="other">Enheten har inte låsts upp på <xliff:g id="NUMBER_1">%d</xliff:g> timmar. Bekräfta det grafiska lösenordet.</item>
-      <item quantity="one">Enheten har inte låsts upp på <xliff:g id="NUMBER_0">%d</xliff:g> timme. Bekräfta det grafiska lösenordet.</item>
+        <item quantity="other">Enheten har inte låsts upp på <xliff:g id="NUMBER_1">%d</xliff:g> timmar. Bekräfta det grafiska lösenordet.</item>
+        <item quantity="one">Enheten har inte låsts upp på <xliff:g id="NUMBER_0">%d</xliff:g> timme. Bekräfta det grafiska lösenordet.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="other">Enheten har inte låsts upp på <xliff:g id="NUMBER_1">%d</xliff:g> timmar. Bekräfta pinkoden.</item>
-      <item quantity="one">Enheten har inte låsts upp på <xliff:g id="NUMBER_0">%d</xliff:g> timme. Bekräfta pinkoden.</item>
+        <item quantity="other">Enheten har inte låsts upp på <xliff:g id="NUMBER_1">%d</xliff:g> timmar. Bekräfta pinkoden.</item>
+        <item quantity="one">Enheten har inte låsts upp på <xliff:g id="NUMBER_0">%d</xliff:g> timme. Bekräfta pinkoden.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="other">Enheten har inte låsts upp på <xliff:g id="NUMBER_1">%d</xliff:g> timmar. Bekräfta lösenordet.</item>
-      <item quantity="one">Enheten har inte låsts upp på <xliff:g id="NUMBER_0">%d</xliff:g> timme. Bekräfta lösenordet.</item>
+        <item quantity="other">Enheten har inte låsts upp på <xliff:g id="NUMBER_1">%d</xliff:g> timmar. Bekräfta lösenordet.</item>
+        <item quantity="one">Enheten har inte låsts upp på <xliff:g id="NUMBER_0">%d</xliff:g> timme. Bekräfta lösenordet.</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"Identifierades inte"</string>
 </resources>

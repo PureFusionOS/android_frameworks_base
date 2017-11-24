@@ -23,9 +23,13 @@ import java.util.Set;
 
 public interface CastController extends CallbackController<Callback>, Dumpable {
     void setDiscovering(boolean request);
+
     void setCurrentUserId(int currentUserId);
+
     Set<CastDevice> getCastDevices();
+
     void startCasting(CastDevice device);
+
     void stopCasting(CastDevice device);
 
     public interface Callback {

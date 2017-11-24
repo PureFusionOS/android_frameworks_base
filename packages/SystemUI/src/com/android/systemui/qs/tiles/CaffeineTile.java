@@ -32,21 +32,23 @@ import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
-/** Quick settings tile: Caffeine **/
+/**
+ * Quick settings tile: Caffeine
+ **/
 public class CaffeineTile extends QSTileImpl<BooleanState> {
 
+    private static int[] DURATIONS = new int[]{
+            5 * 60,   // 5 min
+            10 * 60,  // 10 min
+            30 * 60,  // 30 min
+            -1,       // infinity
+    };
     private final PowerManager.WakeLock mWakeLock;
+    private final Receiver mReceiver = new Receiver();
+    public long mLastClickTime = -1;
     private int mSecondsRemaining;
     private int mDuration;
-    private static int[] DURATIONS = new int[] {
-        5 * 60,   // 5 min
-        10 * 60,  // 10 min
-        30 * 60,  // 30 min
-        -1,       // infinity
-    };
     private CountDownTimer mCountdownTimer = null;
-    public long mLastClickTime = -1;
-    private final Receiver mReceiver = new Receiver();
 
     public CaffeineTile(QSHost host) {
         super(host);
@@ -133,7 +135,7 @@ public class CaffeineTile extends QSTileImpl<BooleanState> {
 
     private void startCountDown(long duration) {
         stopCountDown();
-        mSecondsRemaining = (int)duration;
+        mSecondsRemaining = (int) duration;
         if (duration == -1) {
             // infinity timing, no need to start timer
             return;
@@ -167,7 +169,7 @@ public class CaffeineTile extends QSTileImpl<BooleanState> {
             return "\u221E"; // infinity
         }
         return String.format("%02d:%02d",
-                        mSecondsRemaining / 60 % 60, mSecondsRemaining % 60);
+                mSecondsRemaining / 60 % 60, mSecondsRemaining % 60);
     }
 
     @Override
@@ -176,13 +178,13 @@ public class CaffeineTile extends QSTileImpl<BooleanState> {
         if (state.value) {
             state.label = formatValueWithRemainingTime();
             state.icon = ResourceIcon.get(R.drawable.ic_qs_caffeine_on);
-            state.contentDescription =  mContext.getString(
+            state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_caffeine_on);
             state.state = Tile.STATE_ACTIVE;
         } else {
             state.label = mContext.getString(R.string.quick_settings_caffeine_label);
             state.icon = ResourceIcon.get(R.drawable.ic_qs_caffeine_off);
-            state.contentDescription =  mContext.getString(
+            state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_caffeine_off);
             state.state = Tile.STATE_INACTIVE;
         }

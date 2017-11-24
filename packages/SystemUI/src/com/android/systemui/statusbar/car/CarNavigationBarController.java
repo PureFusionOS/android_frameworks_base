@@ -38,7 +38,7 @@ import java.util.List;
 
 /**
  * A controller to populate data for CarNavigationBarView and handle user interactions.
- *
+ * <p>
  * <p>Each button inside the navigation bar is defined by data in arrays_car.xml. OEMs can
  * customize the navigation buttons by updating arrays_car.xml appropriately in an overlay.
  */
@@ -81,7 +81,7 @@ class CarNavigationBarController {
     private Intent mPersistentTaskIntent;
 
     public CarNavigationBarController(Context context, CarNavigationBarView navBar,
-            CarStatusBar activityStarter) {
+                                      CarStatusBar activityStarter) {
         mContext = context;
         mNavBar = navBar;
         mStatusBar = activityStarter;
@@ -325,7 +325,7 @@ class CarNavigationBarController {
      * The click listeners are attached to the given button.
      */
     private void initClickListeners(View button, int index, String clickString,
-            String longPressString) {
+                                    String longPressString) {
         // Each button at least have an action when pressed.
         if (TextUtils.isEmpty(clickString)) {
             throw new RuntimeException("Facet at index " + index + " does not have click action.");

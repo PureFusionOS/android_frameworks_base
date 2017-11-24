@@ -106,7 +106,7 @@ public class NotificationChildrenContainer extends ViewGroup {
     }
 
     public NotificationChildrenContainer(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                                         int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initDimens();
         mHybridGroupManager = new HybridGroupManager(getContext(), this);
@@ -231,7 +231,7 @@ public class NotificationChildrenContainer extends ViewGroup {
     /**
      * Add a child notification to this view.
      *
-     * @param row the row to add
+     * @param row        the row to add
      * @param childIndex the index to add it at, if -1 it will be added at the end
      */
     public void addNotification(ExpandableNotificationRow row, int childIndex) {
@@ -412,14 +412,14 @@ public class NotificationChildrenContainer extends ViewGroup {
     /**
      * Apply the order given in the list to the children.
      *
-     * @param childOrder the new list order
+     * @param childOrder             the new list order
      * @param visualStabilityManager
      * @param callback
      * @return whether the list order has changed
      */
     public boolean applyChildOrder(List<ExpandableNotificationRow> childOrder,
-            VisualStabilityManager visualStabilityManager,
-            VisualStabilityManager.Callback callback) {
+                                   VisualStabilityManager visualStabilityManager,
+                                   VisualStabilityManager.Callback callback) {
         if (childOrder == null) {
             return false;
         }
@@ -454,7 +454,6 @@ public class NotificationChildrenContainer extends ViewGroup {
     }
 
     /**
-     *
      * @return the intrinsic size of this children container, i.e the natural fully expanded state
      */
     public int getIntrinsicHeight() {
@@ -464,7 +463,7 @@ public class NotificationChildrenContainer extends ViewGroup {
 
     /**
      * @return the intrinsic height with a number of children given
-     *         in @param maxAllowedVisibleChildren
+     * in @param maxAllowedVisibleChildren
      */
     private int getIntrinsicHeight(float maxAllowedVisibleChildren) {
         if (showingAsLowPriority()) {
@@ -630,14 +629,14 @@ public class NotificationChildrenContainer extends ViewGroup {
      * When moving into the bottom stack, the bottom visible child in an expanded group adjusts its
      * height, children in the group after this are gone.
      *
-     * @param child the child who's height to adjust.
+     * @param child        the child who's height to adjust.
      * @param parentHeight the height of the parent.
-     * @param childState the state to update.
-     * @param yPosition the yPosition of the view.
+     * @param childState   the state to update.
+     * @param yPosition    the yPosition of the view.
      * @return true if children after this one should be hidden.
      */
     private boolean updateChildStateForExpandedGroup(ExpandableNotificationRow child,
-            int parentHeight, ExpandableViewState childState, int yPosition) {
+                                                     int parentHeight, ExpandableViewState childState, int yPosition) {
         final int top = yPosition + child.getClipTopAmount();
         final int intrinsicHeight = child.getIntrinsicHeight();
         final int bottom = top + intrinsicHeight;
@@ -816,13 +815,13 @@ public class NotificationChildrenContainer extends ViewGroup {
         }
     }
 
+    public ExpandableNotificationRow getContainingNotification() {
+        return mContainingNotification;
+    }
+
     public void setContainingNotification(ExpandableNotificationRow parent) {
         mContainingNotification = parent;
         mHeaderUtil = new NotificationHeaderUtil(mContainingNotification);
-    }
-
-    public ExpandableNotificationRow getContainingNotification() {
-        return mContainingNotification;
     }
 
     public NotificationHeaderView getHeaderView() {
@@ -1075,7 +1074,7 @@ public class NotificationChildrenContainer extends ViewGroup {
      * Get the minimum Height for this group.
      *
      * @param maxAllowedVisibleChildren the number of children that should be visible
-     * @param likeHighPriority if the height should be calculated as if it were not low priority
+     * @param likeHighPriority          if the height should be calculated as if it were not low priority
      */
     private int getMinHeight(int maxAllowedVisibleChildren, boolean likeHighPriority) {
         if (!likeHighPriority && showingAsLowPriority()) {
@@ -1140,18 +1139,6 @@ public class NotificationChildrenContainer extends ViewGroup {
         mOverflowNumber = null;
         mGroupOverFlowState = null;
         updateGroupOverflow();
-    }
-
-    public void setUserLocked(boolean userLocked) {
-        mUserLocked = userLocked;
-        if (!mUserLocked) {
-            updateHeaderVisibility(false /* animate */);
-        }
-        int childCount = mChildren.size();
-        for (int i = 0; i < childCount; i++) {
-            ExpandableNotificationRow child = mChildren.get(i);
-            child.setUserLocked(userLocked && !showingAsLowPriority());
-        }
     }
 
     public void onNotificationUpdated() {
@@ -1238,5 +1225,17 @@ public class NotificationChildrenContainer extends ViewGroup {
     @VisibleForTesting
     public boolean isUserLocked() {
         return mUserLocked;
+    }
+
+    public void setUserLocked(boolean userLocked) {
+        mUserLocked = userLocked;
+        if (!mUserLocked) {
+            updateHeaderVisibility(false /* animate */);
+        }
+        int childCount = mChildren.size();
+        for (int i = 0; i < childCount; i++) {
+            ExpandableNotificationRow child = mChildren.get(i);
+            child.setUserLocked(userLocked && !showingAsLowPriority());
+        }
     }
 }

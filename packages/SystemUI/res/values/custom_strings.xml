@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2018 PureFusionOS
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +25,7 @@
 
     <!-- PiP Tile -->
     <string name="quick_settings_pip_label">PiP</string>
-     <!-- Sync QS Tile -->
+    <!-- Sync QS Tile -->
     <string name="quick_settings_sync_label">Sync</string>
     <string name="accessibility_quick_settings_sync_off">Sync off</string>
     <string name="accessibility_quick_settings_sync_on">Sync on</string>
@@ -133,7 +132,7 @@
     <string name="omnijaws_current_text">Now</string>
     <string name="omnijaws_package_not_available">OmniJaws not available</string>
     <string name="omnijaws_service_last_update">Last update:</string>
-    
+
     <!-- Off/On/Toggle -->
     <string name="off">Off</string>
     <string name="on">On</string>

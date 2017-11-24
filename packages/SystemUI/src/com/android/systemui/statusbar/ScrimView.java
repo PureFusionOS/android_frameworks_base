@@ -36,8 +36,7 @@ import com.android.systemui.R;
 /**
  * A view which can draw a scrim
  */
-public class ScrimView extends View
-{
+public class ScrimView extends View {
     private final Paint mPaint = new Paint();
     private int mScrimColor;
     private boolean mIsEmpty = true;
@@ -99,7 +98,7 @@ public class ScrimView extends View
                     canvas.drawRect(0, 0, getWidth(), mExcludedRect.top, mPaint);
                 }
                 if (mExcludedRect.left > 0) {
-                    canvas.drawRect(0,  mExcludedRect.top, mExcludedRect.left, mExcludedRect.bottom,
+                    canvas.drawRect(0, mExcludedRect.top, mExcludedRect.left, mExcludedRect.bottom,
                             mPaint);
                 }
                 if (mExcludedRect.right < getWidth()) {
@@ -110,7 +109,7 @@ public class ScrimView extends View
                             mPaint);
                 }
                 if (mExcludedRect.bottom < getHeight()) {
-                    canvas.drawRect(0,  mExcludedRect.bottom, getWidth(), getHeight(), mPaint);
+                    canvas.drawRect(0, mExcludedRect.bottom, getWidth(), getHeight(), mPaint);
                 }
             }
         }
@@ -130,6 +129,10 @@ public class ScrimView extends View
         invalidate();
     }
 
+    public int getScrimColor() {
+        return mScrimColor;
+    }
+
     public void setScrimColor(int color) {
         if (color != mScrimColor) {
             mIsEmpty = Color.alpha(color) == 0;
@@ -139,10 +142,6 @@ public class ScrimView extends View
                 mChangeRunnable.run();
             }
         }
-    }
-
-    public int getScrimColor() {
-        return mScrimColor;
     }
 
     @Override

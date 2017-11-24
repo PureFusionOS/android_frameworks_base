@@ -94,13 +94,13 @@ public class HybridGroupManager {
     }
 
     public HybridNotificationView bindFromNotification(HybridNotificationView reusableView,
-            Notification notification) {
+                                                       Notification notification) {
         return bindFromNotificationWithStyle(reusableView, notification,
                 R.style.HybridNotification);
     }
 
     public HybridNotificationView bindAmbientFromNotification(HybridNotificationView reusableView,
-            Notification notification) {
+                                                              Notification notification) {
         return bindFromNotificationWithStyle(reusableView, notification,
                 R.style.HybridNotification_Ambient);
     }
@@ -149,7 +149,7 @@ public class HybridGroupManager {
     }
 
     public void setOverflowNumberDark(TextView view, boolean dark, boolean fade, long delay) {
-        mDozer.setIntensityDark((f)->{
+        mDozer.setIntensityDark((f) -> {
             mDarkAmount = f;
             updateOverFlowNumberColor(view);
         }, dark, fade, delay);

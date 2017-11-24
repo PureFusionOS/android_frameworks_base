@@ -40,7 +40,7 @@ public class ClockPreference extends DropDownPreference implements TunerService.
     public ClockPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mClock = context.getString(com.android.internal.R.string.status_bar_clock);
-        setEntryValues(new CharSequence[] { SECONDS, DEFAULT, DISABLED });
+        setEntryValues(new CharSequence[]{SECONDS, DEFAULT, DISABLED});
     }
 
     @Override

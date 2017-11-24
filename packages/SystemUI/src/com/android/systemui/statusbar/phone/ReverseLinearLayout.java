@@ -29,10 +29,14 @@ import java.util.ArrayList;
  */
 public class ReverseLinearLayout extends LinearLayout {
 
-    /** If true, the layout is reversed vs. a regular linear layout */
+    /**
+     * If true, the layout is reversed vs. a regular linear layout
+     */
     private boolean mIsLayoutReverse;
 
-    /** If true, the layout is opposite to it's natural reversity from the layout direction */
+    /**
+     * If true, the layout is opposite to it's natural reversity from the layout direction
+     */
     private boolean mIsAlternativeOrder;
 
     public ReverseLinearLayout(Context context, @Nullable AttributeSet attrs) {

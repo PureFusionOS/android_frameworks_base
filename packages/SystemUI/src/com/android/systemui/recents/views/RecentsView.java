@@ -106,34 +106,28 @@ public class RecentsView extends FrameLayout {
 
     private static final int SHOW_STACK_ACTION_BUTTON_DURATION = 134;
     private static final int HIDE_STACK_ACTION_BUTTON_DURATION = 100;
-
+    private final float mScrimAlpha;
+    private final Drawable mBackgroundScrim;
+    private final FlingAnimationUtils mFlingAnimationUtils;
+    View mFloatingButton;
+    View mClearRecents;
+    @ViewDebug.ExportedProperty(category = "recents")
+    Rect mSystemInsets = new Rect();
+    TextView mMemText;
+    ProgressBar mMemBar;
     private TaskStackView mTaskStackView;
     private TextView mStackActionButton;
     private TextView mEmptyView;
     private SettingsObserver mSettingsObserver;
     private boolean showClearAllRecents;
-    View mFloatingButton;
-    View mClearRecents;
     private int clearRecentsLocation;
-
     private boolean mAwaitingFirstLayout = true;
     private boolean mLastTaskLaunchedWasFreeform;
-
-    @ViewDebug.ExportedProperty(category="recents")
-    Rect mSystemInsets = new Rect();
     private int mDividerSize;
-
-    private final float mScrimAlpha;
-    private final Drawable mBackgroundScrim;
     private Animator mBackgroundScrimAnimator;
-
     private RecentsTransitionHelper mTransitionHelper;
-    @ViewDebug.ExportedProperty(deepExport=true, prefix="touch_")
+    @ViewDebug.ExportedProperty(deepExport = true, prefix = "touch_")
     private RecentsViewTouchHandler mTouchHandler;
-    private final FlingAnimationUtils mFlingAnimationUtils;
-
-    TextView mMemText;
-    ProgressBar mMemBar;
     private ActivityManager mAm;
     private int mTotalMem;
 
@@ -256,7 +250,9 @@ public class RecentsView extends FrameLayout {
         return mLastTaskLaunchedWasFreeform;
     }
 
-    /** Launches the focused task from the first stack if possible */
+    /**
+     * Launches the focused task from the first stack if possible
+     */
     public boolean launchFocusedTask(int logEvent) {
         if (mTaskStackView != null) {
             Task task = mTaskStackView.getFocusedTask();
@@ -275,7 +271,9 @@ public class RecentsView extends FrameLayout {
         return false;
     }
 
-    /** Launches the task that recents was launched from if possible */
+    /**
+     * Launches the task that recents was launched from if possible
+     */
     public boolean launchPreviousTask() {
         if (Recents.getConfiguration().getLaunchState().launchedFromPipApp) {
             // If the app auto-entered PiP on the way to Recents, then just re-expand it
@@ -295,7 +293,9 @@ public class RecentsView extends FrameLayout {
         return false;
     }
 
-    /** Launches a given task. */
+    /**
+     * Launches a given task.
+     */
     public boolean launchTask(Task task, Rect taskBounds, int destinationStack) {
         if (mTaskStackView != null) {
             // Iterate the stack views and try and find the given task.
@@ -347,7 +347,7 @@ public class RecentsView extends FrameLayout {
     public void startFABanimation() {
         RecentsConfiguration config = Recents.getConfiguration();
         // Animate the action button in
-        mFloatingButton = ((View)getParent()).findViewById(R.id.floating_action_button);
+        mFloatingButton = ((View) getParent()).findViewById(R.id.floating_action_button);
         mFloatingButton.animate().alpha(1f)
                 .setStartDelay(config.fabEnterAnimDelay)
                 .setDuration(config.fabEnterAnimDuration)
@@ -359,7 +359,7 @@ public class RecentsView extends FrameLayout {
     public void endFABanimation() {
         RecentsConfiguration config = Recents.getConfiguration();
         // Animate the action button away
-        mFloatingButton = ((View)getParent()).findViewById(R.id.floating_action_button);
+        mFloatingButton = ((View) getParent()).findViewById(R.id.floating_action_button);
         mFloatingButton.animate().alpha(0f)
                 .setStartDelay(0)
                 .setDuration(config.fabExitAnimDuration)
@@ -376,11 +376,11 @@ public class RecentsView extends FrameLayout {
         mClearRecents.setVisibility(View.VISIBLE);
         mClearRecents.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            EventBus.getDefault().send(new DismissAllTaskViewsEvent());
+                EventBus.getDefault().send(new DismissAllTaskViewsEvent());
             }
         });
-        mMemText = (TextView) ((View)getParent()).findViewById(R.id.recents_memory_text);
-        mMemBar = (ProgressBar) ((View)getParent()).findViewById(R.id.recents_memory_bar);
+        mMemText = (TextView) ((View) getParent()).findViewById(R.id.recents_memory_text);
+        mMemBar = (ProgressBar) ((View) getParent()).findViewById(R.id.recents_memory_bar);
         super.onAttachedToWindow();
     }
 
@@ -403,7 +403,7 @@ public class RecentsView extends FrameLayout {
 
         if (mTaskStackView.getVisibility() != GONE) {
             mTaskStackView.measure(widthMeasureSpec, heightMeasureSpec);
-        showMemDisplay();
+            showMemDisplay();
         }
 
         // Measure the empty view to the full size of the screen
@@ -424,18 +424,18 @@ public class RecentsView extends FrameLayout {
 
         if (mFloatingButton != null && showClearAllRecents) {
             clearRecentsLocation = Settings.System.getIntForUser(
-                mContext.getContentResolver(), Settings.System.RECENTS_CLEAR_ALL_LOCATION,
-                3, UserHandle.USER_CURRENT);
+                    mContext.getContentResolver(), Settings.System.RECENTS_CLEAR_ALL_LOCATION,
+                    3, UserHandle.USER_CURRENT);
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
                     mFloatingButton.getLayoutParams();
             boolean isLandscape = mContext.getResources().getConfiguration().orientation
-                == Configuration.ORIENTATION_LANDSCAPE;
+                    == Configuration.ORIENTATION_LANDSCAPE;
             if (isLandscape) {
                 params.topMargin = mContext.getResources().
-                      getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
+                        getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
             } else {
-                params.topMargin = 2*(mContext.getResources().
-                    getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height));
+                params.topMargin = 2 * (mContext.getResources().
+                        getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height));
             }
             switch (clearRecentsLocation) {
                 case 0:
@@ -464,7 +464,7 @@ public class RecentsView extends FrameLayout {
         }
         LayoutInflater inflater = LayoutInflater.from(mContext);
         float cornerRadius = mContext.getResources().getDimensionPixelSize(
-                    R.dimen.recents_task_view_rounded_corners_radius);
+                R.dimen.recents_task_view_rounded_corners_radius);
     }
 
     private boolean showMemDisplay() {
@@ -489,11 +489,11 @@ public class RecentsView extends FrameLayout {
 
         MemoryInfo memInfo = new MemoryInfo();
         mAm.getMemoryInfo(memInfo);
-            int available = (int)(memInfo.availMem / 1048576L);
-            int max = (int)(getTotalMemory() / 1048576L);
-            mMemText.setText("Free RAM: " + String.valueOf(available) + "MB");
-            mMemBar.setMax(max);
-            mMemBar.setProgress(available);
+        int available = (int) (memInfo.availMem / 1048576L);
+        int max = (int) (getTotalMemory() / 1048576L);
+        mMemText.setText("Free RAM: " + String.valueOf(available) + "MB");
+        mMemBar.setMax(max);
+        mMemBar.setProgress(available);
     }
 
     public long getTotalMemory() {
@@ -629,7 +629,7 @@ public class RecentsView extends FrameLayout {
                     true /* animateAlpha */, true /* animateBounds */);
         } else {
             final TaskStack.DockState dockState = (TaskStack.DockState) event.dropTarget;
-            updateVisibleDockRegions(new TaskStack.DockState[] {dockState},
+            updateVisibleDockRegions(new TaskStack.DockState[]{dockState},
                     false /* isDefaultDockState */, -1, -1, true /* animateAlpha */,
                     true /* animateBounds */);
         }
@@ -664,14 +664,14 @@ public class RecentsView extends FrameLayout {
             if (ssp.startTaskInDockedMode(event.task.key.id, dockState.createMode)) {
                 final OnAnimationStartedListener startedListener =
                         new OnAnimationStartedListener() {
-                    @Override
-                    public void onAnimationStarted() {
-                        EventBus.getDefault().send(new DockedFirstAnimationFrameEvent());
-                        // Remove the task and don't bother relaying out, as all the tasks will be
-                        // relaid out when the stack changes on the multiwindow change event
-                        getStack().removeTask(event.task, null, true /* fromDockGesture */);
-                    }
-                };
+                            @Override
+                            public void onAnimationStarted() {
+                                EventBus.getDefault().send(new DockedFirstAnimationFrameEvent());
+                                // Remove the task and don't bother relaying out, as all the tasks will be
+                                // relaid out when the stack changes on the multiwindow change event
+                                getStack().removeTask(event.task, null, true /* fromDockGesture */);
+                            }
+                        };
 
                 final Rect taskRect = getTaskRect(event.taskView);
                 AppTransitionAnimationSpecsFuture future =
@@ -819,7 +819,7 @@ public class RecentsView extends FrameLayout {
                 public void run() {
                     if (translate) {
                         mStackActionButton.animate()
-                            .translationY(0f);
+                                .translationY(0f);
                     }
                     mStackActionButton.animate()
                             .alpha(1f)
@@ -857,7 +857,7 @@ public class RecentsView extends FrameLayout {
         if (mStackActionButton.getVisibility() == View.VISIBLE) {
             if (translate) {
                 mStackActionButton.animate()
-                    .translationY(-mStackActionButton.getMeasuredHeight() * 0.25f);
+                        .translationY(-mStackActionButton.getMeasuredHeight() * 0.25f);
             }
             mStackActionButton.animate()
                     .alpha(0f)
@@ -879,8 +879,8 @@ public class RecentsView extends FrameLayout {
      * Updates the dock region to match the specified dock state.
      */
     private void updateVisibleDockRegions(TaskStack.DockState[] newDockStates,
-            boolean isDefaultDockState, int overrideAreaAlpha, int overrideHintAlpha,
-            boolean animateAlpha, boolean animateBounds) {
+                                          boolean isDefaultDockState, int overrideAreaAlpha, int overrideHintAlpha,
+                                          boolean animateAlpha, boolean animateBounds) {
         ArraySet<TaskStack.DockState> newDockStatesSet = Utilities.arrayToSet(newDockStates,
                 new ArraySet<TaskStack.DockState>());
         ArrayList<TaskStack.DockState> visDockStates = mTouchHandler.getVisibleDockStates();
@@ -901,9 +901,9 @@ public class RecentsView extends FrameLayout {
                         : viewState.hintTextAlpha;
                 Rect bounds = isDefaultDockState
                         ? dockState.getPreDockedBounds(getMeasuredWidth(), getMeasuredHeight(),
-                                mSystemInsets)
+                        mSystemInsets)
                         : dockState.getDockedBounds(getMeasuredWidth(), getMeasuredHeight(),
-                                mDividerSize, mSystemInsets, getResources());
+                        mDividerSize, mSystemInsets, getResources());
                 if (viewState.dockAreaOverlay.getCallback() != this) {
                     viewState.dockAreaOverlay.setCallback(this);
                     viewState.dockAreaOverlay.setBounds(bounds);
@@ -940,7 +940,7 @@ public class RecentsView extends FrameLayout {
         int left = isLayoutRtl()
                 ? actionButtonRect.left - mStackActionButton.getPaddingLeft()
                 : actionButtonRect.right + mStackActionButton.getPaddingRight()
-                        - mStackActionButton.getMeasuredWidth();
+                - mStackActionButton.getMeasuredWidth();
         int top = actionButtonRect.top +
                 (actionButtonRect.height() - mStackActionButton.getMeasuredHeight()) / 2;
         actionButtonRect.set(left, top, left + mStackActionButton.getMeasuredWidth(),
@@ -952,10 +952,15 @@ public class RecentsView extends FrameLayout {
         String innerPrefix = prefix + "  ";
         String id = Integer.toHexString(System.identityHashCode(this));
 
-        writer.print(prefix); writer.print(TAG);
-        writer.print(" awaitingFirstLayout="); writer.print(mAwaitingFirstLayout ? "Y" : "N");
-        writer.print(" insets="); writer.print(Utilities.dumpRect(mSystemInsets));
-        writer.print(" [0x"); writer.print(id); writer.print("]");
+        writer.print(prefix);
+        writer.print(TAG);
+        writer.print(" awaitingFirstLayout=");
+        writer.print(mAwaitingFirstLayout ? "Y" : "N");
+        writer.print(" insets=");
+        writer.print(Utilities.dumpRect(mSystemInsets));
+        writer.print(" [0x");
+        writer.print(id);
+        writer.print("]");
         writer.println();
 
         if (getStack() != null) {
@@ -967,32 +972,32 @@ public class RecentsView extends FrameLayout {
     }
 
     class SettingsObserver extends ContentObserver {
-         SettingsObserver(Handler handler) {
-             super(handler);
-         }
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
 
-         void observe() {
-             ContentResolver resolver = mContext.getContentResolver();
-             resolver.registerContentObserver(Settings.System.getUriFor(
-                     Settings.System.SHOW_CLEAR_ALL_RECENTS), false, this, UserHandle.USER_ALL);
-             update();
-         }
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.SHOW_CLEAR_ALL_RECENTS), false, this, UserHandle.USER_ALL);
+            update();
+        }
 
-         void unobserve() {
-             ContentResolver resolver = mContext.getContentResolver();
-             resolver.unregisterContentObserver(this);
-         }
+        void unobserve() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.unregisterContentObserver(this);
+        }
 
-         @Override
-         public void onChange(boolean selfChange, Uri uri) {
-             update();
-         }
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            update();
+        }
 
-   public void update() {
-        mFloatingButton = ((View)getParent()).findViewById(R.id.floating_action_button);
-        mClearRecents = (ImageButton) ((View)getParent()).findViewById(R.id.clear_recents);
-        showClearAllRecents = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SHOW_CLEAR_ALL_RECENTS, 1, UserHandle.USER_CURRENT) != 0;
-         }
-     }
+        public void update() {
+            mFloatingButton = ((View) getParent()).findViewById(R.id.floating_action_button);
+            mClearRecents = (ImageButton) ((View) getParent()).findViewById(R.id.clear_recents);
+            showClearAllRecents = Settings.System.getIntForUser(mContext.getContentResolver(),
+                    Settings.System.SHOW_CLEAR_ALL_RECENTS, 1, UserHandle.USER_CURRENT) != 0;
+        }
+    }
 }

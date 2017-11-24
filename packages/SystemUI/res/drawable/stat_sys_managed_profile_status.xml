@@ -16,11 +16,11 @@ Copyright (C) 2015 The Android Open Source Project
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="23dp"
     android:height="18dp"
-    android:viewportWidth="23"
-    android:viewportHeight="18">
-<!--
-    The asset contains a briefcase symbol of 15.26dp x 13.6dp in the center.
--->
+    android:viewportHeight="18"
+    android:viewportWidth="23">
+    <!--
+        The asset contains a briefcase symbol of 15.26dp x 13.6dp in the center.
+    -->
     <path
         android:fillColor="@android:color/white"
         android:pathData="M15.0815,4.5903 L15.0815,3.43636 L13.9276,2.2 L9.14696,2.2 L7.99302,3.43636

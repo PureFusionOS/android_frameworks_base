@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"กด \"เมนู\" เพื่อปลดล็อก"</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"เครือข่ายถูกล็อก"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"ไม่มีซิมการ์ด"</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"ไม่มีซิมการ์ดในแท็บเล็ต"</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"ไม่มีซิมการ์ดในโทรศัพท์"</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"ไม่มีซิมการ์ดในแท็บเล็ต"</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"ไม่มีซิมการ์ดในโทรศัพท์"</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"ใส่ซิมการ์ด"</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"ไม่มีซิมการ์ดหรือไม่สามารถอ่านได้ โปรดใส่ซิมการ์ด"</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"ซิมการ์ดใช้ไม่ได้"</string>
@@ -69,34 +68,34 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"พิมพ์ PIN ซึ่งเป็นเลข 4-8 หลัก"</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"รหัส PUK ต้องเป็นตัวเลขอย่างน้อย 8 หลัก"</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"ใส่รหัส PUK ที่ถูกต้องอีกครั้ง การพยายามซ้ำหลายครั้งจะทำให้ซิมการ์ดถูกปิดใช้งานอย่างถาวร"</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"รหัส PIN ไม่ตรง"</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"รหัส PIN ไม่ตรง"</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"ลองหลายรูปแบบมากเกินไป"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"คุณพิมพ์ PIN ไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้งแล้ว \n\nโปรดลองอีกครั้งใน <xliff:g id="NUMBER_1">%2$d</xliff:g> วินาที"</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"คุณพิมพ์รหัสผ่านไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้งแล้ว \n\nโปรดลองอีกครั้งใน <xliff:g id="NUMBER_1">%2$d</xliff:g> วินาที"</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"คุณวาดรูปแบบการปลดล็อกไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้งแล้ว \n\nโปรดลองอีกครั้งในอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> วินาที"</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะรีเซ็ตแท็บเล็ตเครื่องนี้ ซึ่งจะเป็นการลบข้อมูลทั้งหมดในเครื่อง"</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะรีเซ็ตโทรศัพท์เครื่องนี้ ซึ่งจะเป็นการลบข้อมูลทั้งหมดในเครื่อง"</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะรีเซ็ตแท็บเล็ตเครื่องนี้ ซึ่งจะเป็นการลบข้อมูลทั้งหมดในเครื่อง"</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะรีเซ็ตโทรศัพท์เครื่องนี้ ซึ่งจะเป็นการลบข้อมูลทั้งหมดในเครื่อง"</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะนำผู้ใช้รายนี้ออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของผู้ใช้"</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะนำผู้ใช้รายนี้ออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของผู้ใช้"</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะนำผู้ใช้รายนี้ออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของผู้ใช้"</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะนำผู้ใช้รายนี้ออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของผู้ใช้"</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะนำโปรไฟล์งานออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของโปรไฟล์"</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะนำโปรไฟล์งานออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของโปรไฟล์"</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะนำโปรไฟล์งานออก ซึ่งจะเป็นการลบข้อมูลโปรไฟล์ทั้งหมด"</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะนำโปรไฟล์งานออก ซึ่งจะเป็นการลบข้อมูลโปรไฟล์ทั้งหมด"</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"คุณวาดรูปแบบการปลดล็อกไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะขอให้คุณปลดล็อกแท็บเล็ตโดยใช้บัญชีอีเมล\n\n โปรดลองอีกครั้งในอีก <xliff:g id="NUMBER_2">%3$d</xliff:g> วินาที"</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"คุณวาดรูปแบบการปลดล็อกไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะขอให้คุณปลดล็อกโทรศัพท์โดยใช้บัญชีอีเมล\n\n โปรดลองอีกครั้งในอีก <xliff:g id="NUMBER_2">%3$d</xliff:g> วินาที"</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะรีเซ็ตแท็บเล็ตเครื่องนี้ ซึ่งจะเป็นการลบข้อมูลทั้งหมดในเครื่อง"</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะรีเซ็ตโทรศัพท์เครื่องนี้ ซึ่งจะเป็นการลบข้อมูลทั้งหมดในเครื่อง"</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะรีเซ็ตแท็บเล็ตเครื่องนี้ ซึ่งจะเป็นการลบข้อมูลทั้งหมดในเครื่อง"</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะรีเซ็ตโทรศัพท์เครื่องนี้ ซึ่งจะเป็นการลบข้อมูลทั้งหมดในเครื่อง"</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะนำผู้ใช้รายนี้ออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของผู้ใช้"</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะนำผู้ใช้รายนี้ออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของผู้ใช้"</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะนำผู้ใช้รายนี้ออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของผู้ใช้"</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะนำผู้ใช้รายนี้ออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของผู้ใช้"</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะนำโปรไฟล์งานออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของโปรไฟล์"</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะนำโปรไฟล์งานออก ซึ่งจะเป็นการลบข้อมูลทั้งหมดของโปรไฟล์"</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"คุณปลดล็อกแท็บเล็ตไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะนำโปรไฟล์งานออก ซึ่งจะเป็นการลบข้อมูลโปรไฟล์ทั้งหมด"</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"คุณปลดล็อกโทรศัพท์ไม่ถูกต้อง <xliff:g id="NUMBER">%d</xliff:g> ครั้ง ระบบจะนำโปรไฟล์งานออก ซึ่งจะเป็นการลบข้อมูลโปรไฟล์ทั้งหมด"</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"คุณวาดรูปแบบการปลดล็อกไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะขอให้คุณปลดล็อกแท็บเล็ตโดยใช้บัญชีอีเมล\n\n โปรดลองอีกครั้งในอีก <xliff:g id="NUMBER_2">%3$d</xliff:g> วินาที"</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"คุณวาดรูปแบบการปลดล็อกไม่ถูกต้อง <xliff:g id="NUMBER_0">%1$d</xliff:g> ครั้ง หากพยายามไม่สำเร็จอีก <xliff:g id="NUMBER_1">%2$d</xliff:g> ครั้ง ระบบจะขอให้คุณปลดล็อกโทรศัพท์โดยใช้บัญชีอีเมล\n\n โปรดลองอีกครั้งในอีก <xliff:g id="NUMBER_2">%3$d</xliff:g> วินาที"</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"รหัส PIN ของซิมไม่ถูกต้อง ตอนนี้คุณต้องติดต่อผู้ให้บริการเพื่อปลดล็อกอุปกรณ์ของคุณ"</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="other">รหัส PIN ของซิมไม่ถูกต้อง คุณพยายามได้อีก <xliff:g id="NUMBER_1">%d</xliff:g> ครั้ง</item>
-      <item quantity="one">รหัส PIN ของซิมไม่ถูกต้อง คุณพยายามได้อีก <xliff:g id="NUMBER_0">%d</xliff:g> ครั้งก่อนที่จะต้องติดต่อผู้ให้บริการเพื่อปลดล็อกอุปกรณ์ของคุณ</item>
+        <item quantity="other">รหัส PIN ของซิมไม่ถูกต้อง คุณพยายามได้อีก <xliff:g id="NUMBER_1">%d</xliff:g> ครั้ง</item>
+        <item quantity="one">รหัส PIN ของซิมไม่ถูกต้อง คุณพยายามได้อีก <xliff:g id="NUMBER_0">%d</xliff:g> ครั้งก่อนที่จะต้องติดต่อผู้ให้บริการเพื่อปลดล็อกอุปกรณ์ของคุณ</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"ซิมไม่สามารถใช้งานได้ โปรดติดต่อผู้ให้บริการ"</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="other">รหัส PUK ของซิมไม่ถูกต้อง คุณพยายามได้อีก <xliff:g id="NUMBER_1">%d</xliff:g> ครั้งก่อนที่ซิมจะไม่สามารถใช้งานได้อย่างถาวร</item>
-      <item quantity="one">รหัส PUK ของซิมไม่ถูกต้อง คุณพยายามได้อีก <xliff:g id="NUMBER_0">%d</xliff:g> ครั้งก่อนที่ซิมจะไม่สามารถใช้งานได้อย่างถาวร</item>
+        <item quantity="other">รหัส PUK ของซิมไม่ถูกต้อง คุณพยายามได้อีก <xliff:g id="NUMBER_1">%d</xliff:g> ครั้งก่อนที่ซิมจะไม่สามารถใช้งานได้อย่างถาวร</item>
+        <item quantity="one">รหัส PUK ของซิมไม่ถูกต้อง คุณพยายามได้อีก <xliff:g id="NUMBER_0">%d</xliff:g> ครั้งก่อนที่ซิมจะไม่สามารถใช้งานได้อย่างถาวร</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"การปลดล็อกด้วย PIN ของซิมล้มเหลว!"</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"การปลดล็อกด้วย PUK ของซิมล้มเหลว!"</string>
@@ -116,16 +115,16 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"ผู้ดูแลระบบล็อกอุปกรณ์"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"มีการล็อกอุปกรณ์ด้วยตัวเอง"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="other">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_1">%d</xliff:g> ชั่วโมงแล้ว ยืนยันรูปแบบ</item>
-      <item quantity="one">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_0">%d</xliff:g> ชั่วโมงแล้ว ยืนยันรูปแบบ</item>
+        <item quantity="other">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_1">%d</xliff:g> ชั่วโมงแล้ว ยืนยันรูปแบบ</item>
+        <item quantity="one">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_0">%d</xliff:g> ชั่วโมงแล้ว ยืนยันรูปแบบ</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="other">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_1">%d</xliff:g> ชั่วโมงแล้ว ยืนยัน PIN</item>
-      <item quantity="one">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_0">%d</xliff:g> ชั่วโมงแล้ว ยืนยัน PIN</item>
+        <item quantity="other">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_1">%d</xliff:g> ชั่วโมงแล้ว ยืนยัน PIN</item>
+        <item quantity="one">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_0">%d</xliff:g> ชั่วโมงแล้ว ยืนยัน PIN</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="other">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_1">%d</xliff:g> ชั่วโมงแล้ว ยืนยันรหัสผ่าน</item>
-      <item quantity="one">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_0">%d</xliff:g> ชั่วโมงแล้ว ยืนยันรหัสผ่าน</item>
+        <item quantity="other">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_1">%d</xliff:g> ชั่วโมงแล้ว ยืนยันรหัสผ่าน</item>
+        <item quantity="one">ไม่มีการปลดล็อกอุปกรณ์มา <xliff:g id="NUMBER_0">%d</xliff:g> ชั่วโมงแล้ว ยืนยันรหัสผ่าน</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"ไม่รู้จัก"</string>
 </resources>

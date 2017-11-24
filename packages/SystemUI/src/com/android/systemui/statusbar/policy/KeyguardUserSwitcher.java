@@ -52,12 +52,18 @@ public class KeyguardUserSwitcher {
     private final KeyguardUserSwitcherScrim mBackground;
 
     private ViewGroup mUserSwitcher;
+    public final DataSetObserver mDataSetObserver = new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            refresh();
+        }
+    };
     private ObjectAnimator mBgAnimator;
     private UserSwitcherController mUserSwitcherController;
     private boolean mAnimating;
 
     public KeyguardUserSwitcher(Context context, ViewStub userSwitcher,
-            KeyguardStatusBarView statusBarView, NotificationPanelView panelView) {
+                                KeyguardStatusBarView statusBarView, NotificationPanelView panelView) {
         boolean keyguardUserSwitcherEnabled =
                 context.getResources().getBoolean(R.bool.config_keyguardUserSwitcher) || ALWAYS_ON;
         UserSwitcherController userSwitcherController = Dependency.get(UserSwitcherController.class);
@@ -237,13 +243,6 @@ public class KeyguardUserSwitcher {
         return mAnimating;
     }
 
-    public final DataSetObserver mDataSetObserver = new DataSetObserver() {
-        @Override
-        public void onChanged() {
-            refresh();
-        }
-    };
-
     public void onDensityOrFontScaleChanged() {
         if (mUserSwitcherContainer != null) {
             reinflateViews();
@@ -258,7 +257,7 @@ public class KeyguardUserSwitcher {
         private KeyguardUserSwitcher mKeyguardUserSwitcher;
 
         public Adapter(Context context, UserSwitcherController controller,
-                KeyguardUserSwitcher kgu) {
+                       KeyguardUserSwitcher kgu) {
             super(controller);
             mContext = context;
             mKeyguardUserSwitcher = kgu;

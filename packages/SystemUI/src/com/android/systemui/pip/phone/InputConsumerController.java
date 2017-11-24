@@ -36,49 +36,7 @@ import static android.view.WindowManager.INPUT_CONSUMER_PIP;
 public class InputConsumerController {
 
     private static final String TAG = InputConsumerController.class.getSimpleName();
-
-    /**
-     * Listener interface for callers to subscribe to touch events.
-     */
-    public interface TouchListener {
-        boolean onTouchEvent(MotionEvent ev);
-    }
-
-    /**
-     * Listener interface for callers to learn when this class is registered or unregistered with
-     * window manager
-     */
-    public interface RegistrationListener {
-        void onRegistrationChanged(boolean isRegistered);
-    }
-
-    /**
-     * Input handler used for the PiP input consumer. Input events are batched and consumed with the
-     * SurfaceFlinger vsync.
-     */
-    private final class PipInputEventReceiver extends BatchedInputEventReceiver {
-
-        public PipInputEventReceiver(InputChannel inputChannel, Looper looper) {
-            super(inputChannel, looper, Choreographer.getSfInstance());
-        }
-
-        @Override
-        public void onInputEvent(InputEvent event) {
-            boolean handled = true;
-            try {
-                // To be implemented for input handling over Pip windows
-                if (mListener != null && event instanceof MotionEvent) {
-                    MotionEvent ev = (MotionEvent) event;
-                    handled = mListener.onTouchEvent(ev);
-                }
-            } finally {
-                finishInputEvent(event, handled);
-            }
-        }
-    }
-
     private IWindowManager mWindowManager;
-
     private PipInputEventReceiver mInputEventReceiver;
     private TouchListener mListener;
     private RegistrationListener mRegistrationListener;
@@ -155,5 +113,45 @@ public class InputConsumerController {
         final String innerPrefix = prefix + "  ";
         pw.println(prefix + TAG);
         pw.println(innerPrefix + "registered=" + (mInputEventReceiver != null));
+    }
+
+    /**
+     * Listener interface for callers to subscribe to touch events.
+     */
+    public interface TouchListener {
+        boolean onTouchEvent(MotionEvent ev);
+    }
+
+    /**
+     * Listener interface for callers to learn when this class is registered or unregistered with
+     * window manager
+     */
+    public interface RegistrationListener {
+        void onRegistrationChanged(boolean isRegistered);
+    }
+
+    /**
+     * Input handler used for the PiP input consumer. Input events are batched and consumed with the
+     * SurfaceFlinger vsync.
+     */
+    private final class PipInputEventReceiver extends BatchedInputEventReceiver {
+
+        public PipInputEventReceiver(InputChannel inputChannel, Looper looper) {
+            super(inputChannel, looper, Choreographer.getSfInstance());
+        }
+
+        @Override
+        public void onInputEvent(InputEvent event) {
+            boolean handled = true;
+            try {
+                // To be implemented for input handling over Pip windows
+                if (mListener != null && event instanceof MotionEvent) {
+                    MotionEvent ev = (MotionEvent) event;
+                    handled = mListener.onTouchEvent(ev);
+                }
+            } finally {
+                finishInputEvent(event, handled);
+            }
+        }
     }
 }

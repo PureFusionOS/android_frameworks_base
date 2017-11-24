@@ -29,7 +29,9 @@ import com.android.systemui.qs.GlobalSetting;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
-/** Quick settings tile: Heads up **/
+/**
+ * Quick settings tile: Heads up
+ **/
 public class HeadsUpTile extends QSTileImpl<BooleanState> {
 
     private static final Intent NOTIFICATION_SETTINGS =
@@ -72,18 +74,18 @@ public class HeadsUpTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        final int value = arg instanceof Integer ? (Integer)arg : mSetting.getValue();
+        final int value = arg instanceof Integer ? (Integer) arg : mSetting.getValue();
         final boolean headsUp = value != 0;
         state.value = headsUp;
         state.label = mContext.getString(R.string.quick_settings_heads_up_label);
         if (headsUp) {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_heads_up_on);
-            state.contentDescription =  mContext.getString(
+            state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_heads_up_on);
             state.state = Tile.STATE_ACTIVE;
         } else {
             state.icon = ResourceIcon.get(R.drawable.ic_qs_heads_up_off);
-            state.contentDescription =  mContext.getString(
+            state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_heads_up_off);
             state.state = Tile.STATE_INACTIVE;
         }

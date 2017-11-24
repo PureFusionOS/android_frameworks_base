@@ -79,9 +79,8 @@ public class Utilities {
     public static final Rect EMPTY_RECT = new Rect();
 
     /**
-     * @return the first parent walking up the view hierarchy that has the given class type.
-     *
      * @param parentClass must be a class derived from {@link View}
+     * @return the first parent walking up the view hierarchy that has the given class type.
      */
     public static <T extends View> T findParent(View v, Class<T> parentClass) {
         ViewParent parent = v.getParent();
@@ -143,7 +142,7 @@ public class Utilities {
      *
      * @param value must be between 0 and 1
      */
-    public static float mapRange(@FloatRange(from=0.0,to=1.0) float value, float min, float max) {
+    public static float mapRange(@FloatRange(from = 0.0, to = 1.0) float value, float min, float max) {
         return min + (value * (max - min));
     }
 
@@ -156,7 +155,9 @@ public class Utilities {
         return (value - min) / (max - min);
     }
 
-    /** Scales a rect about its centroid */
+    /**
+     * Scales a rect about its centroid
+     */
     public static void scaleRectAboutCenter(RectF r, float scale) {
         if (scale != 1.0f) {
             float cx = r.centerX();
@@ -170,7 +171,9 @@ public class Utilities {
         }
     }
 
-    /** Calculates the constrast between two colors, using the algorithm provided by the WCAG v2. */
+    /**
+     * Calculates the constrast between two colors, using the algorithm provided by the WCAG v2.
+     */
     public static float computeContrastBetweenColors(int bg, int fg) {
         float bgR = Color.red(bg) / 255f;
         float bgG = Color.green(bg) / 255f;
@@ -179,7 +182,7 @@ public class Utilities {
         bgG = (bgG < 0.03928f) ? bgG / 12.92f : (float) Math.pow((bgG + 0.055f) / 1.055f, 2.4f);
         bgB = (bgB < 0.03928f) ? bgB / 12.92f : (float) Math.pow((bgB + 0.055f) / 1.055f, 2.4f);
         float bgL = 0.2126f * bgR + 0.7152f * bgG + 0.0722f * bgB;
-        
+
         float fgR = Color.red(fg) / 255f;
         float fgG = Color.green(fg) / 255f;
         float fgB = Color.blue(fg) / 255f;
@@ -191,15 +194,17 @@ public class Utilities {
         return Math.abs((fgL + 0.05f) / (bgL + 0.05f));
     }
 
-    /** Returns the base color overlaid with another overlay color with a specified alpha. */
+    /**
+     * Returns the base color overlaid with another overlay color with a specified alpha.
+     */
     public static int getColorWithOverlay(int baseColor, int overlayColor, float overlayAlpha) {
         return Color.rgb(
-            (int) (overlayAlpha * Color.red(baseColor) +
-                    (1f - overlayAlpha) * Color.red(overlayColor)),
-            (int) (overlayAlpha * Color.green(baseColor) +
-                    (1f - overlayAlpha) * Color.green(overlayColor)),
-            (int) (overlayAlpha * Color.blue(baseColor) +
-                    (1f - overlayAlpha) * Color.blue(overlayColor)));
+                (int) (overlayAlpha * Color.red(baseColor) +
+                        (1f - overlayAlpha) * Color.red(overlayColor)),
+                (int) (overlayAlpha * Color.green(baseColor) +
+                        (1f - overlayAlpha) * Color.green(overlayColor)),
+                (int) (overlayAlpha * Color.blue(baseColor) +
+                        (1f - overlayAlpha) * Color.blue(overlayColor)));
     }
 
     /**

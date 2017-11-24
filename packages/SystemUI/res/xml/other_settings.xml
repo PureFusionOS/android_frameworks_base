@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,8 +18,8 @@
 
     <!-- importance -->
     <Preference
-            android:key="power_notification_controls"
-            android:title="@string/tuner_full_importance_settings"
-            android:fragment="com.android.systemui.tuner.PowerNotificationControlsFragment"/>
+        android:fragment="com.android.systemui.tuner.PowerNotificationControlsFragment"
+        android:key="power_notification_controls"
+        android:title="@string/tuner_full_importance_settings" />
 
 </PreferenceScreen>

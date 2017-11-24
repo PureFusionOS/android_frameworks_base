@@ -32,35 +32,31 @@ import java.util.Locale;
 
 /**
  * Keeps track of interesting falsing data.
- *
+ * <p>
  * By default the log only gets collected on userdebug builds. To turn it on on user:
- *  adb shell setprop debug.falsing_log true
- *
+ * adb shell setprop debug.falsing_log true
+ * <p>
  * The log gets dumped as part of the SystemUI services. To dump on demand:
- *  adb shell dumpsys activity service com.android.systemui SystemBars | grep -A 999 FALSING | less
- *
+ * adb shell dumpsys activity service com.android.systemui SystemBars | grep -A 999 FALSING | less
+ * <p>
  * To dump into logcat:
- *  adb shell setprop debug.falsing_logcat true
- *
+ * adb shell setprop debug.falsing_logcat true
+ * <p>
  * To adjust the log buffer size:
- *  adb shell setprop debug.falsing_log_size 200
+ * adb shell setprop debug.falsing_log_size 200
  */
 public class FalsingLog {
     public static final boolean ENABLED = SystemProperties.getBoolean("debug.falsing_log",
             Build.IS_DEBUGGABLE);
+    public static final boolean VERBOSE = false;
     private static final boolean LOGCAT = SystemProperties.getBoolean("debug.falsing_logcat",
             false);
-
-    public static final boolean VERBOSE = false;
-
     private static final int MAX_SIZE = SystemProperties.getInt("debug.falsing_log_size", 100);
 
     private static final String TAG = "FalsingLog";
-
+    private static FalsingLog sInstance;
     private final ArrayDeque<String> mLog = new ArrayDeque<>(MAX_SIZE);
     private final SimpleDateFormat mFormat = new SimpleDateFormat("MM-dd HH:mm:ss", Locale.US);
-
-    private static FalsingLog sInstance;
 
     private FalsingLog() {
     }
@@ -113,8 +109,8 @@ public class FalsingLog {
             sInstance.mLog.removeFirst();
         }
         String entry = new StringBuilder().append(sInstance.mFormat.format(new Date()))
-            .append(" ").append(level).append(" ")
-            .append(tag).append(" ").append(s).toString();
+                .append(" ").append(level).append(" ")
+                .append(tag).append(" ").append(s).toString();
         sInstance.mLog.add(entry);
     }
 

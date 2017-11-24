@@ -140,9 +140,15 @@ public class BatterySaverTile extends QSTileImpl<BooleanState> implements
             OnAttachStateChangeListener {
         private final BatteryMeterDrawableBase mDrawable
                 = new BatteryMeterDrawableBase(
-                        mHost.getContext(),
-                        mHost.getContext().getColor(R.color.meter_background_color));
+                mHost.getContext(),
+                mHost.getContext().getColor(R.color.meter_background_color));
         private View mCurrentView;
+        private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                postBindView();
+            }
+        };
 
         @Override
         public CharSequence getTitle() {
@@ -152,6 +158,11 @@ public class BatterySaverTile extends QSTileImpl<BooleanState> implements
         @Override
         public Boolean getToggleState() {
             return null;
+        }
+
+        @Override
+        public void setToggleState(boolean state) {
+            // No toggle state.
         }
 
         @Override
@@ -244,11 +255,6 @@ public class BatterySaverTile extends QSTileImpl<BooleanState> implements
         }
 
         @Override
-        public void setToggleState(boolean state) {
-            // No toggle state.
-        }
-
-        @Override
         public int getMetricsCategory() {
             return MetricsEvent.QS_BATTERY_DETAIL;
         }
@@ -270,12 +276,5 @@ public class BatterySaverTile extends QSTileImpl<BooleanState> implements
                 v.getContext().unregisterReceiver(mReceiver);
             }
         }
-
-        private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                postBindView();
-            }
-        };
     }
 }

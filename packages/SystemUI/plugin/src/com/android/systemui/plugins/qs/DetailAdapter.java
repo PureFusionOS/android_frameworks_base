@@ -26,15 +26,19 @@ public interface DetailAdapter {
     public static final int VERSION = 1;
 
     CharSequence getTitle();
+
     Boolean getToggleState();
+
+    void setToggleState(boolean state);
 
     default boolean getToggleEnabled() {
         return true;
     }
 
     View createDetailView(Context context, View convertView, ViewGroup parent);
+
     Intent getSettingsIntent();
-    void setToggleState(boolean state);
+
     int getMetricsCategory();
 
     /**

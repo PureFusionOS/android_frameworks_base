@@ -54,7 +54,7 @@ import static com.android.systemui.statusbar.phone.FingerprintUnlockController.M
 public class StatusBarKeyguardViewManager implements RemoteInputController.Callback {
 
     // When hiding the Keyguard with timing supplied from WindowManager, better be early than late.
-    private static final long HIDE_TIMING_CORRECTION_MS = - 16 * 3;
+    private static final long HIDE_TIMING_CORRECTION_MS = -16 * 3;
 
     // Delay for showing the navigation bar when the bouncer appears. This should be kept in sync
     // with the appear animations of the PIN/pattern/password views.
@@ -71,52 +71,52 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
 
     protected final Context mContext;
     private final StatusBarWindowManager mStatusBarWindowManager;
-
+    private final ArrayList<Runnable> mAfterKeyguardGoneRunnables = new ArrayList<>();
     protected LockPatternUtils mLockPatternUtils;
     protected ViewMediatorCallback mViewMediatorCallback;
     protected StatusBar mStatusBar;
-    private ScrimController mScrimController;
-    private FingerprintUnlockController mFingerprintUnlockController;
-
-    private ViewGroup mContainer;
-
-    private boolean mDeviceInteractive = false;
-    private boolean mScreenTurnedOn;
     protected KeyguardBouncer mBouncer;
     protected boolean mShowing;
     protected boolean mOccluded;
     protected boolean mRemoteInputActive;
-    private boolean mDozing;
-
     protected boolean mFirstUpdate = true;
     protected boolean mLastShowing;
     protected boolean mLastOccluded;
+    protected boolean mLastRemoteInputActive;
+    private ScrimController mScrimController;
+    private FingerprintUnlockController mFingerprintUnlockController;
+    private ViewGroup mContainer;
+    private boolean mDeviceInteractive = false;
+    private boolean mScreenTurnedOn;
+    private boolean mDozing;
     private boolean mLastBouncerShowing;
     private boolean mLastBouncerDismissible;
-    protected boolean mLastRemoteInputActive;
     private boolean mLastDeferScrimFadeOut;
     private boolean mLastDozing;
-
     private OnDismissAction mAfterKeyguardGoneAction;
-    private final ArrayList<Runnable> mAfterKeyguardGoneRunnables = new ArrayList<>();
     private boolean mDeviceWillWakeUp;
     private boolean mDeferScrimFadeOut;
-
-    private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
-            new KeyguardUpdateMonitorCallback() {
+    private Runnable mMakeNavigationBarVisibleRunnable = new Runnable() {
         @Override
-        public void onEmergencyCallAction() {
-
-            // Since we won't get a setOccluded call we have to reset the view manually such that
-            // the bouncer goes away.
-            if (mOccluded) {
-                reset(false /* hideBouncerWhenShowing */);
-            }
+        public void run() {
+            mStatusBar.getNavigationBarView().getRootView().setVisibility(View.VISIBLE);
         }
     };
+    private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
+            new KeyguardUpdateMonitorCallback() {
+                @Override
+                public void onEmergencyCallAction() {
+
+                    // Since we won't get a setOccluded call we have to reset the view manually such that
+                    // the bouncer goes away.
+                    if (mOccluded) {
+                        reset(false /* hideBouncerWhenShowing */);
+                    }
+                }
+            };
 
     public StatusBarKeyguardViewManager(Context context, ViewMediatorCallback callback,
-            LockPatternUtils lockPatternUtils) {
+                                        LockPatternUtils lockPatternUtils) {
         mContext = context;
         mViewMediatorCallback = callback;
         mLockPatternUtils = lockPatternUtils;
@@ -125,10 +125,10 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
     }
 
     public void registerStatusBar(StatusBar statusBar,
-            ViewGroup container,
-            ScrimController scrimController,
-            FingerprintUnlockController fingerprintUnlockController,
-            DismissCallbackRegistry dismissCallbackRegistry) {
+                                  ViewGroup container,
+                                  ScrimController scrimController,
+                                  FingerprintUnlockController fingerprintUnlockController,
+                                  DismissCallbackRegistry dismissCallbackRegistry) {
         mStatusBar = statusBar;
         mContainer = container;
         mScrimController = scrimController;
@@ -175,7 +175,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
     }
 
     public void dismissWithAction(OnDismissAction r, Runnable cancelAction,
-            boolean afterKeyguardGone) {
+                                  boolean afterKeyguardGone) {
         if (mShowing) {
             if (!afterKeyguardGone) {
                 mBouncer.showWithDismissAction(r, cancelAction);
@@ -343,7 +343,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         long uptimeMillis = SystemClock.uptimeMillis();
         long delay = Math.max(0, startTime + HIDE_TIMING_CORRECTION_MS - uptimeMillis);
 
-        if (mStatusBar.isInLaunchTransition() ) {
+        if (mStatusBar.isInLaunchTransition()) {
             mStatusBar.fadeKeyguardAfterLaunchTransition(new Runnable() {
                 @Override
                 public void run() {
@@ -432,13 +432,13 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
     }
 
     private void animateScrimControllerKeyguardFadingOut(long delay, long duration,
-            boolean skipFirstFrame) {
+                                                         boolean skipFirstFrame) {
         animateScrimControllerKeyguardFadingOut(delay, duration, null /* endRunnable */,
                 skipFirstFrame);
     }
 
     private void animateScrimControllerKeyguardFadingOut(long delay, long duration,
-            final Runnable endRunnable, boolean skipFirstFrame) {
+                                                         final Runnable endRunnable, boolean skipFirstFrame) {
         Trace.asyncTraceBegin(Trace.TRACE_TAG_VIEW, "Fading out", 0);
         mScrimController.animateKeyguardFadingOut(delay, duration, new Runnable() {
             @Override
@@ -528,13 +528,6 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
         }
     }
 
-    private Runnable mMakeNavigationBarVisibleRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mStatusBar.getNavigationBarView().getRootView().setVisibility(View.VISIBLE);
-        }
-    };
-
     protected void updateStates() {
         int vis = mContainer.getSystemUiVisibility();
         boolean showing = mShowing;
@@ -602,7 +595,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
      */
     protected boolean isNavBarVisible() {
         return (!(mShowing && !mOccluded) && !mDozing || mBouncer.isShowing() || mRemoteInputActive)
-                 && !mDeferScrimFadeOut;
+                && !mDeferScrimFadeOut;
     }
 
     /**
@@ -610,7 +603,7 @@ public class StatusBarKeyguardViewManager implements RemoteInputController.Callb
      */
     protected boolean getLastNavBarVisible() {
         return (!(mLastShowing && !mLastOccluded) && !mLastDozing || mLastBouncerShowing || mLastRemoteInputActive)
-                 && !mLastDeferScrimFadeOut;
+                && !mLastDeferScrimFadeOut;
     }
 
     public boolean shouldDismissOnMenuPressed() {

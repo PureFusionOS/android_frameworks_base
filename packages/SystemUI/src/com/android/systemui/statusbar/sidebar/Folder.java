@@ -46,21 +46,34 @@ import java.util.ArrayList;
 
 public class Folder extends LinearLayout implements FolderListener,
         View.OnFocusChangeListener, TextView.OnEditorActionListener {
+    private static int sTextSize;
     protected FolderInfo mInfo;
-    
+    FolderEditText mFolderName;
     private FolderIcon mIcon;
     private Context mContext;
     private ArrayList<View> mContents = new ArrayList<View>();
     private boolean mIsEditingName = false;
-    FolderEditText mFolderName;
-    
-    private static int sTextSize;
-    
     private GridView mContent;
     private FrameLayout mFolderFooter;
     private int mFolderNameHeight;
 
     private InputMethodManager mInputMethodManager;
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return false;
+        }
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+    };
 
     public Folder(Context context) {
         this(context, null);
@@ -77,12 +90,11 @@ public class Folder extends LinearLayout implements FolderListener,
                 getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         sTextSize = context.getResources().getDimensionPixelSize(R.dimen.item_title_text_size);
     }
-    
+
     /**
      * Creates a new UserFolder, inflated from R.layout.setup_user_folder.
      *
      * @param context The application's context.
-     *
      * @return A new UserFolder.
      */
     static Folder fromXml(Context context, boolean isSidebar) {
@@ -129,11 +141,11 @@ public class Folder extends LinearLayout implements FolderListener,
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
 
         GridView.LayoutParams lp =
-            new GridView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                new GridView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         mContents.add(textView);
         return true;
     }
-    
+
     public int getItemCount() {
         return mContents.size();
     }
@@ -180,7 +192,7 @@ public class Folder extends LinearLayout implements FolderListener,
         }
 
         createAndAddShortcut(item);
-        ContentsAdapter adapter = (ContentsAdapter)mContent.getAdapter();
+        ContentsAdapter adapter = (ContentsAdapter) mContent.getAdapter();
         adapter.notifyDataSetChanged();
         mContent.setAdapter(adapter);
     }
@@ -192,10 +204,10 @@ public class Folder extends LinearLayout implements FolderListener,
         if (v != null)
             removeView(v);
     }
-    
+
     public void removeView(View v) {
         mContents.remove(v);
-        ContentsAdapter adapter = (ContentsAdapter)mContent.getAdapter();
+        ContentsAdapter adapter = (ContentsAdapter) mContent.getAdapter();
         adapter.notifyDataSetChanged();
         mContent.setAdapter(adapter);
     }
@@ -247,23 +259,6 @@ public class Folder extends LinearLayout implements FolderListener,
         return false;
     }
 
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            return false;
-        }
-
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        public void onDestroyActionMode(ActionMode mode) {
-        }
-
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-    };
-    
     private class ContentsAdapter extends BaseAdapter {
 
         @Override
@@ -285,6 +280,6 @@ public class Folder extends LinearLayout implements FolderListener,
         public View getView(int position, View convertView, ViewGroup parent) {
             return mContents.get(position);
         }
-        
+
     }
 }

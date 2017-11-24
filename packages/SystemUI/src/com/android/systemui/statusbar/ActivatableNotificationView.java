@@ -48,80 +48,68 @@ import com.android.systemui.statusbar.stack.StackStateAnimator;
  */
 public abstract class ActivatableNotificationView extends ExpandableOutlineView {
 
-    private static final int BACKGROUND_ANIMATION_LENGTH_MS = 220;
-    private static final int ACTIVATE_ANIMATION_LENGTH = 220;
-    private static final long DARK_ANIMATION_LENGTH = StackStateAnimator.ANIMATION_DURATION_WAKEUP;
-
-    /**
-     * The amount of width, which is kept in the end when performing a disappear animation (also
-     * the amount from which the horizontal appearing begins)
-     */
-    private static final float HORIZONTAL_COLLAPSED_REST_PARTIAL = 0.05f;
-
-    /**
-     * At which point from [0,1] does the horizontal collapse animation end (or start when
-     * expanding)? 1.0 meaning that it ends immediately and 0.0 that it is continuously animated.
-     */
-    private static final float HORIZONTAL_ANIMATION_END = 0.2f;
-
-    /**
-     * At which point from [0,1] does the alpha animation end (or start when
-     * expanding)? 1.0 meaning that it ends immediately and 0.0 that it is continuously animated.
-     */
-    private static final float ALPHA_ANIMATION_END = 0.0f;
-
-    /**
-     * At which point from [0,1] does the horizontal collapse animation start (or start when
-     * expanding)? 1.0 meaning that it starts immediately and 0.0 that it is animated at all.
-     */
-    private static final float HORIZONTAL_ANIMATION_START = 1.0f;
-
-    /**
-     * At which point from [0,1] does the vertical collapse animation start (or end when
-     * expanding) 1.0 meaning that it starts immediately and 0.0 that it is animated at all.
-     */
-    private static final float VERTICAL_ANIMATION_START = 1.0f;
-
-    /**
-     * Scale for the background to animate from when exiting dark mode.
-     */
-    private static final float DARK_EXIT_SCALE_START = 0.93f;
-
     /**
      * A sentinel value when no color should be used. Can be used with {@link #setTintColor(int)}
      * or {@link #setOverrideTintColor(int, float)}.
      */
     protected static final int NO_COLOR = 0;
-
+    private static final int BACKGROUND_ANIMATION_LENGTH_MS = 220;
+    private static final int ACTIVATE_ANIMATION_LENGTH = 220;
+    private static final long DARK_ANIMATION_LENGTH = StackStateAnimator.ANIMATION_DURATION_WAKEUP;
+    /**
+     * The amount of width, which is kept in the end when performing a disappear animation (also
+     * the amount from which the horizontal appearing begins)
+     */
+    private static final float HORIZONTAL_COLLAPSED_REST_PARTIAL = 0.05f;
+    /**
+     * At which point from [0,1] does the horizontal collapse animation end (or start when
+     * expanding)? 1.0 meaning that it ends immediately and 0.0 that it is continuously animated.
+     */
+    private static final float HORIZONTAL_ANIMATION_END = 0.2f;
+    /**
+     * At which point from [0,1] does the alpha animation end (or start when
+     * expanding)? 1.0 meaning that it ends immediately and 0.0 that it is continuously animated.
+     */
+    private static final float ALPHA_ANIMATION_END = 0.0f;
+    /**
+     * At which point from [0,1] does the horizontal collapse animation start (or start when
+     * expanding)? 1.0 meaning that it starts immediately and 0.0 that it is animated at all.
+     */
+    private static final float HORIZONTAL_ANIMATION_START = 1.0f;
+    /**
+     * At which point from [0,1] does the vertical collapse animation start (or end when
+     * expanding) 1.0 meaning that it starts immediately and 0.0 that it is animated at all.
+     */
+    private static final float VERTICAL_ANIMATION_START = 1.0f;
+    /**
+     * Scale for the background to animate from when exiting dark mode.
+     */
+    private static final float DARK_EXIT_SCALE_START = 0.93f;
     private static final Interpolator ACTIVATE_INVERSE_INTERPOLATOR
             = new PathInterpolator(0.6f, 0, 0.5f, 1);
     private static final Interpolator ACTIVATE_INVERSE_ALPHA_INTERPOLATOR
             = new PathInterpolator(0, 0, 0.5f, 1);
+    protected final int mNormalRippleColor;
     private final int mTintedRippleColor;
     private final int mLowPriorityRippleColor;
-    protected final int mNormalRippleColor;
     private final AccessibilityManager mAccessibilityManager;
     private final DoubleTapHelper mDoubleTapHelper;
-
+    private final Interpolator mSlowOutFastInInterpolator;
+    private final Interpolator mSlowOutLinearInInterpolator;
+    private final int mNormalColor;
+    private final int mLowPriorityColor;
+    protected int mBgTint = NO_COLOR;
     private boolean mDimmed;
     private boolean mDark;
-
-    protected int mBgTint = NO_COLOR;
     private float mBgAlpha = 1f;
-
     /**
      * Flag to indicate that the notification has been touched once and the second touch will
      * click it.
      */
     private boolean mActivated;
-
     private OnActivatedListener mOnActivatedListener;
-
-    private final Interpolator mSlowOutFastInInterpolator;
-    private final Interpolator mSlowOutLinearInInterpolator;
     private Interpolator mCurrentAppearInterpolator;
     private Interpolator mCurrentAlphaInterpolator;
-
     private NotificationBackgroundView mBackgroundNormal;
     private NotificationBackgroundView mBackgroundDimmed;
     private ObjectAnimator mBackgroundAnimator;
@@ -132,14 +120,19 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     private ValueAnimator mBackgroundColorAnimator;
     private float mAppearAnimationFraction = -1.0f;
     private float mAppearAnimationTranslation;
-    private final int mNormalColor;
-    private final int mLowPriorityColor;
     private boolean mIsBelowSpeedBump;
     private FalsingManager mFalsingManager;
 
     private float mNormalBackgroundVisibilityAmount;
+    private final Runnable mTapTimeoutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            makeInactive(true /* animate */);
+        }
+    };
     private ValueAnimator mFadeInFromDarkAnimator;
     private float mDimmedBackgroundFadeInAmount = -1;
+    private float mShadowAlpha = 1.0f;
     private ValueAnimator.AnimatorUpdateListener mBackgroundVisibilityUpdater
             = new ValueAnimator.AnimatorUpdateListener() {
         @Override
@@ -164,7 +157,6 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
             updateOutlineAlpha();
         }
     };
-    private float mShadowAlpha = 1.0f;
     private FakeShadowView mFakeShadow;
     private int mCurrentBackgroundTint;
     private int mTargetTint;
@@ -222,13 +214,6 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         updateOutlineAlpha();
     }
 
-    private final Runnable mTapTimeoutRunnable = new Runnable() {
-        @Override
-        public void run() {
-            makeInactive(true /* animate */);
-        }
-    };
-
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (mNeedsDimming && !mActivated && ev.getActionMasked() == MotionEvent.ACTION_DOWN
@@ -277,7 +262,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
 
     @Override
     public void drawableHotspotChanged(float x, float y) {
-        if (!mDimmed){
+        if (!mDimmed) {
             mBackgroundNormal.drawableHotspotChanged(x, y);
         }
     }
@@ -324,9 +309,9 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         if (!isDimmable()) {
             return;
         }
-        int widthHalf = mBackgroundNormal.getWidth()/2;
-        int heightHalf = mBackgroundNormal.getActualHeight()/2;
-        float radius = (float) Math.sqrt(widthHalf*widthHalf + heightHalf*heightHalf);
+        int widthHalf = mBackgroundNormal.getWidth() / 2;
+        int heightHalf = mBackgroundNormal.getActualHeight() / 2;
+        float radius = (float) Math.sqrt(widthHalf * widthHalf + heightHalf * heightHalf);
         Animator animator;
         if (reverse) {
             animator = ViewAnimationUtils.createCircularReveal(mBackgroundNormal,
@@ -447,16 +432,6 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         updateOutlineAlpha();
     }
 
-    @Override
-    public void setBelowSpeedBump(boolean below) {
-        super.setBelowSpeedBump(below);
-        if (below != mIsBelowSpeedBump) {
-            mIsBelowSpeedBump = below;
-            updateBackgroundTint();
-            onBelowSpeedBumpChanged();
-        }
-    }
-
     protected void onBelowSpeedBumpChanged() {
     }
 
@@ -465,6 +440,16 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
      */
     public boolean isBelowSpeedBump() {
         return mIsBelowSpeedBump;
+    }
+
+    @Override
+    public void setBelowSpeedBump(boolean below) {
+        super.setBelowSpeedBump(below);
+        if (below != mIsBelowSpeedBump) {
+            mIsBelowSpeedBump = below;
+            updateBackgroundTint();
+            onBelowSpeedBumpChanged();
+        }
     }
 
     /**
@@ -487,8 +472,8 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     /**
      * Set an override tint color that is used for the background.
      *
-     * @param color the color that should be used to tint the background.
-     *              This can be {@link #NO_COLOR} if the tint should be normally computed.
+     * @param color          the color that should be used to tint the background.
+     *                       This can be {@link #NO_COLOR} if the tint should be normally computed.
      * @param overrideAmount a value from 0 to 1 how much the override tint should be used. The
      *                       background color will then be the interpolation between this and the
      *                       regular background color, where 1 means the overrideTintColor is fully
@@ -504,9 +489,9 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
         int newColor = calculateBgColor();
         setBackgroundTintColor(newColor);
         if (!isDimmable() && mNeedsDimming) {
-           mBackgroundNormal.setDrawableAlpha((int) NotificationUtils.interpolate(255,
-                   mDimmedAlpha,
-                   overrideAmount));
+            mBackgroundNormal.setDrawableAlpha((int) NotificationUtils.interpolate(255,
+                    mDimmedAlpha,
+                    overrideAmount));
         } else {
             mBackgroundNormal.setDrawableAlpha(255);
         }
@@ -643,7 +628,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     protected void updateBackgroundAlpha(float transformationAmount) {
-        mBgAlpha =  isChildInGroup() && mDimmed ? transformationAmount : 1f;
+        mBgAlpha = isChildInGroup() && mDimmed ? transformationAmount : 1f;
         if (mDimmedBackgroundFadeInAmount != -1) {
             mBgAlpha *= mDimmedBackgroundFadeInAmount;
         }
@@ -721,7 +706,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
 
     @Override
     public void performRemoveAnimation(long duration, float translationDirection,
-            Runnable onFinishedRunnable) {
+                                       Runnable onFinishedRunnable) {
         enableAppearDrawing(true);
         if (mDrawingAppearAnimation) {
             startAppearAnimation(false /* isAppearing */, translationDirection,
@@ -740,7 +725,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     private void startAppearAnimation(boolean isAppearing, float translationDirection, long delay,
-            long duration, final Runnable onFinishedRunnable) {
+                                      long duration, final Runnable onFinishedRunnable) {
         cancelAppearAnimation();
         mAnimationTranslationY = translationDirection * getActualHeight();
         if (mAppearAnimationFraction == -1.0f) {
@@ -892,7 +877,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
     }
 
     /**
-     * @param withTint should a possible tint be factored in?
+     * @param withTint     should a possible tint be factored in?
      * @param withOverRide should the value be interpolated with {@link #mOverrideTint}
      * @return the calculated background color
      */
@@ -977,7 +962,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
 
     @Override
     public void setFakeShadowIntensity(float shadowIntensity, float outlineAlpha, int shadowYEnd,
-            int outlineTranslation) {
+                                       int outlineTranslation) {
         boolean hiddenBefore = mShadowHidden;
         mShadowHidden = shadowIntensity == 0.0f;
         if (!mShadowHidden || !hiddenBefore) {
@@ -993,6 +978,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
 
     public interface OnActivatedListener {
         void onActivated(ActivatableNotificationView view);
+
         void onActivationReset(ActivatableNotificationView view);
     }
 }

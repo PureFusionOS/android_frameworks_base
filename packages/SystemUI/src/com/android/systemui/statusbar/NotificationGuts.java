@@ -54,55 +54,6 @@ public class NotificationGuts extends FrameLayout {
 
     private GutsContent mGutsContent;
 
-    public interface GutsContent {
-
-        public void setGutsParent(NotificationGuts listener);
-
-        /**
-         * @return the view to be shown in the notification guts.
-         */
-        public View getContentView();
-
-        /**
-         * @return the actual height of the content.
-         */
-        public int getActualHeight();
-
-        /**
-         * Called when the guts view have been told to close, typically after an outside
-         * interaction.
-         *
-         * @param save whether the state should be saved.
-         * @param force whether the guts view should be forced closed regardless of state.
-         * @return if closing the view has been handled.
-         */
-        public boolean handleCloseControls(boolean save, boolean force);
-
-        /**
-         * @return whether the notification associated with these guts is set to be removed.
-         */
-        public boolean willBeRemoved();
-
-        /**
-         * @return whether these guts are a leavebehind (e.g. {@link NotificationSnooze}).
-         */
-        public default boolean isLeavebehind() {
-            return false;
-        }
-    }
-
-    public interface OnGutsClosedListener {
-        public void onGutsClosed(NotificationGuts guts);
-    }
-
-    public interface OnHeightChangedListener {
-        public void onHeightChanged(NotificationGuts guts);
-    }
-
-    interface OnSettingsClickListener {
-        void onClick(View v, int appUid);
-    }
-
     public NotificationGuts(Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
@@ -124,14 +75,14 @@ public class NotificationGuts extends FrameLayout {
         this(context, null);
     }
 
+    public GutsContent getGutsContent() {
+        return mGutsContent;
+    }
+
     public void setGutsContent(GutsContent content) {
         mGutsContent = content;
         removeAllViews();
         addView(mGutsContent.getContentView());
-    }
-
-    public GutsContent getGutsContent() {
-        return mGutsContent;
     }
 
     public void resetFalsingCheck() {
@@ -236,13 +187,13 @@ public class NotificationGuts extends FrameLayout {
         a.start();
     }
 
+    public int getActualHeight() {
+        return mActualHeight;
+    }
+
     public void setActualHeight(int actualHeight) {
         mActualHeight = actualHeight;
         invalidate();
-    }
-
-    public int getActualHeight() {
-        return mActualHeight;
     }
 
     public int getIntrinsicHeight() {
@@ -303,5 +254,54 @@ public class NotificationGuts extends FrameLayout {
 
     public boolean isExposed() {
         return mExposed;
+    }
+
+    public interface GutsContent {
+
+        public void setGutsParent(NotificationGuts listener);
+
+        /**
+         * @return the view to be shown in the notification guts.
+         */
+        public View getContentView();
+
+        /**
+         * @return the actual height of the content.
+         */
+        public int getActualHeight();
+
+        /**
+         * Called when the guts view have been told to close, typically after an outside
+         * interaction.
+         *
+         * @param save  whether the state should be saved.
+         * @param force whether the guts view should be forced closed regardless of state.
+         * @return if closing the view has been handled.
+         */
+        public boolean handleCloseControls(boolean save, boolean force);
+
+        /**
+         * @return whether the notification associated with these guts is set to be removed.
+         */
+        public boolean willBeRemoved();
+
+        /**
+         * @return whether these guts are a leavebehind (e.g. {@link NotificationSnooze}).
+         */
+        public default boolean isLeavebehind() {
+            return false;
+        }
+    }
+
+    public interface OnGutsClosedListener {
+        public void onGutsClosed(NotificationGuts guts);
+    }
+
+    public interface OnHeightChangedListener {
+        public void onHeightChanged(NotificationGuts guts);
+    }
+
+    interface OnSettingsClickListener {
+        void onClick(View v, int appUid);
     }
 }

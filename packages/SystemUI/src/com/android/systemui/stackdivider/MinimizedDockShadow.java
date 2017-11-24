@@ -63,18 +63,18 @@ public class MinimizedDockShadow extends View {
         if (mDockSide == WindowManager.DOCKED_TOP) {
             mShadowPaint.setShader(new LinearGradient(
                     0, 0, 0, bottom - top,
-                    new int[] { startColor, middleColor, quarter, endColor },
-                    new float[] { 0f, 0.35f, 0.6f, 1f }, Shader.TileMode.CLAMP));
+                    new int[]{startColor, middleColor, quarter, endColor},
+                    new float[]{0f, 0.35f, 0.6f, 1f}, Shader.TileMode.CLAMP));
         } else if (mDockSide == WindowManager.DOCKED_LEFT) {
             mShadowPaint.setShader(new LinearGradient(
                     0, 0, right - left, 0,
-                    new int[] { startColor, middleColor, quarter, endColor },
-                    new float[] { 0f, 0.35f, 0.6f, 1f }, Shader.TileMode.CLAMP));
+                    new int[]{startColor, middleColor, quarter, endColor},
+                    new float[]{0f, 0.35f, 0.6f, 1f}, Shader.TileMode.CLAMP));
         } else if (mDockSide == WindowManager.DOCKED_RIGHT) {
             mShadowPaint.setShader(new LinearGradient(
                     right - left, 0, 0, 0,
-                    new int[] { startColor, middleColor, quarter, endColor },
-                    new float[] { 0f, 0.35f, 0.6f, 1f }, Shader.TileMode.CLAMP));
+                    new int[]{startColor, middleColor, quarter, endColor},
+                    new float[]{0f, 0.35f, 0.6f, 1f}, Shader.TileMode.CLAMP));
         }
     }
 

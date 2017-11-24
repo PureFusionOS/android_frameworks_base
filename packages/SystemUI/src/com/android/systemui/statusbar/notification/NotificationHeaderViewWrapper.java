@@ -74,7 +74,7 @@ public class NotificationHeaderViewWrapper extends NotificationViewWrapper {
 
                     @Override
                     public Interpolator getCustomInterpolator(int interpolationType,
-                            boolean isFrom) {
+                                                              boolean isFrom) {
                         boolean isLowPriority = mView instanceof NotificationHeaderView;
                         if (interpolationType == TRANSFORM_Y) {
                             if (isLowPriority && !isFrom
@@ -178,7 +178,7 @@ public class NotificationHeaderViewWrapper extends NotificationViewWrapper {
             View child = stack.pop();
             if (child instanceof ImageView) {
                 ((ImageView) child).setCropToPadding(true);
-            } else if (child instanceof ViewGroup){
+            } else if (child instanceof ViewGroup) {
                 ViewGroup group = (ViewGroup) child;
                 for (int i = 0; i < group.getChildCount(); i++) {
                     stack.push(group.getChildAt(i));

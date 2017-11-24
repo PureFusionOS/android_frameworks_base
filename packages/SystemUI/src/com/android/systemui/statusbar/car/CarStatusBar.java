@@ -66,6 +66,16 @@ public class CarStatusBar extends StatusBar implements
 
     private ConnectedDeviceSignalController mConnectedDeviceSignalController;
     private CarNavigationBarView mNavigationBarView;
+    private BroadcastReceiver mPackageChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getData() == null || mController == null) {
+                return;
+            }
+            String packageName = intent.getData().getSchemeSpecificPart();
+            mController.onPackageChange(packageName);
+        }
+    };
 
     @Override
     public void start() {
@@ -211,17 +221,6 @@ public class CarStatusBar extends StatusBar implements
         }
     }
 
-    private BroadcastReceiver mPackageChangeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getData() == null || mController == null) {
-                return;
-            }
-            String packageName = intent.getData().getSchemeSpecificPart();
-            mController.onPackageChange(packageName);
-        }
-    };
-
     private void registerPackageChangeReceivers() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -232,22 +231,6 @@ public class CarStatusBar extends StatusBar implements
 
     public boolean hasDockedTask() {
         return Recents.getSystemServices().hasDockedTask();
-    }
-
-    /**
-     * An implementation of TaskStackListener, that listens for changes in the system task
-     * stack and notifies the navigation bar.
-     */
-    private class TaskStackListenerImpl extends TaskStackListener {
-        @Override
-        public void onTaskStackChanged() {
-            SystemServicesProxy ssp = Recents.getSystemServices();
-            ActivityManager.RunningTaskInfo runningTaskInfo = ssp.getRunningTask();
-            if (runningTaskInfo != null && runningTaskInfo.baseActivity != null) {
-                mController.taskChanged(runningTaskInfo.baseActivity.getPackageName(),
-                        runningTaskInfo.stackId);
-            }
-        }
     }
 
     @Override
@@ -323,5 +306,21 @@ public class CarStatusBar extends StatusBar implements
     protected void onDensityOrFontScaleChanged() {
         super.onDensityOrFontScaleChanged();
         mController.onDensityOrFontScaleChanged();
+    }
+
+    /**
+     * An implementation of TaskStackListener, that listens for changes in the system task
+     * stack and notifies the navigation bar.
+     */
+    private class TaskStackListenerImpl extends TaskStackListener {
+        @Override
+        public void onTaskStackChanged() {
+            SystemServicesProxy ssp = Recents.getSystemServices();
+            ActivityManager.RunningTaskInfo runningTaskInfo = ssp.getRunningTask();
+            if (runningTaskInfo != null && runningTaskInfo.baseActivity != null) {
+                mController.taskChanged(runningTaskInfo.baseActivity.getPackageName(),
+                        runningTaskInfo.stackId);
+            }
+        }
     }
 }

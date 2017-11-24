@@ -29,6 +29,14 @@ public abstract class SystemUI implements SysUiServiceProvider {
     public Context mContext;
     public Map<Class<?>, Object> mComponents;
 
+    public static void overrideNotificationAppName(Context context, Notification.Builder n) {
+        final Bundle extras = new Bundle();
+        extras.putString(Notification.EXTRA_SUBSTITUTE_APP_NAME,
+                context.getString(com.android.internal.R.string.android_system_label));
+
+        n.addExtras(extras);
+    }
+
     public abstract void start();
 
     protected void onConfigurationChanged(Configuration newConfig) {
@@ -49,13 +57,5 @@ public abstract class SystemUI implements SysUiServiceProvider {
         if (mComponents != null) {
             mComponents.put(interfaceType, component);
         }
-    }
-
-    public static void overrideNotificationAppName(Context context, Notification.Builder n) {
-        final Bundle extras = new Bundle();
-        extras.putString(Notification.EXTRA_SUBSTITUTE_APP_NAME,
-                context.getString(com.android.internal.R.string.android_system_label));
-
-        n.addExtras(extras);
     }
 }

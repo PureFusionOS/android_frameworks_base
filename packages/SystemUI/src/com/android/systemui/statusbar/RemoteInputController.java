@@ -82,7 +82,7 @@ public class RemoteInputController {
     /**
      * Adds a currently spinning (i.e. sending) remote input.
      *
-     * @param key the key of the entry that's spinning.
+     * @param key   the key of the entry that's spinning.
      * @param token the token of the view managing the remote input.
      */
     public void addSpinning(String key, Object token) {
@@ -95,7 +95,7 @@ public class RemoteInputController {
     /**
      * Removes a currently spinning remote input.
      *
-     * @param key the key of the entry for which a remote input should be removed.
+     * @param key   the key of the entry for which a remote input should be removed.
      * @param token a token identifying the view that is requesting the removal. If non-null,
      *              the entry is only removed if the token matches the last added token for this
      *              entry. If null, the entry is removed regardless.
@@ -141,7 +141,8 @@ public class RemoteInputController {
     /**
      * Prunes dangling weak references, removes entries referring to {@param remove} and returns
      * whether {@param contains} is part of the array in a single loop.
-     * @param remove if non-null, removes this entry from the active remote inputs
+     *
+     * @param remove      if non-null, removes this entry from the active remote inputs
      * @param removeToken if non-null, only removes an entry if this matches the token when the
      *                    entry was added.
      * @return true if {@param contains} is in the set of active remote inputs
@@ -204,8 +205,10 @@ public class RemoteInputController {
     }
 
     public interface Callback {
-        default void onRemoteInputActive(boolean active) {}
+        default void onRemoteInputActive(boolean active) {
+        }
 
-        default void onRemoteInputSent(NotificationData.Entry entry) {}
+        default void onRemoteInputSent(NotificationData.Entry entry) {
+        }
     }
 }

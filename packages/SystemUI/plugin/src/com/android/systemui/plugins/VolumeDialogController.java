@@ -29,7 +29,7 @@ import com.android.systemui.plugins.annotations.ProvidesInterface;
 
 /**
  * Manages the VolumeDialog.
- *
+ * <p>
  * Accessible through {@link PluginDependency}
  */
 @ProvidesInterface(version = VolumeDialogController.VERSION)
@@ -40,10 +40,13 @@ public interface VolumeDialogController {
     int VERSION = 1;
 
     void setActiveStream(int stream);
+
     void setStreamVolume(int stream, int userLevel);
+
     void setRingerMode(int ringerModeNormal, boolean external);
 
     boolean hasVibrator();
+
     void vibrate();
 
     AudioManager getAudioManager();
@@ -51,10 +54,37 @@ public interface VolumeDialogController {
     void notifyVisible(boolean visible);
 
     void addCallback(Callbacks callbacks, Handler handler);
+
     void removeCallback(Callbacks callbacks);
 
     void userActivity();
+
     void getState();
+
+    @ProvidesInterface(version = Callbacks.VERSION)
+    public interface Callbacks {
+        int VERSION = 1;
+
+        void onShowRequested(int reason);
+
+        void onDismissRequested(int reason);
+
+        void onStateChanged(State state);
+
+        void onLayoutDirectionChanged(int layoutDirection);
+
+        void onConfigurationChanged();
+
+        void onShowVibrateHint();
+
+        void onShowSilentHint();
+
+        void onScreenOff();
+
+        void onShowSafetyWarning(int flags);
+
+        void onAccessibilityModeChanged(Boolean showA11yStream);
+    }
 
     @ProvidesInterface(version = StreamState.VERSION)
     public static final class StreamState {
@@ -66,7 +96,8 @@ public interface VolumeDialogController {
         public int levelMax;
         public boolean muted;
         public boolean muteSupported;
-        public @IntegerRes int name;
+        public @IntegerRes
+        int name;
         public String remoteLabel;
         public boolean routedToBluetooth;
 
@@ -99,6 +130,17 @@ public interface VolumeDialogController {
         public ComponentName effectsSuppressor;
         public String effectsSuppressorName;
         public int activeStream = NO_ACTIVE_STREAM;
+
+        private static void sep(StringBuilder sb, int indent) {
+            if (indent > 0) {
+                sb.append('\n');
+                for (int i = 0; i < indent; i++) {
+                    sb.append(' ');
+                }
+            } else {
+                sb.append(',');
+            }
+        }
 
         public State copy() {
             final State rt = new State();
@@ -136,41 +178,20 @@ public interface VolumeDialogController {
                 if (ss.muted) sb.append(" [MUTED]");
                 if (ss.dynamic) sb.append(" [DYNAMIC]");
             }
-            sep(sb, indent); sb.append("ringerModeExternal:").append(ringerModeExternal);
-            sep(sb, indent); sb.append("ringerModeInternal:").append(ringerModeInternal);
-            sep(sb, indent); sb.append("zenMode:").append(zenMode);
-            sep(sb, indent); sb.append("effectsSuppressor:").append(effectsSuppressor);
-            sep(sb, indent); sb.append("effectsSuppressorName:").append(effectsSuppressorName);
-            sep(sb, indent); sb.append("activeStream:").append(activeStream);
+            sep(sb, indent);
+            sb.append("ringerModeExternal:").append(ringerModeExternal);
+            sep(sb, indent);
+            sb.append("ringerModeInternal:").append(ringerModeInternal);
+            sep(sb, indent);
+            sb.append("zenMode:").append(zenMode);
+            sep(sb, indent);
+            sb.append("effectsSuppressor:").append(effectsSuppressor);
+            sep(sb, indent);
+            sb.append("effectsSuppressorName:").append(effectsSuppressorName);
+            sep(sb, indent);
+            sb.append("activeStream:").append(activeStream);
             if (indent > 0) sep(sb, indent);
             return sb.append('}').toString();
         }
-
-        private static void sep(StringBuilder sb, int indent) {
-            if (indent > 0) {
-                sb.append('\n');
-                for (int i = 0; i < indent; i++) {
-                    sb.append(' ');
-                }
-            } else {
-                sb.append(',');
-            }
-        }
-    }
-
-    @ProvidesInterface(version = Callbacks.VERSION)
-    public interface Callbacks {
-        int VERSION = 1;
-
-        void onShowRequested(int reason);
-        void onDismissRequested(int reason);
-        void onStateChanged(State state);
-        void onLayoutDirectionChanged(int layoutDirection);
-        void onConfigurationChanged();
-        void onShowVibrateHint();
-        void onShowSilentHint();
-        void onScreenOff();
-        void onShowSafetyWarning(int flags);
-        void onAccessibilityModeChanged(Boolean showA11yStream);
     }
 }

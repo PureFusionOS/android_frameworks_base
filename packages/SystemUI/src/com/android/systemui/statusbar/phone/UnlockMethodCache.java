@@ -37,13 +37,59 @@ public class UnlockMethodCache {
     private final LockPatternUtils mLockPatternUtils;
     private final KeyguardUpdateMonitor mKeyguardUpdateMonitor;
     private final ArrayList<OnUnlockMethodChangedListener> mListeners = new ArrayList<>();
-    /** Whether the user configured a secure unlock method (PIN, password, etc.) */
+    /**
+     * Whether the user configured a secure unlock method (PIN, password, etc.)
+     */
     private boolean mSecure;
-    /** Whether the unlock method is currently insecure (insecure method or trusted environment) */
+    /**
+     * Whether the unlock method is currently insecure (insecure method or trusted environment)
+     */
     private boolean mCanSkipBouncer;
     private boolean mTrustManaged;
     private boolean mFaceUnlockRunning;
     private boolean mTrusted;
+    private final KeyguardUpdateMonitorCallback mCallback = new KeyguardUpdateMonitorCallback() {
+        @Override
+        public void onUserSwitchComplete(int userId) {
+            update(false /* updateAlways */);
+        }
+
+        @Override
+        public void onTrustChanged(int userId) {
+            update(false /* updateAlways */);
+        }
+
+        @Override
+        public void onTrustManagedChanged(int userId) {
+            update(false /* updateAlways */);
+        }
+
+        @Override
+        public void onStartedWakingUp() {
+            update(false /* updateAlways */);
+        }
+
+        @Override
+        public void onFingerprintAuthenticated(int userId) {
+            Trace.beginSection("KeyguardUpdateMonitorCallback#onFingerprintAuthenticated");
+            if (!mKeyguardUpdateMonitor.isUnlockingWithFingerprintAllowed()) {
+                Trace.endSection();
+                return;
+            }
+            update(false /* updateAlways */);
+            Trace.endSection();
+        }
+
+        @Override
+        public void onFaceUnlockStateChanged(boolean running, int userId) {
+            update(false /* updateAlways */);
+        }
+
+        @Override
+        public void onStrongAuthStateChanged(int userId) {
+            update(false /* updateAlways */);
+        }
+    };
 
     private UnlockMethodCache(Context ctx) {
         mLockPatternUtils = new LockPatternUtils(ctx);
@@ -89,13 +135,13 @@ public class UnlockMethodCache {
         Trace.beginSection("UnlockMethodCache#update");
         int user = KeyguardUpdateMonitor.getCurrentUser();
         boolean secure = mLockPatternUtils.isSecure(user);
-        boolean canSkipBouncer = !secure ||  mKeyguardUpdateMonitor.getUserCanSkipBouncer(user);
+        boolean canSkipBouncer = !secure || mKeyguardUpdateMonitor.getUserCanSkipBouncer(user);
         boolean trustManaged = mKeyguardUpdateMonitor.getUserTrustIsManaged(user);
         boolean trusted = mKeyguardUpdateMonitor.getUserHasTrust(user);
         boolean faceUnlockRunning = mKeyguardUpdateMonitor.isFaceUnlockRunning(user)
                 && trustManaged;
         boolean changed = secure != mSecure || canSkipBouncer != mCanSkipBouncer ||
-                trustManaged != mTrustManaged  || faceUnlockRunning != mFaceUnlockRunning;
+                trustManaged != mTrustManaged || faceUnlockRunning != mFaceUnlockRunning;
         if (changed || updateAlways) {
             mSecure = secure;
             mCanSkipBouncer = canSkipBouncer;
@@ -112,49 +158,6 @@ public class UnlockMethodCache {
             listener.onUnlockMethodStateChanged();
         }
     }
-
-    private final KeyguardUpdateMonitorCallback mCallback = new KeyguardUpdateMonitorCallback() {
-        @Override
-        public void onUserSwitchComplete(int userId) {
-            update(false /* updateAlways */);
-        }
-
-        @Override
-        public void onTrustChanged(int userId) {
-            update(false /* updateAlways */);
-        }
-
-        @Override
-        public void onTrustManagedChanged(int userId) {
-            update(false /* updateAlways */);
-        }
-
-        @Override
-        public void onStartedWakingUp() {
-            update(false /* updateAlways */);
-        }
-
-        @Override
-        public void onFingerprintAuthenticated(int userId) {
-            Trace.beginSection("KeyguardUpdateMonitorCallback#onFingerprintAuthenticated");
-            if (!mKeyguardUpdateMonitor.isUnlockingWithFingerprintAllowed()) {
-                Trace.endSection();
-                return;
-            }
-            update(false /* updateAlways */);
-            Trace.endSection();
-        }
-
-        @Override
-        public void onFaceUnlockStateChanged(boolean running, int userId) {
-            update(false /* updateAlways */);
-        }
-
-        @Override
-        public void onStrongAuthStateChanged(int userId) {
-            update(false /* updateAlways */);
-        }
-    };
 
     public boolean isTrustManaged() {
         return mTrustManaged;
