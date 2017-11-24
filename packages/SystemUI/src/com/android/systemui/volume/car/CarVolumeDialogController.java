@@ -29,7 +29,7 @@ import com.android.systemui.volume.VolumeDialogControllerImpl;
 
 /**
  * A volume dialog controller for the automotive use case.
- *
+ * <p>
  * {@link android.car.media.CarAudioManager} is the source of truth to get the stream volumes.
  * And volume changes should be sent to the car's audio module instead of the android's audio mixer.
  */
@@ -78,7 +78,7 @@ public class CarVolumeDialogController extends VolumeDialogControllerImpl {
 
     @Override
     protected int getAudioManagerStreamVolume(int stream) {
-        if(mCarAudioManager == null) {
+        if (mCarAudioManager == null) {
             Log.d(TAG, "Car audio manager is not initialized yet");
             return 0;
         }
@@ -93,7 +93,7 @@ public class CarVolumeDialogController extends VolumeDialogControllerImpl {
 
     @Override
     protected int getAudioManagerStreamMaxVolume(int stream) {
-        if(mCarAudioManager == null) {
+        if (mCarAudioManager == null) {
             Log.d(TAG, "Car audio manager is not initialized yet");
             return 0;
         }
@@ -108,7 +108,7 @@ public class CarVolumeDialogController extends VolumeDialogControllerImpl {
 
     @Override
     protected int getAudioManagerStreamMinVolume(int stream) {
-        if(mCarAudioManager == null) {
+        if (mCarAudioManager == null) {
             Log.d(TAG, "Car audio manager is not initialized yet");
             return 0;
         }

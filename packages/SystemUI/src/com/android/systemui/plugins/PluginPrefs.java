@@ -22,7 +22,7 @@ import java.util.Set;
 
 /**
  * Storage for all plugin actions in SharedPreferences.
- *
+ * <p>
  * This allows the list of actions that the Tuner needs to search for to be generated
  * instead of hard coded.
  */
@@ -41,21 +41,21 @@ public class PluginPrefs {
         mPluginActions = new ArraySet<>(mSharedPrefs.getStringSet(PLUGIN_ACTIONS, null));
     }
 
-    public Set<String> getPluginList() {
-        return mPluginActions;
-    }
-
-    public synchronized void addAction(String action) {
-        if (mPluginActions.add(action)){
-            mSharedPrefs.edit().putStringSet(PLUGIN_ACTIONS, mPluginActions).commit();
-        }
-    }
-
     public static boolean hasPlugins(Context context) {
         return context.getSharedPreferences(PREFS, 0).getBoolean(HAS_PLUGINS, false);
     }
 
     public static void setHasPlugins(Context context) {
         context.getSharedPreferences(PREFS, 0).edit().putBoolean(HAS_PLUGINS, true).commit();
+    }
+
+    public Set<String> getPluginList() {
+        return mPluginActions;
+    }
+
+    public synchronized void addAction(String action) {
+        if (mPluginActions.add(action)) {
+            mSharedPrefs.edit().putStringSet(PLUGIN_ACTIONS, mPluginActions).commit();
+        }
     }
 }

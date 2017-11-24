@@ -86,6 +86,7 @@ public class PropertyAnimatorTest extends SysuiTestCase {
         }
     };
     private AnimatorListenerAdapter mFinishListener = mock(AnimatorListenerAdapter.class);
+    private AnimationFilter mAnimationFilter = new AnimationFilter();
     private AnimationProperties mAnimationProperties = new AnimationProperties() {
         @Override
         public AnimationFilter getAnimationFilter() {
@@ -97,7 +98,6 @@ public class PropertyAnimatorTest extends SysuiTestCase {
             return mFinishListener;
         }
     }.setDuration(200);
-    private AnimationFilter mAnimationFilter = new AnimationFilter();
     private Interpolator mTestInterpolator = Interpolators.ALPHA_IN;
 
 

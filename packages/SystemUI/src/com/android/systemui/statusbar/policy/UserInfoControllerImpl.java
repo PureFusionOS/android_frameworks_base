@@ -52,6 +52,34 @@ public class UserInfoControllerImpl implements UserInfoController {
     private String mUserName;
     private Drawable mUserDrawable;
     private String mUserAccount;
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (Intent.ACTION_USER_SWITCHED.equals(action)) {
+                reloadUserInfo();
+            }
+        }
+    };
+    private final BroadcastReceiver mProfileReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (ContactsContract.Intents.ACTION_PROFILE_CHANGED.equals(action) ||
+                    Intent.ACTION_USER_INFO_CHANGED.equals(action)) {
+                try {
+                    final int currentUser = ActivityManager.getService().getCurrentUser().id;
+                    final int changedUser =
+                            intent.getIntExtra(Intent.EXTRA_USER_HANDLE, getSendingUserId());
+                    if (changedUser == currentUser) {
+                        reloadUserInfo();
+                    }
+                } catch (RemoteException e) {
+                    Log.e(TAG, "Couldn't get current user id for profile change", e);
+                }
+            }
+        }
+    };
 
     public UserInfoControllerImpl(Context context) {
         mContext = context;
@@ -74,36 +102,6 @@ public class UserInfoControllerImpl implements UserInfoController {
     public void removeCallback(OnUserInfoChangedListener callback) {
         mCallbacks.remove(callback);
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if (Intent.ACTION_USER_SWITCHED.equals(action)) {
-                reloadUserInfo();
-            }
-        }
-    };
-
-    private final BroadcastReceiver mProfileReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if (ContactsContract.Intents.ACTION_PROFILE_CHANGED.equals(action) ||
-                    Intent.ACTION_USER_INFO_CHANGED.equals(action)) {
-                try {
-                    final int currentUser = ActivityManager.getService().getCurrentUser().id;
-                    final int changedUser =
-                            intent.getIntExtra(Intent.EXTRA_USER_HANDLE, getSendingUserId());
-                    if (changedUser == currentUser) {
-                        reloadUserInfo();
-                    }
-                } catch (RemoteException e) {
-                    Log.e(TAG, "Couldn't get current user id for profile change", e);
-                }
-            }
-        }
-    };
 
     public void reloadUserInfo() {
         if (mUserInfoTask != null) {
@@ -157,7 +155,7 @@ public class UserInfoControllerImpl implements UserInfoController {
                     avatar = new UserIconDrawable(avatarSize)
                             .setIcon(rawAvatar).setBadgeIfManagedUser(mContext, userId).bake();
                 } else {
-                    avatar = UserIcons.getDefaultUserIcon(isGuest? UserHandle.USER_NULL : userId,
+                    avatar = UserIcons.getDefaultUserIcon(isGuest ? UserHandle.USER_NULL : userId,
                             /* light= */ true);
                 }
 
@@ -166,7 +164,7 @@ public class UserInfoControllerImpl implements UserInfoController {
                 if (um.getUsers().size() <= 1) {
                     // Try and read the display name from the local profile
                     final Cursor cursor = context.getContentResolver().query(
-                            ContactsContract.Profile.CONTENT_URI, new String[] {
+                            ContactsContract.Profile.CONTENT_URI, new String[]{
                                     ContactsContract.CommonDataKinds.Phone._ID,
                                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
                             }, null, null, null);

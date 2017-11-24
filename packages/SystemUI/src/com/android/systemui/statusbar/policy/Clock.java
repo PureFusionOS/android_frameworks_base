@@ -64,10 +64,13 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
         DarkReceiver, ConfigurationListener {
 
     public static final String CLOCK_SECONDS = "clock_seconds";
-
+    private static final int AM_PM_STYLE_NORMAL = 0;
+    private static final int AM_PM_STYLE_SMALL = 1;
+    private static final int AM_PM_STYLE_GONE = 2;
+    private final int mAmPmStyle;
+    private final boolean mShowDark;
     private boolean mClockVisibleByPolicy = true;
     private boolean mClockVisibleByUser = true;
-
     private boolean mAttached;
     private Calendar mCalendar;
     private String mClockFormatString;
@@ -75,15 +78,67 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
     private SimpleDateFormat mContentDescriptionFormat;
     private Locale mLocale;
     private boolean mScreenOn = true;
-
-    private static final int AM_PM_STYLE_NORMAL  = 0;
-    private static final int AM_PM_STYLE_SMALL   = 1;
-    private static final int AM_PM_STYLE_GONE    = 2;
-
-    private final int mAmPmStyle;
-    private final boolean mShowDark;
     private boolean mShowSeconds;
     private Handler mSecondsHandler;
+    private boolean mDemoMode;
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
+                String tz = intent.getStringExtra("time-zone");
+                getHandler().post(() -> {
+                    mCalendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
+                    if (mClockFormat != null) {
+                        mClockFormat.setTimeZone(mCalendar.getTimeZone());
+                    }
+                });
+            } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
+                final Locale newLocale = getResources().getConfiguration().locale;
+                getHandler().post(() -> {
+                    if (!newLocale.equals(mLocale)) {
+                        mLocale = newLocale;
+                        mClockFormatString = ""; // force refresh
+                    }
+                });
+            }
+
+            if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mScreenOn = true;
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mScreenOn = false;
+            }
+
+            if (mScreenOn) {
+                getHandler().post(() -> updateClock());
+            }
+        }
+    };
+    private final Runnable mSecondTick = new Runnable() {
+        @Override
+        public void run() {
+            if (mCalendar != null) {
+                updateClock();
+            }
+            mSecondsHandler.postAtTime(this, SystemClock.uptimeMillis() / 1000 * 1000 + 1000);
+        }
+    };
+    private final BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                if (mSecondsHandler != null) {
+                    mSecondsHandler.removeCallbacks(mSecondTick);
+                }
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                if (mSecondsHandler != null) {
+                    mSecondsHandler.postAtTime(mSecondTick,
+                            SystemClock.uptimeMillis() / 1000 * 1000 + 1000);
+                }
+            }
+        }
+    };
 
     public Clock(Context context) {
         this(context, null);
@@ -158,40 +213,6 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             }
         }
     }
-
-    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(Intent.ACTION_TIMEZONE_CHANGED)) {
-                String tz = intent.getStringExtra("time-zone");
-                getHandler().post(() -> {
-                    mCalendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
-                    if (mClockFormat != null) {
-                        mClockFormat.setTimeZone(mCalendar.getTimeZone());
-                    }
-                });
-            } else if (action.equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
-                final Locale newLocale = getResources().getConfiguration().locale;
-                getHandler().post(() -> {
-                    if (!newLocale.equals(mLocale)) {
-                        mLocale = newLocale;
-                        mClockFormatString = ""; // force refresh
-                    }
-                });
-            }
-
-            if (action.equals(Intent.ACTION_SCREEN_ON)) {
-                mScreenOn = true;
-            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-                mScreenOn = false;
-            }
-
-            if (mScreenOn) {
-                getHandler().post(() -> updateClock());
-            }
-        }
-    };
 
     public void setClockVisibleByUser(boolean visible) {
         mClockVisibleByUser = visible;
@@ -313,11 +334,11 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
                 if (a >= 0) {
                     // Move a back so any whitespace before AM/PM is also in the alternate size.
                     final int b = a;
-                    while (a > 0 && Character.isWhitespace(format.charAt(a-1))) {
+                    while (a > 0 && Character.isWhitespace(format.charAt(a - 1))) {
                         a--;
                     }
                     format = format.substring(0, a) + MAGIC1 + format.substring(a, b)
-                        + "a" + MAGIC2 + format.substring(b + 1);
+                            + "a" + MAGIC2 + format.substring(b + 1);
                 }
             }
             mClockFormat = sdf = new SimpleDateFormat(format);
@@ -333,12 +354,12 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             if (magic1 >= 0 && magic2 > magic1) {
                 SpannableStringBuilder formatted = new SpannableStringBuilder(result);
                 if (mAmPmStyle == AM_PM_STYLE_GONE) {
-                    formatted.delete(magic1, magic2+1);
+                    formatted.delete(magic1, magic2 + 1);
                 } else {
                     if (mAmPmStyle == AM_PM_STYLE_SMALL) {
                         CharacterStyle style = new RelativeSizeSpan(0.7f);
                         formatted.setSpan(style, magic1, magic2,
-                                          Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+                                Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     }
                     formatted.delete(magic2, magic2 + 1);
                     formatted.delete(magic1, magic1 + 1);
@@ -350,8 +371,6 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
         return result;
 
     }
-
-    private boolean mDemoMode;
 
     @Override
     public void dispatchDemoCommand(String command, Bundle args) {
@@ -381,32 +400,5 @@ public class Clock extends TextView implements DemoMode, Tunable, CommandQueue.C
             setContentDescription(mContentDescriptionFormat.format(mCalendar.getTime()));
         }
     }
-
-    private final BroadcastReceiver mScreenReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                if (mSecondsHandler != null) {
-                    mSecondsHandler.removeCallbacks(mSecondTick);
-                }
-            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                if (mSecondsHandler != null) {
-                    mSecondsHandler.postAtTime(mSecondTick,
-                            SystemClock.uptimeMillis() / 1000 * 1000 + 1000);
-                }
-            }
-        }
-    };
-
-    private final Runnable mSecondTick = new Runnable() {
-        @Override
-        public void run() {
-            if (mCalendar != null) {
-                updateClock();
-            }
-            mSecondsHandler.postAtTime(this, SystemClock.uptimeMillis() / 1000 * 1000 + 1000);
-        }
-    };
 }
 

@@ -52,7 +52,7 @@ public class PenSizeArrayAdapter extends ArrayAdapter<String> {
         return createPenSizeImae(position);
     }
 
-    private ImageView createPenSizeImae(int position){
+    private ImageView createPenSizeImae(int position) {
         ImageView imageView = new ImageView(getContext());
         final int width = getContext().getResources().getDimensionPixelSize(R.dimen.crop_buttons);
         final int contentWidth = getContext().getResources().getDimensionPixelSize(R.dimen.crop_buttons_inlet);
@@ -61,7 +61,7 @@ public class PenSizeArrayAdapter extends ArrayAdapter<String> {
         final int penSize = Math.round(penSizeValue * density);
 
         final Canvas canvas = new Canvas();
-        canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG,Paint.FILTER_BITMAP_FLAG));
+        canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG, Paint.FILTER_BITMAP_FLAG));
         final Bitmap bmp = Bitmap.createBitmap(contentWidth, contentWidth, Bitmap.Config.ARGB_8888);
         canvas.setBitmap(bmp);
         final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);

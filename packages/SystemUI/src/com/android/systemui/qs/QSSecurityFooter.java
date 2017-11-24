@@ -56,16 +56,30 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
     private final ActivityStarter mActivityStarter;
     private final Handler mMainHandler;
     private final View mDivider;
-
+    protected H mHandler;
     private AlertDialog mDialog;
     private QSTileHost mHost;
-    protected H mHandler;
-
     private boolean mIsVisible;
     private boolean mShowWarnings;
     private CharSequence mFooterTextContent = null;
+    private final Runnable mUpdateDisplayState = new Runnable() {
+        @Override
+        public void run() {
+            if (mFooterTextContent != null) {
+                mFooterText.setText(mFooterTextContent);
+            }
+            mRootView.setVisibility(mIsVisible ? View.VISIBLE : View.GONE);
+            if (mDivider != null) mDivider.setVisibility(mIsVisible ? View.GONE : View.VISIBLE);
+        }
+    };
     private int mFooterTextId;
     private int mFooterIconId;
+    private final Runnable mUpdateIcon = new Runnable() {
+        @Override
+        public void run() {
+            mFooterIcon.setImageResource(mFooterIconId);
+        }
+    };
 
     public QSSecurityFooter(QSPanel qsPanel, Context context) {
         mRootView = LayoutInflater.from(context)
@@ -137,7 +151,7 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
         final CharSequence workProfileName = mSecurityController.getWorkProfileOrganizationName();
         // Update visibility of footer
         mIsVisible = mShowWarnings && (isDeviceManaged || hasCACerts || hasCACertsInWorkProfile ||
-            vpnName != null || vpnNameWorkProfile != null);
+                vpnName != null || vpnNameWorkProfile != null);
         // Update the string
         mFooterTextContent = getFooterText(isDeviceManaged, hasWorkProfile,
                 hasCACerts, hasCACertsInWorkProfile, isNetworkLoggingEnabled, vpnName,
@@ -154,9 +168,9 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
     }
 
     protected CharSequence getFooterText(boolean isDeviceManaged, boolean hasWorkProfile,
-            boolean hasCACerts, boolean hasCACertsInWorkProfile, boolean isNetworkLoggingEnabled,
-            String vpnName, String vpnNameWorkProfile, CharSequence organizationName,
-            CharSequence workProfileName) {
+                                         boolean hasCACerts, boolean hasCACertsInWorkProfile, boolean isNetworkLoggingEnabled,
+                                         String vpnName, String vpnNameWorkProfile, CharSequence organizationName,
+                                         CharSequence workProfileName) {
         if (isDeviceManaged) {
             if (hasCACerts || hasCACertsInWorkProfile || isNetworkLoggingEnabled) {
                 if (organizationName == null) {
@@ -245,7 +259,7 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
         mDialog = new SystemUIDialog(mContext);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         View dialogView = LayoutInflater.from(mContext)
-               .inflate(R.layout.quick_settings_footer_dialog, null, false);
+                .inflate(R.layout.quick_settings_footer_dialog, null, false);
         mDialog.setView(dialogView);
         mDialog.setButton(DialogInterface.BUTTON_POSITIVE, getPositiveButton(), this);
 
@@ -313,7 +327,7 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
     }
 
     protected CharSequence getManagementMessage(boolean isDeviceManaged,
-            CharSequence organizationName) {
+                                                CharSequence organizationName) {
         if (!isDeviceManaged) return null;
         if (organizationName != null)
             return mContext.getString(
@@ -322,7 +336,7 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
     }
 
     protected CharSequence getCaCertsMessage(boolean isDeviceManaged, boolean hasCACerts,
-            boolean hasCACertsInWorkProfile) {
+                                             boolean hasCACertsInWorkProfile) {
         if (!(hasCACerts || hasCACertsInWorkProfile)) return null;
         if (isDeviceManaged) {
             return mContext.getString(R.string.monitoring_description_management_ca_certificate);
@@ -340,7 +354,7 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
     }
 
     protected CharSequence getVpnMessage(boolean isDeviceManaged, boolean hasWorkProfile,
-            String vpnName, String vpnNameWorkProfile) {
+                                         String vpnName, String vpnNameWorkProfile) {
         if (vpnName == null && vpnNameWorkProfile == null) return null;
         final SpannableStringBuilder message = new SpannableStringBuilder();
         if (isDeviceManaged) {
@@ -381,23 +395,11 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
         }
     }
 
-    private final Runnable mUpdateIcon = new Runnable() {
-        @Override
-        public void run() {
-            mFooterIcon.setImageResource(mFooterIconId);
-        }
-    };
-
-    private final Runnable mUpdateDisplayState = new Runnable() {
-        @Override
-        public void run() {
-            if (mFooterTextContent != null) {
-                mFooterText.setText(mFooterTextContent);
-            }
-            mRootView.setVisibility(mIsVisible ? View.VISIBLE : View.GONE);
-            if (mDivider != null) mDivider.setVisibility(mIsVisible ? View.GONE : View.VISIBLE);
-        }
-    };
+    public void updateSettings() {
+        mShowWarnings = Settings.System.getIntForUser(
+                mContext.getContentResolver(), Settings.System.QS_FOOTER_WARNINGS, 1,
+                UserHandle.USER_CURRENT) == 1;
+    }
 
     private class Callback implements SecurityController.SecurityControllerCallback {
         @Override
@@ -451,11 +453,5 @@ public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClic
         public int hashCode() {
             return 314159257; // prime
         }
-    }
-
-    public void updateSettings() {
-        mShowWarnings = Settings.System.getIntForUser(
-                mContext.getContentResolver(), Settings.System.QS_FOOTER_WARNINGS, 1,
-                UserHandle.USER_CURRENT) == 1;
     }
 }

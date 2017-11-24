@@ -21,7 +21,7 @@ import android.os.Bundle;
 
 import com.android.internal.view.RotationPolicy;
 
-public class Rotation extends Activity  {
+public class Rotation extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -45,18 +45,28 @@ public class AccessPointControllerImpl
     private static final String EXTRA_START_CONNECT_SSID = "wifi_start_connect_ssid";
 
     private static final int[] ICONS = {
-        R.drawable.ic_qs_wifi_full_0,
-        R.drawable.ic_qs_wifi_full_1,
-        R.drawable.ic_qs_wifi_full_2,
-        R.drawable.ic_qs_wifi_full_3,
-        R.drawable.ic_qs_wifi_full_4,
+            R.drawable.ic_qs_wifi_full_0,
+            R.drawable.ic_qs_wifi_full_1,
+            R.drawable.ic_qs_wifi_full_2,
+            R.drawable.ic_qs_wifi_full_3,
+            R.drawable.ic_qs_wifi_full_4,
     };
 
     private final Context mContext;
     private final ArrayList<AccessPointCallback> mCallbacks = new ArrayList<AccessPointCallback>();
     private final WifiTracker mWifiTracker;
     private final UserManager mUserManager;
+    private final ActionListener mConnectListener = new ActionListener() {
+        @Override
+        public void onSuccess() {
+            if (DEBUG) Log.d(TAG, "connect success");
+        }
 
+        @Override
+        public void onFailure(int reason) {
+            if (DEBUG) Log.d(TAG, "connect failure reason=" + reason);
+        }
+    };
     private int mCurrentUser;
 
     public AccessPointControllerImpl(Context context, Looper bgLooper) {
@@ -157,16 +167,4 @@ public class AccessPointControllerImpl
     public void onAccessPointsChanged() {
         fireAcccessPointsCallback(mWifiTracker.getAccessPoints());
     }
-
-    private final ActionListener mConnectListener = new ActionListener() {
-        @Override
-        public void onSuccess() {
-            if (DEBUG) Log.d(TAG, "connect success");
-        }
-
-        @Override
-        public void onFailure(int reason) {
-            if (DEBUG) Log.d(TAG, "connect failure reason=" + reason);
-        }
-    };
 }

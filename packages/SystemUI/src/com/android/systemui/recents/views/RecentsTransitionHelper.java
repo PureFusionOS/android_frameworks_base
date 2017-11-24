@@ -80,16 +80,6 @@ public class RecentsTransitionHelper {
     private Context mContext;
     private Handler mHandler;
     private TaskViewTransform mTmpTransform = new TaskViewTransform();
-
-    private class StartScreenPinningRunnableRunnable implements Runnable {
-
-        private int taskId = -1;
-
-        @Override
-        public void run() {
-            EventBus.getDefault().send(new ScreenPinningRequestEvent(mContext, taskId));
-        }
-    }
     private StartScreenPinningRunnableRunnable mStartScreenPinningRunnable
             = new StartScreenPinningRunnableRunnable();
 
@@ -99,11 +89,94 @@ public class RecentsTransitionHelper {
     }
 
     /**
+     * Composes a single animation spec for the given {@link Task}
+     */
+    private static AppTransitionAnimationSpec composeOffscreenAnimationSpec(Task task,
+                                                                            Rect taskRect) {
+        return new AppTransitionAnimationSpec(task.key.id, null, taskRect);
+    }
+
+    public static GraphicBuffer composeTaskBitmap(TaskView taskView, TaskViewTransform transform) {
+        float scale = transform.scale;
+        int fromWidth = (int) (transform.rect.width() * scale);
+        int fromHeight = (int) (transform.rect.height() * scale);
+        if (fromWidth == 0 || fromHeight == 0) {
+            Log.e(TAG, "Could not compose thumbnail for task: " + taskView.getTask() +
+                    " at transform: " + transform);
+
+            return drawViewIntoGraphicBuffer(1, 1, null, 1f, 0x00ffffff);
+        } else {
+            if (RecentsDebugFlags.Static.EnableTransitionThumbnailDebugMode) {
+                return drawViewIntoGraphicBuffer(fromWidth, fromHeight, null, 1f, 0xFFff0000);
+            } else {
+                return drawViewIntoGraphicBuffer(fromWidth, fromHeight, taskView, scale, 0);
+            }
+        }
+    }
+
+    private static GraphicBuffer composeHeaderBitmap(TaskView taskView,
+                                                     TaskViewTransform transform) {
+        float scale = transform.scale;
+        int headerWidth = (int) (transform.rect.width());
+        int headerHeight = (int) (taskView.mHeaderView.getMeasuredHeight() * scale);
+        if (headerWidth == 0 || headerHeight == 0) {
+            return null;
+        }
+
+        if (RecentsDebugFlags.Static.EnableTransitionThumbnailDebugMode) {
+            return drawViewIntoGraphicBuffer(headerWidth, headerHeight, null, 1f, 0xFFff0000);
+        } else {
+            return drawViewIntoGraphicBuffer(headerWidth, headerHeight, taskView.mHeaderView,
+                    scale, 0);
+        }
+    }
+
+    public static GraphicBuffer drawViewIntoGraphicBuffer(int bufferWidth, int bufferHeight,
+                                                          View view, float scale, int eraseColor) {
+        RenderNode node = RenderNode.create("RecentsTransition", null);
+        node.setLeftTopRightBottom(0, 0, bufferWidth, bufferHeight);
+        node.setClipToBounds(false);
+        DisplayListCanvas c = node.start(bufferWidth, bufferHeight);
+        c.scale(scale, scale);
+        if (eraseColor != 0) {
+            c.drawColor(eraseColor);
+        }
+        if (view != null) {
+            view.draw(c);
+        }
+        node.end(c);
+        return ThreadedRenderer.createHardwareBitmap(node, bufferWidth, bufferHeight)
+                .createGraphicBufferHandle();
+    }
+
+    /**
+     * Composes a single animation spec for the given {@link TaskView}
+     */
+    private static AppTransitionAnimationSpec composeAnimationSpec(TaskStackView stackView,
+                                                                   TaskView taskView, TaskViewTransform transform, boolean addHeaderBitmap) {
+        GraphicBuffer b = null;
+        if (addHeaderBitmap) {
+            b = composeHeaderBitmap(taskView, transform);
+            if (b == null) {
+                return null;
+            }
+        }
+
+        Rect taskRect = new Rect();
+        transform.rect.round(taskRect);
+        if (stackView.getStack().getStackFrontMostTask(false /* includeFreeformTasks */) !=
+                taskView.getTask()) {
+            taskRect.bottom = taskRect.top + stackView.getMeasuredHeight();
+        }
+        return new AppTransitionAnimationSpec(taskView.getTask().key.id, b, taskRect);
+    }
+
+    /**
      * Launches the specified {@link Task}.
      */
     public void launchTaskFromRecents(final TaskStack stack, @Nullable final Task task,
-            final TaskStackView stackView, final TaskView taskView,
-            final boolean screenPinningRequested, final int destinationStack) {
+                                      final TaskStackView stackView, final TaskView taskView,
+                                      final boolean screenPinningRequested, final int destinationStack) {
 
         final ActivityOptions.OnAnimationStartedListener animStartedListener;
         final AppTransitionAnimationSpecsFuture transitionFuture;
@@ -187,34 +260,34 @@ public class RecentsTransitionHelper {
     /**
      * Starts the activity for the launch task.
      *
-     * @param taskView this is the {@link TaskView} that we are launching from. This can be null if
-     *                 we are toggling recents and the launch-to task is now offscreen.
+     * @param taskView         this is the {@link TaskView} that we are launching from. This can be null if
+     *                         we are toggling recents and the launch-to task is now offscreen.
      * @param destinationStack id of the stack to put the task into.
      */
     private void startTaskActivity(TaskStack stack, Task task, @Nullable TaskView taskView,
-            ActivityOptions opts, AppTransitionAnimationSpecsFuture transitionFuture,
-            int destinationStack) {
+                                   ActivityOptions opts, AppTransitionAnimationSpecsFuture transitionFuture,
+                                   int destinationStack) {
         SystemServicesProxy ssp = Recents.getSystemServices();
         ssp.startActivityFromRecents(mContext, task.key, task.title, opts, destinationStack,
                 succeeded -> {
-            if (succeeded) {
-                // Keep track of the index of the task launch
-                int taskIndexFromFront = 0;
-                int taskIndex = stack.indexOfStackTask(task);
-                if (taskIndex > -1) {
-                    taskIndexFromFront = stack.getTaskCount() - taskIndex - 1;
-                }
-                EventBus.getDefault().send(new LaunchTaskSucceededEvent(taskIndexFromFront));
-            } else {
-                // Dismiss the task if we fail to launch it
-                if (taskView != null) {
-                    taskView.dismissTask();
-                }
+                    if (succeeded) {
+                        // Keep track of the index of the task launch
+                        int taskIndexFromFront = 0;
+                        int taskIndex = stack.indexOfStackTask(task);
+                        if (taskIndex > -1) {
+                            taskIndexFromFront = stack.getTaskCount() - taskIndex - 1;
+                        }
+                        EventBus.getDefault().send(new LaunchTaskSucceededEvent(taskIndexFromFront));
+                    } else {
+                        // Dismiss the task if we fail to launch it
+                        if (taskView != null) {
+                            taskView.dismissTask();
+                        }
 
-                // Keep track of failed launches
-                EventBus.getDefault().send(new LaunchTaskFailedEvent());
-            }
-        });
+                        // Keep track of failed launches
+                        EventBus.getDefault().send(new LaunchTaskFailedEvent());
+                    }
+                });
         if (transitionFuture != null) {
             mHandler.post(transitionFuture::precacheSpecs);
         }
@@ -243,7 +316,8 @@ public class RecentsTransitionHelper {
                     while (mAppTransitionAnimationSpecs == SPECS_WAITING) {
                         try {
                             RecentsTransitionHelper.this.wait();
-                        } catch (InterruptedException e) {}
+                        } catch (InterruptedException e) {
+                        }
                     }
                     if (mAppTransitionAnimationSpecs == null) {
                         return null;
@@ -263,7 +337,7 @@ public class RecentsTransitionHelper {
      * Composes the transition spec when docking a task, which includes a full task bitmap.
      */
     public List<AppTransitionAnimationSpec> composeDockAnimationSpec(TaskView taskView,
-            Rect bounds) {
+                                                                     Rect bounds) {
         mTmpTransform.fillIn(taskView);
         Task task = taskView.getTask();
         GraphicBuffer buffer = RecentsTransitionHelper.composeTaskBitmap(taskView, mTmpTransform);
@@ -275,7 +349,7 @@ public class RecentsTransitionHelper {
      * Composes the animation specs for all the tasks in the target stack.
      */
     private List<AppTransitionAnimationSpec> composeAnimationSpecs(final Task task,
-            final TaskStackView stackView, final int destinationStack, Rect windowRect) {
+                                                                   final TaskStackView stackView, final int destinationStack, Rect windowRect) {
         // Ensure we have a valid target stack id
         final int targetStackId = destinationStack != INVALID_STACK_ID ?
                 destinationStack : task.key.stackId;
@@ -340,91 +414,18 @@ public class RecentsTransitionHelper {
         return specs;
     }
 
-    /**
-     * Composes a single animation spec for the given {@link Task}
-     */
-    private static AppTransitionAnimationSpec composeOffscreenAnimationSpec(Task task,
-            Rect taskRect) {
-        return new AppTransitionAnimationSpec(task.key.id, null, taskRect);
-    }
-
-    public static GraphicBuffer composeTaskBitmap(TaskView taskView, TaskViewTransform transform) {
-        float scale = transform.scale;
-        int fromWidth = (int) (transform.rect.width() * scale);
-        int fromHeight = (int) (transform.rect.height() * scale);
-        if (fromWidth == 0 || fromHeight == 0) {
-            Log.e(TAG, "Could not compose thumbnail for task: " + taskView.getTask() +
-                    " at transform: " + transform);
-
-            return drawViewIntoGraphicBuffer(1, 1, null, 1f, 0x00ffffff);
-        } else {
-            if (RecentsDebugFlags.Static.EnableTransitionThumbnailDebugMode) {
-                return drawViewIntoGraphicBuffer(fromWidth, fromHeight, null, 1f, 0xFFff0000);
-            } else {
-                return drawViewIntoGraphicBuffer(fromWidth, fromHeight, taskView, scale, 0);
-            }
-        }
-    }
-
-    private static GraphicBuffer composeHeaderBitmap(TaskView taskView,
-            TaskViewTransform transform) {
-        float scale = transform.scale;
-        int headerWidth = (int) (transform.rect.width());
-        int headerHeight = (int) (taskView.mHeaderView.getMeasuredHeight() * scale);
-        if (headerWidth == 0 || headerHeight == 0) {
-            return null;
-        }
-
-        if (RecentsDebugFlags.Static.EnableTransitionThumbnailDebugMode) {
-            return drawViewIntoGraphicBuffer(headerWidth, headerHeight, null, 1f, 0xFFff0000);
-        } else {
-            return drawViewIntoGraphicBuffer(headerWidth, headerHeight, taskView.mHeaderView,
-                    scale, 0);
-        }
-    }
-
-    public static GraphicBuffer drawViewIntoGraphicBuffer(int bufferWidth, int bufferHeight,
-            View view, float scale, int eraseColor) {
-        RenderNode node = RenderNode.create("RecentsTransition", null);
-        node.setLeftTopRightBottom(0, 0, bufferWidth, bufferHeight);
-        node.setClipToBounds(false);
-        DisplayListCanvas c = node.start(bufferWidth, bufferHeight);
-        c.scale(scale, scale);
-        if (eraseColor != 0) {
-            c.drawColor(eraseColor);
-        }
-        if (view != null) {
-            view.draw(c);
-        }
-        node.end(c);
-        return ThreadedRenderer.createHardwareBitmap(node, bufferWidth, bufferHeight)
-                .createGraphicBufferHandle();
-    }
-
-    /**
-     * Composes a single animation spec for the given {@link TaskView}
-     */
-    private static AppTransitionAnimationSpec composeAnimationSpec(TaskStackView stackView,
-            TaskView taskView, TaskViewTransform transform, boolean addHeaderBitmap) {
-        GraphicBuffer b = null;
-        if (addHeaderBitmap) {
-            b = composeHeaderBitmap(taskView, transform);
-            if (b == null) {
-                return null;
-            }
-        }
-
-        Rect taskRect = new Rect();
-        transform.rect.round(taskRect);
-        if (stackView.getStack().getStackFrontMostTask(false /* includeFreeformTasks */) !=
-                taskView.getTask()) {
-            taskRect.bottom = taskRect.top + stackView.getMeasuredHeight();
-        }
-        return new AppTransitionAnimationSpec(taskView.getTask().key.id, b, taskRect);
-    }
-
     public interface AnimationSpecComposer {
         List<AppTransitionAnimationSpec> composeSpecs();
+    }
+
+    private class StartScreenPinningRunnableRunnable implements Runnable {
+
+        private int taskId = -1;
+
+        @Override
+        public void run() {
+            EventBus.getDefault().send(new ScreenPinningRequestEvent(mContext, taskId));
+        }
     }
 
     /**
@@ -437,7 +438,7 @@ public class RecentsTransitionHelper {
         private final IAppTransitionAnimationSpecsFuture future;
 
         private AppTransitionAnimationSpecsFuture(AnimationSpecComposer composer,
-                IAppTransitionAnimationSpecsFuture future) {
+                                                  IAppTransitionAnimationSpecsFuture future) {
             this.composer = composer;
             this.future = future;
         }

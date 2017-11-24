@@ -32,7 +32,7 @@ public class DragStartInitializeDropTargetsEvent extends EventBus.Event {
     public final RecentsViewTouchHandler handler;
 
     public DragStartInitializeDropTargetsEvent(Task task, TaskView taskView,
-            RecentsViewTouchHandler handler) {
+                                               RecentsViewTouchHandler handler) {
         this.task = task;
         this.taskView = taskView;
         this.handler = handler;

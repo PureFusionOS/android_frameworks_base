@@ -32,6 +32,17 @@ public class ConfigurableTexts {
     private final Context mContext;
     private final ArrayMap<TextView, Integer> mTexts = new ArrayMap<>();
     private final ArrayMap<TextView, Integer> mTextLabels = new ArrayMap<>();
+    private final Runnable mUpdateAll = new Runnable() {
+        @Override
+        public void run() {
+            for (int i = 0; i < mTexts.size(); i++) {
+                setTextSizeH(mTexts.keyAt(i), mTexts.valueAt(i));
+            }
+            for (int i = 0; i < mTextLabels.size(); i++) {
+                setTextLabelH(mTextLabels.keyAt(i), mTextLabels.valueAt(i));
+            }
+        }
+    };
 
     public ConfigurableTexts(Context context) {
         mContext = context;
@@ -47,7 +58,7 @@ public class ConfigurableTexts {
         final float fontScale = res.getConfiguration().fontScale;
         final float density = res.getDisplayMetrics().density;
         final float px = text.getTextSize();
-        final int sp = (int)(px / fontScale / density);
+        final int sp = (int) (px / fontScale / density);
         mTexts.put(text, sp);
         text.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
             @Override
@@ -56,7 +67,7 @@ public class ConfigurableTexts {
 
             @Override
             public void onViewAttachedToWindow(View v) {
-               setTextSizeH(text, sp);
+                setTextSizeH(text, sp);
             }
         });
         mTextLabels.put(text, labelResId);
@@ -81,16 +92,4 @@ public class ConfigurableTexts {
             // oh well.
         }
     }
-
-    private final Runnable mUpdateAll = new Runnable() {
-        @Override
-        public void run() {
-            for (int i = 0; i < mTexts.size(); i++) {
-                setTextSizeH(mTexts.keyAt(i), mTexts.valueAt(i));
-            }
-            for (int i = 0; i < mTextLabels.size(); i++) {
-                setTextLabelH(mTextLabels.keyAt(i), mTextLabels.valueAt(i));
-            }
-        }
-    };
 }

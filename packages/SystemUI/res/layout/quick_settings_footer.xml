@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,22 +16,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:attr/colorPrimary"
     android:clickable="true"
-    android:paddingBottom="@dimen/qs_tile_padding_top"
-    android:paddingTop="@dimen/qs_tile_padding_top"
-    android:paddingStart="@dimen/qs_footer_padding_start"
-    android:paddingEnd="@dimen/qs_footer_padding_end"
     android:gravity="center_vertical"
-    android:background="?android:attr/colorPrimary" >
+    android:paddingBottom="@dimen/qs_tile_padding_top"
+    android:paddingEnd="@dimen/qs_footer_padding_end"
+    android:paddingStart="@dimen/qs_footer_padding_start"
+    android:paddingTop="@dimen/qs_tile_padding_top">
 
     <TextView
         android:id="@+id/footer_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start"
         android:layout_weight="1"
+        android:gravity="start"
         android:textAppearance="@style/TextAppearance.QS.TileLabel"
-        android:textColor="?android:attr/textColorSecondary"/>
+        android:textColor="?android:attr/textColorSecondary" />
 
     <ImageView
         android:id="@+id/footer_icon"
@@ -40,6 +39,6 @@
         android:layout_height="@dimen/qs_footer_icon_size"
         android:contentDescription="@null"
         android:src="@drawable/ic_info_outline"
-        android:tint="?android:attr/textColorSecondary"/>
+        android:tint="?android:attr/textColorSecondary" />
 
 </LinearLayout>

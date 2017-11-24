@@ -15,20 +15,20 @@
   -->
 
 <!-- Extends Framelayout -->
-<com.android.systemui.statusbar.DismissView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:visibility="gone">
+<com.android.systemui.statusbar.DismissView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingEnd="8dp"
+    android:visibility="gone">
+
     <com.android.systemui.statusbar.DismissViewButton
-            style="@android:style/Widget.Material.Button.Borderless"
-            android:id="@+id/dismiss_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:focusable="true"
-            android:contentDescription="@string/accessibility_clear_all"
-            android:text="@string/clear_all_notifications_text"
-            android:textAllCaps="true"/>
+        android:id="@+id/dismiss_text"
+        style="@android:style/Widget.Material.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:contentDescription="@string/accessibility_clear_all"
+        android:focusable="true"
+        android:text="@string/clear_all_notifications_text"
+        android:textAllCaps="true" />
 </com.android.systemui.statusbar.DismissView>

@@ -30,14 +30,14 @@ import com.android.systemui.EventLogTags;
  * TODO: delete this once the old logs are no longer needed.
  */
 public class LockscreenGestureLogger {
+    private final MetricsLogger mMetricsLogger = Dependency.get(MetricsLogger.class);
     private ArrayMap<Integer, Integer> mLegacyMap;
     private LogMaker mLogMaker = new LogMaker(MetricsEvent.VIEW_UNKNOWN)
             .setType(MetricsEvent.TYPE_ACTION);
-    private final MetricsLogger mMetricsLogger = Dependency.get(MetricsLogger.class);
 
     public LockscreenGestureLogger() {
         mLegacyMap = new ArrayMap<>(EventLogConstants.METRICS_GESTURE_TYPE_MAP.length);
-        for (int i = 0; i < EventLogConstants.METRICS_GESTURE_TYPE_MAP.length ; i++) {
+        for (int i = 0; i < EventLogConstants.METRICS_GESTURE_TYPE_MAP.length; i++) {
             mLegacyMap.put(EventLogConstants.METRICS_GESTURE_TYPE_MAP[i], i);
         }
     }

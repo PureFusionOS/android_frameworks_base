@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,35 +17,34 @@
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/navigation_side_padding"
     android:layout_height="match_parent"
-    android:layout_weight="0"
-    >
+    android:layout_weight="0">
+
     <com.android.systemui.statusbar.policy.KeyButtonView
         android:id="@+id/menu"
         android:layout_width="@dimen/navigation_extra_key_width"
         android:layout_height="match_parent"
         android:layout_marginEnd="2dp"
-        android:scaleType="centerInside"
-        systemui:keyCode="82"
-        systemui:playSound="false"
-        android:visibility="invisible"
         android:contentDescription="@string/accessibility_menu"
-        />
+        android:scaleType="centerInside"
+        android:visibility="invisible"
+        systemui:keyCode="82"
+        systemui:playSound="false" />
+
     <com.android.systemui.statusbar.policy.KeyButtonView
         android:id="@+id/ime_switcher"
         android:layout_width="@dimen/navigation_extra_key_width"
         android:layout_height="match_parent"
         android:layout_marginEnd="2dp"
-        android:visibility="invisible"
         android:contentDescription="@string/accessibility_ime_switch_button"
         android:scaleType="centerInside"
-        />
+        android:visibility="invisible" />
+
     <com.android.systemui.statusbar.policy.KeyButtonView
         android:id="@+id/accessibility_button"
         android:layout_width="@dimen/navigation_extra_key_width"
         android:layout_height="match_parent"
         android:layout_marginEnd="2dp"
-        android:visibility="invisible"
         android:contentDescription="@string/accessibility_accessibility_button"
         android:scaleType="centerInside"
-    />
+        android:visibility="invisible" />
 </FrameLayout>

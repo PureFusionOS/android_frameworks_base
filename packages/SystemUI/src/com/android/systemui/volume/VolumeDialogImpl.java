@@ -90,45 +90,41 @@ import static android.accessibilityservice.AccessibilityServiceInfo.FEEDBACK_GEN
 
 /**
  * Visual presentation of the volume dialog.
- *
+ * <p>
  * A client of VolumeDialogControllerImpl and its state model.
- *
+ * <p>
  * Methods ending in "H" must be called on the (ui) handler.
  */
 public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
-    private static final String TAG = Util.logTag(VolumeDialogImpl.class);
-
     public static final String SHOW_FULL_ZEN = "sysui_show_full_zen";
-
+    private static final String TAG = Util.logTag(VolumeDialogImpl.class);
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
     private static final int UPDATE_ANIMATION_DURATION = 80;
 
     private final Context mContext;
     private final H mHandler = new H();
+    private final List<VolumeRow> mRows = new ArrayList<>();
+    private final SparseBooleanArray mDynamic = new SparseBooleanArray();
+    private final KeyguardManager mKeyguard;
+    private final AudioManager mAudioManager;
+    private final AccessibilityManager mAccessibilityMgr;
+    private final Object mSafetyWarningLock = new Object();
+    private final Accessibility mAccessibility = new Accessibility();
+    private final ColorStateList mActiveSliderTint;
+    private final ColorStateList mInactiveSliderTint;
+    private final ZenModeController mZenModeController;
     private VolumeDialogController mController;
-
     private Window mWindow;
     private CustomDialog mDialog;
     private ViewGroup mDialogView;
     private ViewGroup mDialogRowsView;
     private ViewGroup mDialogContentView;
     private ImageButton mExpandButton;
-    private final List<VolumeRow> mRows = new ArrayList<>();
     private ConfigurableTexts mConfigurableTexts;
-    private final SparseBooleanArray mDynamic = new SparseBooleanArray();
-    private final KeyguardManager mKeyguard;
-    private final AudioManager mAudioManager;
-    private final AccessibilityManager mAccessibilityMgr;
     private int mExpandButtonAnimationDuration;
     private ZenFooter mZenFooter;
-    private final Object mSafetyWarningLock = new Object();
-    private final Accessibility mAccessibility = new Accessibility();
-    private final ColorStateList mActiveSliderTint;
-    private final ColorStateList mInactiveSliderTint;
     private VolumeDialogMotion mMotion;
     private int mWindowType;
-    private final ZenModeController mZenModeController;
-
     private boolean mShowing;
     private boolean mExpanded;
     private boolean mShowA11yStream;
@@ -140,14 +136,107 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     private boolean mExpandButtonAnimationRunning;
     private SafetyWarningDialog mSafetyWarning;
     private Callback mCallback;
+    private final ZenModePanel.Callback mZenPanelCallback = new ZenModePanel.Callback() {
+        @Override
+        public void onPrioritySettings() {
+            mCallback.onZenPrioritySettingsClicked();
+        }
+
+        @Override
+        public void onInteraction() {
+            mHandler.sendEmptyMessage(H.RESCHEDULE_TIMEOUT);
+        }
+
+        @Override
+        public void onExpanded(boolean expanded) {
+            // noop.
+        }
+    };
     private boolean mPendingStateChanged;
     private boolean mPendingRecheckAll;
     private long mCollapseTime;
     private boolean mHovering = false;
     private int mDensity;
-
     private boolean mShowFullZen;
     private TunerZenModePanel mZenPanel;
+    private final OnClickListener mClickExpand = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mExpandButtonAnimationRunning) return;
+            final boolean newExpand = !mExpanded;
+            Events.writeEvent(mContext, Events.EVENT_EXPAND, newExpand);
+            updateExpandedH(newExpand, false /* dismissing */);
+        }
+    };
+    private final VolumeDialogController.Callbacks mControllerCallbackH
+            = new VolumeDialogController.Callbacks() {
+        @Override
+        public void onShowRequested(int reason) {
+            showH(reason);
+        }
+
+        @Override
+        public void onDismissRequested(int reason) {
+            dismissH(reason);
+        }
+
+        @Override
+        public void onScreenOff() {
+            dismissH(Events.DISMISS_REASON_SCREEN_OFF);
+        }
+
+        @Override
+        public void onStateChanged(State state) {
+            onStateChangedH(state);
+        }
+
+        @Override
+        public void onLayoutDirectionChanged(int layoutDirection) {
+            mDialogView.setLayoutDirection(layoutDirection);
+        }
+
+        @Override
+        public void onConfigurationChanged() {
+            Configuration newConfig = mContext.getResources().getConfiguration();
+            final int density = newConfig.densityDpi;
+            if (density != mDensity) {
+                mDialog.dismiss();
+                mZenFooter.cleanup();
+                initDialog();
+                mDensity = density;
+            }
+            updateWindowWidthH();
+            mConfigurableTexts.update();
+            mZenFooter.onConfigurationChanged();
+        }
+
+        @Override
+        public void onShowVibrateHint() {
+            if (mSilentMode) {
+                mController.setRingerMode(AudioManager.RINGER_MODE_SILENT, false);
+            }
+        }
+
+        @Override
+        public void onShowSilentHint() {
+            if (mSilentMode) {
+                mController.setRingerMode(AudioManager.RINGER_MODE_NORMAL, false);
+            }
+        }
+
+        @Override
+        public void onShowSafetyWarning(int flags) {
+            showSafetyWarningH(flags);
+        }
+
+        @Override
+        public void onAccessibilityModeChanged(Boolean showA11yStream) {
+            boolean show = showA11yStream == null ? false : showA11yStream;
+            mShowA11yStream = show;
+            updateRowsH(getActiveRow());
+
+        }
+    };
 
     public VolumeDialogImpl(Context context) {
         mContext = context;
@@ -159,6 +248,14 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
                 (AccessibilityManager) mContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
         mActiveSliderTint = ColorStateList.valueOf(Utils.getColorAccent(mContext));
         mInactiveSliderTint = loadColorStateList(R.color.volume_slider_inactive);
+    }
+
+    private static int getImpliedLevel(SeekBar seekBar, int progress) {
+        final int m = seekBar.getMax();
+        final int n = m / 100 - 1;
+        final int level = progress == 0 ? 0
+                : progress == m ? (m / 100) : (1 + (int) ((progress / (float) m) * n));
+        return level;
     }
 
     public void init(int windowType, Callback callback) {
@@ -326,7 +423,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
     }
 
     private void addRow(int stream, int iconRes, int iconMuteRes, boolean important,
-            boolean dynamic) {
+                        boolean dynamic) {
         VolumeRow row = new VolumeRow();
         initRow(row, stream, iconRes, iconMuteRes, important);
         int rowSize;
@@ -351,7 +448,6 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
         }
     }
 
-
     private boolean isAttached() {
         return mDialogContentView != null && mDialogContentView.isAttachedToWindow();
     }
@@ -374,30 +470,29 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
 
     public void dump(PrintWriter writer) {
         writer.println(VolumeDialogImpl.class.getSimpleName() + " state:");
-        writer.print("  mShowing: "); writer.println(mShowing);
-        writer.print("  mExpanded: "); writer.println(mExpanded);
+        writer.print("  mShowing: ");
+        writer.println(mShowing);
+        writer.print("  mExpanded: ");
+        writer.println(mExpanded);
         writer.print("  mExpandButtonAnimationRunning: ");
         writer.println(mExpandButtonAnimationRunning);
-        writer.print("  mActiveStream: "); writer.println(mActiveStream);
-        writer.print("  mDynamic: "); writer.println(mDynamic);
-        writer.print("  mAutomute: "); writer.println(mAutomute);
-        writer.print("  mSilentMode: "); writer.println(mSilentMode);
-        writer.print("  mCollapseTime: "); writer.println(mCollapseTime);
+        writer.print("  mActiveStream: ");
+        writer.println(mActiveStream);
+        writer.print("  mDynamic: ");
+        writer.println(mDynamic);
+        writer.print("  mAutomute: ");
+        writer.println(mAutomute);
+        writer.print("  mSilentMode: ");
+        writer.println(mSilentMode);
+        writer.print("  mCollapseTime: ");
+        writer.println(mCollapseTime);
         writer.print("  mAccessibility.mFeedbackEnabled: ");
         writer.println(mAccessibility.mFeedbackEnabled);
     }
 
-    private static int getImpliedLevel(SeekBar seekBar, int progress) {
-        final int m = seekBar.getMax();
-        final int n = m / 100 - 1;
-        final int level = progress == 0 ? 0
-                : progress == m ? (m / 100) : (1 + (int)((progress / (float) m) * n));
-        return level;
-    }
-
     @SuppressLint("InflateParams")
     private void initRow(final VolumeRow row, final int stream, int iconRes, int iconMuteRes,
-            boolean important) {
+                         boolean important) {
         row.stream = stream;
         row.iconRes = iconRes;
         row.iconMuteRes = iconMuteRes;
@@ -778,12 +873,12 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
         row.icon.setAlpha(iconEnabled ? 1 : 0.5f);
         final int iconRes =
                 isRingVibrate ? R.drawable.ic_volume_ringer_vibrate
-                : isRingSilent || zenMuted ? row.cachedIconRes
-                : ss.routedToBluetooth ?
+                        : isRingSilent || zenMuted ? row.cachedIconRes
+                        : ss.routedToBluetooth ?
                         (ss.muted ? R.drawable.ic_volume_media_bt_mute
                                 : R.drawable.ic_volume_media_bt)
-                : mAutomute && ss.level == 0 ? row.iconMuteRes
-                : (ss.muted ? row.iconMuteRes : row.iconRes);
+                        : mAutomute && ss.level == 0 ? row.iconMuteRes
+                        : (ss.muted ? row.iconMuteRes : row.iconRes);
         if (iconRes != row.cachedIconRes) {
             if (row.cachedIconRes != 0 && isRingVibrate) {
                 mController.vibrate();
@@ -793,11 +888,11 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
         }
         row.iconState =
                 iconRes == R.drawable.ic_volume_ringer_vibrate ? Events.ICON_STATE_VIBRATE
-                : (iconRes == R.drawable.ic_volume_media_bt_mute || iconRes == row.iconMuteRes)
+                        : (iconRes == R.drawable.ic_volume_media_bt_mute || iconRes == row.iconMuteRes)
                         ? Events.ICON_STATE_MUTE
-                : (iconRes == R.drawable.ic_volume_media_bt || iconRes == row.iconRes)
+                        : (iconRes == R.drawable.ic_volume_media_bt || iconRes == row.iconRes)
                         ? Events.ICON_STATE_UNMUTE
-                : Events.ICON_STATE_UNKNOWN;
+                        : Events.ICON_STATE_UNKNOWN;
         if (iconEnabled) {
             if (isRingStream) {
                 if (isRingVibrate) {
@@ -823,9 +918,9 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
                 row.icon.setContentDescription(getStreamLabelH(ss));
             } else {
                 if (ss.muted || mAutomute && ss.level == 0) {
-                   row.icon.setContentDescription(mContext.getString(
-                           R.string.volume_stream_content_description_unmute,
-                           getStreamLabelH(ss)));
+                    row.icon.setContentDescription(mContext.getString(
+                            R.string.volume_stream_content_description_unmute,
+                            getStreamLabelH(ss)));
                 } else {
                     row.icon.setContentDescription(mContext.getString(
                             mShowA11yStream
@@ -1004,102 +1099,26 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
         return pm.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN);
     }
 
-    private final VolumeDialogController.Callbacks mControllerCallbackH
-            = new VolumeDialogController.Callbacks() {
-        @Override
-        public void onShowRequested(int reason) {
-            showH(reason);
-        }
-
-        @Override
-        public void onDismissRequested(int reason) {
-            dismissH(reason);
-        }
-
-        @Override
-        public void onScreenOff() {
-            dismissH(Events.DISMISS_REASON_SCREEN_OFF);
-        }
-
-        @Override
-        public void onStateChanged(State state) {
-            onStateChangedH(state);
-        }
-
-        @Override
-        public void onLayoutDirectionChanged(int layoutDirection) {
-            mDialogView.setLayoutDirection(layoutDirection);
-        }
-
-        @Override
-        public void onConfigurationChanged() {
-            Configuration newConfig = mContext.getResources().getConfiguration();
-            final int density = newConfig.densityDpi;
-            if (density != mDensity) {
-                mDialog.dismiss();
-                mZenFooter.cleanup();
-                initDialog();
-                mDensity = density;
-            }
-            updateWindowWidthH();
-            mConfigurableTexts.update();
-            mZenFooter.onConfigurationChanged();
-        }
-
-        @Override
-        public void onShowVibrateHint() {
-            if (mSilentMode) {
-                mController.setRingerMode(AudioManager.RINGER_MODE_SILENT, false);
-            }
-        }
-
-        @Override
-        public void onShowSilentHint() {
-            if (mSilentMode) {
-                mController.setRingerMode(AudioManager.RINGER_MODE_NORMAL, false);
-            }
-        }
-
-        @Override
-        public void onShowSafetyWarning(int flags) {
-            showSafetyWarningH(flags);
-        }
-
-        @Override
-        public void onAccessibilityModeChanged(Boolean showA11yStream) {
-            boolean show = showA11yStream == null ? false : showA11yStream;
-            mShowA11yStream = show;
-            updateRowsH(getActiveRow());
-
-        }
-    };
-
-    private final ZenModePanel.Callback mZenPanelCallback = new ZenModePanel.Callback() {
-        @Override
-        public void onPrioritySettings() {
-            mCallback.onZenPrioritySettingsClicked();
-        }
-
-        @Override
-        public void onInteraction() {
-            mHandler.sendEmptyMessage(H.RESCHEDULE_TIMEOUT);
-        }
-
-        @Override
-        public void onExpanded(boolean expanded) {
-            // noop.
-        }
-    };
-
-    private final OnClickListener mClickExpand = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (mExpandButtonAnimationRunning) return;
-            final boolean newExpand = !mExpanded;
-            Events.writeEvent(mContext, Events.EVENT_EXPAND, newExpand);
-            updateExpandedH(newExpand, false /* dismissing */);
-        }
-    };
+    private static class VolumeRow {
+        private View view;
+        private TextView header;
+        private ImageButton icon;
+        private SeekBar slider;
+        private int stream;
+        private StreamState ss;
+        private long userAttempt;  // last user-driven slider change
+        private boolean tracking;  // tracking slider touch
+        private int requestedLevel = -1;  // pending user-requested level via progress changed
+        private int iconRes;
+        private int iconMuteRes;
+        private boolean important;
+        private int cachedIconRes;
+        private ColorStateList cachedSliderTint;
+        private int iconState;  // from Events
+        private ObjectAnimator anim;  // slider progress animation for non-touch-related updates
+        private int animTargetProgress;
+        private int lastAudibleLevel = 1;
+    }
 
     private final class H extends Handler {
         private static final int SHOW = 1;
@@ -1119,15 +1138,33 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case SHOW: showH(msg.arg1); break;
-                case DISMISS: dismissH(msg.arg1); break;
-                case RECHECK: recheckH((VolumeRow) msg.obj); break;
-                case RECHECK_ALL: recheckH(null); break;
-                case SET_STREAM_IMPORTANT: setStreamImportantH(msg.arg1, msg.arg2 != 0); break;
-                case RESCHEDULE_TIMEOUT: rescheduleTimeoutH(); break;
-                case STATE_CHANGED: onStateChangedH(mState); break;
-                case UPDATE_BOTTOM_MARGIN: updateDialogBottomMarginH(); break;
-                case UPDATE_FOOTER: updateFooterH(); break;
+                case SHOW:
+                    showH(msg.arg1);
+                    break;
+                case DISMISS:
+                    dismissH(msg.arg1);
+                    break;
+                case RECHECK:
+                    recheckH((VolumeRow) msg.obj);
+                    break;
+                case RECHECK_ALL:
+                    recheckH(null);
+                    break;
+                case SET_STREAM_IMPORTANT:
+                    setStreamImportantH(msg.arg1, msg.arg2 != 0);
+                    break;
+                case RESCHEDULE_TIMEOUT:
+                    rescheduleTimeoutH();
+                    break;
+                case STATE_CHANGED:
+                    onStateChangedH(mState);
+                    break;
+                case UPDATE_BOTTOM_MARGIN:
+                    updateDialogBottomMarginH();
+                    break;
+                case UPDATE_FOOTER:
+                    updateFooterH();
+                    break;
             }
         }
     }
@@ -1223,14 +1260,14 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-            if (D.BUG) Log.d(TAG, "onStartTrackingTouch"+ " " + mRow.stream);
+            if (D.BUG) Log.d(TAG, "onStartTrackingTouch" + " " + mRow.stream);
             mController.setActiveStream(mRow.stream);
             mRow.tracking = true;
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            if (D.BUG) Log.d(TAG, "onStopTrackingTouch"+ " " + mRow.stream);
+            if (D.BUG) Log.d(TAG, "onStopTrackingTouch" + " " + mRow.stream);
             mRow.tracking = false;
             mRow.userAttempt = SystemClock.uptimeMillis();
             final int userLevel = getImpliedLevel(seekBar, seekBar.getProgress());
@@ -1271,7 +1308,7 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
 
         @Override
         public boolean onRequestSendAccessibilityEvent(ViewGroup host, View child,
-                AccessibilityEvent event) {
+                                                       AccessibilityEvent event) {
             rescheduleTimeoutH();
             return super.onRequestSendAccessibilityEvent(host, child, event);
         }
@@ -1291,26 +1328,5 @@ public class VolumeDialogImpl implements VolumeDialog, TunerService.Tunable {
             }
             return false;
         }
-    }
-
-    private static class VolumeRow {
-        private View view;
-        private TextView header;
-        private ImageButton icon;
-        private SeekBar slider;
-        private int stream;
-        private StreamState ss;
-        private long userAttempt;  // last user-driven slider change
-        private boolean tracking;  // tracking slider touch
-        private int requestedLevel = -1;  // pending user-requested level via progress changed
-        private int iconRes;
-        private int iconMuteRes;
-        private boolean important;
-        private int cachedIconRes;
-        private ColorStateList cachedSliderTint;
-        private int iconState;  // from Events
-        private ObjectAnimator anim;  // slider progress animation for non-touch-related updates
-        private int animTargetProgress;
-        private int lastAudibleLevel = 1;
     }
 }

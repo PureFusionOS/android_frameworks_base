@@ -27,7 +27,7 @@ public class StatusBarIconList {
 
     public StatusBarIconList(String[] slots) {
         final int N = slots.length;
-        for (int i=0; i < N; i++) {
+        for (int i = 0; i < N; i++) {
             mSlots.add(slots[i]);
             mIcons.add(null);
         }
@@ -35,7 +35,7 @@ public class StatusBarIconList {
 
     public int getSlotIndex(String slot) {
         final int N = mSlots.size();
-        for (int i=0; i<N; i++) {
+        for (int i = 0; i < N; i++) {
             if (slot.equals(mSlots.get(i))) {
                 return i;
             }
@@ -79,7 +79,7 @@ public class StatusBarIconList {
     public void dump(PrintWriter pw) {
         final int N = mSlots.size();
         pw.println("  icon slots: " + N);
-        for (int i=0; i<N; i++) {
+        for (int i = 0; i < N; i++) {
             pw.printf("    %2d: (%s) %s\n", i, mSlots.get(i), mIcons.get(i));
         }
     }

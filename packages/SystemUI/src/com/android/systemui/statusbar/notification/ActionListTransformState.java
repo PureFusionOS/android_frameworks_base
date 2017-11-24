@@ -20,16 +20,11 @@ import android.util.Pools;
 
 /**
  * A transform state of the action list
-*/
+ */
 public class ActionListTransformState extends TransformState {
 
     private static Pools.SimplePool<ActionListTransformState> sInstancePool
             = new Pools.SimplePool<>(40);
-
-    @Override
-    protected boolean sameAs(TransformState otherState) {
-        return otherState instanceof ActionListTransformState;
-    }
 
     public static ActionListTransformState obtain() {
         ActionListTransformState instance = sInstancePool.acquire();
@@ -37,6 +32,11 @@ public class ActionListTransformState extends TransformState {
             return instance;
         }
         return new ActionListTransformState();
+    }
+
+    @Override
+    protected boolean sameAs(TransformState otherState) {
+        return otherState instanceof ActionListTransformState;
     }
 
     @Override

@@ -43,10 +43,8 @@ import java.util.ArrayList;
  */
 public class LeakReporter {
 
-    static final String TAG = "LeakReporter";
-
     public static final String FILEPROVIDER_AUTHORITY = "com.android.systemui.fileprovider";
-
+    static final String TAG = "LeakReporter";
     static final String LEAK_DIR = "leak";
     static final String LEAK_HPROF = "leak.hprof";
     static final String LEAK_DUMP = "leak.dump";
@@ -72,7 +70,8 @@ public class LeakReporter {
             File dumpFile = new File(leakDir, LEAK_DUMP);
             try (FileOutputStream fos = new FileOutputStream(dumpFile)) {
                 PrintWriter w = new PrintWriter(fos);
-                w.print("Build: "); w.println(SystemProperties.get("ro.build.description"));
+                w.print("Build: ");
+                w.println(SystemProperties.get("ro.build.description"));
                 w.println();
                 w.flush();
                 mLeakDetector.dump(fos.getFD(), w, new String[0]);
@@ -122,7 +121,7 @@ public class LeakReporter {
         final StringBuilder messageBody = new StringBuilder("Build info: ")
                 .append(SystemProperties.get("ro.build.description"));
         intent.putExtra(Intent.EXTRA_TEXT, messageBody.toString());
-        final ClipData clipData = new ClipData(null, new String[] { mimeType },
+        final ClipData clipData = new ClipData(null, new String[]{mimeType},
                 new ClipData.Item(null, null, null, dumpUri));
         final ArrayList<Uri> attachments = Lists.newArrayList(dumpUri);
 
@@ -134,7 +133,7 @@ public class LeakReporter {
 
         String leakReportEmail = mLeakReportEmail;
         if (leakReportEmail != null) {
-            intent.putExtra(Intent.EXTRA_EMAIL, new String[] { leakReportEmail });
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{leakReportEmail});
         }
 
         return intent;

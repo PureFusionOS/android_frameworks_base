@@ -23,10 +23,13 @@ import android.support.annotation.VisibleForTesting;
 import com.android.systemui.R;
 
 public class TileColorPicker {
-    @VisibleForTesting static final int[] DISABLE_STATE_SET = {-android.R.attr.state_enabled};
-    @VisibleForTesting static final int[] ENABLE_STATE_SET = {android.R.attr.state_enabled,
+    @VisibleForTesting
+    static final int[] DISABLE_STATE_SET = {-android.R.attr.state_enabled};
+    @VisibleForTesting
+    static final int[] ENABLE_STATE_SET = {android.R.attr.state_enabled,
             android.R.attr.state_activated};
-    @VisibleForTesting static final int[] INACTIVE_STATE_SET = {-android.R.attr.state_activated};
+    @VisibleForTesting
+    static final int[] INACTIVE_STATE_SET = {-android.R.attr.state_activated};
     private static TileColorPicker sInstance;
 
     private ColorStateList mColorStateList;

@@ -47,12 +47,11 @@ import com.android.systemui.statusbar.phone.KeyguardAffordanceHelper;
  */
 public class KeyguardAffordanceView extends ImageView {
 
+    public static final float MAX_ICON_SCALE_AMOUNT = 1.5f;
+    public static final float MIN_ICON_SCALE_AMOUNT = 0.8f;
     private static final long CIRCLE_APPEAR_DURATION = 80;
     private static final long CIRCLE_DISAPPEAR_MAX_DURATION = 200;
     private static final long NORMAL_ANIMATION_DURATION = 200;
-    public static final float MAX_ICON_SCALE_AMOUNT = 1.5f;
-    public static final float MIN_ICON_SCALE_AMOUNT = 0.8f;
-
     private final int mMinBackgroundRadius;
     private final Paint mCirclePaint;
     private final int mInverseColor;
@@ -124,7 +123,7 @@ public class KeyguardAffordanceView extends ImageView {
     }
 
     public KeyguardAffordanceView(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                                  int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mCirclePaint = new Paint();
         mCirclePaint.setAntiAlias(true);
@@ -314,17 +313,13 @@ public class KeyguardAffordanceView extends ImageView {
         return (float) Math.hypot(width, height);
     }
 
-    public void setCircleRadius(float circleRadius) {
-        setCircleRadius(circleRadius, false, false);
-    }
-
     public void setCircleRadius(float circleRadius, boolean slowAnimation) {
         setCircleRadius(circleRadius, slowAnimation, false);
     }
 
     public void setCircleRadiusWithoutAnimation(float circleRadius) {
         cancelAnimator(mCircleAnimator);
-        setCircleRadius(circleRadius, false ,true);
+        setCircleRadius(circleRadius, false, true);
     }
 
     private void setCircleRadius(float circleRadius, boolean slowAnimation, boolean noAnimation) {
@@ -418,14 +413,14 @@ public class KeyguardAffordanceView extends ImageView {
     /**
      * Sets the scale of the containing image
      *
-     * @param imageScale The new Scale.
-     * @param animate Should an animation be performed
-     * @param duration If animate, whats the duration? When -1 we take the default duration
+     * @param imageScale   The new Scale.
+     * @param animate      Should an animation be performed
+     * @param duration     If animate, whats the duration? When -1 we take the default duration
      * @param interpolator If animate, whats the interpolator? When null we take the default
      *                     interpolator.
      */
     public void setImageScale(float imageScale, boolean animate, long duration,
-            Interpolator interpolator) {
+                              Interpolator interpolator) {
         cancelAnimator(mScaleAnimator);
         if (!animate) {
             mImageScale = imageScale;
@@ -458,15 +453,15 @@ public class KeyguardAffordanceView extends ImageView {
         }
     }
 
+    public float getRestingAlpha() {
+        return mRestingAlpha;
+    }
+
     public void setRestingAlpha(float alpha) {
         mRestingAlpha = alpha;
 
         // TODO: Handle the case an animation is playing.
         setImageAlpha(alpha, false);
-    }
-
-    public float getRestingAlpha() {
-        return mRestingAlpha;
     }
 
     public void setImageAlpha(float alpha, boolean animate) {
@@ -476,14 +471,14 @@ public class KeyguardAffordanceView extends ImageView {
     /**
      * Sets the alpha of the containing image
      *
-     * @param alpha The new alpha.
-     * @param animate Should an animation be performed
-     * @param duration If animate, whats the duration? When -1 we take the default duration
+     * @param alpha        The new alpha.
+     * @param animate      Should an animation be performed
+     * @param duration     If animate, whats the duration? When -1 we take the default duration
      * @param interpolator If animate, whats the interpolator? When null we take the default
      *                     interpolator.
      */
     public void setImageAlpha(float alpha, boolean animate, long duration,
-            Interpolator interpolator, Runnable runnable) {
+                              Interpolator interpolator, Runnable runnable) {
         cancelAnimator(mAlphaAnimator);
         alpha = mLaunchingAffordance ? 0 : alpha;
         int endAlpha = (int) (alpha * 255);
@@ -526,6 +521,7 @@ public class KeyguardAffordanceView extends ImageView {
     private Animator.AnimatorListener getEndListener(final Runnable runnable) {
         return new AnimatorListenerAdapter() {
             boolean mCancelled;
+
             @Override
             public void onAnimationCancel(Animator animation) {
                 mCancelled = true;
@@ -542,6 +538,10 @@ public class KeyguardAffordanceView extends ImageView {
 
     public float getCircleRadius() {
         return mCircleRadius;
+    }
+
+    public void setCircleRadius(float circleRadius) {
+        setCircleRadius(circleRadius, false, false);
     }
 
     @Override

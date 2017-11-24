@@ -61,7 +61,7 @@ public class NotificationDozeHelper {
     }
 
     public void startIntensityAnimation(ValueAnimator.AnimatorUpdateListener updateListener,
-            boolean dark, long delay, Animator.AnimatorListener listener) {
+                                        boolean dark, long delay, Animator.AnimatorListener listener) {
         float startIntensity = dark ? 0f : 1f;
         float endIntensity = dark ? 1f : 0f;
         ValueAnimator animator = ValueAnimator.ofFloat(startIntensity, endIntensity);
@@ -76,7 +76,7 @@ public class NotificationDozeHelper {
     }
 
     public void setIntensityDark(Consumer<Float> listener, boolean dark,
-            boolean animate, long delay) {
+                                 boolean animate, long delay) {
         if (animate) {
             startIntensityAnimation(a -> listener.accept((Float) a.getAnimatedValue()), dark, delay,
                     null /* listener */);

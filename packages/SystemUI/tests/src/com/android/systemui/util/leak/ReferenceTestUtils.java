@@ -27,7 +27,9 @@ import java.lang.ref.WeakReference;
  */
 public class ReferenceTestUtils {
 
-    /** Returns a runnable that blocks until {@code o} has been collected. */
+    /**
+     * Returns a runnable that blocks until {@code o} has been collected.
+     */
     public static CollectionWaiter createCollectionWaiter(Object o) {
         ReferenceQueue<Object> q = new ReferenceQueue<>();
         Reference<?> ref = new WeakReference<>(o, q);

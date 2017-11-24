@@ -55,20 +55,18 @@ public class StorageNotification extends SystemUI {
     private static final String ACTION_FINISH_WIZARD = "com.android.systemui.action.FINISH_WIZARD";
 
     // TODO: delay some notifications to avoid bumpy fast operations
-
-    private NotificationManager mNotificationManager;
-    private StorageManager mStorageManager;
-
-    private static class MoveInfo {
-        public int moveId;
-        public Bundle extras;
-        public String packageName;
-        public String label;
-        public String volumeUuid;
-    }
-
     private final SparseArray<MoveInfo> mMoves = new SparseArray<>();
-
+    private NotificationManager mNotificationManager;
+    private final BroadcastReceiver mFinishReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // When finishing the adoption wizard, clean up any notifications
+            // for moving primary storage
+            mNotificationManager.cancelAsUser(null, SystemMessage.NOTE_STORAGE_MOVE,
+                    UserHandle.ALL);
+        }
+    };
+    private StorageManager mStorageManager;
     private final StorageEventListener mListener = new StorageEventListener() {
         @Override
         public void onVolumeStateChanged(VolumeInfo vol, int oldState, int newState) {
@@ -112,17 +110,6 @@ public class StorageNotification extends SystemUI {
             mStorageManager.setVolumeSnoozed(fsUuid, true);
         }
     };
-
-    private final BroadcastReceiver mFinishReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // When finishing the adoption wizard, clean up any notifications
-            // for moving primary storage
-            mNotificationManager.cancelAsUser(null, SystemMessage.NOTE_STORAGE_MOVE,
-                    UserHandle.ALL);
-        }
-    };
-
     private final MoveCallback mMoveCallback = new MoveCallback() {
         @Override
         public void onCreated(int moveId, Bundle extras) {
@@ -575,7 +562,7 @@ public class StorageNotification extends SystemUI {
     }
 
     private Notification.Builder buildNotificationBuilder(VolumeInfo vol, CharSequence title,
-            CharSequence text) {
+                                                          CharSequence text) {
         Notification.Builder builder =
                 new Notification.Builder(mContext, NotificationChannels.STORAGE)
                         .setSmallIcon(getSmallIcon(vol.getDisk(), vol.getState()))
@@ -751,5 +738,13 @@ public class StorageNotification extends SystemUI {
     private boolean isTv() {
         PackageManager packageManager = mContext.getPackageManager();
         return packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+    }
+
+    private static class MoveInfo {
+        public int moveId;
+        public Bundle extras;
+        public String packageName;
+        public String label;
+        public String volumeUuid;
     }
 }

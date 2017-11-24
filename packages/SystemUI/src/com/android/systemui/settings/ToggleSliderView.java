@@ -41,7 +41,62 @@ public class ToggleSliderView extends RelativeLayout implements ToggleSlider {
     private TextView mLabel;
 
     private ToggleSliderView mMirror;
+    private final OnCheckedChangeListener mCheckListener = new OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton toggle, boolean checked) {
+            mSlider.setEnabled(!checked);
+
+            if (mListener != null) {
+                mListener.onChanged(
+                        ToggleSliderView.this, mTracking, checked, mSlider.getProgress(), false);
+            }
+
+            if (mMirror != null) {
+                mMirror.mToggle.setChecked(checked);
+            }
+        }
+    };
     private BrightnessMirrorController mMirrorController;
+    private final OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            if (mListener != null) {
+                mListener.onChanged(
+                        ToggleSliderView.this, mTracking, mToggle.isChecked(), progress, false);
+            }
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+            mTracking = true;
+
+            if (mListener != null) {
+                mListener.onChanged(ToggleSliderView.this, mTracking, mToggle.isChecked(),
+                        mSlider.getProgress(), false);
+            }
+
+            mToggle.setChecked(false);
+
+            if (mMirrorController != null) {
+                mMirrorController.showMirror();
+                mMirrorController.setLocation((View) getParent());
+            }
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            mTracking = false;
+
+            if (mListener != null) {
+                mListener.onChanged(ToggleSliderView.this, mTracking, mToggle.isChecked(),
+                        mSlider.getProgress(), true);
+            }
+
+            if (mMirrorController != null) {
+                mMirrorController.hideMirror();
+            }
+        }
+    };
 
     public ToggleSliderView(Context context) {
         this(context, null);
@@ -100,13 +155,13 @@ public class ToggleSliderView extends RelativeLayout implements ToggleSlider {
     }
 
     @Override
-    public void setChecked(boolean checked) {
-        mToggle.setChecked(checked);
+    public boolean isChecked() {
+        return mToggle.isChecked();
     }
 
     @Override
-    public boolean isChecked() {
-        return mToggle.isChecked();
+    public void setChecked(boolean checked) {
+        mToggle.setChecked(checked);
     }
 
     @Override
@@ -134,62 +189,5 @@ public class ToggleSliderView extends RelativeLayout implements ToggleSlider {
         }
         return super.dispatchTouchEvent(ev);
     }
-
-    private final OnCheckedChangeListener mCheckListener = new OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton toggle, boolean checked) {
-            mSlider.setEnabled(!checked);
-
-            if (mListener != null) {
-                mListener.onChanged(
-                        ToggleSliderView.this, mTracking, checked, mSlider.getProgress(), false);
-            }
-
-            if (mMirror != null) {
-                mMirror.mToggle.setChecked(checked);
-            }
-        }
-    };
-
-    private final OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if (mListener != null) {
-                mListener.onChanged(
-                        ToggleSliderView.this, mTracking, mToggle.isChecked(), progress, false);
-            }
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-            mTracking = true;
-
-            if (mListener != null) {
-                mListener.onChanged(ToggleSliderView.this, mTracking, mToggle.isChecked(),
-                        mSlider.getProgress(), false);
-            }
-
-            mToggle.setChecked(false);
-
-            if (mMirrorController != null) {
-                mMirrorController.showMirror();
-                mMirrorController.setLocation((View) getParent());
-            }
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            mTracking = false;
-
-            if (mListener != null) {
-                mListener.onChanged(ToggleSliderView.this, mTracking, mToggle.isChecked(),
-                        mSlider.getProgress(), true);
-            }
-
-            if (mMirrorController != null) {
-                mMirrorController.hideMirror();
-            }
-        }
-    };
 }
 

@@ -46,7 +46,8 @@ public class NextAlarmControllerImpl extends BroadcastReceiver
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("NextAlarmController state:");
-        pw.print("  mNextAlarm="); pw.println(mNextAlarm);
+        pw.print("  mNextAlarm=");
+        pw.println(mNextAlarm);
     }
 
     public void addCallback(NextAlarmChangeCallback cb) {

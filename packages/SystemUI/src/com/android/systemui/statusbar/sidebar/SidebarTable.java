@@ -28,19 +28,19 @@ public class SidebarTable {
 
     private static final String DATABASE_CREATE =
             "create table "
-            + TABLE_SIDEBAR + "("
-            + COLUMN_ITEM_ID + " integer primary key, "
-            + COLUMN_ITEM_TYPE + " integer, "
-            + COLUMN_CONTAINER + " integer, "
-            + COLUMN_TITLE + " text, "
-            + COLUMN_COMPONENT + " text);";
+                    + TABLE_SIDEBAR + "("
+                    + COLUMN_ITEM_ID + " integer primary key, "
+                    + COLUMN_ITEM_TYPE + " integer, "
+                    + COLUMN_CONTAINER + " integer, "
+                    + COLUMN_TITLE + " text, "
+                    + COLUMN_COMPONENT + " text);";
 
     public static void onCreate(SQLiteDatabase database) {
         database.execSQL(DATABASE_CREATE);
     }
-    
+
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
-            int newVersion) {
+                                 int newVersion) {
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_SIDEBAR);
         onCreate(database);
     }

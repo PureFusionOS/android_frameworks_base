@@ -27,11 +27,23 @@ import java.util.List;
  * Helper class, that handles similar properties as animators (delay, interpolators)
  * but can have a float input as to the amount they should be in effect.  This allows
  * easier animation that tracks input.
- *
+ * <p>
  * All "delays" and "times" are as fractions from 0-1.
  */
 public class TouchAnimator {
 
+    private static final FloatProperty<TouchAnimator> POSITION =
+            new FloatProperty<TouchAnimator>("position") {
+                @Override
+                public void setValue(TouchAnimator touchAnimator, float value) {
+                    touchAnimator.setPosition(value);
+                }
+
+                @Override
+                public Float get(TouchAnimator touchAnimator) {
+                    return touchAnimator.mLastT;
+                }
+            };
     private final Object[] mTargets;
     private final KeyframeSet[] mKeyframeSets;
     private final float mStartDelay;
@@ -42,7 +54,7 @@ public class TouchAnimator {
     private float mLastT = -1;
 
     private TouchAnimator(Object[] targets, KeyframeSet[] keyframeSets,
-            float startDelay, float endDelay, Interpolator interpolator, Listener listener) {
+                          float startDelay, float endDelay, Interpolator interpolator, Listener listener) {
         mTargets = targets;
         mKeyframeSets = keyframeSets;
         mStartDelay = startDelay;
@@ -75,30 +87,6 @@ public class TouchAnimator {
         }
     }
 
-    private static final FloatProperty<TouchAnimator> POSITION =
-            new FloatProperty<TouchAnimator>("position") {
-        @Override
-        public void setValue(TouchAnimator touchAnimator, float value) {
-            touchAnimator.setPosition(value);
-        }
-
-        @Override
-        public Float get(TouchAnimator touchAnimator) {
-            return touchAnimator.mLastT;
-        }
-    };
-
-    public static class ListenerAdapter implements Listener {
-        @Override
-        public void onAnimationAtStart() { }
-
-        @Override
-        public void onAnimationAtEnd() { }
-
-        @Override
-        public void onAnimationStarted() { }
-    }
-
     public interface Listener {
         /**
          * Called when the animator moves into a position of "0". Start and end delays are
@@ -119,6 +107,20 @@ public class TouchAnimator {
         void onAnimationStarted();
     }
 
+    public static class ListenerAdapter implements Listener {
+        @Override
+        public void onAnimationAtStart() {
+        }
+
+        @Override
+        public void onAnimationAtEnd() {
+        }
+
+        @Override
+        public void onAnimationStarted() {
+        }
+    }
+
     public static class Builder {
         private List<Object> mTargets = new ArrayList<>();
         private List<KeyframeSet> mValues = new ArrayList<>();
@@ -127,21 +129,6 @@ public class TouchAnimator {
         private float mEndDelay;
         private Interpolator mInterpolator;
         private Listener mListener;
-
-        public Builder addFloat(Object target, String property, float... values) {
-            add(target, KeyframeSet.ofFloat(getProperty(target, property, float.class), values));
-            return this;
-        }
-
-        public Builder addInt(Object target, String property, int... values) {
-            add(target, KeyframeSet.ofInt(getProperty(target, property, int.class), values));
-            return this;
-        }
-
-        private void add(Object target, KeyframeSet keyframeSet) {
-            mTargets.add(target);
-            mValues.add(keyframeSet);
-        }
 
         private static Property getProperty(Object target, String property, Class<?> cls) {
             if (target instanceof View) {
@@ -170,6 +157,21 @@ public class TouchAnimator {
                 return POSITION;
             }
             return Property.of(target.getClass(), cls, property);
+        }
+
+        public Builder addFloat(Object target, String property, float... values) {
+            add(target, KeyframeSet.ofFloat(getProperty(target, property, float.class), values));
+            return this;
+        }
+
+        public Builder addInt(Object target, String property, int... values) {
+            add(target, KeyframeSet.ofInt(getProperty(target, property, int.class), values));
+            return this;
+        }
+
+        private void add(Object target, KeyframeSet keyframeSet) {
+            mTargets.add(target);
+            mValues.add(keyframeSet);
         }
 
         public Builder setStartDelay(float startDelay) {
@@ -209,15 +211,6 @@ public class TouchAnimator {
             mFrameWidth = 1 / (float) (size - 1);
         }
 
-        void setValue(float fraction, Object target) {
-            int i;
-            for (i = 1; i < mSize - 1 && fraction > mFrameWidth; i++);
-            float amount = fraction / mFrameWidth;
-            interpolate(i, amount, target);
-        }
-
-        protected abstract void interpolate(int index, float amount, Object target);
-
         public static KeyframeSet ofInt(Property property, int... values) {
             return new IntKeyframeSet((Property<?, Integer>) property, values);
         }
@@ -225,6 +218,15 @@ public class TouchAnimator {
         public static KeyframeSet ofFloat(Property property, float... values) {
             return new FloatKeyframeSet((Property<?, Float>) property, values);
         }
+
+        void setValue(float fraction, Object target) {
+            int i;
+            for (i = 1; i < mSize - 1 && fraction > mFrameWidth; i++) ;
+            float amount = fraction / mFrameWidth;
+            interpolate(i, amount, target);
+        }
+
+        protected abstract void interpolate(int index, float amount, Object target);
     }
 
     private static class FloatKeyframeSet<T> extends KeyframeSet {

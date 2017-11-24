@@ -17,15 +17,23 @@
 package com.android.systemui.settings;
 
 public interface ToggleSlider {
+    void setOnChangedListener(Listener l);
+
+    default boolean isChecked() {
+        return false;
+    }
+
+    default void setChecked(boolean checked) {
+    }
+
+    void setMax(int max);
+
+    void setValue(int value);
+
     interface Listener {
         void onInit(ToggleSlider control);
+
         void onChanged(ToggleSlider slider, boolean tracking, boolean automatic, int value,
                        boolean stopTracking);
     }
-
-    void setOnChangedListener(Listener l);
-    default void setChecked(boolean checked) {}
-    default boolean isChecked() { return false; }
-    void setMax(int max);
-    void setValue(int value);
 }

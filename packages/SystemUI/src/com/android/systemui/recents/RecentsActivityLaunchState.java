@@ -18,12 +18,12 @@ package com.android.systemui.recents;
 
 /**
  * The launch state of the RecentsActivity.
- *
+ * <p>
  * Current Constraints:
- *  - needed in onStart() before onNewIntent()
- *  - needs to be reset when Recents is hidden
- *  - needs to be computed in Recents component
- *  - needs to be accessible by views
+ * - needed in onStart() before onNewIntent()
+ * - needs to be reset when Recents is hidden
+ * - needs to be computed in Recents component
+ * - needs to be accessible by views
  */
 public class RecentsActivityLaunchState {
 

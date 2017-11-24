@@ -35,13 +35,13 @@ import java.util.ArrayList;
  */
 public abstract class ExpandableView extends FrameLayout {
 
+    private static Rect mClipRect = new Rect();
     protected OnHeightChangedListener mOnHeightChangedListener;
-    private int mActualHeight;
     protected int mClipTopAmount;
     protected int mClipBottomAmount;
+    private int mActualHeight;
     private boolean mDark;
     private ArrayList<View> mMatchParentViews = new ArrayList<View>();
-    private static Rect mClipRect = new Rect();
     private boolean mWillBeGone;
     private int mMinClipTopAmount = 0;
     private boolean mClipToActualHeight = true;
@@ -76,8 +76,8 @@ public abstract class ExpandableView extends FrameLayout {
                 if (layoutParams.height >= 0) {
                     // An actual height is set
                     childHeightSpec = layoutParams.height > ownMaxHeight
-                        ? MeasureSpec.makeMeasureSpec(ownMaxHeight, MeasureSpec.EXACTLY)
-                        : MeasureSpec.makeMeasureSpec(layoutParams.height, MeasureSpec.EXACTLY);
+                            ? MeasureSpec.makeMeasureSpec(ownMaxHeight, MeasureSpec.EXACTLY)
+                            : MeasureSpec.makeMeasureSpec(layoutParams.height, MeasureSpec.EXACTLY);
                 }
                 child.measure(
                         getChildMeasureSpec(widthMeasureSpec, 0 /* padding */, layoutParams.width),
@@ -119,7 +119,7 @@ public abstract class ExpandableView extends FrameLayout {
      * Sets the actual height of this notification. This is different than the laid out
      * {@link View#getHeight()}, as we want to avoid layouting during scrolling and expanding.
      *
-     * @param actualHeight The height of this notification.
+     * @param actualHeight    The height of this notification.
      * @param notifyListeners Whether the listener should be informed about the change.
      */
     public void setActualHeight(int actualHeight, boolean notifyListeners) {
@@ -130,10 +130,6 @@ public abstract class ExpandableView extends FrameLayout {
         }
     }
 
-    public void setActualHeight(int actualHeight) {
-        setActualHeight(actualHeight, true /* notifyListeners */);
-    }
-
     /**
      * See {@link #setActualHeight}.
      *
@@ -141,6 +137,10 @@ public abstract class ExpandableView extends FrameLayout {
      */
     public int getActualHeight() {
         return mActualHeight;
+    }
+
+    public void setActualHeight(int actualHeight) {
+        setActualHeight(actualHeight, true /* notifyListeners */);
     }
 
     /**
@@ -170,7 +170,7 @@ public abstract class ExpandableView extends FrameLayout {
      * Sets the notification as dimmed. The default implementation does nothing.
      *
      * @param dimmed Whether the notification should be dimmed.
-     * @param fade Whether an animation should be played to change the state.
+     * @param fade   Whether an animation should be played to change the state.
      */
     public void setDimmed(boolean dimmed, boolean fade) {
     }
@@ -178,8 +178,8 @@ public abstract class ExpandableView extends FrameLayout {
     /**
      * Sets the notification as dark. The default implementation does nothing.
      *
-     * @param dark Whether the notification should be dark.
-     * @param fade Whether an animation should be played to change the state.
+     * @param dark  Whether the notification should be dark.
+     * @param fade  Whether an animation should be played to change the state.
      * @param delay If fading, the delay of the animation.
      */
     public void setDark(boolean dark, boolean fade, long delay) {
@@ -204,7 +204,7 @@ public abstract class ExpandableView extends FrameLayout {
      * Sets whether the notification should hide its private contents if it is sensitive.
      */
     public void setHideSensitive(boolean hideSensitive, boolean animated, long delay,
-            long duration) {
+                                 long duration) {
     }
 
     /**
@@ -212,6 +212,10 @@ public abstract class ExpandableView extends FrameLayout {
      */
     public int getIntrinsicHeight() {
         return getHeight();
+    }
+
+    public int getClipTopAmount() {
+        return mClipTopAmount;
     }
 
     /**
@@ -225,6 +229,10 @@ public abstract class ExpandableView extends FrameLayout {
         updateClipping();
     }
 
+    public int getClipBottomAmount() {
+        return mClipBottomAmount;
+    }
+
     /**
      * Set the amount the the notification is clipped on the bottom in addition to the regular
      * clipping. This is mainly used to clip something in a non-animated way without changing the
@@ -235,14 +243,6 @@ public abstract class ExpandableView extends FrameLayout {
     public void setClipBottomAmount(int clipBottomAmount) {
         mClipBottomAmount = clipBottomAmount;
         updateClipping();
-    }
-
-    public int getClipTopAmount() {
-        return mClipTopAmount;
-    }
-
-    public int getClipBottomAmount() {
-        return mClipBottomAmount;
     }
 
     public void setOnHeightChangedListener(OnHeightChangedListener listener) {
@@ -269,21 +269,22 @@ public abstract class ExpandableView extends FrameLayout {
     /**
      * Perform a remove animation on this view.
      *
-     * @param duration The duration of the remove animation.
+     * @param duration             The duration of the remove animation.
      * @param translationDirection The direction value from [-1 ... 1] indicating in which the
      *                             animation should be performed. A value of -1 means that The
      *                             remove animation should be performed upwards,
      *                             such that the  child appears to be going away to the top. 1
      *                             Should mean the opposite.
-     * @param onFinishedRunnable A runnable which should be run when the animation is finished.
+     * @param onFinishedRunnable   A runnable which should be run when the animation is finished.
      */
     public abstract void performRemoveAnimation(long duration, float translationDirection,
-            Runnable onFinishedRunnable);
+                                                Runnable onFinishedRunnable);
 
     public abstract void performAddAnimation(long delay, long duration);
 
     /**
      * Set the notification appearance to be below the speed bump.
+     *
      * @param below true if it is below.
      */
     public void setBelowSpeedBump(boolean below) {
@@ -293,19 +294,18 @@ public abstract class ExpandableView extends FrameLayout {
         return getIntrinsicHeight();
     }
 
+    /**
+     * Gets the translation of the view.
+     */
+    public float getTranslation() {
+        return getTranslationX();
+    }
 
     /**
      * Sets the translation of the view.
      */
     public void setTranslation(float translation) {
         setTranslationX(translation);
-    }
-
-    /**
-     * Gets the translation of the view.
-     */
-    public float getTranslation() {
-        return getTranslationX();
     }
 
     public void onHeightReset() {
@@ -355,7 +355,7 @@ public abstract class ExpandableView extends FrameLayout {
         if (mClipToActualHeight) {
             int top = getClipTopAmount();
             mClipRect.set(0, top, getWidth(), Math.max(getActualHeight() + getExtraBottomPadding()
-                                - mClipBottomAmount, top));
+                    - mClipBottomAmount, top));
             setClipBounds(mClipRect);
         } else {
             setClipBounds(null);
@@ -417,7 +417,7 @@ public abstract class ExpandableView extends FrameLayout {
     }
 
     public void setFakeShadowIntensity(float shadowIntensity, float outlineAlpha, int shadowYEnd,
-            int outlineTranslation) {
+                                       int outlineTranslation) {
     }
 
     public float getOutlineAlpha() {
@@ -428,20 +428,20 @@ public abstract class ExpandableView extends FrameLayout {
         return 0;
     }
 
-    public void setChangingPosition(boolean changingPosition) {
-        mChangingPosition = changingPosition;
-    }
-
     public boolean isChangingPosition() {
         return mChangingPosition;
     }
 
-    public void setTransientContainer(ViewGroup transientContainer) {
-        mTransientContainer = transientContainer;
+    public void setChangingPosition(boolean changingPosition) {
+        mChangingPosition = changingPosition;
     }
 
     public ViewGroup getTransientContainer() {
         return mTransientContainer;
+    }
+
+    public void setTransientContainer(ViewGroup transientContainer) {
+        mTransientContainer = transientContainer;
     }
 
     /**
@@ -466,7 +466,8 @@ public abstract class ExpandableView extends FrameLayout {
         return false;
     }
 
-    public void setActualHeightAnimating(boolean animating) {}
+    public void setActualHeightAnimating(boolean animating) {
+    }
 
     public ExpandableViewState createNewViewState(StackScrollState stackScrollState) {
         return new ExpandableViewState();
@@ -481,15 +482,15 @@ public abstract class ExpandableView extends FrameLayout {
         return false;
     }
 
+    public boolean isInShelf() {
+        return mInShelf;
+    }
+
     /**
      * @param inShelf whether the view is currently fully in the notification shelf.
      */
     public void setInShelf(boolean inShelf) {
         mInShelf = inShelf;
-    }
-
-    public boolean isInShelf() {
-        return mInShelf;
     }
 
     /**
@@ -514,8 +515,8 @@ public abstract class ExpandableView extends FrameLayout {
     public interface OnHeightChangedListener {
 
         /**
-         * @param view the view for which the height changed, or {@code null} if just the top
-         *             padding or the padding between the elements changed
+         * @param view           the view for which the height changed, or {@code null} if just the top
+         *                       padding or the padding between the elements changed
          * @param needsAnimation whether the view height needs to be animated
          */
         void onHeightChanged(ExpandableView view, boolean needsAnimation);

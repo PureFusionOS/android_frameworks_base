@@ -20,14 +20,12 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
     private static final float TILE_ASPECT = 1.2f;
 
     private static final String TAG = "TileLayout";
-
+    protected final ArrayList<TileRecord> mRecords = new ArrayList<>();
     protected int mColumns;
     protected int mCellWidth;
     protected int mCellHeight;
     protected int mCellMargin;
     protected boolean mShowTitles = true;
-
-    protected final ArrayList<TileRecord> mRecords = new ArrayList<>();
     private int mCellMarginTop;
     private boolean mListening;
 
@@ -39,6 +37,10 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         super(context, attrs);
         setFocusableInTouchMode(true);
         updateResources();
+    }
+
+    private static int exactly(int size) {
+        return MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY);
     }
 
     @Override
@@ -101,10 +103,6 @@ public class TileLayout extends ViewGroup implements QSTileLayout {
         int height = (mCellHeight + mCellMargin) * rows + (mCellMarginTop - mCellMargin);
         if (height < 0) height = 0;
         setMeasuredDimension(width, height);
-    }
-
-    private static int exactly(int size) {
-        return MeasureSpec.makeMeasureSpec(size, MeasureSpec.EXACTLY);
     }
 
     @Override

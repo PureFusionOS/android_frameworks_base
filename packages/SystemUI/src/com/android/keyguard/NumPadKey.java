@@ -55,13 +55,10 @@ public class NumPadKey extends ViewGroup {
             if (mTextView != null && mTextView.isEnabled()) {
                 mTextView.append(Character.forDigit(mDigit, 10));
             }
-            userActivity();;
+            userActivity();
+            ;
         }
     };
-
-    public void userActivity() {
-        mPM.userActivity(SystemClock.uptimeMillis(), false);
-    }
 
     public NumPadKey(Context context) {
         this(context, null);
@@ -111,6 +108,10 @@ public class NumPadKey extends ViewGroup {
         setContentDescription(mDigitText.getText().toString());
     }
 
+    public void userActivity() {
+        mPM.userActivity(SystemClock.uptimeMillis(), false);
+    }
+
     public void setDigit(int digit) {
         mDigit = digit;
         updateText();
@@ -127,7 +128,7 @@ public class NumPadKey extends ViewGroup {
             if (sKlondike != null && sKlondike.length > mDigit) {
                 String klondike = sKlondike[mDigit];
                 final int len = klondike.length();
-                if (len > 0  || scramblePin) {
+                if (len > 0 || scramblePin) {
                     mKlondikeText.setText(klondike);
                 } else {
                     mKlondikeText.setVisibility(View.INVISIBLE);
@@ -177,7 +178,7 @@ public class NumPadKey extends ViewGroup {
         if (mEnableHaptics) {
             performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,
                     HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
-                    | HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            | HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
     }
 }

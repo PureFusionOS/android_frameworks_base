@@ -39,6 +39,14 @@ public class KeyguardClockPositionAlgorithm {
 
     private static final float CLOCK_ADJ_TOP_PADDING_MULTIPLIER_MIN = 1.4f;
     private static final float CLOCK_ADJ_TOP_PADDING_MULTIPLIER_MAX = 3.2f;
+    private static final PathInterpolator sSlowDownInterpolator;
+
+    static {
+        Path path = new Path();
+        path.moveTo(0, 0);
+        path.cubicTo(0.3f, 0.875f, 0.6f, 1f, 1f, 1f);
+        sSlowDownInterpolator = new PathInterpolator(path);
+    }
 
     private int mClockNotificationsMarginMin;
     private int mClockNotificationsMarginMax;
@@ -52,22 +60,11 @@ public class KeyguardClockPositionAlgorithm {
     private int mKeyguardStatusHeight;
     private float mEmptyDragAmount;
     private float mDensity;
-
     /**
      * The number (fractional) of notifications the "more" card counts when calculating how many
      * notifications are currently visible for the y positioning of the clock.
      */
     private float mMoreCardNotificationAmount;
-
-    private static final PathInterpolator sSlowDownInterpolator;
-
-    static {
-        Path path = new Path();
-        path.moveTo(0, 0);
-        path.cubicTo(0.3f, 0.875f, 0.6f, 1f, 1f, 1f);
-        sSlowDownInterpolator = new PathInterpolator(path);
-    }
-
     private AccelerateInterpolator mAccelerateInterpolator = new AccelerateInterpolator();
     private int mClockBottom;
     private float mDarkAmount;
@@ -89,8 +86,8 @@ public class KeyguardClockPositionAlgorithm {
     }
 
     public void setup(int maxKeyguardNotifications, int maxPanelHeight, float expandedHeight,
-            int notificationCount, int height, int keyguardStatusHeight, float emptyDragAmount,
-            int clockBottom, float dark) {
+                      int notificationCount, int height, int keyguardStatusHeight, float emptyDragAmount,
+                      int clockBottom, float dark) {
         mMaxKeyguardNotifications = maxKeyguardNotifications;
         mMaxPanelHeight = maxPanelHeight;
         mExpandedHeight = expandedHeight;
@@ -111,7 +108,7 @@ public class KeyguardClockPositionAlgorithm {
         int y = getClockY() - mKeyguardStatusHeight / 2;
         float clockAdjustment = getClockYExpansionAdjustment();
         float topPaddingAdjMultiplier = getTopPaddingAdjMultiplier();
-        result.stackScrollerPaddingAdjustment = (int) (clockAdjustment*topPaddingAdjMultiplier);
+        result.stackScrollerPaddingAdjustment = (int) (clockAdjustment * topPaddingAdjMultiplier);
         int clockNotificationsPadding = getClockNotificationsPadding()
                 + result.stackScrollerPaddingAdjustment;
         int padding = y + clockNotificationsPadding;
@@ -166,7 +163,7 @@ public class KeyguardClockPositionAlgorithm {
         float slowedDownValue = -sSlowDownInterpolator.getInterpolation(t) * SLOW_DOWN_FACTOR
                 * mMaxPanelHeight;
         if (mNotificationCount == 0) {
-            return (-2*value + slowedDownValue)/3;
+            return (-2 * value + slowedDownValue) / 3;
         } else {
             return slowedDownValue;
         }

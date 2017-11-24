@@ -89,25 +89,21 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         UnlockMethodCache.OnUnlockMethodChangedListener,
         AccessibilityController.AccessibilityStateChangedCallback, View.OnLongClickListener {
 
-    final static String TAG = "StatusBar/KeyguardBottomAreaView";
-
     public static final String CAMERA_LAUNCH_SOURCE_AFFORDANCE = "lockscreen_affordance";
     public static final String CAMERA_LAUNCH_SOURCE_WIGGLE = "wiggle_gesture";
     public static final String CAMERA_LAUNCH_SOURCE_POWER_DOUBLE_TAP = "power_double_tap";
-
     public static final String EXTRA_CAMERA_LAUNCH_SOURCE
             = "com.android.systemui.camera_launch_source";
-
+    public static final Intent INSECURE_CAMERA_INTENT =
+            new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+    final static String TAG = "StatusBar/KeyguardBottomAreaView";
     private static final String LEFT_BUTTON_PLUGIN
             = "com.android.systemui.action.PLUGIN_LOCKSCREEN_LEFT_BUTTON";
     private static final String RIGHT_BUTTON_PLUGIN
             = "com.android.systemui.action.PLUGIN_LOCKSCREEN_RIGHT_BUTTON";
-
     private static final Intent SECURE_CAMERA_INTENT =
             new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA_SECURE)
                     .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-    public static final Intent INSECURE_CAMERA_INTENT =
-            new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
     private static final Intent PHONE_INTENT = new Intent(Intent.ACTION_DIAL);
     private static final int DOZE_ANIMATION_STAGGER_DELAY = 48;
     private static final int DOZE_ANIMATION_ELEMENT_DURATION = 250;
@@ -161,24 +157,66 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private String mLeftButtonStr;
     private LockscreenGestureLogger mLockscreenGestureLogger = new LockscreenGestureLogger();
     private boolean mDozing;
+    private final BroadcastReceiver mDevicePolicyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    updateCameraVisibility();
+                }
+            });
+        }
+    };
+    private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
+            new KeyguardUpdateMonitorCallback() {
+                @Override
+                public void onUserSwitchComplete(int userId) {
+                    updateCameraVisibility();
+                }
 
-    public KeyguardBottomAreaView(Context context) {
-        this(context, null);
-    }
+                @Override
+                public void onStartedWakingUp() {
+                    mLockIcon.setDeviceInteractive(true);
+                }
 
-    public KeyguardBottomAreaView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
+                @Override
+                public void onFinishedGoingToSleep(int why) {
+                    mLockIcon.setDeviceInteractive(false);
+                }
 
-    public KeyguardBottomAreaView(Context context, AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
-    }
+                @Override
+                public void onScreenTurnedOn() {
+                    mLockIcon.setScreenOn(true);
+                }
 
-    public KeyguardBottomAreaView(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+                @Override
+                public void onScreenTurnedOff() {
+                    mLockIcon.setScreenOn(false);
+                }
 
+                @Override
+                public void onKeyguardVisibilityChanged(boolean showing) {
+                    mLockIcon.update();
+                }
+
+                @Override
+                public void onFingerprintRunningStateChanged(boolean running) {
+                    mLockIcon.update();
+                }
+
+                @Override
+                public void onStrongAuthStateChanged(int userId) {
+                    mLockIcon.update();
+                }
+
+                @Override
+                public void onUserUnlocked() {
+                    inflateCameraPreview();
+                    updateCameraVisibility();
+                    updateLeftAffordance();
+                }
+            };
     private AccessibilityDelegate mAccessibilityDelegate = new AccessibilityDelegate() {
         @Override
         public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
@@ -216,6 +254,29 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             return super.performAccessibilityAction(host, action, args);
         }
     };
+
+    public KeyguardBottomAreaView(Context context) {
+        this(context, null);
+    }
+
+    public KeyguardBottomAreaView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public KeyguardBottomAreaView(Context context, AttributeSet attrs, int defStyleAttr) {
+        this(context, attrs, defStyleAttr, 0);
+    }
+
+    public KeyguardBottomAreaView(Context context, AttributeSet attrs, int defStyleAttr,
+                                  int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    private static boolean isSuccessfulLaunch(int result) {
+        return result == ActivityManager.START_SUCCESS
+                || result == ActivityManager.START_DELIVERED_TO_TOP
+                || result == ActivityManager.START_TASK_TO_FRONT;
+    }
 
     @Override
     protected void onFinishInflate() {
@@ -414,7 +475,8 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             launchCamera(CAMERA_LAUNCH_SOURCE_AFFORDANCE);
         } else if (v == mLeftAffordanceView) {
             launchLeftAffordance();
-        } if (v == mLockIcon) {
+        }
+        if (v == mLockIcon) {
             if (!mAccessibilityController.isAccessibilityEnabled()) {
                 handleTrustCircleClick();
             } else {
@@ -533,12 +595,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         }
     }
 
-    private static boolean isSuccessfulLaunch(int result) {
-        return result == ActivityManager.START_SUCCESS
-                || result == ActivityManager.START_DELIVERED_TO_TOP
-                || result == ActivityManager.START_TASK_TO_FRONT;
-    }
-
     public void launchLeftAffordance() {
         if (mLeftIsVoiceAssist) {
             launchVoiceAssist();
@@ -583,7 +639,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             mActivityStarter.startActivity(mLeftButton.getIntent(), dismissShade);
         }
     }
-
 
     @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
@@ -694,68 +749,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                 .setStartDelay(delay)
                 .setDuration(DOZE_ANIMATION_ELEMENT_DURATION);
     }
-
-    private final BroadcastReceiver mDevicePolicyReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    updateCameraVisibility();
-                }
-            });
-        }
-    };
-
-    private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
-            new KeyguardUpdateMonitorCallback() {
-                @Override
-                public void onUserSwitchComplete(int userId) {
-                    updateCameraVisibility();
-                }
-
-                @Override
-                public void onStartedWakingUp() {
-                    mLockIcon.setDeviceInteractive(true);
-                }
-
-                @Override
-                public void onFinishedGoingToSleep(int why) {
-                    mLockIcon.setDeviceInteractive(false);
-                }
-
-                @Override
-                public void onScreenTurnedOn() {
-                    mLockIcon.setScreenOn(true);
-                }
-
-                @Override
-                public void onScreenTurnedOff() {
-                    mLockIcon.setScreenOn(false);
-                }
-
-                @Override
-                public void onKeyguardVisibilityChanged(boolean showing) {
-                    mLockIcon.update();
-                }
-
-                @Override
-                public void onFingerprintRunningStateChanged(boolean running) {
-                    mLockIcon.update();
-                }
-
-                @Override
-                public void onStrongAuthStateChanged(int userId) {
-                    mLockIcon.update();
-        }
-
-                @Override
-                public void onUserUnlocked() {
-                    inflateCameraPreview();
-                    updateCameraVisibility();
-                    updateLeftAffordance();
-                }
-            };
 
     public void setKeyguardIndicationController(
             KeyguardIndicationController keyguardIndicationController) {

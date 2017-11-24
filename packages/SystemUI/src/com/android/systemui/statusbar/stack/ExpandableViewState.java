@@ -28,11 +28,47 @@ import com.android.systemui.statusbar.ExpandableNotificationRow;
 import com.android.systemui.statusbar.ExpandableView;
 
 /**
-* A state of an expandable view
-*/
+ * A state of an expandable view
+ */
 public class ExpandableViewState extends ViewState {
 
+    /**
+     * No known location. This is the default and should not be set after an invocation of the
+     * algorithm.
+     */
+    public static final int LOCATION_UNKNOWN = 0x00;
+    /**
+     * The location is the first heads up notification, so on the very top.
+     */
+    public static final int LOCATION_FIRST_HUN = 0x01;
+    /**
+     * The location is hidden / scrolled away on the top.
+     */
+    public static final int LOCATION_HIDDEN_TOP = 0x02;
+    /**
+     * The location is in the main area of the screen and visible.
+     */
+    public static final int LOCATION_MAIN_AREA = 0x04;
+    /**
+     * The location is in the bottom stack and it's peeking
+     */
+    public static final int LOCATION_BOTTOM_STACK_PEEKING = 0x08;
+    /**
+     * The location is in the bottom stack and it's hidden.
+     */
+    public static final int LOCATION_BOTTOM_STACK_HIDDEN = 0x10;
+    /**
+     * The view isn't laid out at all.
+     */
+    public static final int LOCATION_GONE = 0x40;
+    /**
+     * The visible locations of a view.
+     */
+    public static final int VISIBLE_LOCATIONS = ExpandableViewState.LOCATION_FIRST_HUN
+            | ExpandableViewState.LOCATION_MAIN_AREA;
     private static final int TAG_ANIMATOR_HEIGHT = R.id.height_animator_tag;
+
+    // These are flags such that we can create masks for filtering.
     private static final int TAG_ANIMATOR_TOP_INSET = R.id.top_inset_animator_tag;
     private static final int TAG_ANIMATOR_SHADOW_ALPHA = R.id.shadow_alpha_animator_tag;
     private static final int TAG_END_HEIGHT = R.id.height_animator_end_value_tag;
@@ -41,51 +77,6 @@ public class ExpandableViewState extends ViewState {
     private static final int TAG_START_HEIGHT = R.id.height_animator_start_value_tag;
     private static final int TAG_START_TOP_INSET = R.id.top_inset_animator_start_value_tag;
     private static final int TAG_START_SHADOW_ALPHA = R.id.shadow_alpha_animator_start_value_tag;
-
-    // These are flags such that we can create masks for filtering.
-
-    /**
-     * No known location. This is the default and should not be set after an invocation of the
-     * algorithm.
-     */
-    public static final int LOCATION_UNKNOWN = 0x00;
-
-    /**
-     * The location is the first heads up notification, so on the very top.
-     */
-    public static final int LOCATION_FIRST_HUN = 0x01;
-
-    /**
-     * The location is hidden / scrolled away on the top.
-     */
-    public static final int LOCATION_HIDDEN_TOP = 0x02;
-
-    /**
-     * The location is in the main area of the screen and visible.
-     */
-    public static final int LOCATION_MAIN_AREA = 0x04;
-
-    /**
-     * The location is in the bottom stack and it's peeking
-     */
-    public static final int LOCATION_BOTTOM_STACK_PEEKING = 0x08;
-
-    /**
-     * The location is in the bottom stack and it's hidden.
-     */
-    public static final int LOCATION_BOTTOM_STACK_HIDDEN = 0x10;
-
-    /**
-     * The view isn't laid out at all.
-     */
-    public static final int LOCATION_GONE = 0x40;
-
-    /**
-     * The visible locations of a view.
-     */
-    public static final int VISIBLE_LOCATIONS = ExpandableViewState.LOCATION_FIRST_HUN
-            | ExpandableViewState.LOCATION_MAIN_AREA;
-
     public int height;
     public boolean dimmed;
     public boolean dark;
@@ -107,10 +98,26 @@ public class ExpandableViewState extends ViewState {
 
     /**
      * The location this view is currently rendered at.
-     *
+     * <p>
      * <p>See <code>LOCATION_</code> flags.</p>
      */
     public int location;
+
+    /**
+     * Get the end value of the height animation running on a view or the actualHeight
+     * if no animation is running.
+     */
+    public static int getFinalActualHeight(ExpandableView view) {
+        if (view == null) {
+            return 0;
+        }
+        ValueAnimator heightAnimator = getChildTag(view, TAG_ANIMATOR_HEIGHT);
+        if (heightAnimator == null) {
+            return view.getActualHeight();
+        } else {
+            return getChildTag(view, TAG_END_HEIGHT);
+        }
+    }
 
     @Override
     public void copyFrom(ViewState viewState) {
@@ -190,7 +197,7 @@ public class ExpandableViewState extends ViewState {
         // start height animation
         if (this.height != expandableView.getActualHeight()) {
             startHeightAnimation(expandableView, properties);
-        }  else {
+        } else {
             abortAnimation(child, TAG_ANIMATOR_HEIGHT);
         }
 
@@ -313,7 +320,7 @@ public class ExpandableViewState extends ViewState {
     }
 
     private void startShadowAlphaAnimation(final ExpandableView child,
-            AnimationProperties properties) {
+                                           AnimationProperties properties) {
         Float previousStartValue = getChildTag(child, TAG_START_SHADOW_ALPHA);
         Float previousEndValue = getChildTag(child, TAG_END_SHADOW_ALPHA);
         float newEndValue = this.shadowAlpha;
@@ -435,21 +442,5 @@ public class ExpandableViewState extends ViewState {
         child.setTag(TAG_ANIMATOR_TOP_INSET, animator);
         child.setTag(TAG_START_TOP_INSET, child.getClipTopAmount());
         child.setTag(TAG_END_TOP_INSET, newEndValue);
-    }
-
-    /**
-     * Get the end value of the height animation running on a view or the actualHeight
-     * if no animation is running.
-     */
-    public static int getFinalActualHeight(ExpandableView view) {
-        if (view == null) {
-            return 0;
-        }
-        ValueAnimator heightAnimator = getChildTag(view, TAG_ANIMATOR_HEIGHT);
-        if (heightAnimator == null) {
-            return view.getActualHeight();
-        } else {
-            return getChildTag(view, TAG_END_HEIGHT);
-        }
     }
 }

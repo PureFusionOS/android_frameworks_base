@@ -27,26 +27,26 @@ import com.android.systemui.plugins.ViewProvider;
 /**
  * Define an interface or abstract class as follows that includes the
  * version and action.
- *
+ * <p>
  * public interface MyInterface {
- *     public static final String ACTION =
- *             "com.android.systemui.action.PLUGIN_MYINTERFACE";
- *
- *     public static final int VERSION = 1;
- *
- *     void myImportantInterface();
+ * public static final String ACTION =
+ * "com.android.systemui.action.PLUGIN_MYINTERFACE";
+ * <p>
+ * public static final int VERSION = 1;
+ * <p>
+ * void myImportantInterface();
  * }
- *
+ * <p>
  * Then put in a PluginInflateContainer to use and specify the interface
  * or class that will be implemented as viewType.  The layout specified
  * will be used by default and whenever a plugin is not present.
- *
+ * <p>
  * <com.android.systemui.PluginInflateContainer
- *     android:id="@+id/some_id"
- *     android:layout_width="match_parent"
- *     android:layout_height="match_parent"
- *     android:layout="@layout/my_default_component"
- *     systemui:viewType="com.android.systemui.plugins.MyInterface" />
+ * android:id="@+id/some_id"
+ * android:layout_width="match_parent"
+ * android:layout_height="match_parent"
+ * android:layout="@layout/my_default_component"
+ * systemui:viewType="com.android.systemui.plugins.MyInterface" />
  */
 public class PluginInflateContainer extends AutoReinflateContainer
         implements PluginListener<ViewProvider> {

@@ -58,8 +58,8 @@ public class NavBarTile extends QSTileImpl<BooleanState> {
     }
 
     protected void toggleState() {
-         Settings.System.putInt(mContext.getContentResolver(),
-                        Settings.System.NAVIGATION_BAR_SHOW, !NavBarEnabled() ? 1 : 0);
+        Settings.System.putInt(mContext.getContentResolver(),
+                Settings.System.NAVIGATION_BAR_SHOW, !NavBarEnabled() ? 1 : 0);
     }
 
     @Override
@@ -74,13 +74,13 @@ public class NavBarTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-	if (NavBarEnabled()) {
-           state.icon = ResourceIcon.get(R.drawable.ic_qs_navbar);
-           state.label = mContext.getString(R.string.quick_settings_navbar);
-	} else {
-           state.icon = ResourceIcon.get(R.drawable.ic_qs_navbar_off);
-           state.label = mContext.getString(R.string.quick_settings_navbar_off);
-	}
+        if (NavBarEnabled()) {
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_navbar);
+            state.label = mContext.getString(R.string.quick_settings_navbar);
+        } else {
+            state.icon = ResourceIcon.get(R.drawable.ic_qs_navbar_off);
+            state.label = mContext.getString(R.string.quick_settings_navbar_off);
+        }
     }
 
     private boolean NavBarEnabled() {

@@ -99,39 +99,6 @@ public class QSTileImplTest extends SysuiTestCase {
         verify(maker).addTaggedData(eq(FIELD_QS_POSITION), eq(POSITION));
     }
 
-    private class TileLogMatcher implements ArgumentMatcher<LogMaker> {
-
-        private final int mCategory;
-        public String mInvalid;
-
-        public TileLogMatcher(int category) {
-            mCategory = category;
-        }
-
-        @Override
-        public boolean matches(LogMaker arg) {
-            if (arg.getCategory() != mCategory) {
-                mInvalid = "Expected category " + mCategory + " but was " + arg.getCategory();
-                return false;
-            }
-            if (arg.getType() != TYPE_ACTION) {
-                mInvalid = "Expected type " + TYPE_ACTION + " but was " + arg.getType();
-                return false;
-            }
-            if (arg.getSubtype() != mTile.getMetricsCategory()) {
-                mInvalid = "Expected subtype " + mTile.getMetricsCategory() + " but was "
-                        + arg.getSubtype();
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public String toString() {
-            return mInvalid;
-        }
-    }
-
     private static class TileImpl extends QSTileImpl<QSTile.BooleanState> {
         protected TileImpl(QSHost host) {
             super(host);
@@ -170,6 +137,39 @@ public class QSTileImplTest extends SysuiTestCase {
         @Override
         public CharSequence getTileLabel() {
             return null;
+        }
+    }
+
+    private class TileLogMatcher implements ArgumentMatcher<LogMaker> {
+
+        private final int mCategory;
+        public String mInvalid;
+
+        public TileLogMatcher(int category) {
+            mCategory = category;
+        }
+
+        @Override
+        public boolean matches(LogMaker arg) {
+            if (arg.getCategory() != mCategory) {
+                mInvalid = "Expected category " + mCategory + " but was " + arg.getCategory();
+                return false;
+            }
+            if (arg.getType() != TYPE_ACTION) {
+                mInvalid = "Expected type " + TYPE_ACTION + " but was " + arg.getType();
+                return false;
+            }
+            if (arg.getSubtype() != mTile.getMetricsCategory()) {
+                mInvalid = "Expected subtype " + mTile.getMetricsCategory() + " but was "
+                        + arg.getSubtype();
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return mInvalid;
         }
     }
 }

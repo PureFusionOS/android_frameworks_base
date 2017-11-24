@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /**
  * Copyright (c) 2014, The Android Open Source Project
  *
@@ -25,9 +24,9 @@
     android:theme="@android:style/Theme.DeviceDefault.Light">
 
     <include
+        layout="@layout/screen_pinning_request_text_area"
         android:layout_width="@dimen/screen_pinning_request_width"
-        android:layout_height="wrap_content"
-        layout="@layout/screen_pinning_request_text_area" />
+        android:layout_height="wrap_content" />
 
     <View
         android:id="@+id/spacer"
@@ -36,8 +35,8 @@
         android:background="?android:attr/colorAccent" />
 
     <include
+        layout="@layout/screen_pinning_request_buttons"
         android:layout_width="@dimen/screen_pinning_request_width"
-        android:layout_height="wrap_content"
-        layout="@layout/screen_pinning_request_buttons" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

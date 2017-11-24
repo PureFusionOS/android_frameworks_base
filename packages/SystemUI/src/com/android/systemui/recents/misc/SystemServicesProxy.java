@@ -111,47 +111,22 @@ public class SystemServicesProxy {
     final static String TAG = "SystemServicesProxy";
 
     final static BitmapFactory.Options sBitmapOptions;
+    final static List<String> sRecentsBlacklist;
+    private static SystemServicesProxy sSystemServicesProxy;
+
     static {
         sBitmapOptions = new BitmapFactory.Options();
         sBitmapOptions.inMutable = true;
         sBitmapOptions.inPreferredConfig = Bitmap.Config.RGB_565;
     }
 
-    final static List<String> sRecentsBlacklist;
     static {
         sRecentsBlacklist = new ArrayList<>();
         sRecentsBlacklist.add(PipMenuActivity.class.getName());
     }
 
-    private static SystemServicesProxy sSystemServicesProxy;
-
-    AccessibilityManager mAccm;
-    ActivityManager mAm;
-    IActivityManager mIam;
-    PackageManager mPm;
-    IconDrawableFactory mDrawableFactory;
-    IPackageManager mIpm;
     private final IDreamManager mDreamManager;
     private final Context mContext;
-    AssistUtils mAssistUtils;
-    WindowManager mWm;
-    IWindowManager mIwm;
-    KeyguardManager mKgm;
-    UserManager mUm;
-    Display mDisplay;
-    String mRecentsPackage;
-    ComponentName mAssistComponent;
-    private int mCurrentUserId;
-
-    boolean mIsSafeMode;
-    boolean mHasFreeformWorkspaceSupport;
-
-    Bitmap mDummyIcon;
-    int mDummyThumbnailWidth;
-    int mDummyThumbnailHeight;
-    Paint mBgProtectionPaint;
-    Canvas mBgProtectionCanvas;
-
     private final Handler mHandler = new H();
     private final Runnable mGcRunnable = new Runnable() {
         @Override
@@ -160,56 +135,41 @@ public class SystemServicesProxy {
             System.runFinalization();
         }
     };
-
     private final UiOffloadThread mUiOffloadThread = Dependency.get(UiOffloadThread.class);
-
+    AccessibilityManager mAccm;
+    ActivityManager mAm;
+    IActivityManager mIam;
+    PackageManager mPm;
+    IconDrawableFactory mDrawableFactory;
+    IPackageManager mIpm;
+    AssistUtils mAssistUtils;
+    WindowManager mWm;
+    IWindowManager mIwm;
+    KeyguardManager mKgm;
+    UserManager mUm;
+    Display mDisplay;
+    String mRecentsPackage;
+    ComponentName mAssistComponent;
+    boolean mIsSafeMode;
+    boolean mHasFreeformWorkspaceSupport;
+    Bitmap mDummyIcon;
+    int mDummyThumbnailWidth;
+    int mDummyThumbnailHeight;
+    Paint mBgProtectionPaint;
+    Canvas mBgProtectionCanvas;
+    private int mCurrentUserId;
+    private final UserInfoController.OnUserInfoChangedListener mOnUserInfoChangedListener =
+            (String name, Drawable picture, String userAccount) ->
+                    mCurrentUserId = mAm.getCurrentUser();
     /**
-     * An abstract class to track task stack changes.
-     * Classes should implement this instead of {@link android.app.ITaskStackListener}
-     * to reduce IPC calls from system services. These callbacks will be called on the main thread.
+     * List of {@link TaskStackListener} registered from {@link #registerTaskStackListener}.
      */
-    public abstract static class TaskStackListener {
-        /**
-         * NOTE: This call is made of the thread that the binder call comes in on.
-         */
-        public void onTaskStackChangedBackground() { }
-        public void onTaskStackChanged() { }
-        public void onTaskSnapshotChanged(int taskId, TaskSnapshot snapshot) { }
-        public void onActivityPinned(String packageName, int taskId) { }
-        public void onActivityUnpinned() { }
-        public void onPinnedActivityRestartAttempt(boolean clearedTask) { }
-        public void onPinnedStackAnimationStarted() { }
-        public void onPinnedStackAnimationEnded() { }
-        public void onActivityForcedResizable(String packageName, int taskId, int reason) { }
-        public void onActivityDismissingDockedStack() { }
-        public void onActivityLaunchOnSecondaryDisplayFailed() { }
-        public void onTaskProfileLocked(int taskId, int userId) { }
-
-        /**
-         * Checks that the current user matches the user's SystemUI process. Since
-         * {@link android.app.ITaskStackListener} is not multi-user aware, handlers of
-         * TaskStackListener should make this call to verify that we don't act on events from other
-         * user's processes.
-         */
-        protected final boolean checkCurrentUserId(Context context, boolean debug) {
-            int processUserId = UserHandle.myUserId();
-            int currentUserId = SystemServicesProxy.getInstance(context).getCurrentUser();
-            if (processUserId != currentUserId) {
-                if (debug) {
-                    Log.d(TAG, "UID mismatch. SystemUI is running uid=" + processUserId
-                            + " and the current user is uid=" + currentUserId);
-                }
-                return false;
-            }
-            return true;
-        }
-    }
-
+    private List<TaskStackListener> mTaskStackListeners = new ArrayList<>();
     /**
      * Implementation of {@link android.app.ITaskStackListener} to listen task stack changes from
      * ActivityManagerService.
      * This simply passes callbacks to listeners through {@link H}.
-     * */
+     */
     private android.app.TaskStackListener mTaskStackListener = new android.app.TaskStackListener() {
 
         private final List<SystemServicesProxy.TaskStackListener> mTmpListeners = new ArrayList<>();
@@ -243,7 +203,7 @@ public class SystemServicesProxy {
 
         @Override
         public void onPinnedActivityRestartAttempt(boolean clearedTask)
-                throws RemoteException{
+                throws RemoteException {
             mHandler.removeMessages(H.ON_PINNED_ACTIVITY_RESTART_ATTEMPT);
             mHandler.obtainMessage(H.ON_PINNED_ACTIVITY_RESTART_ATTEMPT, clearedTask ? 1 : 0, 0)
                     .sendToTarget();
@@ -290,16 +250,9 @@ public class SystemServicesProxy {
         }
     };
 
-    private final UserInfoController.OnUserInfoChangedListener mOnUserInfoChangedListener =
-            (String name, Drawable picture, String userAccount) ->
-                    mCurrentUserId = mAm.getCurrentUser();
-
     /**
-     * List of {@link TaskStackListener} registered from {@link #registerTaskStackListener}.
+     * Private constructor
      */
-    private List<TaskStackListener> mTaskStackListeners = new ArrayList<>();
-
-    /** Private constructor */
     private SystemServicesProxy(Context context) {
         mContext = context.getApplicationContext();
         mAccm = AccessibilityManager.getInstance(context);
@@ -368,6 +321,34 @@ public class SystemServicesProxy {
     }
 
     /**
+     * Returns whether the given stack id is the home stack id.
+     */
+    public static boolean isHomeStack(int stackId) {
+        return stackId == HOME_STACK_ID;
+    }
+
+    /**
+     * Returns whether the given stack id is the pinned stack id.
+     */
+    public static boolean isPinnedStack(int stackId) {
+        return stackId == PINNED_STACK_ID;
+    }
+
+    /**
+     * Returns whether the given stack id is the docked stack id.
+     */
+    public static boolean isDockedStack(int stackId) {
+        return stackId == DOCKED_STACK_ID;
+    }
+
+    /**
+     * Returns whether the given stack id is the freeform workspace stack id.
+     */
+    public static boolean isFreeformStack(int stackId) {
+        return stackId == FREEFORM_WORKSPACE_STACK_ID;
+    }
+
+    /**
      * Requests a gc() from the background thread.
      */
     public void gc() {
@@ -389,7 +370,7 @@ public class SystemServicesProxy {
      *                                     visible.
      */
     public List<ActivityManager.RecentTaskInfo> getRecentTasks(int numLatestTasks, int userId,
-            boolean includeFrontMostExcludedTask, ArraySet<Integer> quietProfileIds) {
+                                                               boolean includeFrontMostExcludedTask, ArraySet<Integer> quietProfileIds) {
         if (mAm == null) return null;
 
         // If we are mocking, then create some recent tasks
@@ -548,7 +529,7 @@ public class SystemServicesProxy {
     }
 
     private boolean isStackNotOccluded(ActivityManager.StackInfo stackInfo,
-            ActivityManager.StackInfo fullscreenStackInfo) {
+                                       ActivityManager.StackInfo fullscreenStackInfo) {
         boolean stackVisibleNotOccluded = stackInfo == null || stackInfo.visible;
         if (fullscreenStackInfo != null && stackInfo != null) {
             boolean isFullscreenStackOccludingg = fullscreenStackInfo.visible &&
@@ -572,7 +553,9 @@ public class SystemServicesProxy {
         return mIsSafeMode;
     }
 
-    /** Docks a task to the side of the screen and starts it. */
+    /**
+     * Docks a task to the side of the screen and starts it.
+     */
     public boolean startTaskInDockedMode(int taskId, int createMode) {
         if (mIam == null) return false;
 
@@ -588,7 +571,9 @@ public class SystemServicesProxy {
         return false;
     }
 
-    /** Docks an already resumed task to the side of the screen. */
+    /**
+     * Docks an already resumed task to the side of the screen.
+     */
     public boolean moveTaskToDockedStack(int taskId, int createMode, Rect initialBounds) {
         if (mIam == null) {
             return false;
@@ -601,34 +586,6 @@ public class SystemServicesProxy {
             e.printStackTrace();
         }
         return false;
-    }
-
-    /**
-     * Returns whether the given stack id is the home stack id.
-     */
-    public static boolean isHomeStack(int stackId) {
-        return stackId == HOME_STACK_ID;
-    }
-
-    /**
-     * Returns whether the given stack id is the pinned stack id.
-     */
-    public static boolean isPinnedStack(int stackId){
-        return stackId == PINNED_STACK_ID;
-    }
-
-    /**
-     * Returns whether the given stack id is the docked stack id.
-     */
-    public static boolean isDockedStack(int stackId) {
-        return stackId == DOCKED_STACK_ID;
-    }
-
-    /**
-     * Returns whether the given stack id is the freeform workspace stack id.
-     */
-    public static boolean isFreeformStack(int stackId) {
-        return stackId == FREEFORM_WORKSPACE_STACK_ID;
     }
 
     /**
@@ -703,7 +660,9 @@ public class SystemServicesProxy {
         }
     }
 
-    /** Returns the top task thumbnail for the given task id */
+    /**
+     * Returns the top task thumbnail for the given task id
+     */
     public ThumbnailData getTaskThumbnail(int taskId, boolean reduced) {
         if (mAm == null) return null;
 
@@ -736,7 +695,8 @@ public class SystemServicesProxy {
     /**
      * Returns a task thumbnail from the activity manager
      */
-    public @NonNull ThumbnailData getThumbnail(int taskId, boolean reducedResolution) {
+    public @NonNull
+    ThumbnailData getThumbnail(int taskId, boolean reducedResolution) {
         if (mAm == null) {
             return new ThumbnailData();
         }
@@ -793,7 +753,9 @@ public class SystemServicesProxy {
         }
     }
 
-    /** Removes the task */
+    /**
+     * Removes the task
+     */
     public void removeTask(final int taskId) {
         if (mAm == null) return;
         if (RecentsDebugFlags.Static.EnableMockTasks) return;
@@ -819,7 +781,7 @@ public class SystemServicesProxy {
     /**
      * Returns the activity info for a given component name.
      *
-     * @param cn The component name of the activity.
+     * @param cn     The component name of the activity.
      * @param userId The userId of the user that this is for.
      */
     public ActivityInfo getActivityInfo(ComponentName cn, int userId) {
@@ -884,7 +846,7 @@ public class SystemServicesProxy {
      * description joins the app and activity labels.
      */
     public String getBadgedContentDescription(ActivityInfo info, int userId,
-            ActivityManager.TaskDescription td, Resources res) {
+                                              ActivityManager.TaskDescription td, Resources res) {
         // If we are mocking, then return a mock label
         if (RecentsDebugFlags.Static.EnableMockTasks) {
             return "Recent Task Content Description: " + userId;
@@ -900,7 +862,7 @@ public class SystemServicesProxy {
         String badgedApplicationLabel = getBadgedLabel(applicationLabel, userId);
         return applicationLabel.equals(activityLabel) ? badgedApplicationLabel
                 : res.getString(R.string.accessibility_recents_task_header,
-                        badgedApplicationLabel, activityLabel);
+                badgedApplicationLabel, activityLabel);
     }
 
     /**
@@ -937,7 +899,7 @@ public class SystemServicesProxy {
      * Returns the task description icon, loading and badging it if it necessary.
      */
     public Drawable getBadgedTaskDescriptionIcon(ActivityManager.TaskDescription taskDescription,
-            int userId, Resources res) {
+                                                 int userId, Resources res) {
 
         // If we are mocking, then return a mock label
         if (RecentsDebugFlags.Static.EnableMockTasks) {
@@ -1003,7 +965,6 @@ public class SystemServicesProxy {
         return logo;
     }
 
-
     /**
      * Returns the given label for a user, badging if necessary.
      */
@@ -1024,7 +985,9 @@ public class SystemServicesProxy {
         return mKgm.isDeviceLocked(userId);
     }
 
-    /** Returns the package name of the home activity. */
+    /**
+     * Returns the package name of the home activity.
+     */
     public String getHomeActivityPackageName() {
         if (mPm == null) return null;
         if (RecentsDebugFlags.Static.EnableMockTasks) return null;
@@ -1163,10 +1126,12 @@ public class SystemServicesProxy {
                 opts != null ? opts.toBundle() : null, UserHandle.CURRENT));
     }
 
-    /** Starts an activity from recents. */
+    /**
+     * Starts an activity from recents.
+     */
     public void startActivityFromRecents(Context context, Task.TaskKey taskKey, String taskName,
-            ActivityOptions options, int stackId,
-            @Nullable final StartActivityFromRecentsResultListener resultListener) {
+                                         ActivityOptions options, int stackId,
+                                         @Nullable final StartActivityFromRecentsResultListener resultListener) {
         if (mIam == null) {
             return;
         }
@@ -1204,7 +1169,9 @@ public class SystemServicesProxy {
         });
     }
 
-    /** Starts an in-place animation on the front most application windows. */
+    /**
+     * Starts an in-place animation on the front most application windows.
+     */
     public void startInPlaceAnimationOnFrontMostApplication(ActivityOptions opts) {
         if (mIam == null) return;
 
@@ -1339,7 +1306,7 @@ public class SystemServicesProxy {
     }
 
     public void updateOverviewLastStackActiveTimeAsync(long newLastStackActiveTime,
-            int currentUserId) {
+                                                       int currentUserId) {
         mUiOffloadThread.submit(() -> {
             Settings.Secure.putLongForUser(mContext.getContentResolver(),
                     Secure.OVERVIEW_LAST_STACK_ACTIVE_TIME, newLastStackActiveTime, currentUserId);
@@ -1348,6 +1315,71 @@ public class SystemServicesProxy {
 
     public interface StartActivityFromRecentsResultListener {
         void onStartActivityResult(boolean succeeded);
+    }
+
+    /**
+     * An abstract class to track task stack changes.
+     * Classes should implement this instead of {@link android.app.ITaskStackListener}
+     * to reduce IPC calls from system services. These callbacks will be called on the main thread.
+     */
+    public abstract static class TaskStackListener {
+        /**
+         * NOTE: This call is made of the thread that the binder call comes in on.
+         */
+        public void onTaskStackChangedBackground() {
+        }
+
+        public void onTaskStackChanged() {
+        }
+
+        public void onTaskSnapshotChanged(int taskId, TaskSnapshot snapshot) {
+        }
+
+        public void onActivityPinned(String packageName, int taskId) {
+        }
+
+        public void onActivityUnpinned() {
+        }
+
+        public void onPinnedActivityRestartAttempt(boolean clearedTask) {
+        }
+
+        public void onPinnedStackAnimationStarted() {
+        }
+
+        public void onPinnedStackAnimationEnded() {
+        }
+
+        public void onActivityForcedResizable(String packageName, int taskId, int reason) {
+        }
+
+        public void onActivityDismissingDockedStack() {
+        }
+
+        public void onActivityLaunchOnSecondaryDisplayFailed() {
+        }
+
+        public void onTaskProfileLocked(int taskId, int userId) {
+        }
+
+        /**
+         * Checks that the current user matches the user's SystemUI process. Since
+         * {@link android.app.ITaskStackListener} is not multi-user aware, handlers of
+         * TaskStackListener should make this call to verify that we don't act on events from other
+         * user's processes.
+         */
+        protected final boolean checkCurrentUserId(Context context, boolean debug) {
+            int processUserId = UserHandle.myUserId();
+            int currentUserId = SystemServicesProxy.getInstance(context).getCurrentUser();
+            if (processUserId != currentUserId) {
+                if (debug) {
+                    Log.d(TAG, "UID mismatch. SystemUI is running uid=" + processUserId
+                            + " and the current user is uid=" + currentUserId);
+                }
+                return false;
+            }
+            return true;
+        }
     }
 
     private final class H extends Handler {
@@ -1368,20 +1400,20 @@ public class SystemServicesProxy {
             synchronized (mTaskStackListeners) {
                 switch (msg.what) {
                     case ON_TASK_STACK_CHANGED: {
-                    Trace.beginSection("onTaskStackChanged");
+                        Trace.beginSection("onTaskStackChanged");
                         for (int i = mTaskStackListeners.size() - 1; i >= 0; i--) {
                             mTaskStackListeners.get(i).onTaskStackChanged();
                         }
-                    Trace.endSection();
+                        Trace.endSection();
                         break;
                     }
                     case ON_TASK_SNAPSHOT_CHANGED: {
-                    Trace.beginSection("onTaskSnapshotChanged");
+                        Trace.beginSection("onTaskSnapshotChanged");
                         for (int i = mTaskStackListeners.size() - 1; i >= 0; i--) {
                             mTaskStackListeners.get(i).onTaskSnapshotChanged(msg.arg1,
                                     (TaskSnapshot) msg.obj);
                         }
-                    Trace.endSection();
+                        Trace.endSection();
                         break;
                     }
                     case ON_ACTIVITY_PINNED: {

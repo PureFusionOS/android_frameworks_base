@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 **
 ** Copyright 2015, The CyanogenMod Project
 **
@@ -19,11 +18,11 @@
 
 <!-- This is a view that shows general weather information in Keyguard. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/keyguard_weather_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:orientation="horizontal" >
+    android:id="@+id/keyguard_weather_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/no_weather_info_text"
@@ -32,32 +31,32 @@
         android:layout_gravity="center"
         android:includeFontPadding="false"
         android:text="@string/weather_info_not_available"
-        android:textSize="15sp"
-        android:textColor="@color/keyguard_default_primary_text_color" />
+        android:textColor="@color/keyguard_default_primary_text_color"
+        android:textSize="15sp" />
 
     <LinearLayout
         android:id="@+id/weather_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" >
+        android:layout_gravity="center">
 
         <LinearLayout
             android:id="@+id/left_panel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:orientation="vertical" >
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/condition"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:includeFontPadding="false"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="@color/keyguard_default_primary_text_color" />
+            <TextView
+                android:id="@+id/condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:includeFontPadding="false"
+                android:textColor="@color/keyguard_default_primary_text_color"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -66,16 +65,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:orientation="vertical"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:orientation="vertical" >
+            android:paddingRight="10dp">
 
             <ImageView
                 android:id="@+id/weather_image"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
-                android:scaleType="centerInside"
-                android:adjustViewBounds="true" />
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside" />
 
         </LinearLayout>
 
@@ -83,9 +82,9 @@
             android:id="@+id/right_panel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:orientation="vertical" >
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/current_temp"
@@ -93,9 +92,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:includeFontPadding="false"
+                android:textColor="@color/keyguard_default_primary_text_color"
                 android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/keyguard_default_primary_text_color" />
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -107,9 +106,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:includeFontPadding="false"
-        android:textStyle="bold"
         android:letterSpacing="0.15"
+        android:textColor="@color/keyguard_default_primary_text_color"
         android:textSize="16sp"
-        android:textColor="@color/keyguard_default_primary_text_color" />
+        android:textStyle="bold" />
 
 </LinearLayout>

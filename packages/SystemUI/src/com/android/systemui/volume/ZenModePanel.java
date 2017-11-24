@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2014 The Android Open Source Project
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,16 +68,17 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class ZenModePanel extends FrameLayout {
-    private static final String TAG = "ZenModePanel";
-    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
-
     public static final int STATE_MODIFY = 0;
     public static final int STATE_AUTO_RULE = 1;
     public static final int STATE_OFF = 2;
-
+    public static final Intent ZEN_SETTINGS
+            = new Intent(Settings.ACTION_ZEN_MODE_SETTINGS);
+    public static final Intent ZEN_PRIORITY_SETTINGS
+            = new Intent(Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS);
+    private static final String TAG = "ZenModePanel";
+    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
     private static final int SECONDS_MS = 1000;
     private static final int MINUTES_MS = 60 * SECONDS_MS;
-
     private static final int[] MINUTE_BUCKETS = ZenModeConfig.MINUTE_BUCKETS;
     private static final int MIN_BUCKET_MINUTES = MINUTE_BUCKETS[0];
     private static final int MAX_BUCKET_MINUTES = MINUTE_BUCKETS[MINUTE_BUCKETS.length - 1];
@@ -86,35 +87,39 @@ public class ZenModePanel extends FrameLayout {
     private static final int COUNTDOWN_CONDITION_INDEX = 1;
     private static final int COUNTDOWN_ALARM_CONDITION_INDEX = 2;
     private static final int COUNTDOWN_CONDITION_COUNT = 2;
-
-    public static final Intent ZEN_SETTINGS
-            = new Intent(Settings.ACTION_ZEN_MODE_SETTINGS);
-    public static final Intent ZEN_PRIORITY_SETTINGS
-            = new Intent(Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS);
-
     private static final long TRANSITION_DURATION = 300;
-
-    private final Context mContext;
     protected final LayoutInflater mInflater;
+    private final Context mContext;
     private final H mHandler = new H();
     private final ZenPrefs mPrefs;
     private final TransitionHelper mTransitionHelper = new TransitionHelper();
     private final Uri mForeverId;
     private final ConfigurableTexts mConfigurableTexts;
-
-    private String mTag = TAG + "/" + Integer.toHexString(System.identityHashCode(this));
-
+    private final ZenModeController.Callback mZenCallback = new ZenModeController.Callback() {
+        @Override
+        public void onManualRuleChanged(ZenRule rule) {
+            mHandler.obtainMessage(H.MANUAL_RULE_CHANGED, rule).sendToTarget();
+        }
+    };
     protected SegmentedButtons mZenButtons;
+    protected LinearLayout mZenConditions;
+    protected int mZenModeConditionLayoutId;
+    protected int mZenModeButtonLayoutId;
+    private String mTag = TAG + "/" + Integer.toHexString(System.identityHashCode(this));
     private View mZenIntroduction;
     private TextView mZenIntroductionMessage;
     private View mZenIntroductionConfirm;
     private TextView mZenIntroductionCustomize;
-    protected LinearLayout mZenConditions;
     private TextView mZenAlarmWarning;
     private RadioGroup mZenRadioGroup;
     private LinearLayout mZenRadioGroupContent;
-
     private Callback mCallback;
+    private final Interaction.Callback mInteractionCallback = new Interaction.Callback() {
+        @Override
+        public void onInteraction() {
+            fireInteraction();
+        }
+    };
     private ZenModeController mController;
     private boolean mCountdownConditionSupported;
     private boolean mRequestingConditions;
@@ -126,12 +131,36 @@ public class ZenModePanel extends FrameLayout {
     private int mAttachedZen;
     private boolean mAttached;
     private Condition mSessionExitCondition;
+    protected final SegmentedButtons.Callback mZenButtonsCallback = new SegmentedButtons.Callback() {
+        @Override
+        public void onSelected(final Object value, boolean fromClick) {
+            if (value != null && mZenButtons.isShown() && isAttachedToWindow()) {
+                final int zen = (Integer) value;
+                if (fromClick) {
+                    MetricsLogger.action(mContext, MetricsEvent.QS_DND_ZEN_SELECT, zen);
+                }
+                if (DEBUG) Log.d(mTag, "mZenButtonsCallback selected=" + zen);
+                final Uri realConditionId = getRealConditionId(mSessionExitCondition);
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mController.setZen(zen, realConditionId, TAG + ".selectZen");
+                        if (zen != Global.ZEN_MODE_OFF) {
+                            Prefs.putInt(mContext, Prefs.Key.DND_FAVORITE_ZEN, zen);
+                        }
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onInteraction() {
+            fireInteraction();
+        }
+    };
     private Condition[] mConditions;
     private Condition mTimeCondition;
     private boolean mVoiceCapable;
-
-    protected int mZenModeConditionLayoutId;
-    protected int mZenModeButtonLayoutId;
     private View mEmpty;
     private TextView mEmptyText;
     private ImageView mEmptyIcon;
@@ -153,20 +182,73 @@ public class ZenModePanel extends FrameLayout {
         if (DEBUG) Log.d(mTag, "new ZenModePanel");
     }
 
+    private static String prefKeyForConfirmation(int zen) {
+        switch (zen) {
+            case Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS:
+                return Prefs.Key.DND_CONFIRMED_PRIORITY_INTRODUCTION;
+            case Global.ZEN_MODE_NO_INTERRUPTIONS:
+                return Prefs.Key.DND_CONFIRMED_SILENCE_INTRODUCTION;
+            case Global.ZEN_MODE_ALARMS:
+                return Prefs.Key.DND_CONFIRMED_ALARM_INTRODUCTION;
+            default:
+                return null;
+        }
+    }
+
+    private static Uri getConditionId(Condition condition) {
+        return condition != null ? condition.id : null;
+    }
+
+    private static boolean sameConditionId(Condition lhs, Condition rhs) {
+        return lhs == null ? rhs == null : rhs != null && lhs.id.equals(rhs.id);
+    }
+
+    private static Condition copy(Condition condition) {
+        return condition == null ? null : condition.copy();
+    }
+
+    private static Condition parseExistingTimeCondition(Context context, Condition condition) {
+        if (condition == null) return null;
+        final long time = ZenModeConfig.tryParseCountdownConditionId(condition.id);
+        if (time == 0) return null;
+        final long now = System.currentTimeMillis();
+        final long span = time - now;
+        if (span <= 0 || span > MAX_BUCKET_MINUTES * MINUTES_MS) return null;
+        return ZenModeConfig.toTimeCondition(context,
+                time, Math.round(span / (float) MINUTES_MS), ActivityManager.getCurrentUser(),
+                false /*shortVersion*/);
+    }
+
+    private static String foreverSummary(Context context) {
+        return context.getString(com.android.internal.R.string.zen_mode_forever);
+    }
+
+    private static boolean isCountdown(Condition c) {
+        return c != null && ZenModeConfig.isValidCountdownConditionId(c.id);
+    }
+
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("ZenModePanel state:");
-        pw.print("  mCountdownConditionSupported="); pw.println(mCountdownConditionSupported);
-        pw.print("  mRequestingConditions="); pw.println(mRequestingConditions);
-        pw.print("  mAttached="); pw.println(mAttached);
-        pw.print("  mHidden="); pw.println(mHidden);
-        pw.print("  mExpanded="); pw.println(mExpanded);
-        pw.print("  mSessionZen="); pw.println(mSessionZen);
-        pw.print("  mAttachedZen="); pw.println(mAttachedZen);
+        pw.print("  mCountdownConditionSupported=");
+        pw.println(mCountdownConditionSupported);
+        pw.print("  mRequestingConditions=");
+        pw.println(mRequestingConditions);
+        pw.print("  mAttached=");
+        pw.println(mAttached);
+        pw.print("  mHidden=");
+        pw.println(mHidden);
+        pw.print("  mExpanded=");
+        pw.println(mExpanded);
+        pw.print("  mSessionZen=");
+        pw.println(mSessionZen);
+        pw.print("  mAttachedZen=");
+        pw.println(mAttachedZen);
         pw.print("  mConfirmedPriorityIntroduction=");
         pw.println(mPrefs.mConfirmedPriorityIntroduction);
         pw.print("  mConfirmedSilenceIntroduction=");
         pw.println(mPrefs.mConfirmedSilenceIntroduction);
-        pw.print("  mVoiceCapable="); pw.println(mVoiceCapable);
+        pw.print("  mVoiceCapable=");
+        pw.println(mVoiceCapable);
         mTransitionHelper.dump(fd, pw, args);
     }
 
@@ -275,19 +357,6 @@ public class ZenModePanel extends FrameLayout {
         if (DEBUG) Log.d(TAG, "confirmZenIntroduction " + prefKey);
         Prefs.putBoolean(mContext, prefKey, true);
         mHandler.sendEmptyMessage(H.UPDATE_WIDGETS);
-    }
-
-    private static String prefKeyForConfirmation(int zen) {
-        switch (zen) {
-            case Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS:
-                return Prefs.Key.DND_CONFIRMED_PRIORITY_INTRODUCTION;
-            case Global.ZEN_MODE_NO_INTERRUPTIONS:
-                return Prefs.Key.DND_CONFIRMED_SILENCE_INTRODUCTION;
-            case Global.ZEN_MODE_ALARMS:
-                return Prefs.Key.DND_CONFIRMED_ALARM_INTRODUCTION;
-            default:
-                return null;
-        }
     }
 
     private void onAttach() {
@@ -418,20 +487,8 @@ public class ZenModePanel extends FrameLayout {
         updateWidgets();
     }
 
-    private static Uri getConditionId(Condition condition) {
-        return condition != null ? condition.id : null;
-    }
-
     private Uri getRealConditionId(Condition condition) {
         return isForever(condition) ? null : getConditionId(condition);
-    }
-
-    private static boolean sameConditionId(Condition lhs, Condition rhs) {
-        return lhs == null ? rhs == null : rhs != null && lhs.id.equals(rhs.id);
-    }
-
-    private static Condition copy(Condition condition) {
-        return condition == null ? null : condition.copy();
     }
 
     public void setCallback(Callback callback) {
@@ -531,10 +588,10 @@ public class ZenModePanel extends FrameLayout {
             int message = zenImportant
                     ? R.string.zen_priority_introduction
                     : zenAlarm
-                            ? R.string.zen_alarms_introduction
-                            : mVoiceCapable
-                                    ? R.string.zen_silence_introduction_voice
-                                    : R.string.zen_silence_introduction;
+                    ? R.string.zen_alarms_introduction
+                    : mVoiceCapable
+                    ? R.string.zen_silence_introduction_voice
+                    : R.string.zen_silence_introduction;
             mConfigurableTexts.add(mZenIntroductionMessage, message);
             mConfigurableTexts.update();
             mZenIntroductionCustomize.setVisibility(zenImportant ? VISIBLE : GONE);
@@ -573,18 +630,6 @@ public class ZenModePanel extends FrameLayout {
         final int templateRes = soon ? R.string.alarm_template : R.string.alarm_template_far;
         final String template = getResources().getString(templateRes, formattedTime);
         return getResources().getString(warningRes, template);
-    }
-
-    private static Condition parseExistingTimeCondition(Context context, Condition condition) {
-        if (condition == null) return null;
-        final long time = ZenModeConfig.tryParseCountdownConditionId(condition.id);
-        if (time == 0) return null;
-        final long now = System.currentTimeMillis();
-        final long span = time - now;
-        if (span <= 0 || span > MAX_BUCKET_MINUTES * MINUTES_MS) return null;
-        return ZenModeConfig.toTimeCondition(context,
-                time, Math.round(span / (float) MINUTES_MS), ActivityManager.getCurrentUser(),
-                false /*shortVersion*/);
     }
 
     private void handleUpdateConditions() {
@@ -628,10 +673,6 @@ public class ZenModePanel extends FrameLayout {
     private Condition forever() {
         return new Condition(mForeverId, foreverSummary(mContext), "", "", 0 /*icon*/,
                 Condition.STATE_TRUE, 0 /*flags*/);
-    }
-
-    private static String foreverSummary(Context context) {
-        return context.getString(com.android.internal.R.string.zen_mode_forever);
     }
 
     // Returns a time condition if the next alarm is within the next week.
@@ -710,10 +751,6 @@ public class ZenModePanel extends FrameLayout {
                     COUNTDOWN_CONDITION_INDEX);
             getConditionTagAt(COUNTDOWN_CONDITION_INDEX).rb.setChecked(true);
         }
-    }
-
-    private static boolean isCountdown(Condition c) {
-        return c != null && ZenModeConfig.isValidCountdownConditionId(c.id);
     }
 
     private boolean isForever(Condition c) {
@@ -828,7 +865,7 @@ public class ZenModePanel extends FrameLayout {
     private void announceConditionSelection(ConditionTag tag) {
         final int zen = getSelectedZen(Global.ZEN_MODE_OFF);
         String modeText;
-        switch(zen) {
+        switch (zen) {
             case Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS:
                 modeText = mContext.getString(R.string.interruption_level_priority);
                 break;
@@ -920,12 +957,22 @@ public class ZenModePanel extends FrameLayout {
         }
     }
 
-    private final ZenModeController.Callback mZenCallback = new ZenModeController.Callback() {
-        @Override
-        public void onManualRuleChanged(ZenRule rule) {
-            mHandler.obtainMessage(H.MANUAL_RULE_CHANGED, rule).sendToTarget();
-        }
-    };
+    public interface Callback {
+        void onPrioritySettings();
+
+        void onInteraction();
+
+        void onExpanded(boolean expanded);
+    }
+
+    // used as the view tag on condition rows
+    private static class ConditionTag {
+        RadioButton rb;
+        View lines;
+        TextView line1;
+        TextView line2;
+        Condition condition;
+    }
 
     private final class H extends Handler {
         private static final int MANUAL_RULE_CHANGED = 2;
@@ -938,25 +985,14 @@ public class ZenModePanel extends FrameLayout {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MANUAL_RULE_CHANGED: handleUpdateManualRule((ZenRule) msg.obj); break;
-                case UPDATE_WIDGETS: updateWidgets(); break;
+                case MANUAL_RULE_CHANGED:
+                    handleUpdateManualRule((ZenRule) msg.obj);
+                    break;
+                case UPDATE_WIDGETS:
+                    updateWidgets();
+                    break;
             }
         }
-    }
-
-    public interface Callback {
-        void onPrioritySettings();
-        void onInteraction();
-        void onExpanded(boolean expanded);
-    }
-
-    // used as the view tag on condition rows
-    private static class ConditionTag {
-        RadioButton rb;
-        View lines;
-        TextView line1;
-        TextView line2;
-        Condition condition;
     }
 
     private final class ZenPrefs implements OnSharedPreferenceChangeListener {
@@ -1028,7 +1064,7 @@ public class ZenModePanel extends FrameLayout {
         }
 
         private void updateConfirmedPriorityIntroduction() {
-            final boolean confirmed =  Prefs.getBoolean(mContext,
+            final boolean confirmed = Prefs.getBoolean(mContext,
                     Prefs.Key.DND_CONFIRMED_PRIORITY_INTRODUCTION, false);
             if (confirmed == mConfirmedPriorityIntroduction) return;
             mConfirmedPriorityIntroduction = confirmed;
@@ -1037,7 +1073,7 @@ public class ZenModePanel extends FrameLayout {
         }
 
         private void updateConfirmedSilenceIntroduction() {
-            final boolean confirmed =  Prefs.getBoolean(mContext,
+            final boolean confirmed = Prefs.getBoolean(mContext,
                     Prefs.Key.DND_CONFIRMED_SILENCE_INTRODUCTION, false);
             if (confirmed == mConfirmedSilenceIntroduction) return;
             mConfirmedSilenceIntroduction = confirmed;
@@ -1046,7 +1082,7 @@ public class ZenModePanel extends FrameLayout {
         }
 
         private void updateConfirmedAlarmIntroduction() {
-            final boolean confirmed =  Prefs.getBoolean(mContext,
+            final boolean confirmed = Prefs.getBoolean(mContext,
                     Prefs.Key.DND_CONFIRMED_ALARM_INTRODUCTION, false);
             if (confirmed == mConfirmedAlarmIntroduction) return;
             mConfirmedAlarmIntroduction = confirmed;
@@ -1054,41 +1090,6 @@ public class ZenModePanel extends FrameLayout {
                     + mConfirmedAlarmIntroduction);
         }
     }
-
-    protected final SegmentedButtons.Callback mZenButtonsCallback = new SegmentedButtons.Callback() {
-        @Override
-        public void onSelected(final Object value, boolean fromClick) {
-            if (value != null && mZenButtons.isShown() && isAttachedToWindow()) {
-                final int zen = (Integer) value;
-                if (fromClick) {
-                    MetricsLogger.action(mContext, MetricsEvent.QS_DND_ZEN_SELECT, zen);
-                }
-                if (DEBUG) Log.d(mTag, "mZenButtonsCallback selected=" + zen);
-                final Uri realConditionId = getRealConditionId(mSessionExitCondition);
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        mController.setZen(zen, realConditionId, TAG + ".selectZen");
-                        if (zen != Global.ZEN_MODE_OFF) {
-                            Prefs.putInt(mContext, Prefs.Key.DND_FAVORITE_ZEN, zen);
-                        }
-                    }
-                });
-            }
-        }
-
-        @Override
-        public void onInteraction() {
-            fireInteraction();
-        }
-    };
-
-    private final Interaction.Callback mInteractionCallback = new Interaction.Callback() {
-        @Override
-        public void onInteraction() {
-            fireInteraction();
-        }
-    };
 
     private final class TransitionHelper implements TransitionListener, Runnable {
         private final ArraySet<View> mTransitioningViews = new ArraySet<View>();
@@ -1103,9 +1104,12 @@ public class ZenModePanel extends FrameLayout {
 
         public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
             pw.println("  TransitionHelper state:");
-            pw.print("    mPendingUpdateWidgets="); pw.println(mPendingUpdateWidgets);
-            pw.print("    mTransitioning="); pw.println(mTransitioning);
-            pw.print("    mTransitioningViews="); pw.println(mTransitioningViews);
+            pw.print("    mPendingUpdateWidgets=");
+            pw.println(mPendingUpdateWidgets);
+            pw.print("    mTransitioning=");
+            pw.println(mTransitioning);
+            pw.print("    mTransitioningViews=");
+            pw.println(mTransitioningViews);
         }
 
         public void pendingUpdateWidgets() {
@@ -1118,14 +1122,14 @@ public class ZenModePanel extends FrameLayout {
 
         @Override
         public void startTransition(LayoutTransition transition,
-                ViewGroup container, View view, int transitionType) {
+                                    ViewGroup container, View view, int transitionType) {
             mTransitioningViews.add(view);
             updateTransitioning();
         }
 
         @Override
         public void endTransition(LayoutTransition transition,
-                ViewGroup container, View view, int transitionType) {
+                                  ViewGroup container, View view, int transitionType) {
             mTransitioningViews.remove(view);
             updateTransitioning();
         }

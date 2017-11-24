@@ -20,7 +20,9 @@ import com.android.systemui.statusbar.policy.LocationController.LocationChangeCa
 
 public interface LocationController extends CallbackController<LocationChangeCallback> {
     boolean isLocationActive();
+
     boolean isLocationEnabled();
+
     boolean setLocationEnabled(boolean enabled);
 
     /**
@@ -29,9 +31,11 @@ public interface LocationController extends CallbackController<LocationChangeCal
     public interface LocationChangeCallback {
         /**
          * Called whenever location's state changes.
+         *
          * @param active
          */
-        default void onLocationActiveChanged(boolean active) {}
+        default void onLocationActiveChanged(boolean active) {
+        }
 
         /**
          * Called whenever location settings change.
@@ -39,6 +43,7 @@ public interface LocationController extends CallbackController<LocationChangeCal
          * @param locationEnabled A value of true indicates that at least one type of location
          *                        is enabled in settings.
          */
-        default void onLocationSettingsChanged(boolean locationEnabled) {}
+        default void onLocationSettingsChanged(boolean locationEnabled) {
+        }
     }
 }

@@ -34,7 +34,9 @@ import com.android.systemui.qs.GlobalSetting;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
-/** Quick settings tile: Airplane mode **/
+/**
+ * Quick settings tile: Airplane mode
+ **/
 public class AirplaneModeTile extends QSTileImpl<BooleanState> {
     private final AnimationIcon mEnable =
             new AnimationIcon(R.drawable.ic_signal_airplane_enable_animation,
@@ -43,7 +45,14 @@ public class AirplaneModeTile extends QSTileImpl<BooleanState> {
             new AnimationIcon(R.drawable.ic_signal_airplane_disable_animation,
                     R.drawable.ic_signal_airplane_enable);
     private final GlobalSetting mSetting;
-
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(intent.getAction())) {
+                refreshState();
+            }
+        }
+    };
     private boolean mListening;
 
     public AirplaneModeTile(QSHost host) {
@@ -86,7 +95,7 @@ public class AirplaneModeTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        final int value = arg instanceof Integer ? (Integer)arg : mSetting.getValue();
+        final int value = arg instanceof Integer ? (Integer) arg : mSetting.getValue();
         final boolean airplaneMode = value != 0;
         state.value = airplaneMode;
         state.label = mContext.getString(R.string.airplane_mode);
@@ -126,13 +135,4 @@ public class AirplaneModeTile extends QSTileImpl<BooleanState> {
         }
         mSetting.setListening(listening);
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Intent.ACTION_AIRPLANE_MODE_CHANGED.equals(intent.getAction())) {
-                refreshState();
-            }
-        }
-    };
 }

@@ -44,21 +44,19 @@ public class ShortcutKeyDispatcher extends SystemUI
         implements ShortcutKeyServiceProxy.Callbacks {
 
     private static final String TAG = "ShortcutKeyDispatcher";
-
-    private ShortcutKeyServiceProxy mShortcutKeyServiceProxy = new ShortcutKeyServiceProxy(this);
-    private IWindowManager mWindowManagerService = WindowManagerGlobal.getWindowManagerService();
-    private IActivityManager mActivityManager = ActivityManager.getService();
-
     protected final long META_MASK = ((long) KeyEvent.META_META_ON) << Integer.SIZE;
     protected final long ALT_MASK = ((long) KeyEvent.META_ALT_ON) << Integer.SIZE;
     protected final long CTRL_MASK = ((long) KeyEvent.META_CTRL_ON) << Integer.SIZE;
     protected final long SHIFT_MASK = ((long) KeyEvent.META_SHIFT_ON) << Integer.SIZE;
-
     protected final long SC_DOCK_LEFT = META_MASK | KeyEvent.KEYCODE_LEFT_BRACKET;
     protected final long SC_DOCK_RIGHT = META_MASK | KeyEvent.KEYCODE_RIGHT_BRACKET;
+    private ShortcutKeyServiceProxy mShortcutKeyServiceProxy = new ShortcutKeyServiceProxy(this);
+    private IWindowManager mWindowManagerService = WindowManagerGlobal.getWindowManagerService();
+    private IActivityManager mActivityManager = ActivityManager.getService();
 
     /**
      * Registers a shortcut key to window manager.
+     *
      * @param shortcutCode packed representation of shortcut key code and meta information
      */
     public void registerShortcutKey(long shortcutCode) {

@@ -50,6 +50,7 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
      * 1 icon width early.
      */
     public static final float OVERFLOW_EARLY_AMOUNT = 0.2f;
+    public static final int MAX_VISIBLE_ICONS_WHEN_DARK = 5;
     private static final int NO_VALUE = Integer.MIN_VALUE;
     private static final String TAG = "NotificationIconContainer";
     private static final boolean DEBUG = false;
@@ -62,7 +63,6 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
             return mAnimationFilter;
         }
     }.setDuration(200);
-
     private static final AnimationProperties ICON_ANIMATION_PROPERTIES = new AnimationProperties() {
         private AnimationFilter mAnimationFilter = new AnimationFilter().animateY().animateAlpha()
                 .animateScale();
@@ -74,7 +74,6 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
 
     }.setDuration(CANNED_ANIMATION_DURATION)
             .setCustomInterpolator(View.TRANSLATION_Y, Interpolators.ICON_OVERSHOT);
-
     private static final AnimationProperties mTempProperties = new AnimationProperties() {
         private AnimationFilter mAnimationFilter = new AnimationFilter();
 
@@ -83,7 +82,6 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
             return mAnimationFilter;
         }
     };
-
     private static final AnimationProperties ADD_ICON_PROPERTIES = new AnimationProperties() {
         private AnimationFilter mAnimationFilter = new AnimationFilter().animateAlpha();
 
@@ -92,7 +90,6 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
             return mAnimationFilter;
         }
     }.setDuration(200).setDelay(50);
-
     private static final AnimationProperties UNDARK_PROPERTIES = new AnimationProperties() {
         private AnimationFilter mAnimationFilter = new AnimationFilter()
                 .animateX();
@@ -102,10 +99,8 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
             return mAnimationFilter;
         }
     }.setDuration(StackStateAnimator.ANIMATION_DURATION_WAKEUP);
-    public static final int MAX_VISIBLE_ICONS_WHEN_DARK = 5;
-
-    private boolean mShowAllIcons = true;
     private final HashMap<View, IconState> mIconStates = new HashMap<>();
+    private boolean mShowAllIcons = true;
     private int mDotPadding;
     private int mStaticDotRadius;
     private int mActualLayoutWidth = NO_VALUE;
@@ -148,6 +143,7 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
         super.onConfigurationChanged(newConfig);
         initDimens();
     }
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         float centerY = getHeight() / 2.0f;
@@ -199,7 +195,7 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
         }
         int childIndex = indexOfChild(child);
         if (childIndex < getChildCount() - 1 && !isReplacingIcon
-            && mIconStates.get(getChildAt(childIndex + 1)).iconAppearAmount > 0.0f) {
+                && mIconStates.get(getChildAt(childIndex + 1)).iconAppearAmount > 0.0f) {
             if (mAddAnimationStartIndex < 0) {
                 mAddAnimationStartIndex = childIndex;
             } else {
@@ -401,11 +397,25 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
         return mActualPaddingEnd;
     }
 
+    public void setActualPaddingEnd(float paddingEnd) {
+        mActualPaddingEnd = paddingEnd;
+        if (DEBUG) {
+            invalidate();
+        }
+    }
+
     private float getActualPaddingStart() {
         if (mActualPaddingStart == NO_VALUE) {
             return getPaddingStart();
         }
         return mActualPaddingStart;
+    }
+
+    public void setActualPaddingStart(float paddingStart) {
+        mActualPaddingStart = paddingStart;
+        if (DEBUG) {
+            invalidate();
+        }
     }
 
     /**
@@ -420,20 +430,6 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
 
     public void setActualLayoutWidth(int actualLayoutWidth) {
         mActualLayoutWidth = actualLayoutWidth;
-        if (DEBUG) {
-            invalidate();
-        }
-    }
-
-    public void setActualPaddingEnd(float paddingEnd) {
-        mActualPaddingEnd = paddingEnd;
-        if (DEBUG) {
-            invalidate();
-        }
-    }
-
-    public void setActualPaddingStart(float paddingStart) {
-        mActualPaddingStart = paddingStart;
         if (DEBUG) {
             invalidate();
         }
@@ -516,7 +512,6 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
         public float clampedAppearAmount = 1.0f;
         public int visibleState;
         public boolean justAdded = true;
-        private boolean justReplaced;
         public boolean needsCannedAnimation;
         public boolean useFullTransitionAmount;
         public boolean useLinearTransitionAmount;
@@ -524,6 +519,7 @@ public class NotificationIconContainer extends AlphaOptimizedFrameLayout {
         public boolean justUndarkened;
         public int iconColor = StatusBarIconView.NO_COLOR;
         public boolean noAnimations;
+        private boolean justReplaced;
 
         @Override
         public void applyToView(View view) {

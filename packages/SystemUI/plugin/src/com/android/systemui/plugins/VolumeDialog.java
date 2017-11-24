@@ -29,6 +29,7 @@ public interface VolumeDialog extends Plugin {
     int VERSION = 1;
 
     void init(int windowType, Callback callback);
+
     void destroy();
 
     @ProvidesInterface(version = VERSION)
@@ -36,6 +37,7 @@ public interface VolumeDialog extends Plugin {
         int VERSION = 1;
 
         void onZenSettingsClicked();
+
         void onZenPrioritySettingsClicked();
     }
 }

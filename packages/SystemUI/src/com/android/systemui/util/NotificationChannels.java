@@ -26,11 +26,11 @@ import com.android.systemui.SystemUI;
 import java.util.Arrays;
 
 public class NotificationChannels extends SystemUI {
-    public static String ALERTS      = "ALR";
+    public static String ALERTS = "ALR";
     public static String SCREENSHOTS = "SCN";
-    public static String GENERAL     = "GEN";
-    public static String STORAGE     = "DSK";
-    public static String TVPIP       = "TPP";
+    public static String GENERAL = "GEN";
+    public static String STORAGE = "DSK";
+    public static String TVPIP = "TPP";
     public static String SCREENRECORDS = "SCR";
 
     @VisibleForTesting
@@ -71,13 +71,13 @@ public class NotificationChannels extends SystemUI {
         }
     }
 
-    @Override
-    public void start() {
-        createAll(mContext);
-    }
-
     private static boolean isTv(Context context) {
         PackageManager packageManager = context.getPackageManager();
         return packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+    }
+
+    @Override
+    public void start() {
+        createAll(mContext);
     }
 }

@@ -24,8 +24,7 @@ import android.widget.FrameLayout;
 /**
  * A view who contains media artwork.
  */
-public class BackDropView extends FrameLayout
-{
+public class BackDropView extends FrameLayout {
     private Runnable mOnVisibilityChangedRunnable;
 
     public BackDropView(Context context) {
@@ -41,7 +40,7 @@ public class BackDropView extends FrameLayout
     }
 
     public BackDropView(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                        int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

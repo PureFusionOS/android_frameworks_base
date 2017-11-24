@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,43 +16,43 @@
 
 <!--    android:background="@drawable/status_bar_closed_default_background" -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
+
     <CheckBox
         android:id="@+id/toggle"
         android:layout_width="48dp"
         android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:button="@null"
         android:background="@*android:drawable/switch_track_material"
-        android:visibility="gone"
-        />
+        android:button="@null"
+        android:visibility="gone" />
+
     <com.android.systemui.settings.ToggleSeekBar
         android:id="@+id/slider"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/toggle"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="16dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/toggle"
         android:paddingBottom="16dp"
-        android:thumb="@drawable/ic_brightness_thumb"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="16dp"
         android:splitTrack="false"
-        />
+        android:thumb="@drawable/ic_brightness_thumb" />
+
     <TextView
         android:id="@+id/label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/toggle"
         android:layout_alignEnd="@id/toggle"
+        android:layout_alignStart="@id/toggle"
         android:layout_centerVertical="true"
         android:gravity="center"
         android:paddingTop="26dp"
         android:textColor="#666666"
         android:textSize="12sp"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 </merge>

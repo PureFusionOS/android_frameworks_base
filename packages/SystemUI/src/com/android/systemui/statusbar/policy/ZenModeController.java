@@ -26,24 +26,46 @@ import com.android.systemui.statusbar.policy.ZenModeController.Callback;
 
 public interface ZenModeController extends CallbackController<Callback> {
     void setZen(int zen, Uri conditionId, String reason);
+
     int getZen();
+
     ZenRule getManualRule();
+
     ZenModeConfig getConfig();
+
     long getNextAlarm();
+
     boolean isZenAvailable();
+
     ComponentName getEffectsSuppressor();
+
     boolean isCountdownConditionSupported();
+
     int getCurrentUser();
+
     boolean isVolumeRestricted();
 
     public static interface Callback {
-        default void onZenChanged(int zen) {}
-        default void onConditionsChanged(Condition[] conditions) {}
-        default void onNextAlarmChanged() {}
-        default void onZenAvailableChanged(boolean available) {}
-        default void onEffectsSupressorChanged() {}
-        default void onManualRuleChanged(ZenRule rule) {}
-        default void onConfigChanged(ZenModeConfig config) {}
+        default void onZenChanged(int zen) {
+        }
+
+        default void onConditionsChanged(Condition[] conditions) {
+        }
+
+        default void onNextAlarmChanged() {
+        }
+
+        default void onZenAvailableChanged(boolean available) {
+        }
+
+        default void onEffectsSupressorChanged() {
+        }
+
+        default void onManualRuleChanged(ZenRule rule) {
+        }
+
+        default void onConfigChanged(ZenModeConfig config) {
+        }
     }
 
 }

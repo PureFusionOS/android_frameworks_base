@@ -46,13 +46,13 @@ public class NotificationTemplateViewWrapper extends NotificationHeaderViewWrapp
     private int mMinHeightHint;
 
     protected NotificationTemplateViewWrapper(Context ctx, View view,
-            ExpandableNotificationRow row) {
+                                              ExpandableNotificationRow row) {
         super(ctx, view, row);
         mTransformationHelper.setCustomTransformation(
                 new ViewTransformationHelper.CustomTransformation() {
                     @Override
                     public boolean transformTo(TransformState ownState,
-                            TransformableView notification, final float transformationAmount) {
+                                               TransformableView notification, final float transformationAmount) {
                         if (!(notification instanceof HybridNotificationView)) {
                             return false;
                         }
@@ -70,7 +70,7 @@ public class NotificationTemplateViewWrapper extends NotificationHeaderViewWrapp
 
                     @Override
                     public boolean customTransformTarget(TransformState ownState,
-                            TransformState otherState) {
+                                                         TransformState otherState) {
                         float endY = getTransformationY(ownState, otherState);
                         ownState.setTransformationEndY(endY);
                         return true;
@@ -78,7 +78,7 @@ public class NotificationTemplateViewWrapper extends NotificationHeaderViewWrapp
 
                     @Override
                     public boolean transformFrom(TransformState ownState,
-                            TransformableView notification, float transformationAmount) {
+                                                 TransformableView notification, float transformationAmount) {
                         if (!(notification instanceof HybridNotificationView)) {
                             return false;
                         }
@@ -96,14 +96,14 @@ public class NotificationTemplateViewWrapper extends NotificationHeaderViewWrapp
 
                     @Override
                     public boolean initTransformation(TransformState ownState,
-                            TransformState otherState) {
+                                                      TransformState otherState) {
                         float startY = getTransformationY(ownState, otherState);
                         ownState.setTransformationStartY(startY);
                         return true;
                     }
 
                     private float getTransformationY(TransformState ownState,
-                            TransformState otherState) {
+                                                     TransformState otherState) {
                         int[] otherStablePosition = otherState.getLaidOutLocationOnScreen();
                         int[] ownStablePosition = ownState.getLaidOutLocationOnScreen();
                         return (otherStablePosition[1]
@@ -112,6 +112,22 @@ public class NotificationTemplateViewWrapper extends NotificationHeaderViewWrapp
                     }
 
                 }, TRANSFORMING_VIEW_TEXT);
+    }
+
+    private static int interpolateColor(int source, int target, float t) {
+        int aSource = Color.alpha(source);
+        int rSource = Color.red(source);
+        int gSource = Color.green(source);
+        int bSource = Color.blue(source);
+        int aTarget = Color.alpha(target);
+        int rTarget = Color.red(target);
+        int gTarget = Color.green(target);
+        int bTarget = Color.blue(target);
+        return Color.argb(
+                (int) (aSource * (1f - t) + aTarget * t),
+                (int) (rSource * (1f - t) + rTarget * t),
+                (int) (gSource * (1f - t) + gTarget * t),
+                (int) (bSource * (1f - t) + bTarget * t));
     }
 
     private void resolveTemplateViews(StatusBarNotification notification) {
@@ -212,22 +228,6 @@ public class NotificationTemplateViewWrapper extends NotificationHeaderViewWrapp
         if (mPicture != null) {
             getDozer().setImageDark(mPicture, dark, fade, delay, true /* useGrayscale */);
         }
-    }
-
-    private static int interpolateColor(int source, int target, float t) {
-        int aSource = Color.alpha(source);
-        int rSource = Color.red(source);
-        int gSource = Color.green(source);
-        int bSource = Color.blue(source);
-        int aTarget = Color.alpha(target);
-        int rTarget = Color.red(target);
-        int gTarget = Color.green(target);
-        int bTarget = Color.blue(target);
-        return Color.argb(
-                (int) (aSource * (1f - t) + aTarget * t),
-                (int) (rSource * (1f - t) + rTarget * t),
-                (int) (gSource * (1f - t) + gTarget * t),
-                (int) (bSource * (1f - t) + bTarget * t));
     }
 
     @Override

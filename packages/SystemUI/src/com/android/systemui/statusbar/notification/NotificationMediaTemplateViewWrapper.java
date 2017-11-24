@@ -27,12 +27,12 @@ import com.android.systemui.statusbar.TransformableView;
  */
 public class NotificationMediaTemplateViewWrapper extends NotificationTemplateViewWrapper {
 
+    View mActions;
+
     protected NotificationMediaTemplateViewWrapper(Context ctx, View view,
-            ExpandableNotificationRow row) {
+                                                   ExpandableNotificationRow row) {
         super(ctx, view, row);
     }
-
-    View mActions;
 
     private void resolveViews() {
         mActions = mView.findViewById(com.android.internal.R.id.media_actions);

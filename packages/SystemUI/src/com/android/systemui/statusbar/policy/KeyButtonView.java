@@ -53,12 +53,12 @@ import static android.view.accessibility.AccessibilityNodeInfo.ACTION_LONG_CLICK
 
 public class KeyButtonView extends ImageView implements ButtonInterface {
 
-    private final boolean mPlaySounds;
-    private int mContentDescriptionRes;
-
     public static final int CURSOR_REPEAT_FLAGS = KeyEvent.FLAG_SOFT_KEYBOARD
             | KeyEvent.FLAG_KEEP_TOUCH_MODE;
-
+    private final boolean mPlaySounds;
+    private final KeyButtonRipple mRipple;
+    private final MetricsLogger mMetricsLogger = Dependency.get(MetricsLogger.class);
+    private int mContentDescriptionRes;
     private long mDownTime;
     private int mCode;
     private int mTouchSlop;
@@ -66,10 +66,6 @@ public class KeyButtonView extends ImageView implements ButtonInterface {
     private AudioManager mAudioManager;
     private boolean mGestureAborted;
     private boolean mLongClicked;
-    private OnClickListener mOnClickListener;
-    private final KeyButtonRipple mRipple;
-    private final MetricsLogger mMetricsLogger = Dependency.get(MetricsLogger.class);
-
     private final Runnable mCheckLongPress = new Runnable() {
         public void run() {
             if (isPressed()) {
@@ -92,6 +88,7 @@ public class KeyButtonView extends ImageView implements ButtonInterface {
             }
         }
     };
+    private OnClickListener mOnClickListener;
 
     public KeyButtonView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);

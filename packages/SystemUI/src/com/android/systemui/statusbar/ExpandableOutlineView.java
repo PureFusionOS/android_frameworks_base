@@ -72,16 +72,16 @@ public abstract class ExpandableOutlineView extends ExpandableView {
         invalidateOutline();
     }
 
+    @Override
+    public float getOutlineAlpha() {
+        return mOutlineAlpha;
+    }
+
     protected void setOutlineAlpha(float alpha) {
         if (alpha != mOutlineAlpha) {
             mOutlineAlpha = alpha;
             invalidateOutline();
         }
-    }
-
-    @Override
-    public float getOutlineAlpha() {
-        return mOutlineAlpha;
     }
 
     protected void setOutlineRect(RectF rect) {

@@ -108,13 +108,13 @@ public class NotificationBackgroundView extends View {
         invalidate();
     }
 
+    public int getActualHeight() {
+        return mActualHeight;
+    }
+
     public void setActualHeight(int actualHeight) {
         mActualHeight = actualHeight;
         invalidate();
-    }
-
-    public int getActualHeight() {
-        return mActualHeight;
     }
 
     public void setClipTopAmount(int clipTopAmount) {

@@ -43,36 +43,30 @@ import static com.android.systemui.statusbar.phone.nano.TouchAnalyticsProto.Sess
  * Tracks touch, sensor and phone events when the lockscreen is on. If the phone is unlocked
  * the data containing these events is saved to a file. This data is collected
  * to analyze how a human interaction looks like.
- *
+ * <p>
  * A session starts when the screen is turned on.
  * A session ends when the screen is turned off or user unlocks the phone.
  */
 public class DataCollector implements SensorEventListener {
+    public static final boolean DEBUG = false;
     private static final String TAG = "DataCollector";
     private static final String COLLECTOR_ENABLE = "data_collector_enable";
     private static final String COLLECT_BAD_TOUCHES = "data_collector_collect_bad_touches";
     private static final String ALLOW_REJECTED_TOUCH_REPORTS =
             "data_collector_allow_rejected_touch_reports";
-
     private static final long TIMEOUT_MILLIS = 11000; // 11 seconds.
-    public static final boolean DEBUG = false;
-
+    private static DataCollector sInstance = null;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Context mContext;
-
     // Err on the side of caution, so logging is not started after a crash even tough the screen
     // is off.
     private SensorLoggerSession mCurrentSession = null;
-
     private boolean mEnableCollector = false;
     private boolean mTimeoutActive = false;
     private boolean mCollectBadTouches = false;
     private boolean mCornerSwiping = false;
     private boolean mTrackingStarted = false;
     private boolean mAllowReportRejectedTouch = false;
-
-    private static DataCollector sInstance = null;
-
     protected final ContentObserver mSettingsObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
@@ -230,7 +224,7 @@ public class DataCollector implements SensorEventListener {
 
     /**
      * @return true if data is being collected - either for data gathering or creating a
-     *         rejected touch report.
+     * rejected touch report.
      */
     public boolean isEnabled() {
         return mEnableCollector || mAllowReportRejectedTouch;
@@ -238,7 +232,7 @@ public class DataCollector implements SensorEventListener {
 
     /**
      * @return true if the full data set for data gathering should be collected - including
-     *         extensive sensor data, which is is not normally included with rejected touch reports.
+     * extensive sensor data, which is is not normally included with rejected touch reports.
      */
     public boolean isEnabledFull() {
         return mEnableCollector;

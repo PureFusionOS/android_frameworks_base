@@ -17,62 +17,62 @@
   -->
 
 <!-- LinearLayout -->
-<com.android.systemui.statusbar.policy.RemoteInputView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:theme="@style/systemui_theme_remote_input"
-        android:id="@+id/remote_input"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+<com.android.systemui.statusbar.policy.RemoteInputView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/remote_input"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/systemui_theme_remote_input">
 
-    <view class="com.android.systemui.statusbar.policy.RemoteInputView$RemoteEditText"
-            android:id="@+id/remote_input_text"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:paddingTop="2dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="12dp"
-            android:gravity="start|center_vertical"
-            android:textAppearance="?android:attr/textAppearance"
-            android:textColor="@color/remote_input_text"
-            android:textColorHint="@color/remote_input_hint"
-            android:textSize="16sp"
-            android:background="@null"
-            android:singleLine="true"
-            android:ellipsize="start"
-            android:inputType="textShortMessage|textAutoCorrect|textCapSentences"
-            android:imeOptions="actionSend|flagNoExtractUi|flagNoFullscreen" />
+    <view
+        android:id="@+id/remote_input_text"
+        class="com.android.systemui.statusbar.policy.RemoteInputView$RemoteEditText"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@null"
+        android:ellipsize="start"
+        android:gravity="start|center_vertical"
+        android:imeOptions="actionSend|flagNoExtractUi|flagNoFullscreen"
+        android:inputType="textShortMessage|textAutoCorrect|textCapSentences"
+        android:paddingBottom="4dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="16dp"
+        android:paddingTop="2dp"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearance"
+        android:textColor="@color/remote_input_text"
+        android:textColorHint="@color/remote_input_hint"
+        android:textSize="16sp" />
 
     <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical">
 
         <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingStart="12dp"
-                android:paddingEnd="24dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:id="@+id/remote_input_send"
-                android:src="@drawable/ic_send"
-                android:contentDescription="@*android:string/ime_action_send"
-                android:tint="@color/remote_input_send"
-                android:tintMode="src_in"
-                android:background="@drawable/ripple_drawable" />
+            android:id="@+id/remote_input_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/ripple_drawable"
+            android:contentDescription="@*android:string/ime_action_send"
+            android:paddingBottom="16dp"
+            android:paddingEnd="24dp"
+            android:paddingStart="12dp"
+            android:paddingTop="16dp"
+            android:src="@drawable/ic_send"
+            android:tint="@color/remote_input_send"
+            android:tintMode="src_in" />
 
         <ProgressBar
-                android:id="@+id/remote_input_progress"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="6dp"
-                android:layout_gravity="center"
-                android:visibility="invisible"
-                android:indeterminate="true"
-                style="?android:attr/progressBarStyleSmall" />
+            android:id="@+id/remote_input_progress"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="6dp"
+            android:indeterminate="true"
+            android:visibility="invisible" />
 
     </FrameLayout>
 

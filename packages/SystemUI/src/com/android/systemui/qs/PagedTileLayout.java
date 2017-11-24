@@ -31,8 +31,39 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
     private PageIndicator mPageIndicator;
 
     private int mNumPages;
-    private PageListener mPageListener;
+    private final PagerAdapter mAdapter = new PagerAdapter() {
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            if (DEBUG) Log.d(TAG, "Destantiating " + position);
+            container.removeView((View) object);
+        }
 
+        public Object instantiateItem(ViewGroup container, int position) {
+            if (DEBUG) Log.d(TAG, "Instantiating " + position);
+            if (isLayoutRtl()) {
+                position = mPages.size() - 1 - position;
+            }
+            ViewGroup view = mPages.get(position);
+            container.addView(view);
+            return view;
+        }
+
+        @Override
+        public int getCount() {
+            return mNumPages;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+    };
+    private final Runnable mDistribute = new Runnable() {
+        @Override
+        public void run() {
+            distributeTiles();
+        }
+    };
+    private PageListener mPageListener;
     private int mPosition;
     private boolean mOffPage;
     private boolean mListening;
@@ -52,7 +83,7 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
 
             @Override
             public void onPageScrolled(int position, float positionOffset,
-                    int positionOffsetPixels) {
+                                       int positionOffsetPixels) {
                 if (mPageIndicator == null) return;
                 setCurrentPage(position, positionOffset != 0);
                 mPageIndicator.setLocation(position + positionOffset);
@@ -247,16 +278,32 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
         setMeasuredDimension(getMeasuredWidth(), maxHeight + getPaddingBottom());
     }
 
-    private final Runnable mDistribute = new Runnable() {
-        @Override
-        public void run() {
-            distributeTiles();
-        }
-    };
-
     public int getColumnCount() {
         if (mPages.size() == 0) return 0;
         return mPages.get(0).mColumns;
+    }
+
+    @Override
+    public void updateSettings() {
+        for (int i = 0; i < mPages.size(); i++) {
+            mPages.get(i).updateSettings();
+            mPages.get(i).updateResources();
+        }
+        postDistributeTiles();
+    }
+
+    @Override
+    public int getNumColumns() {
+        return mPages.get(0).getNumColumns();
+    }
+
+    @Override
+    public boolean isShowTitles() {
+        return mPages.get(0).isShowTitles();
+    }
+
+    public interface PageListener {
+        void onPageChanged(boolean isFirst);
     }
 
     public static class TilePage extends TileLayout {
@@ -285,62 +332,12 @@ public class PagedTileLayout extends ViewPager implements QSTileLayout {
                 defaultRows = res.getInteger(R.integer.quick_settings_num_rows_portrait);
             }
             return Settings.System.getIntForUser(
-                mContext.getContentResolver(), Settings.System.QS_LAYOUT_ROWS, defaultRows,
-                UserHandle.USER_CURRENT);
+                    mContext.getContentResolver(), Settings.System.QS_LAYOUT_ROWS, defaultRows,
+                    UserHandle.USER_CURRENT);
         }
 
         public boolean isFull() {
             return mRecords.size() >= mColumns * mRows;
         }
-    }
-
-    private final PagerAdapter mAdapter = new PagerAdapter() {
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            if (DEBUG) Log.d(TAG, "Destantiating " + position);
-            container.removeView((View) object);
-        }
-
-        public Object instantiateItem(ViewGroup container, int position) {
-            if (DEBUG) Log.d(TAG, "Instantiating " + position);
-            if (isLayoutRtl()) {
-                position = mPages.size() - 1 - position;
-            }
-            ViewGroup view = mPages.get(position);
-            container.addView(view);
-            return view;
-        }
-
-        @Override
-        public int getCount() {
-            return mNumPages;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-    };
-
-    public interface PageListener {
-        void onPageChanged(boolean isFirst);
-    }
-
-    @Override
-    public void updateSettings() {
-        for (int i = 0; i < mPages.size(); i++) {
-            mPages.get(i).updateSettings();
-            mPages.get(i).updateResources();
-        }
-        postDistributeTiles();
-    }
-
-    @Override
-    public int getNumColumns() {
-        return mPages.get(0).getNumColumns();
-    }
-
-    @Override
-    public boolean isShowTitles() {
-        return mPages.get(0).isShowTitles();
     }
 }

@@ -55,9 +55,12 @@ public class EmergencyButton extends Button {
 
     private static final String LOG_TAG = "EmergencyButton";
     private final EmergencyAffordanceManager mEmergencyAffordanceManager;
-
+    private final boolean mIsVoiceCapable;
+    private final boolean mEnableEmergencyCallWhileSimLocked;
     private int mDownX;
     private int mDownY;
+    private boolean mLongPressWasDragged;
+    private LockPatternUtils mLockPatternUtils;
     KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
         @Override
@@ -70,19 +73,8 @@ public class EmergencyButton extends Button {
             updateEmergencyCallButton();
         }
     };
-    private boolean mLongPressWasDragged;
-
-    public interface EmergencyButtonCallback {
-        public void onEmergencyButtonClickedWhenInCall();
-    }
-
-    private LockPatternUtils mLockPatternUtils;
     private PowerManager mPowerManager;
     private EmergencyButtonCallback mEmergencyButtonCallback;
-
-    private final boolean mIsVoiceCapable;
-    private final boolean mEnableEmergencyCallWhileSimLocked;
-
     public EmergencyButton(Context context) {
         this(context, null);
     }
@@ -242,5 +234,9 @@ public class EmergencyButton extends Button {
 
     private TelecomManager getTelecommManager() {
         return (TelecomManager) mContext.getSystemService(Context.TELECOM_SERVICE);
+    }
+
+    public interface EmergencyButtonCallback {
+        public void onEmergencyButtonClickedWhenInCall();
     }
 }

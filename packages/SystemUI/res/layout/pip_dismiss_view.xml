@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,12 +23,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:text="@string/pip_phone_dismiss_hint"
-        android:textColor="#FFFFFFFF"
-        android:textSize="14sp"
         android:shadowColor="@android:color/black"
         android:shadowDx="-2"
         android:shadowDy="2"
-        android:shadowRadius="0.01" />
+        android:shadowRadius="0.01"
+        android:text="@string/pip_phone_dismiss_hint"
+        android:textColor="#FFFFFFFF"
+        android:textSize="14sp" />
 
 </FrameLayout>

@@ -21,8 +21,11 @@ import com.android.systemui.statusbar.policy.RotationLockController.RotationLock
 public interface RotationLockController extends Listenable,
         CallbackController<RotationLockControllerCallback> {
     int getRotationLockOrientation();
+
     boolean isRotationLockAffordanceVisible();
+
     boolean isRotationLocked();
+
     void setRotationLocked(boolean locked);
 
     public interface RotationLockControllerCallback {

@@ -29,21 +29,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DozeLog {
-    private static final String TAG = "DozeLog";
-    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
-    private static final boolean ENABLED = true;
-    private static final int SIZE = Build.IS_DEBUGGABLE ? 400 : 50;
-    static final SimpleDateFormat FORMAT = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
-
-    private static final int PULSE_REASONS = 5;
-
     public static final int PULSE_REASON_NONE = -1;
     public static final int PULSE_REASON_INTENT = 0;
     public static final int PULSE_REASON_NOTIFICATION = 1;
     public static final int PULSE_REASON_SENSOR_SIGMOTION = 2;
     public static final int PULSE_REASON_SENSOR_PICKUP = 3;
     public static final int PULSE_REASON_SENSOR_DOUBLE_TAP = 4;
-
+    static final SimpleDateFormat FORMAT = new SimpleDateFormat("MM-dd HH:mm:ss.SSS");
+    private static final String TAG = "DozeLog";
+    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
+    private static final boolean ENABLED = true;
+    private static final int SIZE = Build.IS_DEBUGGABLE ? 400 : 50;
+    private static final int PULSE_REASONS = 5;
     private static boolean sRegisterKeyguardCallback = true;
 
     private static long[] sTimes;
@@ -59,6 +56,33 @@ public class DozeLog {
     private static SummaryStats sScreenOnPulsingStats;
     private static SummaryStats sScreenOnNotPulsingStats;
     private static SummaryStats sEmergencyCallStats;
+    private static final KeyguardUpdateMonitorCallback sKeyguardCallback =
+            new KeyguardUpdateMonitorCallback() {
+                @Override
+                public void onEmergencyCallAction() {
+                    traceEmergencyCall();
+                }
+
+                @Override
+                public void onKeyguardBouncerChanged(boolean bouncer) {
+                    traceKeyguardBouncerChanged(bouncer);
+                }
+
+                @Override
+                public void onStartedWakingUp() {
+                    traceScreenOn();
+                }
+
+                @Override
+                public void onFinishedGoingToSleep(int why) {
+                    traceScreenOff(why);
+                }
+
+                @Override
+                public void onKeyguardVisibilityChanged(boolean showing) {
+                    traceKeyguard(showing);
+                }
+            };
     private static SummaryStats[][] sProxStats; // [reason][near/far]
 
     public static void tracePickupPulse(Context context, boolean withinVibrationThreshold) {
@@ -121,7 +145,7 @@ public class DozeLog {
     }
 
     public static void traceFling(boolean expand, boolean aboveThreshold, boolean thresholdNeeded,
-            boolean screenOnFromTouch) {
+                                  boolean screenOnFromTouch) {
         if (!ENABLED) return;
         log("fling expand=" + expand + " aboveThreshold=" + aboveThreshold + " thresholdNeeded="
                 + thresholdNeeded + " screenOnFromTouch=" + screenOnFromTouch);
@@ -164,7 +188,7 @@ public class DozeLog {
     }
 
     public static void traceProximityResult(Context context, boolean near, long millis,
-            int pulseReason) {
+                                            int pulseReason) {
         if (!ENABLED) return;
         init(context);
         log("proximityResult reason=" + pulseReasonToString(pulseReason) + " near=" + near
@@ -174,12 +198,18 @@ public class DozeLog {
 
     public static String pulseReasonToString(int pulseReason) {
         switch (pulseReason) {
-            case PULSE_REASON_INTENT: return "intent";
-            case PULSE_REASON_NOTIFICATION: return "notification";
-            case PULSE_REASON_SENSOR_SIGMOTION: return "sigmotion";
-            case PULSE_REASON_SENSOR_PICKUP: return "pickup";
-            case PULSE_REASON_SENSOR_DOUBLE_TAP: return "doubletap";
-            default: throw new IllegalArgumentException("bad reason: " + pulseReason);
+            case PULSE_REASON_INTENT:
+                return "intent";
+            case PULSE_REASON_NOTIFICATION:
+                return "notification";
+            case PULSE_REASON_SENSOR_SIGMOTION:
+                return "sigmotion";
+            case PULSE_REASON_SENSOR_PICKUP:
+                return "pickup";
+            case PULSE_REASON_SENSOR_DOUBLE_TAP:
+                return "doubletap";
+            default:
+                throw new IllegalArgumentException("bad reason: " + pulseReason);
         }
     }
 
@@ -224,7 +254,7 @@ public class DozeLog {
     }
 
     public static void tracePulseDropped(Context context, boolean pulsePending,
-            DozeMachine.State state, boolean blocked) {
+                                         DozeMachine.State state, boolean blocked) {
         if (!ENABLED) return;
         init(context);
         log("pulseDropped pulsePending=" + pulsePending + " state="
@@ -269,32 +299,4 @@ public class DozeLog {
             pw.println();
         }
     }
-
-    private static final KeyguardUpdateMonitorCallback sKeyguardCallback =
-            new KeyguardUpdateMonitorCallback() {
-        @Override
-        public void onEmergencyCallAction() {
-            traceEmergencyCall();
-        }
-
-        @Override
-        public void onKeyguardBouncerChanged(boolean bouncer) {
-            traceKeyguardBouncerChanged(bouncer);
-        }
-
-        @Override
-        public void onStartedWakingUp() {
-            traceScreenOn();
-        }
-
-        @Override
-        public void onFinishedGoingToSleep(int why) {
-            traceScreenOff(why);
-        }
-
-        @Override
-        public void onKeyguardVisibilityChanged(boolean showing) {
-            traceKeyguard(showing);
-        }
-    };
 }

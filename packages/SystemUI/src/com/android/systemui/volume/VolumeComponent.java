@@ -25,7 +25,10 @@ import java.io.PrintWriter;
 
 public interface VolumeComponent extends DemoMode {
     void dismissNow();
+
     void onConfigurationChanged(Configuration newConfig);
+
     void dump(FileDescriptor fd, PrintWriter pw, String[] args);
+
     void register();
 }

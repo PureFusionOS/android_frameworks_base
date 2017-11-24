@@ -47,6 +47,12 @@ public class PluginFragment extends PreferenceFragment {
             = "com.android.systemui.action.PLUGIN_SETTINGS";
 
     private PluginPrefs mPluginPrefs;
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            loadPrefs();
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,7 +100,7 @@ public class PluginFragment extends PreferenceFragment {
         }
 
         List<PackageInfo> apps = pm.getPackagesHoldingPermissions(new String[]{
-                PluginInstanceManager.PLUGIN_PERMISSION},
+                        PluginInstanceManager.PLUGIN_PERMISSION},
                 PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.GET_SERVICES);
         apps.forEach(app -> {
             if (!plugins.containsKey(app.packageName)) return;
@@ -128,13 +134,6 @@ public class PluginFragment extends PreferenceFragment {
         }
         return b.toString();
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            loadPrefs();
-        }
-    };
 
     private static class PluginPreference extends SwitchPreference {
         private final boolean mHasSettings;

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,11 +12,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<com.android.systemui.recents.views.TaskView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.systemui.recents.views.TaskView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true">
+
     <com.android.systemui.recents.views.TaskViewThumbnail
         android:id="@+id/task_view_thumbnail"
         android:layout_width="match_parent"
@@ -26,10 +25,10 @@
     <include layout="@layout/recents_task_view_header" />
 
     <!-- TODO: Move this into a view stub -->
-    <include layout="@layout/recents_task_view_lock_to_app"/>
+    <include layout="@layout/recents_task_view_lock_to_app" />
 
     <!-- The incompatible app toast -->
-    <include layout="@layout/recents_task_view_incompatible_app_toast"/>
+    <include layout="@layout/recents_task_view_incompatible_app_toast" />
 </com.android.systemui.recents.views.TaskView>
 
 

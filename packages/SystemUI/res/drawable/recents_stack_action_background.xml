@@ -15,7 +15,7 @@ Copyright (C) 2016 The Android Open Source Project
 -->
 
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-        android:color="?android:attr/colorControlHighlight">
+    android:color="?android:attr/colorControlHighlight">
     <item android:id="@android:id/mask">
         <shape>
             <corners android:radius="@dimen/recents_task_view_rounded_corners_radius" />

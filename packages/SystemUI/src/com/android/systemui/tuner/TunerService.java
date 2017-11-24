@@ -21,23 +21,6 @@ import android.os.UserHandle;
 
 public abstract class TunerService {
 
-    public abstract void clearAll();
-    public abstract void destroy();
-
-    public abstract String getValue(String setting);
-    public abstract int getValue(String setting, int def);
-    public abstract String getValue(String setting, String def);
-
-    public abstract void setValue(String setting, String value);
-    public abstract void setValue(String setting, int value);
-
-    public abstract void addTunable(Tunable tunable, String... keys);
-    public abstract void removeTunable(Tunable tunable);
-
-    public interface Tunable {
-        void onTuningChanged(String key, String newValue);
-    }
-
     private static Context userContext(Context context) {
         try {
             return context.createPackageContextAsUser(context.getPackageName(), 0,
@@ -45,5 +28,27 @@ public abstract class TunerService {
         } catch (NameNotFoundException e) {
             return context;
         }
+    }
+
+    public abstract void clearAll();
+
+    public abstract void destroy();
+
+    public abstract String getValue(String setting);
+
+    public abstract int getValue(String setting, int def);
+
+    public abstract String getValue(String setting, String def);
+
+    public abstract void setValue(String setting, String value);
+
+    public abstract void setValue(String setting, int value);
+
+    public abstract void addTunable(Tunable tunable, String... keys);
+
+    public abstract void removeTunable(Tunable tunable);
+
+    public interface Tunable {
+        void onTuningChanged(String key, String newValue);
     }
 }

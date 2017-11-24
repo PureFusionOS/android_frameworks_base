@@ -31,7 +31,9 @@ import java.util.Map;
  */
 public class TrackedGarbage {
 
-    /** Duration after which we consider garbage to be old. */
+    /**
+     * Duration after which we consider garbage to be old.
+     */
     private static final long GARBAGE_COLLECTION_DEADLINE_MILLIS = 60000; // 1min
 
     private final HashSet<LeakReference> mGarbage = new HashSet<>();
@@ -59,25 +61,8 @@ public class TrackedGarbage {
     }
 
     /**
-     * A reference to something we consider leaked if it still has strong references.
-     *
-     * Helpful for finding potential leaks in a heapdump: Simply find an instance of
-     * LeakReference, find the object it refers to, then find a strong path to a GC root.
-     */
-    private static class LeakReference extends WeakReference<Object> {
-        private final Class<?> clazz;
-        private final long createdUptimeMillis;
-
-        LeakReference(Object t, ReferenceQueue<Object> queue) {
-            super(t, queue);
-            clazz = t.getClass();
-            createdUptimeMillis = SystemClock.uptimeMillis();
-        }
-    }
-
-    /**
      * Dump statistics about the garbage.
-     *
+     * <p>
      * For each class, dumps the number of "garbage objects" that have not been collected yet.
      * A large number of old instances indicates a probable leak.
      */
@@ -122,5 +107,22 @@ public class TrackedGarbage {
 
     private boolean isOld(long createdUptimeMillis, long now) {
         return createdUptimeMillis + GARBAGE_COLLECTION_DEADLINE_MILLIS < now;
+    }
+
+    /**
+     * A reference to something we consider leaked if it still has strong references.
+     * <p>
+     * Helpful for finding potential leaks in a heapdump: Simply find an instance of
+     * LeakReference, find the object it refers to, then find a strong path to a GC root.
+     */
+    private static class LeakReference extends WeakReference<Object> {
+        private final Class<?> clazz;
+        private final long createdUptimeMillis;
+
+        LeakReference(Object t, ReferenceQueue<Object> queue) {
+            super(t, queue);
+            clazz = t.getClass();
+            createdUptimeMillis = SystemClock.uptimeMillis();
+        }
     }
 }

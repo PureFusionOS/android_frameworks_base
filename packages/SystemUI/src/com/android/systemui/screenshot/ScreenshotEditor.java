@@ -48,8 +48,23 @@ import java.io.FileOutputStream;
 
 public class ScreenshotEditor extends Service implements View.OnClickListener {
 
+    public static final int WORK_MODE_CROP = 0;
+    public static String KEY_SERVICE_SWITCH = "service_switch";
+    static String TAG = "UniversalCropper";
+    static String KEY_NOTIFICATION_ACCESS_SWITCH = "notification_access_switch";
+    static String KEY_CATEGORY_MAIN = "category_main";
+    static String KEY_CROP_BEHAVIOR = "crop_behavior";
+    static String KEY_DRAW_COLOR = "draw_color";
+    static String KEY_CROP_MODE = "crop_mode";
+    static String KEY_WORK_MODE = "work_mode";
+    static String KEY_CREDITS = "credits";
+    static String KEY_PEN_SIZE = "pen_size";
+    Handler mainHandler;
+    HandlerThread handlerThread = null;
+    CountDownTimer countDownTimer;
+    boolean buttonBarVisible = true;
+    Bitmap screenshot = null;
     private Context mContext;
-
     //Anything the user can see
     private View mainLayout;
     private CropImageView cropView;
@@ -58,9 +73,7 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
     private ImageButton cropModeButton, cropButton, workModeButton;
     private LinearLayout layoutWorkModeCrop, layoutWorkModeDraw;
     private RelativeLayout buttonBar;
-
     private String screenshotPath = "";
-    static String TAG = "UniversalCropper";
     private int nCropMode = 0;
     private int nOverlayColor;
     private int drawColor;
@@ -72,24 +85,20 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
     private boolean isPopUpCropModeShowing = false;
     private boolean isPopUpPenSizeShowing = false;
     private boolean receiverRegistered = false;
-    Handler mainHandler;
-    HandlerThread handlerThread = null;
-
-    CountDownTimer countDownTimer;
-
-    public static final int WORK_MODE_CROP = 0;
-    public static String KEY_SERVICE_SWITCH = "service_switch";
-    static String KEY_NOTIFICATION_ACCESS_SWITCH = "notification_access_switch";
-    static String KEY_CATEGORY_MAIN = "category_main";
-    static String KEY_CROP_BEHAVIOR = "crop_behavior";
-    static String KEY_DRAW_COLOR = "draw_color";
-    static String KEY_CROP_MODE = "crop_mode";
-    static String KEY_WORK_MODE = "work_mode";
-    static String KEY_CREDITS = "credits";
-    static String KEY_PEN_SIZE = "pen_size";
-
     private SharedPreferences preferences;
     private float mDensity;
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (CropImageView.BROADCAST_BUTTON_BAR_VISIBILITY.equals(intent.getAction()))
+                showButtonBar();
+        }
+    };
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public static boolean canWeDrawOurOverlay(Context mContext) {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(mContext);
+    }
 
     @Override
     public void onCreate() {
@@ -142,16 +151,6 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
         receiverRegistered = true;
     }
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (CropImageView.BROADCAST_BUTTON_BAR_VISIBILITY.equals(intent.getAction()))
-                showButtonBar();
-        }
-    };
-
-    boolean buttonBarVisible = true;
-
     private void showButtonBar() {
         if (buttonBarVisible)
             buttonBar.setVisibility(View.GONE);
@@ -166,11 +165,9 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
         return Service.START_STICKY;
     }
 
-    Bitmap screenshot = null;
-
     private void addView() {
         if (!isShowing)
-           initButtons();
+            initButtons();
         mainHandler.post(new Runnable() {
             public void run() {
 
@@ -201,11 +198,11 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
                         }
                     }
                 }.start();*/
-		cropView.setImageBitmap(screenshot);
+                cropView.setImageBitmap(screenshot);
                 if (!isShowing)
                     wm.addView(mainLayout, getParams());
                 else
-                   wm.updateViewLayout(mainLayout, getParams());
+                    wm.updateViewLayout(mainLayout, getParams());
                 isShowing = true;
             }
         });
@@ -278,8 +275,7 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
                 if (!isPopUpCropModeShowing) {
                     listPopupWindowCropMode.show();
                     isPopUpCropModeShowing = true;
-                }
-                else listPopupWindowCropMode.dismiss();
+                } else listPopupWindowCropMode.dismiss();
             }
         });
         cropModeButton.setColorFilter(nOverlayColor, PorterDuff.Mode.MULTIPLY);
@@ -350,7 +346,7 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
         });
 
 
-        final String [] penSizeValues = getResources().getStringArray(R.array.crop_pen_size_entries);
+        final String[] penSizeValues = getResources().getStringArray(R.array.crop_pen_size_entries);
         final ListPopupWindow listPopupPenSizerPicker = new ListPopupWindow(mContext);
         listPopupPenSizerPicker.setAdapter(new PenSizeArrayAdapter(this, android.R.layout.simple_list_item_1, penSizeValues));
         final ImageButton penSizeButton = (ImageButton) mainLayout.findViewById(R.id.penSize);
@@ -419,13 +415,11 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
                 if (!isPopUpWorkModeShowing) {
                     listPopupWindow.show();
                     isPopUpWorkModeShowing = true;
-                }
-                else listPopupWindow.dismiss();
+                } else listPopupWindow.dismiss();
             }
         });
         setWorkMode();
     }
-
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -598,13 +592,6 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
         removeView();
     }
 
-
-
-    @TargetApi(Build.VERSION_CODES.M)
-    public static boolean canWeDrawOurOverlay(Context mContext) {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(mContext);
-    }
-
     private int getUiOptions() {
         if (Build.VERSION.SDK_INT >= 19) {
             return View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -620,10 +607,10 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN;
     }
 
-    private BitmapDrawable createPenSizeImage(int penSize){
+    private BitmapDrawable createPenSizeImage(int penSize) {
         final int width = getResources().getDimensionPixelSize(R.dimen.crop_buttons_inlet);
         final Canvas canvas = new Canvas();
-        canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG,Paint.FILTER_BITMAP_FLAG));
+        canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG, Paint.FILTER_BITMAP_FLAG));
         final Bitmap bmp = Bitmap.createBitmap(width, width, Bitmap.Config.ARGB_8888);
         canvas.setBitmap(bmp);
         final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -633,10 +620,10 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
         return new BitmapDrawable(getResources(), bmp);
     }
 
-    private BitmapDrawable createColorImage(int color){
+    private BitmapDrawable createColorImage(int color) {
         final int width = getResources().getDimensionPixelSize(R.dimen.crop_buttons_inlet);
         final Canvas canvas = new Canvas();
-        canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG,Paint.FILTER_BITMAP_FLAG));
+        canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.ANTI_ALIAS_FLAG, Paint.FILTER_BITMAP_FLAG));
         final Bitmap bmp = Bitmap.createBitmap(width, width, Bitmap.Config.ARGB_8888);
         canvas.setBitmap(bmp);
         // inside

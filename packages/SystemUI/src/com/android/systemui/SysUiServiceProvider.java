@@ -21,9 +21,9 @@ import android.content.Context;
  * since tests don't have SystemUIApplication as their ApplicationContext.
  */
 public interface SysUiServiceProvider {
-    <T> T getComponent(Class<T> interfaceType);
-
     public static <T> T getComponent(Context context, Class<T> interfaceType) {
         return ((SysUiServiceProvider) context.getApplicationContext()).getComponent(interfaceType);
     }
+
+    <T> T getComponent(Class<T> interfaceType);
 }

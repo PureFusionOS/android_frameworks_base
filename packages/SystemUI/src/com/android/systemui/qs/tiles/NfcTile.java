@@ -33,12 +33,20 @@ import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
-/** Quick settings tile: Enable/Disable NFC **/
+/**
+ * Quick settings tile: Enable/Disable NFC
+ **/
 public class NfcTile extends QSTileImpl<BooleanState> {
 
     private NfcAdapter mAdapter;
 
     private boolean mListening;
+    private BroadcastReceiver mNfcReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshState();
+        }
+    };
 
     public NfcTile(QSHost host) {
         super(host);
@@ -128,11 +136,4 @@ public class NfcTile extends QSTileImpl<BooleanState> {
         }
         return mAdapter;
     }
-
-    private BroadcastReceiver mNfcReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            refreshState();
-        }
-    };
 }

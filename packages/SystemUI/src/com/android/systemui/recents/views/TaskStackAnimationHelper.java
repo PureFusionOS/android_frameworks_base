@@ -45,70 +45,32 @@ import java.util.List;
  */
 public class TaskStackAnimationHelper {
 
-    /**
-     * Callbacks from the helper to coordinate view-content animations with view animations.
-     */
-    public interface Callbacks {
-        /**
-         * Callback to prepare for the start animation for the launch target {@link TaskView}.
-         */
-        void onPrepareLaunchTargetForEnterAnimation();
-
-        /**
-         * Callback to start the animation for the launch target {@link TaskView}.
-         */
-        void onStartLaunchTargetEnterAnimation(TaskViewTransform transform, int duration,
-                boolean screenPinningEnabled, ReferenceCountedTrigger postAnimationTrigger);
-
-        /**
-         * Callback to start the animation for the launch target {@link TaskView} when it is
-         * launched from Recents.
-         */
-        void onStartLaunchTargetLaunchAnimation(int duration, boolean screenPinningRequested,
-                ReferenceCountedTrigger postAnimationTrigger);
-
-        /**
-         * Callback to start the animation for the front {@link TaskView} if there is no launch
-         * target.
-         */
-        void onStartFrontTaskEnterAnimation(boolean screenPinningEnabled);
-    }
-
+    public static final int ENTER_FROM_HOME_TRANSLATION_DURATION = 300;
+    public static final int EXIT_TO_HOME_TRANSLATION_DURATION = 200;
     private static final int DOUBLE_FRAME_OFFSET_MS = 33;
     private static final int FRAME_OFFSET_MS = 16;
-
     private static final int ENTER_EXIT_NUM_ANIMATING_TASKS = 5;
-
     private static final int ENTER_FROM_HOME_ALPHA_DURATION = 100;
-    public static final int ENTER_FROM_HOME_TRANSLATION_DURATION = 300;
     private static final Interpolator ENTER_FROM_HOME_ALPHA_INTERPOLATOR = Interpolators.LINEAR;
-
-    public static final int EXIT_TO_HOME_TRANSLATION_DURATION = 200;
     private static final Interpolator EXIT_TO_HOME_TRANSLATION_INTERPOLATOR =
             new PathInterpolator(0.4f, 0, 0.6f, 1f);
-
     private static final int DISMISS_TASK_DURATION = 175;
     private static final int DISMISS_ALL_TASKS_DURATION = 200;
     private static final Interpolator DISMISS_ALL_TRANSLATION_INTERPOLATOR =
             new PathInterpolator(0.4f, 0, 1f, 1f);
-
     private static final Interpolator FOCUS_NEXT_TASK_INTERPOLATOR =
             new PathInterpolator(0.4f, 0, 0, 1f);
     private static final Interpolator FOCUS_IN_FRONT_NEXT_TASK_INTERPOLATOR =
             new PathInterpolator(0, 0, 0, 1f);
     private static final Interpolator FOCUS_BEHIND_NEXT_TASK_INTERPOLATOR =
             Interpolators.LINEAR_OUT_SLOW_IN;
-
     private static final Interpolator ENTER_WHILE_DOCKING_INTERPOLATOR =
             Interpolators.LINEAR_OUT_SLOW_IN;
-
     private final int mEnterAndExitFromHomeTranslationOffset;
     private TaskStackView mStackView;
-
     private TaskViewTransform mTmpTransform = new TaskViewTransform();
     private ArrayList<TaskViewTransform> mTmpCurrentTaskTransforms = new ArrayList<>();
     private ArrayList<TaskViewTransform> mTmpFinalTaskTransforms = new ArrayList<>();
-
     public TaskStackAnimationHelper(Context context, TaskStackView stackView) {
         mStackView = stackView;
         mEnterAndExitFromHomeTranslationOffset = Recents.getConfiguration().isGridEnabled
@@ -295,7 +257,7 @@ public class TaskStackAnimationHelper {
      * Starts an in-app animation to hide all the task views so that we can transition back home.
      */
     public void startExitToHomeAnimation(boolean animated,
-            ReferenceCountedTrigger postAnimationTrigger) {
+                                         ReferenceCountedTrigger postAnimationTrigger) {
         TaskStackLayoutAlgorithm stackLayout = mStackView.getStackAlgorithm();
         TaskStack stack = mStackView.getStack();
 
@@ -321,7 +283,7 @@ public class TaskStackAnimationHelper {
             // Animate the tasks down
             AnimationProps taskAnimation;
             if (animated) {
-                int delay = Math.min(ENTER_EXIT_NUM_ANIMATING_TASKS , taskIndexFromFront) *
+                int delay = Math.min(ENTER_EXIT_NUM_ANIMATING_TASKS, taskIndexFromFront) *
                         mEnterAndExitFromHomeTranslationOffset;
                 taskAnimation = new AnimationProps()
                         .setStartDelay(AnimationProps.BOUNDS, delay)
@@ -345,7 +307,7 @@ public class TaskStackAnimationHelper {
      * window transition for the launching task.
      */
     public void startLaunchTaskAnimation(TaskView launchingTaskView, boolean screenPinningRequested,
-            final ReferenceCountedTrigger postAnimationTrigger) {
+                                         final ReferenceCountedTrigger postAnimationTrigger) {
         Resources res = mStackView.getResources();
 
         int taskViewExitToAppDuration = res.getInteger(
@@ -392,7 +354,7 @@ public class TaskStackAnimationHelper {
      * Starts the delete animation for the specified {@link TaskView}.
      */
     public void startDeleteTaskAnimation(final TaskView deleteTaskView, boolean gridLayout,
-            final ReferenceCountedTrigger postAnimationTrigger) {
+                                         final ReferenceCountedTrigger postAnimationTrigger) {
         if (gridLayout) {
             startTaskGridDeleteTaskAnimation(deleteTaskView, postAnimationTrigger);
         } else {
@@ -404,7 +366,7 @@ public class TaskStackAnimationHelper {
      * Starts the delete animation for all the {@link TaskView}s.
      */
     public void startDeleteAllTasksAnimation(final List<TaskView> taskViews, boolean gridLayout,
-            final ReferenceCountedTrigger postAnimationTrigger) {
+                                             final ReferenceCountedTrigger postAnimationTrigger) {
         if (gridLayout) {
             for (int i = 0; i < taskViews.size(); i++) {
                 startTaskGridDeleteTaskAnimation(taskViews.get(i), postAnimationTrigger);
@@ -420,7 +382,7 @@ public class TaskStackAnimationHelper {
      * @return whether or not this will trigger a scroll in the stack
      */
     public boolean startScrollToFocusedTaskAnimation(Task newFocusedTask,
-            boolean requestViewFocus) {
+                                                     boolean requestViewFocus) {
         TaskStackLayoutAlgorithm stackLayout = mStackView.getStackAlgorithm();
         TaskStackViewScroller stackScroller = mStackView.getScroller();
         TaskStack stack = mStackView.getStack();
@@ -520,7 +482,7 @@ public class TaskStackAnimationHelper {
      * previous task will be animated in after the scroll completes.
      */
     public void startNewStackScrollAnimation(TaskStack newStack,
-            ReferenceCountedTrigger animationTrigger) {
+                                             ReferenceCountedTrigger animationTrigger) {
         TaskStackLayoutAlgorithm stackLayout = mStackView.getStackAlgorithm();
         TaskStackViewScroller stackScroller = mStackView.getScroller();
 
@@ -612,7 +574,7 @@ public class TaskStackAnimationHelper {
     }
 
     private void startTaskGridDeleteTaskAnimation(final TaskView deleteTaskView,
-            final ReferenceCountedTrigger postAnimationTrigger) {
+                                                  final ReferenceCountedTrigger postAnimationTrigger) {
         postAnimationTrigger.increment();
         postAnimationTrigger.addLastDecrementRunnable(() -> {
             mStackView.getTouchHandler().onChildDismissed(deleteTaskView);
@@ -622,11 +584,12 @@ public class TaskStackAnimationHelper {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         postAnimationTrigger.decrement();
-                    }}).start();
+                    }
+                }).start();
     }
 
     private void startTaskStackDeleteTaskAnimation(final TaskView deleteTaskView,
-            final ReferenceCountedTrigger postAnimationTrigger) {
+                                                   final ReferenceCountedTrigger postAnimationTrigger) {
         TaskStackViewTouchHandler touchHandler = mStackView.getTouchHandler();
         touchHandler.onBeginManualDrag(deleteTaskView);
 
@@ -653,7 +616,7 @@ public class TaskStackAnimationHelper {
     }
 
     private void startTaskStackDeleteAllTasksAnimation(final List<TaskView> taskViews,
-            final ReferenceCountedTrigger postAnimationTrigger) {
+                                                       final ReferenceCountedTrigger postAnimationTrigger) {
         TaskStackLayoutAlgorithm stackLayout = mStackView.getStackAlgorithm();
 
         int offscreenXOffset = mStackView.getMeasuredWidth() - stackLayout.getTaskRect().left;
@@ -685,5 +648,34 @@ public class TaskStackAnimationHelper {
             mTmpTransform.rect.offset(offscreenXOffset, 0);
             mStackView.updateTaskViewToTransform(tv, mTmpTransform, taskAnimation);
         }
+    }
+
+    /**
+     * Callbacks from the helper to coordinate view-content animations with view animations.
+     */
+    public interface Callbacks {
+        /**
+         * Callback to prepare for the start animation for the launch target {@link TaskView}.
+         */
+        void onPrepareLaunchTargetForEnterAnimation();
+
+        /**
+         * Callback to start the animation for the launch target {@link TaskView}.
+         */
+        void onStartLaunchTargetEnterAnimation(TaskViewTransform transform, int duration,
+                                               boolean screenPinningEnabled, ReferenceCountedTrigger postAnimationTrigger);
+
+        /**
+         * Callback to start the animation for the launch target {@link TaskView} when it is
+         * launched from Recents.
+         */
+        void onStartLaunchTargetLaunchAnimation(int duration, boolean screenPinningRequested,
+                                                ReferenceCountedTrigger postAnimationTrigger);
+
+        /**
+         * Callback to start the animation for the front {@link TaskView} if there is no launch
+         * target.
+         */
+        void onStartFrontTaskEnterAnimation(boolean screenPinningEnabled);
     }
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  * Copyright (c) 2006, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,8 +58,11 @@
 
     <dimen name="group_overflow_number_size">@*android:dimen/notification_text_size</dimen>
     <dimen name="group_overflow_number_size_dark">16sp</dimen>
-    <dimen name="group_overflow_number_padding">@*android:dimen/notification_content_margin_end</dimen>
-    <dimen name="group_overflow_number_extra_padding_dark">@*android:dimen/notification_extra_margin_ambient</dimen>
+    <dimen name="group_overflow_number_padding">@*android:dimen/notification_content_margin_end
+    </dimen>
+    <dimen name="group_overflow_number_extra_padding_dark">
+        @*android:dimen/notification_extra_margin_ambient
+    </dimen>
 
     <!-- max height of a notification such that the content can still fade out when closing -->
     <dimen name="max_notification_fadeout_height">100dp</dimen>
@@ -136,10 +138,12 @@
     <dimen name="status_bar_icon_drawing_size">17dp</dimen>
 
     <!-- size at which Notification icons will be drawn on Ambient Display -->
-    <dimen name="status_bar_icon_drawing_size_dark">@*android:dimen/notification_header_icon_size_ambient</dimen>
+    <dimen name="status_bar_icon_drawing_size_dark">
+        @*android:dimen/notification_header_icon_size_ambient
+    </dimen>
 
     <!-- opacity at which Notification icons will be drawn in the status bar -->
-    <item type="dimen" name="status_bar_icon_drawing_alpha">90%</item>
+    <item name="status_bar_icon_drawing_alpha" type="dimen">90%</item>
 
     <!-- gap on either side of status bar notification icons -->
     <dimen name="status_bar_icon_padding">0dp</dimen>
@@ -219,7 +223,7 @@
 
     <!-- Minimum fraction of the screen that should be taken up by the notification panel.
          Not used at this screen size. -->
-    <item type="dimen" name="notification_panel_min_height_frac">0%</item>
+    <item name="notification_panel_min_height_frac" type="dimen">0%</item>
 
     <dimen name="blinds_pop_threshold">0dp</dimen>
 
@@ -655,7 +659,7 @@
     <dimen name="ksh_item_padding">4dp</dimen>
     <dimen name="ksh_item_margin_start">4dp</dimen>
 
-<!-- Recents Layout -->
+    <!-- Recents Layout -->
 
     <!-- The amount to inset the stack, specifically at the top and the other sides.  We also
          don't want this to change across configurations that Recents can be opened in, so we
@@ -698,7 +702,7 @@
     <!-- The padding between each freeform task. -->
     <dimen name="recents_freeform_layout_task_padding">8dp</dimen>
 
-<!-- Recents Views -->
+    <!-- Recents Views -->
 
     <!-- The height of a task view bar.  This has to be large enough to cover the action bar
          height in either orientation at this smallest width. -->
@@ -728,7 +732,9 @@
     <dimen name="recents_drag_hint_text_size">14sp</dimen>
 
     <!-- The min alpha to apply to a task affiliation group color. -->
-    <item name="recents_task_affiliation_color_min_alpha_percentage" format="float" type="dimen">0.6</item>
+    <item name="recents_task_affiliation_color_min_alpha_percentage" format="float" type="dimen">
+        0.6
+    </item>
 
     <!-- The amount to offset when animating into an affiliate group. -->
     <dimen name="recents_task_stack_animation_affiliate_enter_offset">32dp</dimen>

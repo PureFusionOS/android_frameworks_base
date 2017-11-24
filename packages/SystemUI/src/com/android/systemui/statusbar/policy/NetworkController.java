@@ -30,39 +30,81 @@ import java.util.List;
 public interface NetworkController extends CallbackController<SignalCallback>, DemoMode {
 
     boolean hasMobileDataFeature();
+
     void addCallback(SignalCallback cb);
+
     void removeCallback(SignalCallback cb);
+
     void setWifiEnabled(boolean enabled);
+
     AccessPointController getAccessPointController();
+
     DataUsageController getMobileDataController();
+
     DataSaverController getDataSaverController();
 
     boolean hasVoiceCallingFeature();
 
     void addEmergencyListener(EmergencyListener listener);
+
     void removeEmergencyListener(EmergencyListener listener);
+
     boolean hasEmergencyCryptKeeperText();
+
     boolean isRadioOn();
 
     public interface SignalCallback {
         default void setWifiIndicators(boolean enabled, IconState statusIcon, IconState qsIcon,
-                boolean activityIn, boolean activityOut, String description, boolean isTransient) {}
+                                       boolean activityIn, boolean activityOut, String description, boolean isTransient) {
+        }
 
         default void setMobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
-                int qsType, boolean activityIn, boolean activityOut, String typeContentDescription,
-                String description, boolean isWide, int subId, boolean roaming) {}
-        default void setSubs(List<SubscriptionInfo> subs) {}
-        default void setNoSims(boolean show) {}
+                                             int qsType, boolean activityIn, boolean activityOut, String typeContentDescription,
+                                             String description, boolean isWide, int subId, boolean roaming) {
+        }
 
-        default void setEthernetIndicators(IconState icon) {}
+        default void setSubs(List<SubscriptionInfo> subs) {
+        }
 
-        default void setIsAirplaneMode(IconState icon) {}
+        default void setNoSims(boolean show) {
+        }
 
-        default void setMobileDataEnabled(boolean enabled) {}
+        default void setEthernetIndicators(IconState icon) {
+        }
+
+        default void setIsAirplaneMode(IconState icon) {
+        }
+
+        default void setMobileDataEnabled(boolean enabled) {
+        }
     }
 
     public interface EmergencyListener {
         void setEmergencyCallsOnly(boolean emergencyOnly);
+    }
+
+    /**
+     * Tracks changes in access points.  Allows listening for changes, scanning for new APs,
+     * and connecting to new ones.
+     */
+    public interface AccessPointController {
+        void addAccessPointCallback(AccessPointCallback callback);
+
+        void removeAccessPointCallback(AccessPointCallback callback);
+
+        void scanForAccessPoints();
+
+        int getIcon(AccessPoint ap);
+
+        boolean connect(AccessPoint ap);
+
+        boolean canConfigWifi();
+
+        public interface AccessPointCallback {
+            void onAccessPointsChanged(List<AccessPoint> accessPoints);
+
+            void onSettingsActivityTriggered(Intent settingsIntent);
+        }
     }
 
     public static class IconState {
@@ -72,7 +114,7 @@ public interface NetworkController extends CallbackController<SignalCallback>, D
 
         /**
          * Optional iconOverlay resource id.
-         *
+         * <p>
          * <p>Set to -1 if not present.
          */
         public final int iconOverlay;
@@ -91,26 +133,8 @@ public interface NetworkController extends CallbackController<SignalCallback>, D
         }
 
         public IconState(boolean visible, int icon, int contentDescription,
-                Context context) {
+                         Context context) {
             this(visible, icon, context.getString(contentDescription));
-        }
-    }
-
-    /**
-     * Tracks changes in access points.  Allows listening for changes, scanning for new APs,
-     * and connecting to new ones.
-     */
-    public interface AccessPointController {
-        void addAccessPointCallback(AccessPointCallback callback);
-        void removeAccessPointCallback(AccessPointCallback callback);
-        void scanForAccessPoints();
-        int getIcon(AccessPoint ap);
-        boolean connect(AccessPoint ap);
-        boolean canConfigWifi();
-
-        public interface AccessPointCallback {
-            void onAccessPointsChanged(List<AccessPoint> accessPoints);
-            void onSettingsActivityTriggered(Intent settingsIntent);
         }
     }
 }

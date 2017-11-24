@@ -34,11 +34,9 @@ public class PhoneStatusBarView extends PanelBar {
     private static final String TAG = "PhoneStatusBarView";
     private static final boolean DEBUG = StatusBar.DEBUG;
     private static final boolean DEBUG_GESTURES = false;
-
-    StatusBar mBar;
-
-    boolean mIsFullyOpenedPanel = false;
     private final PhoneStatusBarTransitions mBarTransitions;
+    StatusBar mBar;
+    boolean mIsFullyOpenedPanel = false;
     private ScrimController mScrimController;
     private float mMinFraction;
     private float mPanelFraction;

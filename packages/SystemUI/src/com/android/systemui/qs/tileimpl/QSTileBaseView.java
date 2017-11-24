@@ -113,7 +113,7 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
     }
 
     public void init(OnClickListener click, OnClickListener secondaryClick,
-            OnLongClickListener longClick) {
+                     OnLongClickListener longClick) {
         setOnClickListener(click);
         setOnLongClickListener(longClick);
     }
@@ -218,6 +218,7 @@ public class QSTileBaseView extends com.android.systemui.plugins.qs.QSTileView {
 
     private class H extends Handler {
         private static final int STATE_CHANGED = 1;
+
         public H() {
             super(Looper.getMainLooper());
         }

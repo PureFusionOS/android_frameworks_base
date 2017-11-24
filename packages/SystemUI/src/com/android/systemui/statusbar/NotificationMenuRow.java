@@ -107,6 +107,26 @@ public class NotificationMenuRow implements NotificationMenuRowPlugin, View.OnCl
         mMenuItems = new ArrayList<>();
     }
 
+    public static MenuItem createSnoozeItem(Context context) {
+        Resources res = context.getResources();
+        NotificationSnooze content = (NotificationSnooze) LayoutInflater.from(context)
+                .inflate(R.layout.notification_snooze, null, false);
+        String snoozeDescription = res.getString(R.string.notification_menu_snooze_description);
+        MenuItem snooze = new NotificationMenuItem(context, snoozeDescription, content,
+                R.drawable.ic_snooze);
+        return snooze;
+    }
+
+    public static MenuItem createInfoItem(Context context) {
+        Resources res = context.getResources();
+        String infoDescription = res.getString(R.string.notification_menu_gear_description);
+        NotificationInfo infoContent = (NotificationInfo) LayoutInflater.from(context).inflate(
+                R.layout.notification_info, null, false);
+        MenuItem info = new NotificationMenuItem(context, infoDescription, infoContent,
+                R.drawable.ic_settings);
+        return info;
+    }
+
     @Override
     public ArrayList<MenuItem> getMenuItems(Context context) {
         return mMenuItems;
@@ -374,7 +394,7 @@ public class NotificationMenuRow implements NotificationMenuRowPlugin, View.OnCl
 
     /**
      * @return whether the notification has been translated enough to show the menu and not enough
-     *         to be dismissed.
+     * to be dismissed.
      */
     private boolean swipedEnoughToShowMenu() {
         final float multiplier = mParent.canViewBeDismissed()
@@ -383,7 +403,7 @@ public class NotificationMenuRow implements NotificationMenuRowPlugin, View.OnCl
         final float minimumSwipeDistance = mHorizSpaceForIcon * multiplier;
         return !mSwipeHelper.swipedFarEnough(0, 0) && isMenuVisible()
                 && (mOnLeft ? mTranslation > minimumSwipeDistance
-                        : mTranslation < -minimumSwipeDistance);
+                : mTranslation < -minimumSwipeDistance);
     }
 
     /**
@@ -392,7 +412,7 @@ public class NotificationMenuRow implements NotificationMenuRowPlugin, View.OnCl
     private boolean isTowardsMenu(float movement) {
         return isMenuVisible()
                 && ((mOnLeft && movement <= 0)
-                        || (!mOnLeft && movement >= 0));
+                || (!mOnLeft && movement >= 0));
     }
 
     @Override
@@ -516,20 +536,6 @@ public class NotificationMenuRow implements NotificationMenuRowPlugin, View.OnCl
         return mHorizSpaceForIcon * mMenuContainer.getChildCount();
     }
 
-    private final class CheckForDrag implements Runnable {
-        @Override
-        public void run() {
-            final float absTransX = Math.abs(mTranslation);
-            final float bounceBackToMenuWidth = getSpaceForMenu();
-            final float notiThreshold = mParent.getWidth() * 0.4f;
-            if ((!isMenuVisible() || isMenuLocationChange())
-                    && absTransX >= bounceBackToMenuWidth * 0.4
-                    && absTransX < notiThreshold) {
-                fadeInMenu(notiThreshold);
-            }
-        }
-    }
-
     private void fadeInMenu(final float notiThreshold) {
         if (mDismissing || mAnimating) {
             return;
@@ -582,26 +588,6 @@ public class NotificationMenuRow implements NotificationMenuRowPlugin, View.OnCl
         // TODO -- handle / allow custom menu items!
     }
 
-    public static MenuItem createSnoozeItem(Context context) {
-        Resources res = context.getResources();
-        NotificationSnooze content = (NotificationSnooze) LayoutInflater.from(context)
-                .inflate(R.layout.notification_snooze, null, false);
-        String snoozeDescription = res.getString(R.string.notification_menu_snooze_description);
-        MenuItem snooze = new NotificationMenuItem(context, snoozeDescription, content,
-                R.drawable.ic_snooze);
-        return snooze;
-    }
-
-    public static MenuItem createInfoItem(Context context) {
-        Resources res = context.getResources();
-        String infoDescription = res.getString(R.string.notification_menu_gear_description);
-        NotificationInfo infoContent = (NotificationInfo) LayoutInflater.from(context).inflate(
-                R.layout.notification_info, null, false);
-        MenuItem info = new NotificationMenuItem(context, infoDescription, infoContent,
-                R.drawable.ic_settings);
-        return info;
-    }
-
     private void addMenuView(MenuItem item, ViewGroup parent) {
         View menuView = item.getMenuView();
         if (menuView != null) {
@@ -647,6 +633,20 @@ public class NotificationMenuRow implements NotificationMenuRowPlugin, View.OnCl
         @Override
         public String getContentDescription() {
             return mContentDescription;
+        }
+    }
+
+    private final class CheckForDrag implements Runnable {
+        @Override
+        public void run() {
+            final float absTransX = Math.abs(mTranslation);
+            final float bounceBackToMenuWidth = getSpaceForMenu();
+            final float notiThreshold = mParent.getWidth() * 0.4f;
+            if ((!isMenuVisible() || isMenuLocationChange())
+                    && absTransX >= bounceBackToMenuWidth * 0.4
+                    && absTransX < notiThreshold) {
+                fadeInMenu(notiThreshold);
+            }
         }
     }
 }

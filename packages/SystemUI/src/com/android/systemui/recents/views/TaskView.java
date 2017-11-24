@@ -70,11 +70,6 @@ import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
 public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks,
         TaskStackAnimationHelper.Callbacks, View.OnClickListener, View.OnLongClickListener {
 
-    /** The TaskView callbacks */
-    interface TaskViewCallbacks {
-        void onTaskViewClipStateChanged(TaskView tv);
-    }
-
     /**
      * The dim overlay is generally calculated from the task progress, but occasionally (like when
      * launching) needs to be animated independently of the task progress.  This call is only used
@@ -92,7 +87,6 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
                     return tv.getDimAlpha();
                 }
             };
-
     /**
      * The dim overlay is generally calculated from the task progress, but occasionally (like when
      * launching) needs to be animated independently of the task progress.
@@ -109,7 +103,6 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
                     return tv.getDimAlpha();
                 }
             };
-
     /**
      * The dim overlay is generally calculated from the task progress, but occasionally (like when
      * launching) needs to be animated independently of the task progress.
@@ -126,40 +119,34 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
                     return tv.getViewBounds().getAlpha();
                 }
             };
-
-    @ViewDebug.ExportedProperty(category="recents")
+    private final TaskViewTransform mTargetAnimationTransform = new TaskViewTransform();
+    @ViewDebug.ExportedProperty(deepExport = true, prefix = "thumbnail_")
+    protected TaskViewThumbnail mThumbnailView;
+    @ViewDebug.ExportedProperty(deepExport = true, prefix = "header_")
+    protected TaskViewHeader mHeaderView;
+    @ViewDebug.ExportedProperty(category = "recents")
     private float mDimAlpha;
     private float mActionButtonTranslationZ;
-
-    @ViewDebug.ExportedProperty(deepExport=true, prefix="task_")
+    @ViewDebug.ExportedProperty(deepExport = true, prefix = "task_")
     private Task mTask;
     private boolean mTaskBound;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private boolean mClipViewInStack = true;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private boolean mTouchExplorationEnabled;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private boolean mIsDisabledInSafeMode;
-    @ViewDebug.ExportedProperty(deepExport=true, prefix="view_bounds_")
+    @ViewDebug.ExportedProperty(deepExport = true, prefix = "view_bounds_")
     private AnimateableViewBounds mViewBounds;
-
     private AnimatorSet mTransformAnimation;
     private ObjectAnimator mDimAnimator;
     private ObjectAnimator mOutlineAnimator;
-    private final TaskViewTransform mTargetAnimationTransform = new TaskViewTransform();
     private ArrayList<Animator> mTmpAnimators = new ArrayList<>();
-
-    @ViewDebug.ExportedProperty(deepExport=true, prefix="thumbnail_")
-    protected TaskViewThumbnail mThumbnailView;
-    @ViewDebug.ExportedProperty(deepExport=true, prefix="header_")
-    protected TaskViewHeader mHeaderView;
     private View mActionButtonView;
     private View mIncompatibleAppToastView;
     private TaskViewCallbacks mCb;
-
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private Point mDownTouchPos = new Point();
-
     private Toast mDisabledAppToast;
 
     public TaskView(Context context) {
@@ -187,7 +174,9 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
         setAccessibilityDelegate(new TaskViewAccessibilityDelegate(this));
     }
 
-    /** Set callback */
+    /**
+     * Set callback
+     */
     void setCallbacks(TaskViewCallbacks cb) {
         mCb = cb;
     }
@@ -204,7 +193,9 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
         }
     }
 
-    /** Gets the task */
+    /**
+     * Gets the task
+     */
     public Task getTask() {
         return mTask;
     }
@@ -212,10 +203,12 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
     /* Create an outline provider to clip and outline the view */
     protected AnimateableViewBounds createOutlineProvider() {
         return new AnimateableViewBounds(this, mContext.getResources().getDimensionPixelSize(
-            R.dimen.recents_task_view_shadow_rounded_corners_radius));
+                R.dimen.recents_task_view_shadow_rounded_corners_radius));
     }
 
-    /** Returns the view bounds. */
+    /**
+     * Returns the view bounds.
+     */
     AnimateableViewBounds getViewBounds() {
         return mViewBounds;
     }
@@ -285,7 +278,7 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
     }
 
     void updateViewPropertiesToTaskTransform(TaskViewTransform toTransform,
-            AnimationProps toAnimation, ValueAnimator.AnimatorUpdateListener updateCallback) {
+                                             AnimationProps toAnimation, ValueAnimator.AnimatorUpdateListener updateCallback) {
         RecentsConfiguration config = Recents.getConfiguration();
         cancelTransformAnimation();
 
@@ -331,7 +324,9 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
         }
     }
 
-    /** Resets this view's properties */
+    /**
+     * Resets this view's properties
+     */
     void resetViewProperties() {
         cancelTransformAnimation();
         setDimAlpha(0);
@@ -374,27 +369,37 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
         }
     }
 
-    /** Enables/disables handling touch on this task view. */
+    /**
+     * Enables/disables handling touch on this task view.
+     */
     public void setTouchEnabled(boolean enabled) {
         setOnClickListener(enabled ? this : null);
     }
 
-    /** Animates this task view if the user does not interact with the stack after a certain time. */
+    /**
+     * Animates this task view if the user does not interact with the stack after a certain time.
+     */
     public void startNoUserInteractionAnimation() {
         mHeaderView.startNoUserInteractionAnimation();
     }
 
-    /** Mark this task view that the user does has not interacted with the stack after a certain time. */
+    /**
+     * Mark this task view that the user does has not interacted with the stack after a certain time.
+     */
     void setNoUserInteractionState() {
         mHeaderView.setNoUserInteractionState();
     }
 
-    /** Resets the state tracking that the user has not interacted with the stack after a certain time. */
+    /**
+     * Resets the state tracking that the user has not interacted with the stack after a certain time.
+     */
     void resetNoUserInteractionState() {
         mHeaderView.resetNoUserInteractionState();
     }
 
-    /** Dismisses this task. */
+    /**
+     * Dismisses this task.
+     */
     void dismissTask() {
         // Animate out the view and call the callback
         final TaskView tv = this;
@@ -422,7 +427,9 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
         return mClipViewInStack;
     }
 
-    /** Sets whether this view should be clipped, or clipped against. */
+    /**
+     * Sets whether this view should be clipped, or clipped against.
+     */
     void setClipViewInStack(boolean clip) {
         if (clip != mClipViewInStack) {
             mClipViewInStack = clip;
@@ -434,15 +441,6 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
 
     public TaskViewHeader getHeaderView() {
         return mHeaderView;
-    }
-
-    /**
-     * Sets the current dim.
-     */
-    public void setDimAlpha(float dimAlpha) {
-        mDimAlpha = dimAlpha;
-        mThumbnailView.setDimAlpha(dimAlpha);
-        mHeaderView.setDimAlpha(dimAlpha);
     }
 
     /**
@@ -458,6 +456,15 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
      */
     public float getDimAlpha() {
         return mDimAlpha;
+    }
+
+    /**
+     * Sets the current dim.
+     */
+    public void setDimAlpha(float dimAlpha) {
+        mDimAlpha = dimAlpha;
+        mThumbnailView.setDimAlpha(dimAlpha);
+        mHeaderView.setDimAlpha(dimAlpha);
     }
 
     /**
@@ -477,7 +484,8 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
 
     /**
      * Shows the action button.
-     * @param fadeIn whether or not to animate the action button in.
+     *
+     * @param fadeIn         whether or not to animate the action button in.
      * @param fadeInDuration the duration of the action button animation, only used if
      *                       {@param fadeIn} is true.
      */
@@ -506,7 +514,7 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
      * @param fadeOut whether or not to animate the action button out.
      */
     public void hideActionButton(boolean fadeOut, int fadeOutDuration, boolean scaleDown,
-            final Animator.AnimatorListener animListener) {
+                                 final Animator.AnimatorListener animListener) {
         if (fadeOut && mActionButtonView.getAlpha() > 0f) {
             if (scaleDown) {
                 float toScale = 0.9f;
@@ -552,7 +560,7 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
 
     @Override
     public void onStartLaunchTargetEnterAnimation(TaskViewTransform transform, int duration,
-            boolean screenPinningEnabled, ReferenceCountedTrigger postAnimationTrigger) {
+                                                  boolean screenPinningEnabled, ReferenceCountedTrigger postAnimationTrigger) {
         cancelDimAnimationIfExists();
 
         // Dim the view after the app window transitions down into recents
@@ -579,7 +587,7 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
 
     @Override
     public void onStartLaunchTargetLaunchAnimation(int duration, boolean screenPinningRequested,
-            ReferenceCountedTrigger postAnimationTrigger) {
+                                                   ReferenceCountedTrigger postAnimationTrigger) {
         Utilities.cancelAnimationWithoutCallbacks(mDimAnimator);
 
         // Un-dim the view before/while launching the target
@@ -604,7 +612,7 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
     /**** TaskCallbacks Implementation ****/
 
     public void onTaskBound(Task t, boolean touchExplorationEnabled, int displayOrientation,
-            Rect displayRect) {
+                            Rect displayRect) {
         SystemServicesProxy ssp = Recents.getSystemServices();
         mTouchExplorationEnabled = touchExplorationEnabled;
         mTask = t;
@@ -655,7 +663,7 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
     /**** View.OnClickListener Implementation ****/
 
     @Override
-     public void onClick(final View v) {
+    public void onClick(final View v) {
         if (mIsDisabledInSafeMode) {
             Context context = getContext();
             String msg = context.getString(R.string.recents_launch_disabled_message, mTask.title);
@@ -731,10 +739,19 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
     public void dump(String prefix, PrintWriter writer) {
         String innerPrefix = prefix + "  ";
 
-        writer.print(prefix); writer.print("TaskView");
-        writer.print(" mTask="); writer.print(mTask.key.id);
+        writer.print(prefix);
+        writer.print("TaskView");
+        writer.print(" mTask=");
+        writer.print(mTask.key.id);
         writer.println();
 
         mThumbnailView.dump(innerPrefix, writer);
+    }
+
+    /**
+     * The TaskView callbacks
+     */
+    interface TaskViewCallbacks {
+        void onTaskViewClipStateChanged(TaskView tv);
     }
 }

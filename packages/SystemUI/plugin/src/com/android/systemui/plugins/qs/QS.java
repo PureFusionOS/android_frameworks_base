@@ -40,24 +40,41 @@ public interface QS extends FragmentBase {
     void setPanelView(HeightListener notificationPanelView);
 
     void hideImmediately();
+
     int getQsMinExpansionHeight();
+
     int getDesiredHeight();
+
     void setHeightOverride(int desiredHeight);
+
     void setHeaderClickable(boolean qsExpansionEnabled);
+
     boolean isCustomizing();
+
     void setOverscrolling(boolean overscrolling);
+
     void setExpanded(boolean qsExpanded);
+
     void setListening(boolean listening);
+
     boolean isShowingDetail();
+
     void closeDetail();
+
     void setKeyguardShowing(boolean keyguardShowing);
+
     void animateHeaderSlidingIn(long delay);
+
     void animateHeaderSlidingOut();
+
     void setQsExpansion(float qsExpansionFraction, float headerTranslation);
+
     void setHeaderListening(boolean listening);
+
     void notifyCustomizeChanged();
 
     void setContainer(ViewGroup container);
+
     void setExpandClickListener(OnClickListener onClickListener);
 
     View getHeader();
@@ -68,6 +85,7 @@ public interface QS extends FragmentBase {
     @ProvidesInterface(version = HeightListener.VERSION)
     public interface HeightListener {
         public static final int VERSION = 1;
+
         void onQsHeightChanged();
     }
 

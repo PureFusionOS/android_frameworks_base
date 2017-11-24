@@ -53,12 +53,14 @@ class TaskResourceLoadQueue {
 
     ConcurrentLinkedQueue<Task> mQueue = new ConcurrentLinkedQueue<Task>();
 
-    /** Adds a new task to the load queue */
+    /**
+     * Adds a new task to the load queue
+     */
     void addTask(Task t) {
         if (!mQueue.contains(t)) {
             mQueue.add(t);
         }
-        synchronized(this) {
+        synchronized (this) {
             notifyAll();
         }
     }
@@ -71,17 +73,23 @@ class TaskResourceLoadQueue {
         return mQueue.poll();
     }
 
-    /** Removes a task from the load queue */
+    /**
+     * Removes a task from the load queue
+     */
     void removeTask(Task t) {
         mQueue.remove(t);
     }
 
-    /** Clears all the tasks from the load queue */
+    /**
+     * Clears all the tasks from the load queue
+     */
     void clearTasks() {
         mQueue.clear();
     }
 
-    /** Returns whether the load queue is empty */
+    /**
+     * Returns whether the load queue is empty
+     */
     boolean isEmpty() {
         return mQueue.isEmpty();
     }
@@ -93,26 +101,24 @@ class TaskResourceLoadQueue {
 class BackgroundTaskLoader implements Runnable {
     static String TAG = "TaskResourceLoader";
     static boolean DEBUG = false;
-
+    private final OnIdleChangedListener mOnIdleChangedListener;
     Context mContext;
     HandlerThread mLoadThread;
     Handler mLoadThreadHandler;
     Handler mMainThreadHandler;
-
     TaskResourceLoadQueue mLoadQueue;
     TaskKeyLruCache<Drawable> mIconCache;
     BitmapDrawable mDefaultIcon;
-
     boolean mStarted;
     boolean mCancelled;
     boolean mWaitingOnLoadQueue;
 
-    private final OnIdleChangedListener mOnIdleChangedListener;
-
-    /** Constructor, creates a new loading thread that loads task resources in the background */
+    /**
+     * Constructor, creates a new loading thread that loads task resources in the background
+     */
     public BackgroundTaskLoader(TaskResourceLoadQueue loadQueue,
-            TaskKeyLruCache<Drawable> iconCache, BitmapDrawable defaultIcon,
-            OnIdleChangedListener onIdleChangedListener) {
+                                TaskKeyLruCache<Drawable> iconCache, BitmapDrawable defaultIcon,
+                                OnIdleChangedListener onIdleChangedListener) {
         mLoadQueue = loadQueue;
         mIconCache = iconCache;
         mDefaultIcon = defaultIcon;
@@ -124,7 +130,9 @@ class BackgroundTaskLoader implements Runnable {
         mLoadThreadHandler = new Handler(mLoadThread.getLooper());
     }
 
-    /** Restarts the loader thread */
+    /**
+     * Restarts the loader thread
+     */
     void start(Context context) {
         mContext = context;
         mCancelled = false;
@@ -140,7 +148,9 @@ class BackgroundTaskLoader implements Runnable {
         }
     }
 
-    /** Requests the loader thread to stop after the current iteration */
+    /**
+     * Requests the loader thread to stop after the current iteration
+     */
     void stop() {
         // Mark as cancelled for the thread to pick up
         mCancelled = true;
@@ -159,7 +169,7 @@ class BackgroundTaskLoader implements Runnable {
                 // when we call stop()
                 mContext = null;
                 // If we are cancelled, then wait until we are started again
-                synchronized(mLoadThread) {
+                synchronized (mLoadThread) {
                     try {
                         mLoadThread.wait();
                     } catch (InterruptedException ie) {
@@ -176,7 +186,7 @@ class BackgroundTaskLoader implements Runnable {
 
                 // If there are no other items in the list, then just wait until something is added
                 if (!mCancelled && mLoadQueue.isEmpty()) {
-                    synchronized(mLoadQueue) {
+                    synchronized (mLoadQueue) {
                         try {
                             mWaitingOnLoadQueue = true;
                             mMainThreadHandler.post(
@@ -281,21 +291,19 @@ public class RecentsTaskLoader {
     private final TaskKeyStrongCache<ThumbnailData> mTempCache = new TaskKeyStrongCache<>();
     private final int mMaxThumbnailCacheSize;
     private final int mMaxIconCacheSize;
-    private int mNumVisibleTasksLoaded;
-
     int mDefaultTaskBarBackgroundColor;
     int mDefaultTaskViewBackgroundColor;
     BitmapDrawable mDefaultIcon;
-
+    private int mNumVisibleTasksLoaded;
     private TaskKeyLruCache.EvictionCallback mClearActivityInfoOnEviction =
             new TaskKeyLruCache.EvictionCallback() {
-        @Override
-        public void onEntryEvicted(Task.TaskKey key) {
-            if (key != null) {
-                mActivityInfoCache.remove(key.getComponent());
-            }
-        }
-    };
+                @Override
+                public void onEntryEvicted(Task.TaskKey key) {
+                    if (key != null) {
+                        mActivityInfoCache.remove(key.getComponent());
+                    }
+                }
+            };
 
     public RecentsTaskLoader(Context context) {
         Resources res = context.getResources();
@@ -327,12 +335,16 @@ public class RecentsTaskLoader {
                 mHighResThumbnailLoader::setTaskLoadQueueIdle);
     }
 
-    /** Returns the size of the app icon cache. */
+    /**
+     * Returns the size of the app icon cache.
+     */
     public int getIconCacheSize() {
         return mMaxIconCacheSize;
     }
 
-    /** Returns the size of the thumbnail cache. */
+    /**
+     * Returns the size of the thumbnail cache.
+     */
     public int getThumbnailCacheSize() {
         return mMaxThumbnailCacheSize;
     }
@@ -341,21 +353,27 @@ public class RecentsTaskLoader {
         return mHighResThumbnailLoader;
     }
 
-    /** Creates a new plan for loading the recent tasks. */
+    /**
+     * Creates a new plan for loading the recent tasks.
+     */
     public RecentsTaskLoadPlan createLoadPlan(Context context) {
         RecentsTaskLoadPlan plan = new RecentsTaskLoadPlan(context);
         return plan;
     }
 
-    /** Preloads raw recents tasks using the specified plan to store the output. */
+    /**
+     * Preloads raw recents tasks using the specified plan to store the output.
+     */
     public synchronized void preloadRawTasks(RecentsTaskLoadPlan plan,
-            boolean includeFrontMostExcludedTask) {
+                                             boolean includeFrontMostExcludedTask) {
         plan.preloadRawTasks(includeFrontMostExcludedTask);
     }
 
-    /** Preloads recents tasks using the specified plan to store the output. */
+    /**
+     * Preloads recents tasks using the specified plan to store the output.
+     */
     public synchronized void preloadTasks(RecentsTaskLoadPlan plan, int runningTaskId,
-            boolean includeFrontMostExcludedTask) {
+                                          boolean includeFrontMostExcludedTask) {
         try {
             Trace.beginSection("preloadPlan");
             plan.preloadPlan(this, runningTaskId, includeFrontMostExcludedTask);
@@ -364,9 +382,11 @@ public class RecentsTaskLoader {
         }
     }
 
-    /** Begins loading the heavy task data according to the specified options. */
+    /**
+     * Begins loading the heavy task data according to the specified options.
+     */
     public synchronized void loadTasks(Context context, RecentsTaskLoadPlan plan,
-            RecentsTaskLoadPlan.Options opts) {
+                                       RecentsTaskLoadPlan.Options opts) {
         if (opts == null) {
             throw new RuntimeException("Requires load options");
         }
@@ -396,13 +416,17 @@ public class RecentsTaskLoader {
         t.notifyTaskDataLoaded(t.thumbnail, icon);
     }
 
-    /** Releases the task resource data back into the pool. */
+    /**
+     * Releases the task resource data back into the pool.
+     */
     public void unloadTaskData(Task t) {
         mLoadQueue.removeTask(t);
         t.notifyTaskDataUnloaded(mDefaultIcon);
     }
 
-    /** Completely removes the resource data from the pool. */
+    /**
+     * Completely removes the resource data from the pool.
+     */
     public void deleteTaskData(Task t, boolean notifyTaskDataUnloaded) {
         mLoadQueue.removeTask(t);
         mIconCache.remove(t.key);
@@ -490,7 +514,7 @@ public class RecentsTaskLoader {
      * cache if it is.
      */
     String getAndUpdateContentDescription(Task.TaskKey taskKey, ActivityManager.TaskDescription td,
-            Resources res) {
+                                          Resources res) {
         SystemServicesProxy ssp = Recents.getSystemServices();
 
         // Return the cached content description if it exists
@@ -522,7 +546,7 @@ public class RecentsTaskLoader {
      * Returns the cached task icon if the task key is not expired, updating the cache if it is.
      */
     Drawable getAndUpdateActivityIcon(Context context, Task.TaskKey taskKey, ActivityManager.TaskDescription td,
-            Resources res, boolean loadIfNotCached) {
+                                      Resources res, boolean loadIfNotCached) {
         SystemServicesProxy ssp = Recents.getSystemServices();
 
         // Return the cached activity icon if it exists
@@ -568,7 +592,7 @@ public class RecentsTaskLoader {
      * Returns the cached thumbnail if the task key is not expired, updating the cache if it is.
      */
     synchronized ThumbnailData getAndUpdateThumbnail(Task.TaskKey taskKey, boolean loadIfNotCached,
-            boolean storeInCache) {
+                                                     boolean storeInCache) {
         SystemServicesProxy ssp = Recents.getSystemServices();
 
         ThumbnailData cached = mThumbnailCache.getAndInvalidateIfModified(taskKey);
@@ -677,12 +701,16 @@ public class RecentsTaskLoader {
     public synchronized void dump(String prefix, PrintWriter writer) {
         String innerPrefix = prefix + "  ";
 
-        writer.print(prefix); writer.println(TAG);
-        writer.print(prefix); writer.println("Icon Cache");
+        writer.print(prefix);
+        writer.println(TAG);
+        writer.print(prefix);
+        writer.println("Icon Cache");
         mIconCache.dump(innerPrefix, writer);
-        writer.print(prefix); writer.println("Thumbnail Cache");
+        writer.print(prefix);
+        writer.println("Thumbnail Cache");
         mThumbnailCache.dump(innerPrefix, writer);
-        writer.print(prefix); writer.println("Temp Thumbnail Cache");
+        writer.print(prefix);
+        writer.println("Temp Thumbnail Cache");
         mTempCache.dump(innerPrefix, writer);
     }
 }

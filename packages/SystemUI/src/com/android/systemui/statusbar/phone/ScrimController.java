@@ -58,37 +58,33 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
     private static final int TAG_START_ALPHA = R.id.scrim_alpha_start;
     private static final int TAG_END_ALPHA = R.id.scrim_alpha_end;
     private static final float NOT_INITIALIZED = -1;
-
-    private final LightBarController mLightBarController;
     protected final ScrimView mScrimBehind;
+    private final LightBarController mLightBarController;
     private final ScrimView mScrimInFront;
     private final UnlockMethodCache mUnlockMethodCache;
     private final View mHeadsUpScrim;
     private final KeyguardUpdateMonitor mKeyguardUpdateMonitor;
-
+    private final Interpolator mInterpolator = new DecelerateInterpolator();
     protected float mScrimBehindAlpha;
     protected float mScrimBehindAlphaKeyguard = SCRIM_BEHIND_ALPHA_KEYGUARD;
     protected float mScrimBehindAlphaUnlocking = SCRIM_BEHIND_ALPHA_UNLOCKING;
-
     protected boolean mKeyguardShowing;
-    private float mFraction;
-
-    private boolean mDarkenWhileDragging;
     protected boolean mBouncerShowing;
     protected boolean mBouncerIsKeyguard = false;
-    private boolean mWakeAndUnlocking;
     protected boolean mAnimateChange;
+    protected long mDurationOverride = -1;
+    private float mFraction;
+    private boolean mDarkenWhileDragging;
+    private boolean mWakeAndUnlocking;
     private boolean mUpdatePending;
     private boolean mTracking;
     private boolean mAnimateKeyguardFadingOut;
-    protected long mDurationOverride = -1;
     private long mAnimationDelay;
     private Runnable mOnAnimationFinished;
-    private final Interpolator mInterpolator = new DecelerateInterpolator();
     private boolean mDozing;
     private float mDozeInFrontAlpha;
     private float mDozeBehindAlpha;
-    private float mCurrentInFrontAlpha  = NOT_INITIALIZED;
+    private float mCurrentInFrontAlpha = NOT_INITIALIZED;
     private float mCurrentBehindAlpha = NOT_INITIALIZED;
     private float mCurrentHeadsUpAlpha = NOT_INITIALIZED;
     private int mPinnedHeadsUpCount;
@@ -101,7 +97,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
     private ValueAnimator mKeyguardFadeoutAnimation;
 
     public ScrimController(LightBarController lightBarController, ScrimView scrimBehind,
-            ScrimView scrimInFront, View headsUpScrim) {
+                           ScrimView scrimInFront, View headsUpScrim) {
         mScrimBehind = scrimBehind;
         mScrimInFront = scrimInFront;
         mHeadsUpScrim = headsUpScrim;
@@ -121,7 +117,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
     }
 
     protected void setScrimBehindValues(float scrimBehindAlphaKeyguard,
-            float scrimBehindAlphaUnlocking) {
+                                        float scrimBehindAlphaUnlocking) {
         mScrimBehindAlphaKeyguard = scrimBehindAlphaKeyguard;
         mScrimBehindAlphaUnlocking = scrimBehindAlphaUnlocking;
         scheduleUpdate();
@@ -161,7 +157,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
     }
 
     public void animateKeyguardFadingOut(long delay, long duration, Runnable onAnimationFinished,
-            boolean skipFirstFrame) {
+                                         boolean skipFirstFrame) {
         mWakeAndUnlocking = false;
         mAnimateKeyguardFadingOut = true;
         mDurationOverride = duration;
@@ -212,9 +208,8 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
         }
     }
 
-    public void setDozeInFrontAlpha(float alpha) {
-        mDozeInFrontAlpha = alpha;
-        updateScrimColor(mScrimInFront);
+    public float getDozeBehindAlpha() {
+        return mDozeBehindAlpha;
     }
 
     public void setDozeBehindAlpha(float alpha) {
@@ -222,12 +217,13 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
         updateScrimColor(mScrimBehind);
     }
 
-    public float getDozeBehindAlpha() {
-        return mDozeBehindAlpha;
-    }
-
     public float getDozeInFrontAlpha() {
         return mDozeInFrontAlpha;
+    }
+
+    public void setDozeInFrontAlpha(float alpha) {
+        mDozeInFrontAlpha = alpha;
+        updateScrimColor(mScrimInFront);
     }
 
     private float getScrimInFrontAlpha() {
@@ -300,13 +296,9 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
             setScrimBehindColor(0);
         } else {
             // woo, special effects
-            final float k = (float)(1f-0.5f*(1f-Math.cos(3.14159f * Math.pow(1f-frac, 2f))));
+            final float k = (float) (1f - 0.5f * (1f - Math.cos(3.14159f * Math.pow(1f - frac, 2f))));
             setScrimBehindColor(k * mScrimBehindAlpha);
         }
-    }
-
-    private void setScrimBehindColor(float alpha) {
-        setScrimColor(mScrimBehind, alpha);
     }
 
     private void setScrimInFrontColor(float alpha) {
@@ -522,7 +514,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
      * Set the amount the current top heads up view is dragged. The range is from 0 to 1 and 0 means
      * the heads up is in its resting space and 1 means it's fully dragged out.
      *
-     * @param draggedHeadsUpView the dragged view
+     * @param draggedHeadsUpView   the dragged view
      * @param topHeadsUpDragAmount how far is it dragged
      */
     public void setTopHeadsUpDragAmount(View draggedHeadsUpView, float topHeadsUpDragAmount) {
@@ -561,6 +553,10 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener,
 
     public int getScrimBehindColor() {
         return mScrimBehind.getScrimColorWithAlpha();
+    }
+
+    private void setScrimBehindColor(float alpha) {
+        setScrimColor(mScrimBehind, alpha);
     }
 
     public void setScrimBehindChangeRunnable(Runnable changeRunnable) {

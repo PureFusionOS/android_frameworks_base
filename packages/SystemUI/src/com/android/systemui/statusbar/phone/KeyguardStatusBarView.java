@@ -125,7 +125,7 @@ public class KeyguardStatusBarView extends RelativeLayout
         mCarrierLabel.setLayoutParams(lp);
 
         lp = (MarginLayoutParams) getLayoutParams();
-        lp.height =  getResources().getDimensionPixelSize(
+        lp.height = getResources().getDimensionPixelSize(
                 R.dimen.status_bar_header_height_keyguard);
         setLayoutParams(lp);
     }

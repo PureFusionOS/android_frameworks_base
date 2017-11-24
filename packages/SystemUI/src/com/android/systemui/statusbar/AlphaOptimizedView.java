@@ -24,8 +24,7 @@ import android.view.View;
  * A View which does not have overlapping renderings commands and therefore does not need a
  * layer when alpha is changed.
  */
-public class AlphaOptimizedView extends View
-{
+public class AlphaOptimizedView extends View {
     public AlphaOptimizedView(Context context) {
         super(context);
     }
@@ -39,7 +38,7 @@ public class AlphaOptimizedView extends View
     }
 
     public AlphaOptimizedView(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                              int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

@@ -38,7 +38,7 @@ public class RowInflaterTask implements InflationTask, AsyncLayoutInflater.OnInf
      * Inflates a new notificationView. This should not be called twice on this object
      */
     public void inflate(Context context, ViewGroup parent, NotificationData.Entry entry,
-            RowInflationFinishedListener listener) {
+                        RowInflationFinishedListener listener) {
         mListener = listener;
         AsyncLayoutInflater inflater = new AsyncLayoutInflater(context);
         mEntry = entry;

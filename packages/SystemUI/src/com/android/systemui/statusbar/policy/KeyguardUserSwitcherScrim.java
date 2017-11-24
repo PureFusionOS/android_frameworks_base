@@ -64,15 +64,15 @@ public class KeyguardUserSwitcherScrim extends Drawable
     }
 
     @Override
+    public int getAlpha() {
+        return mAlpha;
+    }
+
+    @Override
     public void setAlpha(int alpha) {
         mAlpha = alpha;
         updatePaint();
         invalidateSelf();
-    }
-
-    @Override
-    public int getAlpha() {
-        return mAlpha;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class KeyguardUserSwitcherScrim extends Drawable
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft,
-            int oldTop, int oldRight, int oldBottom) {
+                               int oldTop, int oldRight, int oldBottom) {
         if (left != oldLeft || top != oldTop || right != oldRight || bottom != oldBottom) {
             mLayoutWidth = right - left;
             mTop = top;
@@ -102,10 +102,10 @@ public class KeyguardUserSwitcherScrim extends Drawable
         boolean isLtr = getLayoutDirection() == LayoutDirection.LTR;
         mRadialGradientPaint.setShader(
                 new RadialGradient(isLtr ? mLayoutWidth : 0, 0, radius,
-                        new int[] { Color.argb(
-                                        (int) (Color.alpha(mDarkColor) * mAlpha / 255f), 0, 0, 0),
-                                Color.TRANSPARENT },
-                        new float[] { Math.max(0f, mLayoutWidth * INNER_EXTENT / radius), 1f },
+                        new int[]{Color.argb(
+                                (int) (Color.alpha(mDarkColor) * mAlpha / 255f), 0, 0, 0),
+                                Color.TRANSPARENT},
+                        new float[]{Math.max(0f, mLayoutWidth * INNER_EXTENT / radius), 1f},
                         Shader.TileMode.CLAMP));
     }
 }

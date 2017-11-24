@@ -87,7 +87,7 @@ public class FreeformWorkspaceLayoutAlgorithm {
             float rowWidth = 0f;
             float maxRowWidth = 0f;
             int rowCount = 1;
-            for (int i = 0; i < numFreeformTasks;) {
+            for (int i = 0; i < numFreeformTasks; ) {
                 float width = normalizedTaskWidths[i] * rowScale;
                 if (rowWidth + width > normalizedWorkspaceWidth) {
                     // That is too long for this row, create new row
@@ -151,7 +151,7 @@ public class FreeformWorkspaceLayoutAlgorithm {
      * transform for the freeform workspace.
      */
     public TaskViewTransform getTransform(Task task, TaskViewTransform transformOut,
-            TaskStackLayoutAlgorithm stackLayout) {
+                                          TaskStackLayoutAlgorithm stackLayout) {
         if (mTaskRectMap.containsKey(task.key)) {
             final RectF ffRect = mTaskRectMap.get(task.key);
 

@@ -32,6 +32,24 @@ public final class NavigationBarTransitions extends BarTransitions {
     private final LightBarTransitionsController mLightTransitionsController;
 
     private boolean mLightsOut;
+    private final View.OnTouchListener mLightsOutListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent ev) {
+            if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+                // even though setting the systemUI visibility below will turn these views
+                // on, we need them to come up faster so that they can catch this motion
+                // event
+                applyLightsOut(false, false, false);
+
+                try {
+                    mBarService.setSystemUiVisibility(0, View.SYSTEM_UI_FLAG_LOW_PROFILE,
+                            "LightsOutListener");
+                } catch (android.os.RemoteException ex) {
+                }
+            }
+            return false;
+        }
+    };
 
     public NavigationBarTransitions(NavigationBarView view) {
         super(view, R.drawable.nav_background);
@@ -80,12 +98,11 @@ public final class NavigationBarTransitions extends BarTransitions {
         } else {
             final int duration = lightsOut ? LIGHTS_OUT_DURATION : LIGHTS_IN_DURATION;
             navButtons.animate()
-                .alpha(navButtonsAlpha)
-                .setDuration(duration)
-                .start();
+                    .alpha(navButtonsAlpha)
+                    .setDuration(duration)
+                    .start();
         }
     }
-
 
     public void reapplyDarkIntensity() {
         applyDarkIntensity(mLightTransitionsController.getCurrentDarkIntensity());
@@ -97,23 +114,4 @@ public final class NavigationBarTransitions extends BarTransitions {
             buttonDispatchers.valueAt(i).setDarkIntensity(darkIntensity);
         }
     }
-
-    private final View.OnTouchListener mLightsOutListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent ev) {
-            if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-                // even though setting the systemUI visibility below will turn these views
-                // on, we need them to come up faster so that they can catch this motion
-                // event
-                applyLightsOut(false, false, false);
-
-                try {
-                    mBarService.setSystemUiVisibility(0, View.SYSTEM_UI_FLAG_LOW_PROFILE,
-                            "LightsOutListener");
-                } catch (android.os.RemoteException ex) {
-                }
-            }
-            return false;
-        }
-    };
 }

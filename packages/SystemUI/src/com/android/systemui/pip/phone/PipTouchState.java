@@ -30,15 +30,13 @@ import java.io.PrintWriter;
 public class PipTouchState {
     private static final String TAG = "PipTouchHandler";
     private static final boolean DEBUG = true;
-
-    private ViewConfiguration mViewConfig;
-
-    private VelocityTracker mVelocityTracker;
     private final PointF mDownTouch = new PointF();
     private final PointF mDownDelta = new PointF();
     private final PointF mLastTouch = new PointF();
     private final PointF mLastDelta = new PointF();
     private final PointF mVelocity = new PointF();
+    private ViewConfiguration mViewConfig;
+    private VelocityTracker mVelocityTracker;
     private boolean mAllowTouches = true;
     private boolean mIsUserInteracting = false;
     private boolean mIsDragging = false;
@@ -182,7 +180,7 @@ public class PipTouchState {
 
     /**
      * @return the movement delta between the last handled touch event and the previous touch
-     *         position.
+     * position.
      */
     public PointF getLastTouchDelta() {
         return mLastDelta;
@@ -197,7 +195,7 @@ public class PipTouchState {
 
     /**
      * @return the movement delta between the last handled touch event and the down touch
-     *         position.
+     * position.
      */
     public PointF getDownTouchDelta() {
         return mDownDelta;

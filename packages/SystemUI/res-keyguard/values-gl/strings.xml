@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"Preme Menú para desbloquear."</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"Bloqueada pola rede"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"Non hai ningunha tarxeta SIM"</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"Non hai ningunha tarxeta SIM na tableta."</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"Non hai ningunha tarxeta SIM no teléfono."</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"Non hai ningunha tarxeta SIM na tableta."</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"Non hai ningunha tarxeta SIM no teléfono."</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"Insire unha tarxeta SIM."</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"Falta a tarxeta SIM ou non se pode ler. Insire unha tarxeta SIM."</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"Tarxeta SIM inutilizable"</string>
@@ -69,34 +68,34 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"Escribe un PIN que teña entre 4 e 8 números."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"O código PUK debe ter 8 números como mínimo."</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"Volve introducir o código PUK correcto. Se realizas intentos repetidos é posible que se desactive a tarxeta SIM permanentemente."</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"Os códigos PIN non coinciden"</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"Os códigos PIN non coinciden"</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"Tentaches debuxar o padrón moitas veces"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"Introduciches o PIN incorrectamente <xliff:g id="NUMBER_0">%1$d</xliff:g> veces. \n\nTéntao de novo en <xliff:g id="NUMBER_1">%2$d</xliff:g> segundos."</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"Introduciches o contrasinal incorrectamente <xliff:g id="NUMBER_0">%1$d</xliff:g> veces. \n\nTéntao de novo en <xliff:g id="NUMBER_1">%2$d</xliff:g> segundos."</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"Debuxaches incorrectamente o padrón de desbloqueo <xliff:g id="NUMBER_0">%1$d</xliff:g> veces. \n\nTéntao de novo en <xliff:g id="NUMBER_1">%2$d</xliff:g> segundos."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"Tentaches desbloquear a tableta <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, restablecerase a tableta e, por conseguinte, eliminaranse todos os seus datos."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, restablecerase o teléfono e, por conseguinte, eliminaranse todos os seus datos."</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"Tentaches desbloquear a tableta <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Restablecerase a tableta e, por conseguinte, eliminaranse todos os seus datos."</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Restablecerase o teléfono e, por conseguinte, eliminaranse todos os seus datos."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"Tentaches desbloquear a tableta <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, quitarase este usuario e, por conseguinte, todos os datos do usuario."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, quitarase este usuario e, por conseguinte, todos os datos do usuario."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"Tentaches desbloquear a tableta <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Quitarase este usuario e, por conseguinte, todos os datos do usuario."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Quitarase este usuario e, por conseguinte, todos os datos do usuario."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"Tentaches desbloquear a tableta <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, quitarase o perfil de traballo e, por conseguinte, todos os datos do perfil."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, quitarase o perfil de traballo e, por conseguinte, todos os datos do perfil."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"Tentaches desbloquear a tableta <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Quitarase o perfil de traballo e, por conseguinte, todos os datos do perfil."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Quitarase o perfil de traballo e, por conseguinte, todos os datos do perfil."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"Debuxaches o padrón de desbloqueo incorrectamente <xliff:g id="NUMBER_0">%1$d</xliff:g> veces. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, terás que desbloquear a tableta a través dunha conta de correo electrónico.\n\n Téntao de novo en <xliff:g id="NUMBER_2">%3$d</xliff:g> segundos."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"Debuxaches o padrón de desbloqueo incorrectamente <xliff:g id="NUMBER_0">%1$d</xliff:g> veces. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, terás que desbloquear o teléfono a través dunha conta de correo electrónico.\n\n Téntao de novo en <xliff:g id="NUMBER_2">%3$d</xliff:g> segundos."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"Tentaches desbloquear a tableta <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, restablecerase a tableta e, por conseguinte, eliminaranse todos os seus datos."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, restablecerase o teléfono e, por conseguinte, eliminaranse todos os seus datos."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"Tentaches desbloquear a tableta <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Restablecerase a tableta e, por conseguinte, eliminaranse todos os seus datos."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Restablecerase o teléfono e, por conseguinte, eliminaranse todos os seus datos."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"Tentaches desbloquear a tableta <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, quitarase este usuario e, por conseguinte, todos os datos do usuario."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, quitarase este usuario e, por conseguinte, todos os datos do usuario."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"Tentaches desbloquear a tableta <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Quitarase este usuario e, por conseguinte, todos os datos do usuario."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Quitarase este usuario e, por conseguinte, todos os datos do usuario."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"Tentaches desbloquear a tableta <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, quitarase o perfil de traballo e, por conseguinte, todos os datos do perfil."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER_0">%1$d</xliff:g> veces de forma incorrecta. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, quitarase o perfil de traballo e, por conseguinte, todos os datos do perfil."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"Tentaches desbloquear a tableta <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Quitarase o perfil de traballo e, por conseguinte, todos os datos do perfil."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"Tentaches desbloquear o teléfono <xliff:g id="NUMBER">%d</xliff:g> veces de forma incorrecta. Quitarase o perfil de traballo e, por conseguinte, todos os datos do perfil."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"Debuxaches o padrón de desbloqueo incorrectamente <xliff:g id="NUMBER_0">%1$d</xliff:g> veces. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, terás que desbloquear a tableta a través dunha conta de correo electrónico.\n\n Téntao de novo en <xliff:g id="NUMBER_2">%3$d</xliff:g> segundos."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"Debuxaches o padrón de desbloqueo incorrectamente <xliff:g id="NUMBER_0">%1$d</xliff:g> veces. Se realizas <xliff:g id="NUMBER_1">%2$d</xliff:g> intentos incorrectos máis, terás que desbloquear o teléfono a través dunha conta de correo electrónico.\n\n Téntao de novo en <xliff:g id="NUMBER_2">%3$d</xliff:g> segundos."</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"O código PIN da SIM non é correcto. Agora debes contactar co operador para desbloquear o dispositivo."</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="other">O código PIN da SIM é incorrecto. Quédanche <xliff:g id="NUMBER_1">%d</xliff:g> intentos.</item>
-      <item quantity="one">O código PIN da SIM é incorrecto. Quédache <xliff:g id="NUMBER_0">%d</xliff:g> intento antes de que teñas que contactar co operador para desbloquear o dispositivo.</item>
+        <item quantity="other">O código PIN da SIM é incorrecto. Quédanche <xliff:g id="NUMBER_1">%d</xliff:g> intentos.</item>
+        <item quantity="one">O código PIN da SIM é incorrecto. Quédache <xliff:g id="NUMBER_0">%d</xliff:g> intento antes de que teñas que contactar co operador para desbloquear o dispositivo.</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"A SIM está inutilizable. Contacta co operador."</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="other">O código PUK da SIM é incorrecto. Quédanche <xliff:g id="NUMBER_1">%d</xliff:g> intentos antes de que a SIM quede inutilizable para sempre.</item>
-      <item quantity="one">O código PUK da SIM non é correcto. Quédache <xliff:g id="NUMBER_0">%d</xliff:g> intento antes de que a SIM quede inutilizable para sempre.</item>
+        <item quantity="other">O código PUK da SIM é incorrecto. Quédanche <xliff:g id="NUMBER_1">%d</xliff:g> intentos antes de que a SIM quede inutilizable para sempre.</item>
+        <item quantity="one">O código PUK da SIM non é correcto. Quédache <xliff:g id="NUMBER_0">%d</xliff:g> intento antes de que a SIM quede inutilizable para sempre.</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"Produciuse un erro no funcionamento do PIN da SIM"</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"Produciuse un erro ao tentar desbloquear a tarxeta SIM co código PUK."</string>
@@ -116,16 +115,16 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"O administrador bloqueou o dispositivo"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"O dispositivo bloqueouse manualmente"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="other">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_1">%d</xliff:g> horas. Confirma o padrón.</item>
-      <item quantity="one">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_0">%d</xliff:g> hora. Confirma o padrón.</item>
+        <item quantity="other">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_1">%d</xliff:g> horas. Confirma o padrón.</item>
+        <item quantity="one">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_0">%d</xliff:g> hora. Confirma o padrón.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="other">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_1">%d</xliff:g> horas. Confirma o PIN.</item>
-      <item quantity="one">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_0">%d</xliff:g> hora. Confirma o PIN.</item>
+        <item quantity="other">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_1">%d</xliff:g> horas. Confirma o PIN.</item>
+        <item quantity="one">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_0">%d</xliff:g> hora. Confirma o PIN.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="other">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_1">%d</xliff:g> horas. Confirma o contrasinal.</item>
-      <item quantity="one">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_0">%d</xliff:g> hora. Confirma o contrasinal.</item>
+        <item quantity="other">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_1">%d</xliff:g> horas. Confirma o contrasinal.</item>
+        <item quantity="one">O dispositivo non se desbloqueou durante <xliff:g id="NUMBER_0">%d</xliff:g> hora. Confirma o contrasinal.</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"Non se recoñece"</string>
 </resources>

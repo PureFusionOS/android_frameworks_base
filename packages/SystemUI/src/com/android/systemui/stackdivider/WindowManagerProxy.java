@@ -54,13 +54,7 @@ public class WindowManagerProxy {
 
     @GuardedBy("mDockedRect")
     private final Rect mTouchableRegion = new Rect();
-
-    private boolean mDimLayerVisible;
-    private int mDimLayerTargetStack;
-    private float mDimLayerAlpha;
-
     private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
-
     private final Runnable mResizeRunnable = new Runnable() {
         @Override
         public void run() {
@@ -83,7 +77,6 @@ public class WindowManagerProxy {
             }
         }
     };
-
     private final Runnable mDismissRunnable = new Runnable() {
         @Override
         public void run() {
@@ -95,7 +88,6 @@ public class WindowManagerProxy {
             }
         }
     };
-
     private final Runnable mMaximizeRunnable = new Runnable() {
         @Override
         public void run() {
@@ -107,19 +99,6 @@ public class WindowManagerProxy {
             }
         }
     };
-
-    private final Runnable mDimLayerRunnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                WindowManagerGlobal.getWindowManagerService().setResizeDimLayer(mDimLayerVisible,
-                        mDimLayerTargetStack, mDimLayerAlpha);
-            } catch (RemoteException e) {
-                Log.w(TAG, "Failed to resize stack: " + e);
-            }
-        }
-    };
-
     private final Runnable mSwapRunnable = new Runnable() {
         @Override
         public void run() {
@@ -130,7 +109,6 @@ public class WindowManagerProxy {
             }
         }
     };
-
     private final Runnable mSetTouchableRegionRunnable = new Runnable() {
         @Override
         public void run() {
@@ -145,6 +123,20 @@ public class WindowManagerProxy {
             }
         }
     };
+    private boolean mDimLayerVisible;
+    private int mDimLayerTargetStack;
+    private float mDimLayerAlpha;
+    private final Runnable mDimLayerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                WindowManagerGlobal.getWindowManagerService().setResizeDimLayer(mDimLayerVisible,
+                        mDimLayerTargetStack, mDimLayerAlpha);
+            } catch (RemoteException e) {
+                Log.w(TAG, "Failed to resize stack: " + e);
+            }
+        }
+    };
 
     private WindowManagerProxy() {
     }
@@ -154,7 +146,7 @@ public class WindowManagerProxy {
     }
 
     public void resizeDockedStack(Rect docked, Rect tempDockedTaskRect, Rect tempDockedInsetRect,
-            Rect tempOtherTaskRect, Rect tempOtherInsetRect) {
+                                  Rect tempOtherTaskRect, Rect tempOtherInsetRect) {
         synchronized (mDockedRect) {
             mDockedRect.set(docked);
             if (tempDockedTaskRect != null) {

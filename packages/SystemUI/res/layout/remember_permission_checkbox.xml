@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,19 +15,18 @@
 
 <!-- Check box that is displayed in the activity resolver UI for the user
      to make their selection the preferred activity. -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="16dp"
     android:paddingEnd="16dp"
+    android:paddingStart="16dp"
     android:paddingTop="16dp">
 
     <CheckBox
         android:id="@+id/remember"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true"
         android:clickable="true"
+        android:focusable="true"
         android:text="@string/media_projection_remember_text" />
 </FrameLayout>

@@ -14,19 +14,19 @@
      limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
     android:height="2dp"
     android:viewportHeight="1"
-    android:viewportWidth="360"
-    android:width="360dp" >
+    android:viewportWidth="360">
 
     <group
         android:name="linear_indeterminate"
         android:translateX="180.0"
-        android:translateY="0.0" >
+        android:translateY="0.0">
         <group
             android:name="path1"
             android:scaleX="0.1"
-            android:translateX="-522.59" >
+            android:translateX="-522.59">
             <path
                 android:name="rect1"
                 android:fillColor="?android:attr/colorControlActivated"
@@ -35,7 +35,7 @@
         <group
             android:name="path2"
             android:scaleX="0.1"
-            android:translateX="-197.6" >
+            android:translateX="-197.6">
             <path
                 android:name="rect2"
                 android:fillColor="?android:attr/colorControlActivated"

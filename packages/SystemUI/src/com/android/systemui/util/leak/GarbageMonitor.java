@@ -38,8 +38,8 @@ public class GarbageMonitor {
     private final LeakReporter mLeakReporter;
 
     public GarbageMonitor(Looper bgLooper, LeakDetector leakDetector,
-            LeakReporter leakReporter) {
-        mHandler = bgLooper != null ? new Handler(bgLooper): null;
+                          LeakReporter leakReporter) {
+        mHandler = bgLooper != null ? new Handler(bgLooper) : null;
         mTrackedGarbage = leakDetector.getTrackedGarbage();
         mLeakReporter = leakReporter;
     }

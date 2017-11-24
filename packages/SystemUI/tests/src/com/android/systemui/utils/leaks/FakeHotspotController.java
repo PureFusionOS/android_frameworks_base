@@ -31,13 +31,13 @@ public class FakeHotspotController extends BaseLeakChecker<Callback> implements 
     }
 
     @Override
-    public boolean isHotspotTransient() {
-        return false;
+    public void setHotspotEnabled(boolean enabled) {
+
     }
 
     @Override
-    public void setHotspotEnabled(boolean enabled) {
-
+    public boolean isHotspotTransient() {
+        return false;
     }
 
     @Override

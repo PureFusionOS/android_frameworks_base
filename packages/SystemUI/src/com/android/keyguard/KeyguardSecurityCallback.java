@@ -19,8 +19,9 @@ public interface KeyguardSecurityCallback {
 
     /**
      * Dismiss the given security screen.
+     *
      * @param securityVerified true if the user correctly entered credentials for the given screen.
-     * @param targetUserId a user that needs to be the foreground user at the dismissal completion.
+     * @param targetUserId     a user that needs to be the foreground user at the dismissal completion.
      */
     void dismiss(boolean securityVerified, int targetUserId);
 
@@ -31,14 +32,16 @@ public interface KeyguardSecurityCallback {
 
     /**
      * Checks if keyguard is in "verify credentials" mode.
+     *
      * @return true if user has been asked to verify security.
      */
     boolean isVerifyUnlockOnly();
 
     /**
      * Call to report an unlock attempt.
-     * @param userId id of the user whose unlock attempt is recorded.
-     * @param success set to 'true' if user correctly entered security credentials.
+     *
+     * @param userId    id of the user whose unlock attempt is recorded.
+     * @param success   set to 'true' if user correctly entered security credentials.
      * @param timeoutMs timeout in milliseconds to wait before reattempting an unlock.
      *                  Only nonzero if 'success' is false
      */

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 **
 ** Copyright 2013, The Android Open Source Project
 **
@@ -25,34 +24,37 @@
 
     <com.android.keyguard.KeyguardStatusView
         android:id="@+id/clock"
-        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
-            android:orientation="vertical"
-            android:focusable="true">
+            android:focusable="true"
+            android:orientation="vertical">
+
             <TextClock
                 android:id="@+id/clock_view"
+                style="@style/widget_big_thin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|top"
-                android:textColor="@color/clock_white"
-                android:singleLine="true"
-                style="@style/widget_big_thin"
+                android:layout_marginBottom="@dimen/bottom_text_spacing_digital"
+                android:baselineAligned="true"
                 android:format12Hour="@string/keyguard_widget_12_hours_format"
                 android:format24Hour="@string/keyguard_widget_24_hours_format"
-                android:baselineAligned="true"
-                android:layout_marginBottom="@dimen/bottom_text_spacing_digital" />
+                android:singleLine="true"
+                android:textColor="@color/clock_white" />
 
             <include layout="@layout/keyguard_status_area" />
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dip"
                 android:src="@drawable/kg_security_lock_normal" />
         </LinearLayout>
     </com.android.keyguard.KeyguardStatusView>

@@ -53,7 +53,7 @@ public class PowerUI extends SystemUI {
 
     private final Handler mHandler = new Handler();
     private final Receiver mReceiver = new Receiver();
-
+    private final int[] mLowBatteryReminderLevels = new int[2];
     private PowerManager mPowerManager;
     private HardwarePropertiesManager mHardwarePropertiesManager;
     private WarningsUI mWarnings;
@@ -61,10 +61,7 @@ public class PowerUI extends SystemUI {
     private int mBatteryStatus = BatteryManager.BATTERY_STATUS_UNKNOWN;
     private int mPlugType = 0;
     private int mInvalidCharger = 0;
-
     private int mLowBatteryAlertCloseLevel;
-    private final int[] mLowBatteryReminderLevels = new int[2];
-
     private long mScreenOffTime = -1;
 
     private float mThresholdTemp;
@@ -122,15 +119,15 @@ public class PowerUI extends SystemUI {
         mLowBatteryReminderLevels[1] = critLevel;
         mLowBatteryAlertCloseLevel = mLowBatteryReminderLevels[0]
                 + mContext.getResources().getInteger(
-                        com.android.internal.R.integer.config_lowBatteryCloseWarningBump);
+                com.android.internal.R.integer.config_lowBatteryCloseWarningBump);
     }
 
     /**
      * Buckets the battery level.
-     *
+     * <p>
      * The code in this function is a little weird because I couldn't comprehend
      * the bucket going up when the battery level was going down. --joeo
-     *
+     * <p>
      * 1 means that the battery is "ok"
      * 0 means that the battery is between "ok" and what we should warn about.
      * less than 0 means that the battery is low
@@ -143,95 +140,13 @@ public class PowerUI extends SystemUI {
             return 0;
         }
         final int N = mLowBatteryReminderLevels.length;
-        for (int i=N-1; i>=0; i--) {
+        for (int i = N - 1; i >= 0; i--) {
             if (level <= mLowBatteryReminderLevels[i]) {
-                return -1-i;
+                return -1 - i;
             }
         }
         throw new RuntimeException("not possible!");
     }
-
-    private final class Receiver extends BroadcastReceiver {
-
-        public void init() {
-            // Register for Intent broadcasts for...
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            filter.addAction(Intent.ACTION_SCREEN_ON);
-            filter.addAction(Intent.ACTION_USER_SWITCHED);
-            mContext.registerReceiver(this, filter, null, mHandler);
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
-                final int oldBatteryLevel = mBatteryLevel;
-                mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100);
-                final int oldBatteryStatus = mBatteryStatus;
-                mBatteryStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
-                        BatteryManager.BATTERY_STATUS_UNKNOWN);
-                final int oldPlugType = mPlugType;
-                mPlugType = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 1);
-                final int oldInvalidCharger = mInvalidCharger;
-                mInvalidCharger = intent.getIntExtra(BatteryManager.EXTRA_INVALID_CHARGER, 0);
-
-                final boolean plugged = mPlugType != 0;
-                final boolean oldPlugged = oldPlugType != 0;
-
-                int oldBucket = findBatteryLevelBucket(oldBatteryLevel);
-                int bucket = findBatteryLevelBucket(mBatteryLevel);
-
-                if (DEBUG) {
-                    Slog.d(TAG, "buckets   ....." + mLowBatteryAlertCloseLevel
-                            + " .. " + mLowBatteryReminderLevels[0]
-                            + " .. " + mLowBatteryReminderLevels[1]);
-                    Slog.d(TAG, "level          " + oldBatteryLevel + " --> " + mBatteryLevel);
-                    Slog.d(TAG, "status         " + oldBatteryStatus + " --> " + mBatteryStatus);
-                    Slog.d(TAG, "plugType       " + oldPlugType + " --> " + mPlugType);
-                    Slog.d(TAG, "invalidCharger " + oldInvalidCharger + " --> " + mInvalidCharger);
-                    Slog.d(TAG, "bucket         " + oldBucket + " --> " + bucket);
-                    Slog.d(TAG, "plugged        " + oldPlugged + " --> " + plugged);
-                }
-
-                mWarnings.update(mBatteryLevel, bucket, mScreenOffTime);
-                if (oldInvalidCharger == 0 && mInvalidCharger != 0) {
-                    Slog.d(TAG, "showing invalid charger warning");
-                    mWarnings.showInvalidChargerWarning();
-                    return;
-                } else if (oldInvalidCharger != 0 && mInvalidCharger == 0) {
-                    mWarnings.dismissInvalidChargerWarning();
-                } else if (mWarnings.isInvalidChargerWarningShowing()) {
-                    // if invalid charger is showing, don't show low battery
-                    return;
-                }
-
-                boolean isPowerSaver = mPowerManager.isPowerSaveMode();
-                if (!plugged
-                        && !isPowerSaver
-                        && (bucket < oldBucket || oldPlugged)
-                        && mBatteryStatus != BatteryManager.BATTERY_STATUS_UNKNOWN
-                        && bucket < 0) {
-                    // only play SFX when the dialog comes up or the bucket changes
-                    final boolean playSound = bucket != oldBucket || oldPlugged;
-                    mWarnings.showLowBatteryWarning(playSound);
-                } else if (isPowerSaver || plugged || (bucket > oldBucket && bucket > 0)) {
-                    mWarnings.dismissLowBatteryWarning();
-                } else {
-                    mWarnings.updateLowBatteryWarning();
-                }
-            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                mScreenOffTime = SystemClock.elapsedRealtime();
-            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                mScreenOffTime = -1;
-            } else if (Intent.ACTION_USER_SWITCHED.equals(action)) {
-                mWarnings.userSwitched();
-            } else {
-                Slog.w(TAG, "unknown intent: " + intent);
-            }
-        }
-    };
 
     private void initTemperatureWarning() {
         ContentResolver resolver = mContext.getContentResolver();
@@ -261,6 +176,8 @@ public class PowerUI extends SystemUI {
         // We have passed all of the checks, start checking the temp
         updateTemperatureWarning();
     }
+
+    ;
 
     private void showThermalShutdownDialog() {
         if (mPowerManager.getLastShutdownReason()
@@ -376,17 +293,110 @@ public class PowerUI extends SystemUI {
 
     public interface WarningsUI {
         void update(int batteryLevel, int bucket, long screenOffTime);
+
         void dismissLowBatteryWarning();
+
         void showLowBatteryWarning(boolean playSound);
+
         void dismissInvalidChargerWarning();
+
         void showInvalidChargerWarning();
+
         void updateLowBatteryWarning();
+
         boolean isInvalidChargerWarningShowing();
+
         void dismissHighTemperatureWarning();
+
         void showHighTemperatureWarning();
+
         void showThermalShutdownWarning();
+
         void dump(PrintWriter pw);
+
         void userSwitched();
+    }
+
+    private final class Receiver extends BroadcastReceiver {
+
+        public void init() {
+            // Register for Intent broadcasts for...
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_USER_SWITCHED);
+            mContext.registerReceiver(this, filter, null, mHandler);
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
+                final int oldBatteryLevel = mBatteryLevel;
+                mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100);
+                final int oldBatteryStatus = mBatteryStatus;
+                mBatteryStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
+                        BatteryManager.BATTERY_STATUS_UNKNOWN);
+                final int oldPlugType = mPlugType;
+                mPlugType = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 1);
+                final int oldInvalidCharger = mInvalidCharger;
+                mInvalidCharger = intent.getIntExtra(BatteryManager.EXTRA_INVALID_CHARGER, 0);
+
+                final boolean plugged = mPlugType != 0;
+                final boolean oldPlugged = oldPlugType != 0;
+
+                int oldBucket = findBatteryLevelBucket(oldBatteryLevel);
+                int bucket = findBatteryLevelBucket(mBatteryLevel);
+
+                if (DEBUG) {
+                    Slog.d(TAG, "buckets   ....." + mLowBatteryAlertCloseLevel
+                            + " .. " + mLowBatteryReminderLevels[0]
+                            + " .. " + mLowBatteryReminderLevels[1]);
+                    Slog.d(TAG, "level          " + oldBatteryLevel + " --> " + mBatteryLevel);
+                    Slog.d(TAG, "status         " + oldBatteryStatus + " --> " + mBatteryStatus);
+                    Slog.d(TAG, "plugType       " + oldPlugType + " --> " + mPlugType);
+                    Slog.d(TAG, "invalidCharger " + oldInvalidCharger + " --> " + mInvalidCharger);
+                    Slog.d(TAG, "bucket         " + oldBucket + " --> " + bucket);
+                    Slog.d(TAG, "plugged        " + oldPlugged + " --> " + plugged);
+                }
+
+                mWarnings.update(mBatteryLevel, bucket, mScreenOffTime);
+                if (oldInvalidCharger == 0 && mInvalidCharger != 0) {
+                    Slog.d(TAG, "showing invalid charger warning");
+                    mWarnings.showInvalidChargerWarning();
+                    return;
+                } else if (oldInvalidCharger != 0 && mInvalidCharger == 0) {
+                    mWarnings.dismissInvalidChargerWarning();
+                } else if (mWarnings.isInvalidChargerWarningShowing()) {
+                    // if invalid charger is showing, don't show low battery
+                    return;
+                }
+
+                boolean isPowerSaver = mPowerManager.isPowerSaveMode();
+                if (!plugged
+                        && !isPowerSaver
+                        && (bucket < oldBucket || oldPlugged)
+                        && mBatteryStatus != BatteryManager.BATTERY_STATUS_UNKNOWN
+                        && bucket < 0) {
+                    // only play SFX when the dialog comes up or the bucket changes
+                    final boolean playSound = bucket != oldBucket || oldPlugged;
+                    mWarnings.showLowBatteryWarning(playSound);
+                } else if (isPowerSaver || plugged || (bucket > oldBucket && bucket > 0)) {
+                    mWarnings.dismissLowBatteryWarning();
+                } else {
+                    mWarnings.updateLowBatteryWarning();
+                }
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                mScreenOffTime = SystemClock.elapsedRealtime();
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                mScreenOffTime = -1;
+            } else if (Intent.ACTION_USER_SWITCHED.equals(action)) {
+                mWarnings.userSwitched();
+            } else {
+                Slog.w(TAG, "unknown intent: " + intent);
+            }
+        }
     }
 }
 

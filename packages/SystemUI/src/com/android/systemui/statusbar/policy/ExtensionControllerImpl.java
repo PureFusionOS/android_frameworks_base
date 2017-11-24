@@ -38,6 +38,7 @@ public class ExtensionControllerImpl implements ExtensionController {
 
     private interface Producer<T> {
         T get();
+
         void destroy();
     }
 
@@ -58,13 +59,13 @@ public class ExtensionControllerImpl implements ExtensionController {
 
         @Override
         public <P extends T> ExtensionController.ExtensionBuilder<T> withPlugin(Class<P> cls,
-                String action) {
+                                                                                String action) {
             return withPlugin(cls, action, null);
         }
 
         @Override
         public <P> ExtensionController.ExtensionBuilder<T> withPlugin(Class<P> cls,
-                String action, PluginConverter<T, P> converter) {
+                                                                      String action, PluginConverter<T, P> converter) {
             mExtension.addPlugin(action, cls, converter);
             return this;
         }

@@ -26,11 +26,6 @@ public class FakeManagedProfileController extends BaseLeakChecker<Callback> impl
     }
 
     @Override
-    public void setWorkModeEnabled(boolean enabled) {
-
-    }
-
-    @Override
     public boolean hasActiveProfile() {
         return false;
     }
@@ -38,5 +33,10 @@ public class FakeManagedProfileController extends BaseLeakChecker<Callback> impl
     @Override
     public boolean isWorkModeEnabled() {
         return false;
+    }
+
+    @Override
+    public void setWorkModeEnabled(boolean enabled) {
+
     }
 }

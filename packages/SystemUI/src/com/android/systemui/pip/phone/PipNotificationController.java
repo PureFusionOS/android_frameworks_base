@@ -82,7 +82,7 @@ public class PipNotificationController {
     };
 
     public PipNotificationController(Context context, IActivityManager activityManager,
-            PipMotionHelper motionHelper) {
+                                     PipMotionHelper motionHelper) {
         mContext = context;
         mActivityManager = activityManager;
         mAppOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
@@ -170,7 +170,7 @@ public class PipNotificationController {
             final Icon appIcon = appInfo.icon != 0
                     ? Icon.createWithResource(packageName, appInfo.icon)
                     : Icon.createWithResource(Resources.getSystem(),
-                            com.android.internal.R.drawable.sym_def_app_icon);
+                    com.android.internal.R.drawable.sym_def_app_icon);
 
             builder.setContentTitle(mContext.getString(R.string.pip_notification_title, appName))
                     .setContentText(message)

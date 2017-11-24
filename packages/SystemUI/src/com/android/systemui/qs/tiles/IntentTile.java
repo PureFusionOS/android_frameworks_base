@@ -42,25 +42,23 @@ import java.util.Objects;
 
 public class IntentTile extends QSTileImpl<State> {
     public static final String PREFIX = "intent(";
-
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            refreshState(intent);
+        }
+    };
     private PendingIntent mOnClick;
     private String mOnClickUri;
     private PendingIntent mOnLongClick;
     private String mOnLongClickUri;
     private int mCurrentUserId;
     private String mIntentPackage;
-
     private Intent mLastIntent;
 
     private IntentTile(QSHost host, String action) {
         super(host);
         mContext.registerReceiver(mReceiver, new IntentFilter(action));
-    }
-
-    @Override
-    protected void handleDestroy() {
-        super.handleDestroy();
-        mContext.unregisterReceiver(mReceiver);
     }
 
     public static QSTile create(QSHost host, String spec) {
@@ -72,6 +70,12 @@ public class IntentTile extends QSTileImpl<State> {
             throw new IllegalArgumentException("Empty intent tile spec action");
         }
         return new IntentTile(host, action);
+    }
+
+    @Override
+    protected void handleDestroy() {
+        super.handleDestroy();
+        mContext.unregisterReceiver(mReceiver);
     }
 
     @Override
@@ -171,13 +175,6 @@ public class IntentTile extends QSTileImpl<State> {
     public int getMetricsCategory() {
         return MetricsEvent.QS_INTENT;
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            refreshState(intent);
-        }
-    };
 
     private static class BytesIcon extends Icon {
         private final byte[] mBytes;

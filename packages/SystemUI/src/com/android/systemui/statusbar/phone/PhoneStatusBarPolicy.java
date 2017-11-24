@@ -95,12 +95,10 @@ import java.util.List;
 public class PhoneStatusBarPolicy implements Callback, Callbacks,
         RotationLockControllerCallback, Listener, LocationChangeCallback,
         ZenModeController.Callback, DeviceProvisionedListener, KeyguardMonitor.Callback {
-    private static final String TAG = "PhoneStatusBarPolicy";
-    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
-
     public static final int LOCATION_STATUS_ICON_ID = R.drawable.stat_sys_location;
     public static final int NUM_TASKS_FOR_INSTANT_APP_INFO = 5;
-
+    private static final String TAG = "PhoneStatusBarPolicy";
+    private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
     private final String mSlotCast;
     private final String mSlotHotspot;
     private final String mSlotBluetooth;
@@ -131,20 +129,87 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
     private final LocationController mLocationController;
     private final ArraySet<Pair<String, Integer>> mCurrentNotifs = new ArraySet<>();
     private final UiOffloadThread mUiOffloadThread = Dependency.get(UiOffloadThread.class);
-
+    private final HotspotController.Callback mHotspotCallback = new HotspotController.Callback() {
+        @Override
+        public void onHotspotChanged(boolean enabled) {
+            mIconController.setIconVisibility(mSlotHotspot, enabled);
+        }
+    };
     // Assume it's all good unless we hear otherwise.  We don't always seem
     // to get broadcasts that it *is* there.
     IccCardConstants.State mSimState = IccCardConstants.State.READY;
-
     private boolean mZenVisible;
     private boolean mVolumeVisible;
     private boolean mCurrentUserSetup;
+    private final NextAlarmController.NextAlarmChangeCallback mNextAlarmCallback =
+            new NextAlarmController.NextAlarmChangeCallback() {
+                @Override
+                public void onNextAlarmChanged(AlarmManager.AlarmClockInfo nextAlarm) {
+                    updateAlarm();
+                }
+            };
     private boolean mDockedStackExists;
-
+    private final TaskStackListener mTaskListener = new TaskStackListener() {
+        @Override
+        public void onTaskStackChanged() {
+            // Listen for changes to stacks and then check which instant apps are foreground.
+            updateForegroundInstantApps();
+        }
+    };
     private boolean mManagedProfileIconVisible = false;
     private boolean mManagedProfileInQuietMode = false;
+    private final SynchronousUserSwitchObserver mUserSwitchListener =
+            new SynchronousUserSwitchObserver() {
+                @Override
+                public void onUserSwitching(int newUserId) throws RemoteException {
+                    mHandler.post(() -> mUserInfoController.reloadUserInfo());
+                }
 
+                @Override
+                public void onUserSwitchComplete(int newUserId) throws RemoteException {
+                    mHandler.post(() -> {
+                        updateAlarm();
+                        updateQuietState();
+                        updateManagedProfile();
+                        updateForegroundInstantApps();
+                    });
+                }
+            };
     private BluetoothController mBluetooth;
+    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION) ||
+                    action.equals(AudioManager.INTERNAL_RINGER_MODE_CHANGED_ACTION)) {
+                updateVolumeZen();
+            } else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
+                updateSimState(intent);
+            } else if (action.equals(TelecomManager.ACTION_CURRENT_TTY_MODE_CHANGED)) {
+                updateTTY(intent);
+            } else if (action.equals(Intent.ACTION_MANAGED_PROFILE_AVAILABLE) ||
+                    action.equals(Intent.ACTION_MANAGED_PROFILE_UNAVAILABLE) ||
+                    action.equals(Intent.ACTION_MANAGED_PROFILE_REMOVED)) {
+                updateQuietState();
+                updateManagedProfile();
+            } else if (action.equals(AudioManager.ACTION_HEADSET_PLUG)) {
+                updateHeadsetPlug(intent);
+            }
+        }
+    };
+    private Runnable mRemoveCastIconRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (DEBUG) Log.v(TAG, "updateCast: hiding icon NOW");
+            mIconController.setIconVisibility(mSlotCast, false);
+        }
+    };
+    private final CastController.Callback mCastCallback = new CastController.Callback() {
+        @Override
+        public void onCastDevicesChanged() {
+            updateCast();
+        }
+    };
 
     public PhoneStatusBarPolicy(Context context, StatusBarIconController iconController) {
         mContext = context;
@@ -533,7 +598,7 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
     }
 
     private void checkStack(int stackId, ArraySet<Pair<String, Integer>> notifs,
-            NotificationManager noMan, IPackageManager pm) {
+                            NotificationManager noMan, IPackageManager pm) {
         try {
             StackInfo info = ActivityManager.getService().getStackInfo(stackId);
             if (info == null || info.topActivity == null) return;
@@ -553,7 +618,7 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
     }
 
     private void postEphemeralNotif(String pkg, int userId, ApplicationInfo appInfo,
-            NotificationManager noMan, int taskId) {
+                                    NotificationManager noMan, int taskId) {
         final Bundle extras = new Bundle();
         extras.putString(Notification.EXTRA_SUBSTITUTE_APP_NAME,
                 mContext.getString(R.string.instant_apps));
@@ -632,46 +697,6 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
         return false;
     }
 
-    private final SynchronousUserSwitchObserver mUserSwitchListener =
-            new SynchronousUserSwitchObserver() {
-                @Override
-                public void onUserSwitching(int newUserId) throws RemoteException {
-                    mHandler.post(() -> mUserInfoController.reloadUserInfo());
-                }
-
-                @Override
-                public void onUserSwitchComplete(int newUserId) throws RemoteException {
-                    mHandler.post(() -> {
-                        updateAlarm();
-                        updateQuietState();
-                        updateManagedProfile();
-                        updateForegroundInstantApps();
-                    });
-                }
-            };
-
-    private final HotspotController.Callback mHotspotCallback = new HotspotController.Callback() {
-        @Override
-        public void onHotspotChanged(boolean enabled) {
-            mIconController.setIconVisibility(mSlotHotspot, enabled);
-        }
-    };
-
-    private final CastController.Callback mCastCallback = new CastController.Callback() {
-        @Override
-        public void onCastDevicesChanged() {
-            updateCast();
-        }
-    };
-
-    private final NextAlarmController.NextAlarmChangeCallback mNextAlarmCallback =
-            new NextAlarmController.NextAlarmChangeCallback() {
-                @Override
-                public void onNextAlarmChanged(AlarmManager.AlarmClockInfo nextAlarm) {
-                    updateAlarm();
-                }
-            };
-
     @Override
     public void appTransitionStarting(long startTime, long duration, boolean forced) {
         updateManagedProfile();
@@ -736,42 +761,4 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
     public void onDataSaverChanged(boolean isDataSaving) {
         mIconController.setIconVisibility(mSlotDataSaver, isDataSaving);
     }
-
-    private final TaskStackListener mTaskListener = new TaskStackListener() {
-        @Override
-        public void onTaskStackChanged() {
-            // Listen for changes to stacks and then check which instant apps are foreground.
-            updateForegroundInstantApps();
-        }
-    };
-
-    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION) ||
-                    action.equals(AudioManager.INTERNAL_RINGER_MODE_CHANGED_ACTION)) {
-                updateVolumeZen();
-            } else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
-                updateSimState(intent);
-            } else if (action.equals(TelecomManager.ACTION_CURRENT_TTY_MODE_CHANGED)) {
-                updateTTY(intent);
-            } else if (action.equals(Intent.ACTION_MANAGED_PROFILE_AVAILABLE) ||
-                    action.equals(Intent.ACTION_MANAGED_PROFILE_UNAVAILABLE) ||
-                    action.equals(Intent.ACTION_MANAGED_PROFILE_REMOVED)) {
-                updateQuietState();
-                updateManagedProfile();
-            } else if (action.equals(AudioManager.ACTION_HEADSET_PLUG)) {
-                updateHeadsetPlug(intent);
-            }
-        }
-    };
-
-    private Runnable mRemoveCastIconRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (DEBUG) Log.v(TAG, "updateCast: hiding icon NOW");
-            mIconController.setIconVisibility(mSlotCast, false);
-        }
-    };
 }

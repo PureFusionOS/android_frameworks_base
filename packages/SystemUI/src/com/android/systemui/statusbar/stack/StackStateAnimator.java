@@ -68,7 +68,9 @@ public class StackStateAnimator {
     private long mCurrentLength;
     private long mCurrentAdditionalDelay;
 
-    /** The current index for the last child which was not added in this event set. */
+    /**
+     * The current index for the last child which was not added in this event set.
+     */
     private int mCurrentLastNotAddedIndex;
     private ValueAnimator mTopOverScrollAnimator;
     private ValueAnimator mBottomOverScrollAnimator;
@@ -106,6 +108,13 @@ public class StackStateAnimator {
                 return null;
             }
         };
+    }
+
+    public static void removeFromOverlay(View changingView) {
+        ViewGroup parent = (ViewGroup) changingView.getParent();
+        if (parent != null) {
+            parent.removeView(changingView);
+        }
     }
 
     public boolean isRunning() {
@@ -146,26 +155,26 @@ public class StackStateAnimator {
     }
 
     private void initAnimationProperties(StackScrollState finalState, ExpandableView child,
-            ExpandableViewState viewState) {
+                                         ExpandableViewState viewState) {
         boolean wasAdded = mAnimationProperties.wasAdded(child);
         mAnimationProperties.duration = mCurrentLength;
         adaptDurationWhenGoingToFullShade(child, viewState, wasAdded);
         mAnimationProperties.delay = 0;
         if (wasAdded || mAnimationFilter.hasDelays
-                        && (viewState.yTranslation != child.getTranslationY()
-                        || viewState.zTranslation != child.getTranslationZ()
-                        || viewState.alpha != child.getAlpha()
-                        || viewState.height != child.getActualHeight()
-                        || viewState.clipTopAmount != child.getClipTopAmount()
-                        || viewState.dark != child.isDark()
-                        || viewState.shadowAlpha != child.getShadowAlpha())) {
+                && (viewState.yTranslation != child.getTranslationY()
+                || viewState.zTranslation != child.getTranslationZ()
+                || viewState.alpha != child.getAlpha()
+                || viewState.height != child.getActualHeight()
+                || viewState.clipTopAmount != child.getClipTopAmount()
+                || viewState.dark != child.isDark()
+                || viewState.shadowAlpha != child.getShadowAlpha())) {
             mAnimationProperties.delay = mCurrentAdditionalDelay
                     + calculateChildAnimationDelay(viewState, finalState);
         }
     }
 
     private void adaptDurationWhenGoingToFullShade(ExpandableView child,
-            ExpandableViewState viewState, boolean wasAdded) {
+                                                   ExpandableViewState viewState, boolean wasAdded) {
         if (wasAdded && mAnimationFilter.hasGoToFullShadeEvent) {
             child.setTranslationY(child.getTranslationY() + mGoToFullShadeAppearingTranslation);
             float longerDurationFactor = viewState.notGoneIndex - mCurrentLastNotAddedIndex;
@@ -181,7 +190,7 @@ public class StackStateAnimator {
      * @return true if no animation should be performed
      */
     private boolean applyWithoutAnimation(ExpandableView child, ExpandableViewState viewState,
-            StackScrollState finalState) {
+                                          StackScrollState finalState) {
         if (mShadeExpanded) {
             return false;
         }
@@ -218,7 +227,7 @@ public class StackStateAnimator {
     }
 
     private long calculateChildAnimationDelay(ExpandableViewState viewState,
-            StackScrollState finalState) {
+                                              StackScrollState finalState) {
         if (mAnimationFilter.hasGoToFullShadeEvent) {
             return calculateDelayGoToFullShade(viewState);
         }
@@ -292,7 +301,7 @@ public class StackStateAnimator {
 
     /**
      * @return an adapter which ensures that onAnimationFinished is called once no animation is
-     *         running anymore
+     * running anymore
      */
     private AnimatorListenerAdapter getGlobalAnimationFinishedListener() {
         if (!mAnimationListenerPool.empty()) {
@@ -337,7 +346,7 @@ public class StackStateAnimator {
      * Process the animationEvents for a new animation
      *
      * @param animationEvents the animation events for the animation to perform
-     * @param finalState the final state to animate to
+     * @param finalState      the final state to animate to
      */
     private void processAnimationEvents(
             ArrayList<NotificationStackScrollLayout.AnimationEvent> animationEvents,
@@ -392,19 +401,19 @@ public class StackStateAnimator {
                     translationDirection = ((viewState.yTranslation
                             - (ownPosition + actualHeight / 2.0f)) * 2 /
                             actualHeight);
-                    translationDirection = Math.max(Math.min(translationDirection, 1.0f),-1.0f);
+                    translationDirection = Math.max(Math.min(translationDirection, 1.0f), -1.0f);
 
                 }
                 changingView.performRemoveAnimation(ANIMATION_DURATION_APPEAR_DISAPPEAR,
                         translationDirection, new Runnable() {
-                    @Override
-                    public void run() {
-                        // remove the temporary overlay
-                        removeFromOverlay(changingView);
-                    }
-                });
+                            @Override
+                            public void run() {
+                                // remove the temporary overlay
+                                removeFromOverlay(changingView);
+                            }
+                        });
             } else if (event.animationType ==
-                NotificationStackScrollLayout.AnimationEvent.ANIMATION_TYPE_REMOVE_SWIPED_OUT) {
+                    NotificationStackScrollLayout.AnimationEvent.ANIMATION_TYPE_REMOVE_SWIPED_OUT) {
                 // A race condition can trigger the view to be added to the overlay even though
                 // it was fully swiped out. So let's remove it
                 mHostLayout.getOverlay().remove(changingView);
@@ -429,7 +438,7 @@ public class StackStateAnimator {
                 mHeadsUpAppearChildren.add(changingView);
                 mTmpState.applyToView(changingView);
             } else if (event.animationType == NotificationStackScrollLayout
-                            .AnimationEvent.ANIMATION_TYPE_HEADS_UP_DISAPPEAR ||
+                    .AnimationEvent.ANIMATION_TYPE_HEADS_UP_DISAPPEAR ||
                     event.animationType == NotificationStackScrollLayout
                             .AnimationEvent.ANIMATION_TYPE_HEADS_UP_DISAPPEAR_CLICK) {
                 mHeadsUpDisappearChildren.add(changingView);
@@ -444,8 +453,8 @@ public class StackStateAnimator {
                     mAnimationProperties.delay =
                             event.animationType == NotificationStackScrollLayout
                                     .AnimationEvent.ANIMATION_TYPE_HEADS_UP_DISAPPEAR_CLICK
-                            ? ANIMATION_DELAY_HEADS_UP
-                            : 0;
+                                    ? ANIMATION_DELAY_HEADS_UP
+                                    : 0;
                     mAnimationProperties.duration = ANIMATION_DURATION_HEADS_UP_DISAPPEAR;
                     mTmpState.animateTo(changingView, mAnimationProperties);
                     mChildrenToClearFromOverlay.add(changingView);
@@ -455,15 +464,8 @@ public class StackStateAnimator {
         }
     }
 
-    public static void removeFromOverlay(View changingView) {
-        ViewGroup parent = (ViewGroup) changingView.getParent();
-        if (parent != null) {
-            parent.removeView(changingView);
-        }
-    }
-
     public void animateOverScrollToAmount(float targetAmount, final boolean onTop,
-            final boolean isRubberbanded) {
+                                          final boolean isRubberbanded) {
         final float startOverScrollAmount = mHostLayout.getCurrentOverScrollAmount(onTop);
         if (targetAmount == startOverScrollAmount) {
             return;

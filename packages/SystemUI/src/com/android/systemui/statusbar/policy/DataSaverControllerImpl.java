@@ -28,6 +28,29 @@ public class DataSaverControllerImpl implements DataSaverController {
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final ArrayList<Listener> mListeners = new ArrayList<>();
     private final NetworkPolicyManager mPolicyManager;
+    private final INetworkPolicyListener mPolicyListener = new INetworkPolicyListener.Stub() {
+        @Override
+        public void onUidRulesChanged(int uid, int uidRules) throws RemoteException {
+        }
+
+        @Override
+        public void onMeteredIfacesChanged(String[] strings) throws RemoteException {
+        }
+
+        @Override
+        public void onRestrictBackgroundChanged(final boolean isDataSaving) throws RemoteException {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    handleRestrictBackgroundChanged(isDataSaving);
+                }
+            });
+        }
+
+        @Override
+        public void onUidPoliciesChanged(int uid, int uidPolicies) throws RemoteException {
+        }
+    };
 
     public DataSaverControllerImpl(Context context) {
         mPolicyManager = NetworkPolicyManager.from(context);
@@ -71,29 +94,5 @@ public class DataSaverControllerImpl implements DataSaverController {
         } catch (RemoteException e) {
         }
     }
-
-    private final INetworkPolicyListener mPolicyListener = new INetworkPolicyListener.Stub() {
-        @Override
-        public void onUidRulesChanged(int uid, int uidRules) throws RemoteException {
-        }
-
-        @Override
-        public void onMeteredIfacesChanged(String[] strings) throws RemoteException {
-        }
-
-        @Override
-        public void onRestrictBackgroundChanged(final boolean isDataSaving) throws RemoteException {
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    handleRestrictBackgroundChanged(isDataSaving);
-                }
-            });
-        }
-
-        @Override
-        public void onUidPoliciesChanged(int uid, int uidPolicies) throws RemoteException {
-        }
-    };
 
 }

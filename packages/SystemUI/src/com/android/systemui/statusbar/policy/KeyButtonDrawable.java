@@ -29,16 +29,6 @@ public class KeyButtonDrawable extends LayerDrawable {
 
     private final boolean mHasDarkDrawable;
 
-    public static KeyButtonDrawable create(Drawable lightDrawable,
-            @Nullable Drawable darkDrawable) {
-        if (darkDrawable != null) {
-            return new KeyButtonDrawable(
-                    new Drawable[] { lightDrawable.mutate(), darkDrawable.mutate() });
-        } else {
-            return new KeyButtonDrawable(new Drawable[] { lightDrawable.mutate() });
-        }
-    }
-
     private KeyButtonDrawable(Drawable[] drawables) {
         super(drawables);
         for (int i = 0; i < drawables.length; i++) {
@@ -47,6 +37,16 @@ public class KeyButtonDrawable extends LayerDrawable {
         mutate();
         mHasDarkDrawable = drawables.length > 1;
         setDarkIntensity(0f);
+    }
+
+    public static KeyButtonDrawable create(Drawable lightDrawable,
+                                           @Nullable Drawable darkDrawable) {
+        if (darkDrawable != null) {
+            return new KeyButtonDrawable(
+                    new Drawable[]{lightDrawable.mutate(), darkDrawable.mutate()});
+        } else {
+            return new KeyButtonDrawable(new Drawable[]{lightDrawable.mutate()});
+        }
     }
 
     public void setDarkIntensity(float intensity) {

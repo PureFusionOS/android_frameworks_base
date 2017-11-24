@@ -23,7 +23,9 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
-/** Creates a scaled-up version of an app icon for dragging. */
+/**
+ * Creates a scaled-up version of an app icon for dragging.
+ */
 class AppIconDragShadowBuilder extends View.DragShadowBuilder {
     private final static int ICON_SCALE = 2;
     final Drawable mDrawable;

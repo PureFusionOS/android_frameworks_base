@@ -76,10 +76,179 @@ class GlobalScreenrecord {
 
     private CaptureThread mCaptureThread;
 
+    /**
+     * @param context everything needs a context :(
+     */
+    public GlobalScreenrecord(Context context) {
+        mContext = context;
+        mHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                if (msg.what == MSG_TASK_ENDED) {
+                    // The screenrecord process stopped, act as if user
+                    // requested the record to stop.
+                    stopScreenrecord();
+                } else if (msg.what == MSG_TASK_ERROR) {
+                    mCaptureThread = null;
+                    // TODO: Notify the error
+                }
+            }
+        };
+
+        mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+    }
+
+    private static void copyFileUsingStream(File source, File dest) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(source);
+            os = new FileOutputStream(dest);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+            if (os != null) {
+                os.close();
+            }
+        }
+    }
+
+    public boolean isRecording() {
+        return (mCaptureThread != null);
+    }
+
+    /**
+     * Starts recording the screen.
+     */
+    void takeScreenrecord() {
+        if (mCaptureThread != null) {
+            Log.e(TAG, "Capture Thread is already running, ignoring screenrecord start request");
+            return;
+        }
+
+        mCaptureThread = new CaptureThread();
+        mCaptureThread.start();
+
+        updateNotification();
+    }
+
+    public void updateNotification() {
+        final Resources r = mContext.getResources();
+        // Display a notification
+        Notification.Builder builder = new Notification.Builder(mContext, NotificationChannels.SCREENRECORDS)
+                .setTicker(r.getString(R.string.screenrecord_notif_ticker))
+                .setContentTitle(r.getString(R.string.screenrecord_notif_title))
+                .setSmallIcon(R.drawable.ic_capture_video)
+                .setWhen(System.currentTimeMillis())
+                .setUsesChronometer(true)
+                .setOngoing(true);
+
+        Intent stopIntent = new Intent(mContext, TakeScreenrecordService.class)
+                .setAction(TakeScreenrecordService.ACTION_STOP);
+        PendingIntent stopPendIntent = PendingIntent.getService(mContext, 0, stopIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent pointerIntent = new Intent(mContext, TakeScreenrecordService.class)
+                .setAction(TakeScreenrecordService.ACTION_TOGGLE_POINTER);
+        PendingIntent pointerPendIntent = PendingIntent.getService(mContext, 0, pointerIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        boolean showTouches = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.SHOW_TOUCHES, 0, UserHandle.USER_CURRENT) != 0;
+        int togglePointerIconId = showTouches ?
+                R.drawable.ic_pointer_off :
+                R.drawable.ic_pointer_on;
+        int togglePointerStringId = showTouches ?
+                R.string.screenrecord_notif_pointer_off :
+                R.string.screenrecord_notif_pointer_on;
+        builder
+                .addAction(com.android.internal.R.drawable.ic_media_stop,
+                        r.getString(R.string.screenrecord_notif_stop), stopPendIntent)
+                .addAction(togglePointerIconId,
+                        r.getString(togglePointerStringId), pointerPendIntent);
+
+        Notification notif = builder.build();
+        mNotificationManager.notify(SCREENRECORD_NOTIFICATION_ID, notif);
+    }
+
+    /**
+     * Stops recording the screen.
+     */
+    void stopScreenrecord() {
+        if (mCaptureThread == null) {
+            Log.e(TAG, "No capture thread, cannot stop screen recording!");
+            return;
+        }
+
+        mNotificationManager.cancel(SCREENRECORD_NOTIFICATION_ID);
+
+        try {
+            mCaptureThread.interrupt();
+        } catch (Exception e) { /* ignore */ }
+
+        // Wait a bit and copy the output file to a safe place
+        while (mCaptureThread.isAlive()) {
+            // wait...
+        }
+
+        // Give a second to screenrecord to finish the file
+        mHandler.postDelayed(new Runnable() {
+            public void run() {
+                mCaptureThread = null;
+
+                final String fileName = "SCR_"
+                        + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
+                final File pictures = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES);
+                final File screenshots = new File(pictures, "Screenrecords");
+
+                if (!screenshots.exists()) {
+                    if (!screenshots.mkdir()) {
+                        Log.e(TAG, "Cannot create screenrecords directory");
+                        return;
+                    }
+                }
+
+                final File input = new File(TMP_PATH);
+                final File output = new File(screenshots, fileName);
+
+                Log.d(TAG, "Copying file to " + output.getAbsolutePath());
+
+                try {
+                    copyFileUsingStream(input, output);
+                } catch (IOException e) {
+                    Log.e(TAG, "Unable to copy output file", e);
+                    final Message msg = Message.obtain(mHandler, MSG_TASK_ERROR);
+                    mHandler.sendMessage(msg);
+                    return;
+                } finally {
+                    input.delete();
+                }
+
+                // Make it appear in gallery, run MediaScanner
+                // also make sure to tell media scammer that the tmp file got deleted
+                MediaScannerConnection.scanFile(mContext,
+                        new String[]{output.getAbsolutePath(), input.getAbsolutePath()}, null,
+                        new MediaScannerConnection.OnScanCompletedListener() {
+                            public void onScanCompleted(String path, Uri uri) {
+                                Log.i(TAG, "MediaScanner done scanning " + path);
+                            }
+                        });
+            }
+        }, 2000);
+    }
+
     private class CaptureThread extends Thread {
         public void run() {
             Runtime rt = Runtime.getRuntime();
-            String[] cmds = new String[] {"/system/bin/screenrecord", TMP_PATH};
+            String[] cmds = new String[]{"/system/bin/screenrecord", TMP_PATH};
             try {
                 Process proc = rt.exec(cmds);
                 BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -115,175 +284,6 @@ class GlobalScreenrecord {
 
                 // Log the error as well
                 Log.e(TAG, "Error while starting the screenrecord process", e);
-            }
-        }
-    }
-
-
-    /**
-     * @param context everything needs a context :(
-     */
-    public GlobalScreenrecord(Context context) {
-        mContext = context;
-        mHandler = new Handler() {
-            public void handleMessage(Message msg) {
-                if (msg.what == MSG_TASK_ENDED) {
-                    // The screenrecord process stopped, act as if user
-                    // requested the record to stop.
-                    stopScreenrecord();
-                } else if (msg.what == MSG_TASK_ERROR) {
-                    mCaptureThread = null;
-                    // TODO: Notify the error
-                }
-            }
-        };
-
-        mNotificationManager =
-            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-    }
-
-    public boolean isRecording() {
-        return (mCaptureThread != null);
-    }
-
-    /**
-     * Starts recording the screen.
-     */
-    void takeScreenrecord() {
-        if (mCaptureThread != null) {
-            Log.e(TAG, "Capture Thread is already running, ignoring screenrecord start request");
-            return;
-        }
-
-        mCaptureThread = new CaptureThread();
-        mCaptureThread.start();
-
-        updateNotification();
-    }
-
-    public void updateNotification(){
-        final Resources r = mContext.getResources();
-        // Display a notification
-        Notification.Builder builder = new Notification.Builder(mContext, NotificationChannels.SCREENRECORDS)
-            .setTicker(r.getString(R.string.screenrecord_notif_ticker))
-            .setContentTitle(r.getString(R.string.screenrecord_notif_title))
-            .setSmallIcon(R.drawable.ic_capture_video)
-            .setWhen(System.currentTimeMillis())
-            .setUsesChronometer(true)
-            .setOngoing(true);
-
-        Intent stopIntent = new Intent(mContext, TakeScreenrecordService.class)
-            .setAction(TakeScreenrecordService.ACTION_STOP);
-        PendingIntent stopPendIntent = PendingIntent.getService(mContext, 0, stopIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Intent pointerIntent = new Intent(mContext, TakeScreenrecordService.class)
-            .setAction(TakeScreenrecordService.ACTION_TOGGLE_POINTER);
-        PendingIntent pointerPendIntent = PendingIntent.getService(mContext, 0, pointerIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT);
-
-        boolean showTouches = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SHOW_TOUCHES, 0, UserHandle.USER_CURRENT) != 0;
-        int togglePointerIconId = showTouches ?
-                R.drawable.ic_pointer_off :
-                R.drawable.ic_pointer_on;
-        int togglePointerStringId = showTouches ?
-                R.string.screenrecord_notif_pointer_off :
-                R.string.screenrecord_notif_pointer_on;
-        builder
-            .addAction(com.android.internal.R.drawable.ic_media_stop,
-                r.getString(R.string.screenrecord_notif_stop), stopPendIntent)
-            .addAction(togglePointerIconId,
-                r.getString(togglePointerStringId), pointerPendIntent);
-
-        Notification notif = builder.build();
-        mNotificationManager.notify(SCREENRECORD_NOTIFICATION_ID, notif);
-    }
-
-    /**
-     * Stops recording the screen.
-     */
-    void stopScreenrecord() {
-        if (mCaptureThread == null) {
-            Log.e(TAG, "No capture thread, cannot stop screen recording!");
-            return;
-        }
-
-        mNotificationManager.cancel(SCREENRECORD_NOTIFICATION_ID);
-
-        try {
-            mCaptureThread.interrupt();
-        } catch (Exception e) { /* ignore */ }
-
-        // Wait a bit and copy the output file to a safe place
-        while (mCaptureThread.isAlive()) {
-            // wait...
-        }
-
-        // Give a second to screenrecord to finish the file
-        mHandler.postDelayed(new Runnable() { public void run() {
-            mCaptureThread = null;
-
-            final String fileName = "SCR_"
-                    + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".mp4";
-            final File pictures = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
-            final File screenshots = new File(pictures, "Screenrecords");
-
-            if (!screenshots.exists()) {
-                if (!screenshots.mkdir()) {
-                    Log.e(TAG, "Cannot create screenrecords directory");
-                    return;
-                }
-            }
-
-            final File input = new File(TMP_PATH);
-            final File output = new File(screenshots, fileName);
-
-            Log.d(TAG, "Copying file to " + output.getAbsolutePath());
-
-            try {
-                copyFileUsingStream(input, output);
-            } catch (IOException e) {
-                Log.e(TAG, "Unable to copy output file", e);
-                final Message msg = Message.obtain(mHandler, MSG_TASK_ERROR);
-                mHandler.sendMessage(msg);
-                return;
-            } finally {
-                input.delete();
-            }
-
-            // Make it appear in gallery, run MediaScanner
-            // also make sure to tell media scammer that the tmp file got deleted
-            MediaScannerConnection.scanFile(mContext,
-                new String[] { output.getAbsolutePath(), input.getAbsolutePath() }, null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-                public void onScanCompleted(String path, Uri uri) {
-                    Log.i(TAG, "MediaScanner done scanning " + path);
-                }
-            });
-        } }, 2000);
-    }
-
-
-    private static void copyFileUsingStream(File source, File dest) throws IOException {
-        InputStream is = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(source);
-            os = new FileOutputStream(dest);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
-        } finally {
-            if (is != null) {
-                is.close();
-            }
-            if (os != null) {
-                os.close();
             }
         }
     }

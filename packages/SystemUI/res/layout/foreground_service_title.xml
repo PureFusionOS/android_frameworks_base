@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
 ** Copyright 2017, The Android Open Source Project
 **
@@ -18,23 +17,27 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:gravity="center_vertical"
-    android:paddingTop="?android:attr/listPreferredItemPaddingStart"
+    android:orientation="vertical"
     android:paddingBottom="16dp"
+    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
     android:paddingStart="?android:attr/listPreferredItemPaddingStart"
-    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd">
-    <com.android.internal.widget.DialogTitle style="?android:attr/textAppearanceLarge"
-        android:singleLine="true"
-        android:ellipsize="end"
+    android:paddingTop="?android:attr/listPreferredItemPaddingStart">
+
+    <com.android.internal.widget.DialogTitle
+        style="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:text="@string/running_foreground_services_title" />
-    <TextView style="?android:attr/textAppearanceSmall"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/running_foreground_services_title"
+        android:textAlignment="viewStart" />
+
+    <TextView
+        style="?android:attr/textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:textAlignment="viewStart"
-        android:text="@string/running_foreground_services_msg" />
+        android:text="@string/running_foreground_services_msg"
+        android:textAlignment="viewStart" />
 </LinearLayout>

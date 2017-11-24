@@ -126,13 +126,13 @@ public class NotificationsQuickSettingsContainer extends FrameLayout
         } else if (child == mStackScroller) {
             return super.drawChild(canvas,
                     userSwitcherVisible && statusBarVisible ? mKeyguardStatusBar
-                    : statusBarVisible || userSwitcherVisible ? stackQsBottom
-                    : stackQsTop,
+                            : statusBarVisible || userSwitcherVisible ? stackQsBottom
+                            : stackQsTop,
                     drawingTime);
         } else if (child == mUserSwitcher) {
             return super.drawChild(canvas,
                     userSwitcherVisible && statusBarVisible ? stackQsBottom
-                    : stackQsTop,
+                            : stackQsTop,
                     drawingTime);
         } else if (child == mKeyguardStatusBar) {
             return super.drawChild(canvas,

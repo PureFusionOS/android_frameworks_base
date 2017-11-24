@@ -14,8 +14,8 @@
     limitations under the License.
 -->
 <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@android:anim/linear_interpolator"
     android:duration="@integer/carrier_network_change_anim_time"
+    android:interpolator="@android:anim/linear_interpolator"
     android:repeatCount="-1">
 
     <propertyValuesHolder
@@ -23,22 +23,22 @@
         android:valueType="colorType">
         <keyframe
             android:fraction="0.0"
-            android:value="?attr/backgroundColor"/>
+            android:value="?attr/backgroundColor" />
         <keyframe
             android:fraction="0.32"
-            android:value="?attr/backgroundColor"/>
+            android:value="?attr/backgroundColor" />
         <keyframe
             android:fraction="0.33"
-            android:value="?attr/fillColor"/>
+            android:value="?attr/fillColor" />
         <keyframe
             android:fraction="0.66"
-            android:value="?attr/fillColor"/>
+            android:value="?attr/fillColor" />
         <keyframe
             android:fraction="0.67"
-            android:value="?attr/backgroundColor"/>
+            android:value="?attr/backgroundColor" />
         <keyframe
             android:fraction="1.0"
-            android:value="?attr/backgroundColor"/>
+            android:value="?attr/backgroundColor" />
     </propertyValuesHolder>
 
 </objectAnimator>

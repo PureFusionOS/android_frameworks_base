@@ -39,28 +39,28 @@ class Util {
     // Note: currently not shown (only used in the text footer)
     private static final SimpleDateFormat HMMAA = new SimpleDateFormat("h:mm aa", Locale.US);
 
-    private static int[] AUDIO_MANAGER_FLAGS = new int[] {
-        AudioManager.FLAG_SHOW_UI,
-        AudioManager.FLAG_VIBRATE,
-        AudioManager.FLAG_PLAY_SOUND,
-        AudioManager.FLAG_ALLOW_RINGER_MODES,
-        AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE,
-        AudioManager.FLAG_SHOW_VIBRATE_HINT,
-        AudioManager.FLAG_SHOW_SILENT_HINT,
-        AudioManager.FLAG_FROM_KEY,
-        AudioManager.FLAG_SHOW_UI_WARNINGS,
+    private static int[] AUDIO_MANAGER_FLAGS = new int[]{
+            AudioManager.FLAG_SHOW_UI,
+            AudioManager.FLAG_VIBRATE,
+            AudioManager.FLAG_PLAY_SOUND,
+            AudioManager.FLAG_ALLOW_RINGER_MODES,
+            AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE,
+            AudioManager.FLAG_SHOW_VIBRATE_HINT,
+            AudioManager.FLAG_SHOW_SILENT_HINT,
+            AudioManager.FLAG_FROM_KEY,
+            AudioManager.FLAG_SHOW_UI_WARNINGS,
     };
 
-    private static String[] AUDIO_MANAGER_FLAG_NAMES = new String[] {
-        "SHOW_UI",
-        "VIBRATE",
-        "PLAY_SOUND",
-        "ALLOW_RINGER_MODES",
-        "REMOVE_SOUND_AND_VIBRATE",
-        "SHOW_VIBRATE_HINT",
-        "SHOW_SILENT_HINT",
-        "FROM_KEY",
-        "SHOW_UI_WARNINGS",
+    private static String[] AUDIO_MANAGER_FLAG_NAMES = new String[]{
+            "SHOW_UI",
+            "VIBRATE",
+            "PLAY_SOUND",
+            "ALLOW_RINGER_MODES",
+            "REMOVE_SOUND_AND_VIBRATE",
+            "SHOW_VIBRATE_HINT",
+            "SHOW_SILENT_HINT",
+            "FROM_KEY",
+            "SHOW_UI_WARNINGS",
     };
 
     public static String logTag(Class<?> c) {
@@ -70,10 +70,14 @@ class Util {
 
     public static String ringerModeToString(int ringerMode) {
         switch (ringerMode) {
-            case AudioManager.RINGER_MODE_SILENT: return "RINGER_MODE_SILENT";
-            case AudioManager.RINGER_MODE_VIBRATE: return "RINGER_MODE_VIBRATE";
-            case AudioManager.RINGER_MODE_NORMAL: return "RINGER_MODE_NORMAL";
-            default: return "RINGER_MODE_UNKNOWN_" + ringerMode;
+            case AudioManager.RINGER_MODE_SILENT:
+                return "RINGER_MODE_SILENT";
+            case AudioManager.RINGER_MODE_VIBRATE:
+                return "RINGER_MODE_VIBRATE";
+            case AudioManager.RINGER_MODE_NORMAL:
+                return "RINGER_MODE_NORMAL";
+            default:
+                return "RINGER_MODE_UNKNOWN_" + ringerMode;
         }
     }
 
@@ -91,28 +95,40 @@ class Util {
 
     public static String playbackInfoTypeToString(int type) {
         switch (type) {
-            case PlaybackInfo.PLAYBACK_TYPE_LOCAL: return "LOCAL";
-            case PlaybackInfo.PLAYBACK_TYPE_REMOTE: return "REMOTE";
-            default: return "UNKNOWN_" + type;
+            case PlaybackInfo.PLAYBACK_TYPE_LOCAL:
+                return "LOCAL";
+            case PlaybackInfo.PLAYBACK_TYPE_REMOTE:
+                return "REMOTE";
+            default:
+                return "UNKNOWN_" + type;
         }
     }
 
     public static String playbackStateStateToString(int state) {
         switch (state) {
-            case PlaybackState.STATE_NONE: return "STATE_NONE";
-            case PlaybackState.STATE_STOPPED: return "STATE_STOPPED";
-            case PlaybackState.STATE_PAUSED: return "STATE_PAUSED";
-            case PlaybackState.STATE_PLAYING: return "STATE_PLAYING";
-            default: return "UNKNOWN_" + state;
+            case PlaybackState.STATE_NONE:
+                return "STATE_NONE";
+            case PlaybackState.STATE_STOPPED:
+                return "STATE_STOPPED";
+            case PlaybackState.STATE_PAUSED:
+                return "STATE_PAUSED";
+            case PlaybackState.STATE_PLAYING:
+                return "STATE_PLAYING";
+            default:
+                return "UNKNOWN_" + state;
         }
     }
 
     public static String volumeProviderControlToString(int control) {
         switch (control) {
-            case VolumeProvider.VOLUME_CONTROL_ABSOLUTE: return "VOLUME_CONTROL_ABSOLUTE";
-            case VolumeProvider.VOLUME_CONTROL_FIXED: return "VOLUME_CONTROL_FIXED";
-            case VolumeProvider.VOLUME_CONTROL_RELATIVE: return "VOLUME_CONTROL_RELATIVE";
-            default: return "VOLUME_CONTROL_UNKNOWN_" + control;
+            case VolumeProvider.VOLUME_CONTROL_ABSOLUTE:
+                return "VOLUME_CONTROL_ABSOLUTE";
+            case VolumeProvider.VOLUME_CONTROL_FIXED:
+                return "VOLUME_CONTROL_FIXED";
+            case VolumeProvider.VOLUME_CONTROL_RELATIVE:
+                return "VOLUME_CONTROL_RELATIVE";
+            default:
+                return "VOLUME_CONTROL_UNKNOWN_" + control;
         }
     }
 

@@ -38,6 +38,26 @@ public class AutoSizingList extends LinearLayout {
 
     private ListAdapter mAdapter;
     private int mCount;
+    private final Runnable mBindChildren = new Runnable() {
+        @Override
+        public void run() {
+            rebindChildren();
+        }
+    };
+    private final DataSetObserver mDataObserver = new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            if (mCount > getDesiredCount()) {
+                mCount = getDesiredCount();
+            }
+            postRebindChildren();
+        }
+
+        @Override
+        public void onInvalidated() {
+            postRebindChildren();
+        }
+    };
     private boolean mEnableAutoSizing;
 
     public AutoSizingList(Context context, @Nullable AttributeSet attrs) {
@@ -106,26 +126,4 @@ public class AutoSizingList extends LinearLayout {
             removeViewAt(getChildCount() - 1);
         }
     }
-
-    private final Runnable mBindChildren = new Runnable() {
-        @Override
-        public void run() {
-            rebindChildren();
-        }
-    };
-
-    private final DataSetObserver mDataObserver = new DataSetObserver() {
-        @Override
-        public void onChanged() {
-            if (mCount > getDesiredCount()) {
-                mCount = getDesiredCount();
-            }
-            postRebindChildren();
-        }
-
-        @Override
-        public void onInvalidated() {
-            postRebindChildren();
-        }
-    };
 }

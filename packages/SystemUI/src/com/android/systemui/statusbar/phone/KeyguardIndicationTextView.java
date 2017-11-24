@@ -40,7 +40,7 @@ public class KeyguardIndicationTextView extends TextView {
     }
 
     public KeyguardIndicationTextView(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                                      int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

@@ -97,7 +97,7 @@ public class QSSecurityFooterTest extends SysuiTestCase {
 
         waitForIdleSync(mFooter.mHandler);
         assertEquals(mContext.getString(R.string.quick_settings_disclosure_management),
-                     mFooterText.getText());
+                mFooterText.getText());
         assertEquals(View.VISIBLE, mRootView.getVisibility());
         assertEquals(View.VISIBLE, mFooterIcon.getVisibility());
         // -1 == never set.
@@ -113,7 +113,7 @@ public class QSSecurityFooterTest extends SysuiTestCase {
 
         waitForIdleSync(mFooter.mHandler);
         assertEquals(mContext.getString(R.string.quick_settings_disclosure_named_management,
-                                        MANAGING_ORGANIZATION),
+                MANAGING_ORGANIZATION),
                 mFooterText.getText());
         assertEquals(View.VISIBLE, mRootView.getVisibility());
         assertEquals(View.VISIBLE, mFooterIcon.getVisibility());
@@ -141,9 +141,9 @@ public class QSSecurityFooterTest extends SysuiTestCase {
 
         waitForIdleSync(mFooter.mHandler);
         assertEquals(mContext.getString(
-                             R.string.quick_settings_disclosure_named_management_monitoring,
-                             MANAGING_ORGANIZATION),
-                     mFooterText.getText());
+                R.string.quick_settings_disclosure_named_management_monitoring,
+                MANAGING_ORGANIZATION),
+                mFooterText.getText());
     }
 
     @Test
@@ -166,8 +166,8 @@ public class QSSecurityFooterTest extends SysuiTestCase {
 
         waitForIdleSync(mFooter.mHandler);
         assertEquals(mContext.getString(R.string.quick_settings_disclosure_management_named_vpn,
-                                        VPN_PACKAGE),
-                     mFooterText.getText());
+                VPN_PACKAGE),
+                mFooterText.getText());
         assertEquals(View.VISIBLE, mFooterIcon.getVisibility());
         assertEquals(R.drawable.ic_qs_vpn, mFooterIcon.getLastImageResource());
 
@@ -178,9 +178,9 @@ public class QSSecurityFooterTest extends SysuiTestCase {
 
         waitForIdleSync(mFooter.mHandler);
         assertEquals(mContext.getString(
-                              R.string.quick_settings_disclosure_named_management_named_vpn,
-                              MANAGING_ORGANIZATION, VPN_PACKAGE),
-                     mFooterText.getText());
+                R.string.quick_settings_disclosure_named_management_named_vpn,
+                MANAGING_ORGANIZATION, VPN_PACKAGE),
+                mFooterText.getText());
     }
 
     @Test
@@ -193,7 +193,7 @@ public class QSSecurityFooterTest extends SysuiTestCase {
 
         waitForIdleSync(mFooter.mHandler);
         assertEquals(mContext.getString(R.string.quick_settings_disclosure_management_vpns),
-                     mFooterText.getText());
+                mFooterText.getText());
         assertEquals(View.VISIBLE, mFooterIcon.getVisibility());
         assertEquals(R.drawable.ic_qs_vpn, mFooterIcon.getLastImageResource());
 
@@ -204,8 +204,8 @@ public class QSSecurityFooterTest extends SysuiTestCase {
 
         waitForIdleSync(mFooter.mHandler);
         assertEquals(mContext.getString(R.string.quick_settings_disclosure_named_management_vpns,
-                                        MANAGING_ORGANIZATION),
-                     mFooterText.getText());
+                MANAGING_ORGANIZATION),
+                mFooterText.getText());
     }
 
     @Test
@@ -233,8 +233,8 @@ public class QSSecurityFooterTest extends SysuiTestCase {
         // -1 == never set.
         assertEquals(-1, mFooterIcon.getLastImageResource());
         assertEquals(mContext.getString(
-                             R.string.quick_settings_disclosure_managed_profile_monitoring),
-                     mFooterText.getText());
+                R.string.quick_settings_disclosure_managed_profile_monitoring),
+                mFooterText.getText());
 
         // Same situation, but with organization name set
         when(mSecurityController.getWorkProfileOrganizationName())
@@ -243,9 +243,9 @@ public class QSSecurityFooterTest extends SysuiTestCase {
 
         waitForIdleSync(mFooter.mHandler);
         assertEquals(mContext.getString(
-                             R.string.quick_settings_disclosure_named_managed_profile_monitoring,
-                             MANAGING_ORGANIZATION),
-                     mFooterText.getText());
+                R.string.quick_settings_disclosure_named_managed_profile_monitoring,
+                MANAGING_ORGANIZATION),
+                mFooterText.getText());
     }
 
     @Test
@@ -258,7 +258,7 @@ public class QSSecurityFooterTest extends SysuiTestCase {
         // -1 == never set.
         assertEquals(-1, mFooterIcon.getLastImageResource());
         assertEquals(mContext.getString(R.string.quick_settings_disclosure_monitoring),
-                     mFooterText.getText());
+                mFooterText.getText());
     }
 
     @Test
@@ -271,7 +271,7 @@ public class QSSecurityFooterTest extends SysuiTestCase {
         waitForIdleSync(mFooter.mHandler);
         assertEquals(R.drawable.ic_qs_vpn, mFooterIcon.getLastImageResource());
         assertEquals(mContext.getString(R.string.quick_settings_disclosure_vpns),
-                     mFooterText.getText());
+                mFooterText.getText());
     }
 
     @Test
@@ -283,9 +283,9 @@ public class QSSecurityFooterTest extends SysuiTestCase {
         waitForIdleSync(mFooter.mHandler);
         assertEquals(R.drawable.ic_qs_vpn, mFooterIcon.getLastImageResource());
         assertEquals(mContext.getString(
-                             R.string.quick_settings_disclosure_managed_profile_named_vpn,
-                             VPN_PACKAGE_2),
-                     mFooterText.getText());
+                R.string.quick_settings_disclosure_managed_profile_named_vpn,
+                VPN_PACKAGE_2),
+                mFooterText.getText());
     }
 
     @Test
@@ -297,27 +297,27 @@ public class QSSecurityFooterTest extends SysuiTestCase {
         waitForIdleSync(mFooter.mHandler);
         assertEquals(R.drawable.ic_qs_vpn, mFooterIcon.getLastImageResource());
         assertEquals(mContext.getString(R.string.quick_settings_disclosure_named_vpn,
-                                        VPN_PACKAGE),
-                     mFooterText.getText());
+                VPN_PACKAGE),
+                mFooterText.getText());
 
         when(mSecurityController.hasWorkProfile()).thenReturn(true);
         mFooter.refreshState();
 
         waitForIdleSync(mFooter.mHandler);
         assertEquals(mContext.getString(
-                             R.string.quick_settings_disclosure_personal_profile_named_vpn,
-                             VPN_PACKAGE),
-                     mFooterText.getText());
+                R.string.quick_settings_disclosure_personal_profile_named_vpn,
+                VPN_PACKAGE),
+                mFooterText.getText());
     }
 
     @Test
     public void testGetManagementMessage() {
         assertEquals(null, mFooter.getManagementMessage(false, MANAGING_ORGANIZATION));
         assertEquals(mContext.getString(R.string.monitoring_description_named_management,
-                                        MANAGING_ORGANIZATION),
-                     mFooter.getManagementMessage(true, MANAGING_ORGANIZATION));
+                MANAGING_ORGANIZATION),
+                mFooter.getManagementMessage(true, MANAGING_ORGANIZATION));
         assertEquals(mContext.getString(R.string.monitoring_description_management),
-                     mFooter.getManagementMessage(true, null));
+                mFooter.getManagementMessage(true, null));
     }
 
     @Test
@@ -325,50 +325,50 @@ public class QSSecurityFooterTest extends SysuiTestCase {
         assertEquals(null, mFooter.getCaCertsMessage(true, false, false));
         assertEquals(null, mFooter.getCaCertsMessage(false, false, false));
         assertEquals(mContext.getString(R.string.monitoring_description_management_ca_certificate),
-                     mFooter.getCaCertsMessage(true, true, true));
+                mFooter.getCaCertsMessage(true, true, true));
         assertEquals(mContext.getString(R.string.monitoring_description_management_ca_certificate),
-                     mFooter.getCaCertsMessage(true, false, true));
+                mFooter.getCaCertsMessage(true, false, true));
         assertEquals(mContext.getString(
-                         R.string.monitoring_description_managed_profile_ca_certificate),
-                     mFooter.getCaCertsMessage(false, false, true));
+                R.string.monitoring_description_managed_profile_ca_certificate),
+                mFooter.getCaCertsMessage(false, false, true));
         assertEquals(mContext.getString(
-                         R.string.monitoring_description_ca_certificate),
-                     mFooter.getCaCertsMessage(false, true, false));
+                R.string.monitoring_description_ca_certificate),
+                mFooter.getCaCertsMessage(false, true, false));
     }
 
     @Test
     public void testGetNetworkLoggingMessage() {
         assertEquals(null, mFooter.getNetworkLoggingMessage(false));
         assertEquals(mContext.getString(R.string.monitoring_description_management_network_logging),
-                     mFooter.getNetworkLoggingMessage(true));
+                mFooter.getNetworkLoggingMessage(true));
     }
 
     @Test
     public void testGetVpnMessage() {
         assertEquals(null, mFooter.getVpnMessage(true, true, null, null));
         assertEquals(addLink(mContext.getString(R.string.monitoring_description_two_named_vpns,
-                                 VPN_PACKAGE, VPN_PACKAGE_2)),
-                     mFooter.getVpnMessage(true, true, VPN_PACKAGE, VPN_PACKAGE_2));
+                VPN_PACKAGE, VPN_PACKAGE_2)),
+                mFooter.getVpnMessage(true, true, VPN_PACKAGE, VPN_PACKAGE_2));
         assertEquals(addLink(mContext.getString(R.string.monitoring_description_two_named_vpns,
-                                 VPN_PACKAGE, VPN_PACKAGE_2)),
-                     mFooter.getVpnMessage(false, true, VPN_PACKAGE, VPN_PACKAGE_2));
+                VPN_PACKAGE, VPN_PACKAGE_2)),
+                mFooter.getVpnMessage(false, true, VPN_PACKAGE, VPN_PACKAGE_2));
         assertEquals(addLink(mContext.getString(R.string.monitoring_description_named_vpn,
-                                 VPN_PACKAGE)),
-                     mFooter.getVpnMessage(true, false, VPN_PACKAGE, null));
+                VPN_PACKAGE)),
+                mFooter.getVpnMessage(true, false, VPN_PACKAGE, null));
         assertEquals(addLink(mContext.getString(R.string.monitoring_description_named_vpn,
-                                 VPN_PACKAGE)),
-                     mFooter.getVpnMessage(false, false, VPN_PACKAGE, null));
+                VPN_PACKAGE)),
+                mFooter.getVpnMessage(false, false, VPN_PACKAGE, null));
         assertEquals(addLink(mContext.getString(R.string.monitoring_description_named_vpn,
-                                 VPN_PACKAGE_2)),
-                     mFooter.getVpnMessage(true, true, null, VPN_PACKAGE_2));
+                VPN_PACKAGE_2)),
+                mFooter.getVpnMessage(true, true, null, VPN_PACKAGE_2));
         assertEquals(addLink(mContext.getString(
-                                 R.string.monitoring_description_managed_profile_named_vpn,
-                                 VPN_PACKAGE_2)),
-                     mFooter.getVpnMessage(false, true, null, VPN_PACKAGE_2));
+                R.string.monitoring_description_managed_profile_named_vpn,
+                VPN_PACKAGE_2)),
+                mFooter.getVpnMessage(false, true, null, VPN_PACKAGE_2));
         assertEquals(addLink(mContext.getString(
-                                 R.string.monitoring_description_personal_profile_named_vpn,
-                                 VPN_PACKAGE)),
-                     mFooter.getVpnMessage(false, true, VPN_PACKAGE, null));
+                R.string.monitoring_description_personal_profile_named_vpn,
+                VPN_PACKAGE)),
+                mFooter.getVpnMessage(false, true, VPN_PACKAGE, null));
     }
 
     private CharSequence addLink(CharSequence description) {

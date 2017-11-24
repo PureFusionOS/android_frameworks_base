@@ -50,12 +50,14 @@ public interface KeyguardSecurityView {
 
     /**
      * Interface back to keyguard to tell it when security
+     *
      * @param callback
      */
     void setKeyguardCallback(KeyguardSecurityCallback callback);
 
     /**
      * Set {@link LockPatternUtils} object. Useful for providing a mock interface.
+     *
      * @param utils
      */
     void setLockPatternUtils(LockPatternUtils utils);
@@ -75,6 +77,7 @@ public interface KeyguardSecurityView {
     /**
      * Emulate activity life cycle within this view.  When called, the view should prepare itself
      * to be shown.
+     *
      * @param reason the root cause of the event.
      */
     void onResume(int reason);
@@ -88,6 +91,7 @@ public interface KeyguardSecurityView {
 
     /**
      * Get {@link KeyguardSecurityCallback} for the given object
+     *
      * @return KeyguardSecurityCallback
      */
     KeyguardSecurityCallback getCallback();
@@ -104,13 +108,12 @@ public interface KeyguardSecurityView {
      * Show a message on the security view with a specified color
      *
      * @param message the message to show
-     * @param color the color to use
+     * @param color   the color to use
      */
     void showMessage(String message, int color);
 
     /**
      * Instruct the view to show usability hints, if any.
-     *
      */
     void showUsabilityHint();
 
@@ -124,7 +127,7 @@ public interface KeyguardSecurityView {
      *
      * @param finishRunnable the runnable to be run when the animation ended
      * @return true if an animation started and {@code finishRunnable} will be run, false if no
-     *         animation started and {@code finishRunnable} will not be run
+     * animation started and {@code finishRunnable} will not be run
      */
     boolean startDisappearAnimation(Runnable finishRunnable);
 }

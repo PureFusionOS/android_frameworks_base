@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /**
  * Copyright (c) 2009, The Android Open Source Project
  *
@@ -25,8 +24,8 @@
     <string name="status_bar_no_recent_apps" msgid="7374907845131203189">"आपकी हाल की स्‍क्रीन यहां दिखाई देती हैं"</string>
     <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"हाल ही के ऐप्स  खारिज करें"</string>
     <plurals name="status_bar_accessibility_recent_apps" formatted="false" msgid="9138535907802238759">
-      <item quantity="one">अवलोकन में %d स्‍क्रीन</item>
-      <item quantity="other">अवलोकन में %d स्‍क्रीन</item>
+        <item quantity="one">अवलोकन में %d स्‍क्रीन</item>
+        <item quantity="other">अवलोकन में %d स्‍क्रीन</item>
     </plurals>
     <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"कोई नोटिफिकेशन नहीं"</string>
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"ऑनगोइंग"</string>
@@ -251,8 +250,8 @@
     <string name="accessibility_clear_all" msgid="5235938559247164925">"सभी सूचनाएं साफ़ करें."</string>
     <string name="notification_group_overflow_indicator" msgid="1863231301642314183">"+ <xliff:g id="NUMBER">%s</xliff:g>"</string>
     <plurals name="notification_group_overflow_description" formatted="false" msgid="4579313201268495404">
-      <item quantity="one">इसमें <xliff:g id="NUMBER_1">%s</xliff:g> और नोटिफ़िकेशन हैं.</item>
-      <item quantity="other">इसमें <xliff:g id="NUMBER_1">%s</xliff:g> और नोटिफ़िकेशन हैं.</item>
+        <item quantity="one">इसमें <xliff:g id="NUMBER_1">%s</xliff:g> और नोटिफ़िकेशन हैं.</item>
+        <item quantity="other">इसमें <xliff:g id="NUMBER_1">%s</xliff:g> और नोटिफ़िकेशन हैं.</item>
     </plurals>
     <string name="status_bar_notification_inspect_item_title" msgid="5668348142410115323">"नोटिफिकेशन सेटिंग"</string>
     <string name="status_bar_notification_app_settings_title" msgid="5525260160341558869">"<xliff:g id="APP_NAME">%s</xliff:g> सेटिंग"</string>
@@ -341,8 +340,7 @@
     <string name="recents_accessibility_split_screen_top" msgid="9056056469282256287">"ऊपर की ओर दो स्क्रीन बनाएं"</string>
     <string name="recents_accessibility_split_screen_left" msgid="8987144699630620019">"बाईं ओर दो स्क्रीन बनाएं"</string>
     <string name="recents_accessibility_split_screen_right" msgid="275069779299592867">"दाईं ओर दो स्क्रीन बनाएं"</string>
-  <string-array name="recents_blacklist_array">
-  </string-array>
+    <string-array name="recents_blacklist_array"></string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"चार्ज हो गई है"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"चार्ज हो रही है"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"पूर्ण होने में <xliff:g id="CHARGING_TIME">%s</xliff:g> शेष"</string>
@@ -551,13 +549,13 @@
     <string name="notification_num_channels" msgid="2048144408999179471">"नोटिफ़िकेशन की <xliff:g id="NUMBER">%d</xliff:g> श्रेणियां"</string>
     <string name="notification_default_channel_desc" msgid="2506053815870808359">"इस ऐप्लिकेशन में नोटिफ़िकेशन श्रेणियां नहीं हैं"</string>
     <plurals name="notification_num_channels_desc" formatted="false" msgid="5492793452274077663">
-      <item quantity="one">इस ऐप्लिकेशन की <xliff:g id="NUMBER_1">%d</xliff:g> नोटिफ़िकेशन श्रेणियों में से 1 श्रेणी</item>
-      <item quantity="other">इस ऐप्लिकेशन की <xliff:g id="NUMBER_1">%d</xliff:g> नोटिफ़िकेशन श्रेणियों में से 1 श्रेणी</item>
+        <item quantity="one">इस ऐप्लिकेशन की <xliff:g id="NUMBER_1">%d</xliff:g> नोटिफ़िकेशन श्रेणियों में से 1 श्रेणी</item>
+        <item quantity="other">इस ऐप्लिकेशन की <xliff:g id="NUMBER_1">%d</xliff:g> नोटिफ़िकेशन श्रेणियों में से 1 श्रेणी</item>
     </plurals>
     <string name="notification_channels_list_desc_2" msgid="6214732715833946441">"<xliff:g id="CHANNEL_NAME_1">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2">%2$s</xliff:g>"</string>
     <plurals name="notification_channels_list_desc_2_and_others" formatted="false" msgid="2747813553355336157">
-      <item quantity="one"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> और <xliff:g id="NUMBER_5">%3$d</xliff:g> अन्य</item>
-      <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> और <xliff:g id="NUMBER_5">%3$d</xliff:g> अन्य</item>
+        <item quantity="one"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> और <xliff:g id="NUMBER_5">%3$d</xliff:g> अन्य</item>
+        <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> और <xliff:g id="NUMBER_5">%3$d</xliff:g> अन्य</item>
     </plurals>
     <string name="notification_channel_controls_opened_accessibility" msgid="6553950422055908113">"<xliff:g id="APP_NAME">%1$s</xliff:g> के लिए नोटिफ़िकेशन नियंत्रण चालू हैं"</string>
     <string name="notification_channel_controls_closed_accessibility" msgid="7521619812603693144">"<xliff:g id="APP_NAME">%1$s</xliff:g> के लिए नोटिफ़िकेशन नियंत्रण बंद हैं"</string>
@@ -640,18 +638,18 @@
     <string name="left_nav_bar_button_type" msgid="8555981238887546528">"अतिरिक्त बायां बटन प्रकार"</string>
     <string name="right_nav_bar_button_type" msgid="2481056627065649656">"अतिरिक्त दायां बटन प्रकार"</string>
     <string name="nav_bar_default" msgid="8587114043070993007">"(डिफ़ॉल्ट)"</string>
-  <string-array name="nav_bar_buttons">
-    <item msgid="1545641631806817203">"क्लिपबोर्ड"</item>
-    <item msgid="5742013440802239414">"कुंजी कोड"</item>
-    <item msgid="8802889973626281575">"कीबोर्ड स्विचर"</item>
-    <item msgid="8175437057325747277">"कोई नहीं"</item>
-  </string-array>
-  <string-array name="nav_bar_layouts">
-    <item msgid="8077901629964902399">"सामान्य"</item>
-    <item msgid="8256205964297588988">"संक्षिप्त"</item>
-    <item msgid="8719936228094005878">"बाएं झुका हुआ"</item>
-    <item msgid="586019486955594690">"दाएं झुका हुआ"</item>
-  </string-array>
+    <string-array name="nav_bar_buttons">
+        <item msgid="1545641631806817203">"क्लिपबोर्ड"</item>
+        <item msgid="5742013440802239414">"कुंजी कोड"</item>
+        <item msgid="8802889973626281575">"कीबोर्ड स्विचर"</item>
+        <item msgid="8175437057325747277">"कोई नहीं"</item>
+    </string-array>
+    <string-array name="nav_bar_layouts">
+        <item msgid="8077901629964902399">"सामान्य"</item>
+        <item msgid="8256205964297588988">"संक्षिप्त"</item>
+        <item msgid="8719936228094005878">"बाएं झुका हुआ"</item>
+        <item msgid="586019486955594690">"दाएं झुका हुआ"</item>
+    </string-array>
     <string name="menu_ime" msgid="4998010205321292416">"कीबोर्ड स्विचर"</string>
     <string name="save" msgid="2311877285724540644">"सहेजें"</string>
     <string name="reset" msgid="2448168080964209908">"रीसेट करें"</string>
@@ -666,16 +664,16 @@
     <string name="drag_to_remove_tiles" msgid="3361212377437088062">"निकालने के लिए यहां खींचें"</string>
     <string name="qs_edit" msgid="2232596095725105230">"संपादित करें"</string>
     <string name="tuner_time" msgid="6572217313285536011">"समय"</string>
-  <string-array name="clock_options">
-    <item msgid="5965318737560463480">"घंटे, मिनट और सेकंड दिखाएं"</item>
-    <item msgid="1427801730816895300">"घंटे और मिनट दिखाएं (डिफ़ॉल्ट)"</item>
-    <item msgid="3830170141562534721">"यह आइकन ना दिखाएं"</item>
-  </string-array>
-  <string-array name="battery_options">
-    <item msgid="3160236755818672034">"हमेशा प्रतिशत दिखाएं"</item>
-    <item msgid="2139628951880142927">"चार्ज होते समय प्रतिशत दिखाएं (डिफ़ॉल्ट)"</item>
-    <item msgid="3327323682209964956">"यह आइकन ना दिखाएं"</item>
-  </string-array>
+    <string-array name="clock_options">
+        <item msgid="5965318737560463480">"घंटे, मिनट और सेकंड दिखाएं"</item>
+        <item msgid="1427801730816895300">"घंटे और मिनट दिखाएं (डिफ़ॉल्ट)"</item>
+        <item msgid="3830170141562534721">"यह आइकन ना दिखाएं"</item>
+    </string-array>
+    <string-array name="battery_options">
+        <item msgid="3160236755818672034">"हमेशा प्रतिशत दिखाएं"</item>
+        <item msgid="2139628951880142927">"चार्ज होते समय प्रतिशत दिखाएं (डिफ़ॉल्ट)"</item>
+        <item msgid="3327323682209964956">"यह आइकन ना दिखाएं"</item>
+    </string-array>
     <string name="other" msgid="4060683095962566764">"अन्य"</string>
     <string name="accessibility_divider" msgid="5903423481953635044">"विभाजित स्क्रीन विभाजक"</string>
     <string name="accessibility_action_divider_left_full" msgid="2801570521881574972">"बाईं स्क्रीन को पूर्ण स्क्रीन बनाएं"</string>

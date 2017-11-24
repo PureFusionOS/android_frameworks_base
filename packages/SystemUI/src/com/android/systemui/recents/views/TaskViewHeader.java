@@ -71,78 +71,7 @@ public class TaskViewHeader extends FrameLayout
     private static final float OVERLAY_LIGHTNESS_INCREMENT = -0.0625f;
     private static final int OVERLAY_REVEAL_DURATION = 250;
     private static final long FOCUS_INDICATOR_INTERVAL_MS = 30;
-
-    /**
-     * A color drawable that draws a slight highlight at the top to help it stand out.
-     */
-    private class HighlightColorDrawable extends Drawable {
-
-        private Paint mHighlightPaint = new Paint();
-        private Paint mBackgroundPaint = new Paint();
-        private int mColor;
-        private float mDimAlpha;
-
-        public HighlightColorDrawable() {
-            mBackgroundPaint.setColor(Color.argb(255, 0, 0, 0));
-            mBackgroundPaint.setAntiAlias(true);
-            mHighlightPaint.setColor(Color.argb(255, 255, 255, 255));
-            mHighlightPaint.setAntiAlias(true);
-        }
-
-        public void setColorAndDim(int color, float dimAlpha) {
-            if (mColor != color || Float.compare(mDimAlpha, dimAlpha) != 0) {
-                mColor = color;
-                mDimAlpha = dimAlpha;
-                if (mShouldDarkenBackgroundColor) {
-                    color = getSecondaryColor(color, false /* useLightOverlayColor */);
-                }
-                mBackgroundPaint.setColor(color);
-
-                ColorUtils.colorToHSL(color, mTmpHSL);
-                // TODO: Consider using the saturation of the color to adjust the lightness as well
-                mTmpHSL[2] = Math.min(1f,
-                        mTmpHSL[2] + HIGHLIGHT_LIGHTNESS_INCREMENT * (1.0f - dimAlpha));
-                mHighlightPaint.setColor(ColorUtils.HSLToColor(mTmpHSL));
-
-                invalidateSelf();
-            }
-        }
-
-        @Override
-        public void setColorFilter(@Nullable ColorFilter colorFilter) {
-            // Do nothing
-        }
-
-        @Override
-        public void setAlpha(int alpha) {
-            // Do nothing
-        }
-
-        @Override
-        public void draw(Canvas canvas) {
-            // Draw the highlight at the top edge (but put the bottom edge just out of view)
-            canvas.drawRoundRect(0, 0, mTaskViewRect.width(),
-                    2 * Math.max(mHighlightHeight, mCornerRadius),
-                    mCornerRadius, mCornerRadius, mHighlightPaint);
-
-            // Draw the background with the rounded corners
-            canvas.drawRoundRect(0, mHighlightHeight, mTaskViewRect.width(),
-                    getHeight() + mCornerRadius,
-                    mCornerRadius, mCornerRadius, mBackgroundPaint);
-        }
-
-        @Override
-        public int getOpacity() {
-            return PixelFormat.OPAQUE;
-        }
-
-        public int getColor() {
-            return mColor;
-        }
-    }
-
     Task mTask;
-
     // Header views
     ImageView mIconView;
     TextView mTitleView;
@@ -154,15 +83,14 @@ public class TaskViewHeader extends FrameLayout
     ImageView mAppInfoView;
     TextView mAppTitleView;
     ProgressBar mFocusTimerIndicator;
-
     // Header drawables
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     Rect mTaskViewRect = new Rect();
     int mHeaderBarHeight;
     int mHeaderButtonPadding;
     int mCornerRadius;
     int mHighlightHeight;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     float mDimAlpha;
     Drawable mLightDismissDrawable;
     Drawable mDarkDismissDrawable;
@@ -180,19 +108,15 @@ public class TaskViewHeader extends FrameLayout
     int mTaskBarViewDarkTextColor;
     int mDisabledTaskBarBackgroundColor;
     int mMoveTaskTargetStackId = INVALID_STACK_ID;
-
     // Header background
     private HighlightColorDrawable mBackground;
     private HighlightColorDrawable mOverlayBackground;
     private float[] mTmpHSL = new float[3];
-
     // Header dim, which is only used when task view hardware layers are not used
     private Paint mDimLayerPaint = new Paint();
-
     // Whether the background color should be darkened to differentiate from the primary color.
     // Used in grid layout.
     private boolean mShouldDarkenBackgroundColor = false;
-
     private CountDownTimer mFocusTimerCountDown;
 
     public TaskViewHeader(Context context) {
@@ -273,7 +197,7 @@ public class TaskViewHeader extends FrameLayout
      * based on the device configuration.
      */
     private void updateLayoutParams(View icon, View title, View secondaryButton,
-            View tertiaryButton, View button) {
+                                    View tertiaryButton, View button) {
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, mHeaderBarHeight, Gravity.TOP);
         setLayoutParams(lp);
@@ -396,7 +320,9 @@ public class TaskViewHeader extends FrameLayout
                 mCornerRadius, mCornerRadius, mDimLayerPaint);
     }
 
-    /** Starts the focus timer. */
+    /**
+     * Starts the focus timer.
+     */
     public void startFocusTimerIndicator(int duration) {
         if (mFocusTimerIndicator == null) {
             return;
@@ -420,7 +346,9 @@ public class TaskViewHeader extends FrameLayout
         }.start();
     }
 
-    /** Cancels the focus timer. */
+    /**
+     * Cancels the focus timer.
+     */
     public void cancelFocusTimerIndicator() {
         if (mFocusTimerIndicator == null) {
             return;
@@ -433,12 +361,16 @@ public class TaskViewHeader extends FrameLayout
         }
     }
 
-    /** Only exposed for the workaround for b/27815919. */
+    /**
+     * Only exposed for the workaround for b/27815919.
+     */
     public ImageView getIconView() {
         return mIconView;
     }
 
-    /** Returns the secondary color for a primary color. */
+    /**
+     * Returns the secondary color for a primary color.
+     */
     int getSecondaryColor(int primaryColor, boolean useLightOverlayColor) {
         int overlayColor = useLightOverlayColor ? Color.WHITE : Color.BLACK;
         return Utilities.getColorWithOverlay(primaryColor, overlayColor, 0.8f);
@@ -570,7 +502,9 @@ public class TaskViewHeader extends FrameLayout
         }
     }
 
-    /** Unbinds the bar view from the task */
+    /**
+     * Unbinds the bar view from the task
+     */
     void unbindFromTask(boolean touchExplorationEnabled) {
         mTask = null;
         mIconView.setImageDrawable(null);
@@ -579,7 +513,9 @@ public class TaskViewHeader extends FrameLayout
         }
     }
 
-    /** Animates this task bar if the user does not interact with the stack after a certain time. */
+    /**
+     * Animates this task bar if the user does not interact with the stack after a certain time.
+     */
     void startNoUserInteractionAnimation() {
         int duration = getResources().getInteger(R.integer.recents_task_enter_from_app_duration);
         mDismissButton.setVisibility(View.VISIBLE);
@@ -663,7 +599,7 @@ public class TaskViewHeader extends FrameLayout
 
         // Don't forward our state to the drawable - we do it manually in onTaskViewFocusChanged.
         // This is to prevent layer trashing when the view is pressed.
-        return new int[] {};
+        return new int[]{};
     }
 
     @Override
@@ -690,9 +626,9 @@ public class TaskViewHeader extends FrameLayout
             hideAppOverlay(false /* immediate */);
         } else if (v == mLockTaskButton) {
             if (Recents.sLockedTasks.contains(mTask)) {
-               Recents.sLockedTasks.remove(mTask);
+                Recents.sLockedTasks.remove(mTask);
             } else {
-               Recents.sLockedTasks.add(mTask);
+                Recents.sLockedTasks.add(mTask);
             }
             updateLockTaskDrawable();
         }
@@ -791,6 +727,75 @@ public class TaskViewHeader extends FrameLayout
                 }
             });
             revealAnim.start();
+        }
+    }
+
+    /**
+     * A color drawable that draws a slight highlight at the top to help it stand out.
+     */
+    private class HighlightColorDrawable extends Drawable {
+
+        private Paint mHighlightPaint = new Paint();
+        private Paint mBackgroundPaint = new Paint();
+        private int mColor;
+        private float mDimAlpha;
+
+        public HighlightColorDrawable() {
+            mBackgroundPaint.setColor(Color.argb(255, 0, 0, 0));
+            mBackgroundPaint.setAntiAlias(true);
+            mHighlightPaint.setColor(Color.argb(255, 255, 255, 255));
+            mHighlightPaint.setAntiAlias(true);
+        }
+
+        public void setColorAndDim(int color, float dimAlpha) {
+            if (mColor != color || Float.compare(mDimAlpha, dimAlpha) != 0) {
+                mColor = color;
+                mDimAlpha = dimAlpha;
+                if (mShouldDarkenBackgroundColor) {
+                    color = getSecondaryColor(color, false /* useLightOverlayColor */);
+                }
+                mBackgroundPaint.setColor(color);
+
+                ColorUtils.colorToHSL(color, mTmpHSL);
+                // TODO: Consider using the saturation of the color to adjust the lightness as well
+                mTmpHSL[2] = Math.min(1f,
+                        mTmpHSL[2] + HIGHLIGHT_LIGHTNESS_INCREMENT * (1.0f - dimAlpha));
+                mHighlightPaint.setColor(ColorUtils.HSLToColor(mTmpHSL));
+
+                invalidateSelf();
+            }
+        }
+
+        @Override
+        public void setColorFilter(@Nullable ColorFilter colorFilter) {
+            // Do nothing
+        }
+
+        @Override
+        public void setAlpha(int alpha) {
+            // Do nothing
+        }
+
+        @Override
+        public void draw(Canvas canvas) {
+            // Draw the highlight at the top edge (but put the bottom edge just out of view)
+            canvas.drawRoundRect(0, 0, mTaskViewRect.width(),
+                    2 * Math.max(mHighlightHeight, mCornerRadius),
+                    mCornerRadius, mCornerRadius, mHighlightPaint);
+
+            // Draw the background with the rounded corners
+            canvas.drawRoundRect(0, mHighlightHeight, mTaskViewRect.width(),
+                    getHeight() + mCornerRadius,
+                    mCornerRadius, mCornerRadius, mBackgroundPaint);
+        }
+
+        @Override
+        public int getOpacity() {
+            return PixelFormat.OPAQUE;
+        }
+
+        public int getColor() {
+            return mColor;
         }
     }
 }

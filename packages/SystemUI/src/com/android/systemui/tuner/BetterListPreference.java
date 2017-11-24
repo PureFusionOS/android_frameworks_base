@@ -27,13 +27,13 @@ public class BetterListPreference extends ListPreference {
     }
 
     @Override
-    public void setSummary(CharSequence summary) {
-        super.setSummary(summary);
-        mSummary = summary;
+    public CharSequence getSummary() {
+        return mSummary;
     }
 
     @Override
-    public CharSequence getSummary() {
-        return mSummary;
+    public void setSummary(CharSequence summary) {
+        super.setSummary(summary);
+        mSummary = summary;
     }
 }

@@ -40,16 +40,16 @@ public class CellTileView extends SignalTileView {
                 R.dimen.qs_tile_icon_size));
     }
 
+    private static int isDark(Context context) {
+        return Utils.getColorAttr(context, android.R.attr.colorForeground) == 0xff000000 ? 1 : 0;
+    }
+
     protected void updateIcon(ImageView iv, State state) {
         if (!Objects.equals(state.icon, iv.getTag(R.id.qs_icon_tag))) {
             mSignalDrawable.setLevel(((SignalIcon) state.icon).getState());
             iv.setImageDrawable(mSignalDrawable);
             iv.setTag(R.id.qs_icon_tag, state.icon);
         }
-    }
-
-    private static int isDark(Context context) {
-        return Utils.getColorAttr(context, android.R.attr.colorForeground) == 0xff000000 ? 1 : 0;
     }
 
     public static class SignalIcon extends Icon {

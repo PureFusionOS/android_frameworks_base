@@ -49,28 +49,14 @@ public class PipMediaController {
     private static final String ACTION_PAUSE = "com.android.systemui.pip.phone.PAUSE";
     private static final String ACTION_NEXT = "com.android.systemui.pip.phone.NEXT";
     private static final String ACTION_PREV = "com.android.systemui.pip.phone.PREV";
-
-    /**
-     * A listener interface to receive notification on changes to the media actions.
-     */
-    public interface ActionListener {
-        /**
-         * Called when the media actions changes.
-         */
-        void onMediaActionsChanged(List<RemoteAction> actions);
-    }
-
     private final Context mContext;
     private final IActivityManager mActivityManager;
-
     private final MediaSessionManager mMediaSessionManager;
     private MediaController mMediaController;
-
     private RemoteAction mPauseAction;
     private RemoteAction mPlayAction;
     private RemoteAction mNextAction;
     private RemoteAction mPrevAction;
-
     private BroadcastReceiver mPlayPauseActionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -86,15 +72,13 @@ public class PipMediaController {
             }
         }
     };
-
+    private ArrayList<ActionListener> mListeners = new ArrayList<>();
     private MediaController.Callback mPlaybackChangedListener = new MediaController.Callback() {
         @Override
         public void onPlaybackStateChanged(PlaybackState state) {
             notifyActionsChanged();
         }
     };
-
-    private ArrayList<ActionListener> mListeners = new ArrayList<>();
 
     public PipMediaController(Context context, IActivityManager activityManager) {
         mContext = context;
@@ -177,26 +161,26 @@ public class PipMediaController {
         String pauseDescription = mContext.getString(R.string.pip_pause);
         mPauseAction = new RemoteAction(Icon.createWithResource(mContext,
                 R.drawable.ic_pause_white), pauseDescription, pauseDescription,
-                        PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_PAUSE),
-                                FLAG_UPDATE_CURRENT));
+                PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_PAUSE),
+                        FLAG_UPDATE_CURRENT));
 
         String playDescription = mContext.getString(R.string.pip_play);
         mPlayAction = new RemoteAction(Icon.createWithResource(mContext,
                 R.drawable.ic_play_arrow_white), playDescription, playDescription,
-                        PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_PLAY),
-                                FLAG_UPDATE_CURRENT));
+                PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_PLAY),
+                        FLAG_UPDATE_CURRENT));
 
         String nextDescription = mContext.getString(R.string.pip_skip_to_next);
         mNextAction = new RemoteAction(Icon.createWithResource(mContext,
                 R.drawable.ic_skip_next_white), nextDescription, nextDescription,
-                        PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_NEXT),
-                                FLAG_UPDATE_CURRENT));
+                PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_NEXT),
+                        FLAG_UPDATE_CURRENT));
 
         String prevDescription = mContext.getString(R.string.pip_skip_to_prev);
         mPrevAction = new RemoteAction(Icon.createWithResource(mContext,
                 R.drawable.ic_skip_previous_white), prevDescription, prevDescription,
-                        PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_PREV),
-                                FLAG_UPDATE_CURRENT));
+                PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_PREV),
+                        FLAG_UPDATE_CURRENT));
     }
 
     /**
@@ -245,5 +229,15 @@ public class PipMediaController {
             List<RemoteAction> actions = getMediaActions();
             mListeners.forEach(l -> l.onMediaActionsChanged(actions));
         }
+    }
+
+    /**
+     * A listener interface to receive notification on changes to the media actions.
+     */
+    public interface ActionListener {
+        /**
+         * Called when the media actions changes.
+         */
+        void onMediaActionsChanged(List<RemoteAction> actions);
     }
 }

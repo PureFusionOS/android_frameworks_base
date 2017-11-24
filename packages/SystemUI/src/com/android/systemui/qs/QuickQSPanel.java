@@ -42,9 +42,14 @@ import java.util.Collection;
 public class QuickQSPanel extends QSPanel {
 
     public static final String NUM_QUICK_TILES = "sysui_qqs_count";
-
-    private int mMaxTiles;
     protected QSPanel mFullPanel;
+    private int mMaxTiles;
+    private final Tunable mNumTiles = new Tunable() {
+        @Override
+        public void onTuningChanged(String key, String newValue) {
+            setMaxTiles(getNumQuickTiles(mContext));
+        }
+    };
 
     public QuickQSPanel(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -61,6 +66,10 @@ public class QuickQSPanel extends QSPanel {
         mTileLayout.setListening(mListening);
         addView((View) mTileLayout, 0 /* Between brightness and footer */);
         super.setPadding(0, 0, 0, 0);
+    }
+
+    public static int getNumQuickTiles(Context context) {
+        return Dependency.get(TunerService.class).getValue(NUM_QUICK_TILES, 6);
     }
 
     @Override
@@ -138,17 +147,6 @@ public class QuickQSPanel extends QSPanel {
             }
         }
         super.setTiles(quickTiles, true);
-    }
-
-    private final Tunable mNumTiles = new Tunable() {
-        @Override
-        public void onTuningChanged(String key, String newValue) {
-            setMaxTiles(getNumQuickTiles(mContext));
-        }
-    };
-
-    public static int getNumQuickTiles(Context context) {
-        return Dependency.get(TunerService.class).getValue(NUM_QUICK_TILES, 6);
     }
 
     private static class HeaderTileLayout extends LinearLayout implements QSTileLayout {
@@ -253,6 +251,7 @@ public class QuickQSPanel extends QSPanel {
                         R.id.expand_indicator);
             }
         }
+
         @Override
         public void updateSettings() {
         }

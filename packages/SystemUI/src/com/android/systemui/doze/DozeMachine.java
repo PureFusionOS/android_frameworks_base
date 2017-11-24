@@ -31,92 +31,34 @@ import java.util.ArrayList;
 
 /**
  * Orchestrates all things doze.
- *
+ * <p>
  * DozeMachine implements a state machine that orchestrates how the UI and triggers work and
  * interfaces with the power and screen states.
- *
+ * <p>
  * During state transitions and in certain states, DozeMachine holds a wake lock.
  */
 public class DozeMachine {
 
     static final String TAG = "DozeMachine";
     static final boolean DEBUG = DozeService.DEBUG;
-
-    public enum State {
-        /** Default state. Transition to INITIALIZED to get Doze going. */
-        UNINITIALIZED,
-        /** Doze components are set up. Followed by transition to DOZE or DOZE_AOD. */
-        INITIALIZED,
-        /** Regular doze. Device is asleep and listening for pulse triggers. */
-        DOZE,
-        /** Always-on doze. Device is asleep, showing UI and listening for pulse triggers. */
-        DOZE_AOD,
-        /** Pulse has been requested. Device is awake and preparing UI */
-        DOZE_REQUEST_PULSE,
-        /** Pulse is showing. Device is awake and showing UI. */
-        DOZE_PULSING,
-        /** Pulse is done showing. Followed by transition to DOZE or DOZE_AOD. */
-        DOZE_PULSE_DONE,
-        /** Doze is done. DozeService is finished. */
-        FINISH,
-        /** AOD, but the display is temporarily off. */
-        DOZE_AOD_PAUSED;
-
-        boolean canPulse() {
-            switch (this) {
-                case DOZE:
-                case DOZE_AOD:
-                case DOZE_AOD_PAUSED:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        boolean staysAwake() {
-            switch (this) {
-                case DOZE_REQUEST_PULSE:
-                case DOZE_PULSING:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        int screenState() {
-            switch (this) {
-                case UNINITIALIZED:
-                case INITIALIZED:
-                case DOZE:
-                case DOZE_AOD_PAUSED:
-                    return Display.STATE_OFF;
-                case DOZE_PULSING:
-                case DOZE_AOD:
-                    return Display.STATE_DOZE; // TODO: use STATE_ON if appropriate.
-                default:
-                    return Display.STATE_UNKNOWN;
-            }
-        }
-    }
-
     private final Service mDozeService;
     private final WakeLock mWakeLock;
     private final AmbientDisplayConfiguration mConfig;
-    private Part[] mParts;
-
     private final ArrayList<State> mQueuedRequests = new ArrayList<>();
+    private Part[] mParts;
     private State mState = State.UNINITIALIZED;
     private int mPulseReason;
     private boolean mWakeLockHeldForCurrentState = false;
-
     public DozeMachine(Service service, AmbientDisplayConfiguration config,
-            WakeLock wakeLock) {
+                       WakeLock wakeLock) {
         mDozeService = service;
         mConfig = config;
         mWakeLock = wakeLock;
     }
 
-    /** Initializes the set of {@link Part}s. Must be called exactly once after construction. */
+    /**
+     * Initializes the set of {@link Part}s. Must be called exactly once after construction.
+     */
     public void setParts(Part[] parts) {
         Preconditions.checkState(mParts == null);
         mParts = parts;
@@ -124,12 +66,12 @@ public class DozeMachine {
 
     /**
      * Requests transitioning to {@code requestedState}.
-     *
+     * <p>
      * This can be called during a state transition, in which case it will be queued until all
      * queued state transitions are done.
-     *
+     * <p>
      * A wake lock is held while the transition is happening.
-     *
+     * <p>
      * Note that {@link #transitionPolicy} can modify what state will be transitioned to.
      */
     @MainThread
@@ -170,7 +112,7 @@ public class DozeMachine {
 
     /**
      * @return the current state.
-     *
+     * <p>
      * This must not be called during a transition.
      */
     @MainThread
@@ -182,7 +124,7 @@ public class DozeMachine {
 
     /**
      * @return the current pulse reason.
-     *
+     * <p>
      * This is only valid if the machine is currently in one of the pulse states.
      */
     @MainThread
@@ -194,7 +136,9 @@ public class DozeMachine {
         return mPulseReason;
     }
 
-    /** Requests the PowerManager to wake up now. */
+    /**
+     * Requests the PowerManager to wake up now.
+     */
     public void wakeUp() {
         mDozeService.requestWakeUp();
     }
@@ -318,7 +262,7 @@ public class DozeMachine {
             case INITIALIZED:
             case DOZE_PULSE_DONE:
                 transitionTo(mConfig.alwaysOnEnabled(UserHandle.USER_CURRENT)
-                        ? DozeMachine.State.DOZE_AOD : DozeMachine.State.DOZE,
+                                ? DozeMachine.State.DOZE_AOD : DozeMachine.State.DOZE,
                         DozeLog.PULSE_REASON_NONE);
                 break;
             default:
@@ -326,38 +270,130 @@ public class DozeMachine {
         }
     }
 
-    /** Dumps the current state */
+    /**
+     * Dumps the current state
+     */
     public void dump(PrintWriter pw) {
-        pw.print(" state="); pw.println(mState);
-        pw.print(" wakeLockHeldForCurrentState="); pw.println(mWakeLockHeldForCurrentState);
+        pw.print(" state=");
+        pw.println(mState);
+        pw.print(" wakeLockHeldForCurrentState=");
+        pw.println(mWakeLockHeldForCurrentState);
         pw.println("Parts:");
         for (Part p : mParts) {
             p.dump(pw);
         }
     }
 
-    /** A part of the DozeMachine that needs to be notified about state changes. */
+    public enum State {
+        /**
+         * Default state. Transition to INITIALIZED to get Doze going.
+         */
+        UNINITIALIZED,
+        /**
+         * Doze components are set up. Followed by transition to DOZE or DOZE_AOD.
+         */
+        INITIALIZED,
+        /**
+         * Regular doze. Device is asleep and listening for pulse triggers.
+         */
+        DOZE,
+        /**
+         * Always-on doze. Device is asleep, showing UI and listening for pulse triggers.
+         */
+        DOZE_AOD,
+        /**
+         * Pulse has been requested. Device is awake and preparing UI
+         */
+        DOZE_REQUEST_PULSE,
+        /**
+         * Pulse is showing. Device is awake and showing UI.
+         */
+        DOZE_PULSING,
+        /**
+         * Pulse is done showing. Followed by transition to DOZE or DOZE_AOD.
+         */
+        DOZE_PULSE_DONE,
+        /**
+         * Doze is done. DozeService is finished.
+         */
+        FINISH,
+        /**
+         * AOD, but the display is temporarily off.
+         */
+        DOZE_AOD_PAUSED;
+
+        boolean canPulse() {
+            switch (this) {
+                case DOZE:
+                case DOZE_AOD:
+                case DOZE_AOD_PAUSED:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        boolean staysAwake() {
+            switch (this) {
+                case DOZE_REQUEST_PULSE:
+                case DOZE_PULSING:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        int screenState() {
+            switch (this) {
+                case UNINITIALIZED:
+                case INITIALIZED:
+                case DOZE:
+                case DOZE_AOD_PAUSED:
+                    return Display.STATE_OFF;
+                case DOZE_PULSING:
+                case DOZE_AOD:
+                    return Display.STATE_DOZE; // TODO: use STATE_ON if appropriate.
+                default:
+                    return Display.STATE_UNKNOWN;
+            }
+        }
+    }
+
+    /**
+     * A part of the DozeMachine that needs to be notified about state changes.
+     */
     public interface Part {
         /**
          * Transition from {@code oldState} to {@code newState}.
-         *
+         * <p>
          * This method is guaranteed to only be called while a wake lock is held.
          */
         void transitionTo(State oldState, State newState);
 
-        /** Dump current state. For debugging only. */
-        default void dump(PrintWriter pw) {}
+        /**
+         * Dump current state. For debugging only.
+         */
+        default void dump(PrintWriter pw) {
+        }
     }
 
-    /** A wrapper interface for {@link android.service.dreams.DreamService} */
+    /**
+     * A wrapper interface for {@link android.service.dreams.DreamService}
+     */
     public interface Service {
-        /** Finish dreaming. */
+        /**
+         * Finish dreaming.
+         */
         void finish();
 
-        /** Request a display state. See {@link android.view.Display#STATE_DOZE}. */
+        /**
+         * Request a display state. See {@link android.view.Display#STATE_DOZE}.
+         */
         void setDozeScreenState(int state);
 
-        /** Request waking up. */
+        /**
+         * Request waking up.
+         */
         void requestWakeUp();
     }
 }

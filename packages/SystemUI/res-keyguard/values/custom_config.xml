@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2017 The ABC Rom Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2017 The ABC Rom Project
      Copyright (C) 2017 The Liquid Remix Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +22,7 @@
     <bool name="config_fingerprintWakeAndUnlock">true</bool>
 
     <!-- App side bar -->
-    <style name="AppSidebarItemText" >
+    <style name="AppSidebarItemText">
         <item name="android:textColor">@color/sidebar_item_text_color</item>
         <item name="android:textSize">@dimen/item_title_text_size</item>
         <item name="android:singleLine">true</item>
@@ -33,7 +32,7 @@
         <item name="android:shadowRadius">1.0</item>
         <item name="android:shadowDx">2.0</item>
         <item name="android:shadowDy">2.0</item>
-    </style>  
+    </style>
 
     <!-- OmniJaws QS -->
     <style name="TextAppearance.StatusBar.Expanded.Weather">

@@ -81,7 +81,7 @@ public class PipDismissViewController {
             tlp.bottomMargin = stableInsets.bottom + bottomMargin;
 
             // Add the target to the window
-            LayoutParams lp =  new LayoutParams(
+            LayoutParams lp = new LayoutParams(
                     LayoutParams.MATCH_PARENT, gradientHeight,
                     0, windowSize.y - gradientHeight,
                     LayoutParams.TYPE_NAVIGATION_BAR_PANEL,

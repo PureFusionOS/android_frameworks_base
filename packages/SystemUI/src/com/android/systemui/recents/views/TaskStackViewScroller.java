@@ -37,11 +37,6 @@ public class TaskStackViewScroller {
 
     private static final String TAG = "TaskStackViewScroller";
     private static final boolean DEBUG = false;
-
-    public interface TaskStackViewScrollerCallbacks {
-        void onStackScrollChanged(float prevScroll, float curScroll, AnimationProps animation);
-    }
-
     /**
      * A Property wrapper around the <code>stackScroll</code> functionality handled by the
      * {@link #setStackScroll(float)} and
@@ -59,31 +54,29 @@ public class TaskStackViewScroller {
                     return object.getStackScroll();
                 }
             };
-
     Context mContext;
     TaskStackLayoutAlgorithm mLayoutAlgorithm;
     TaskStackViewScrollerCallbacks mCb;
-
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     float mStackScrollP;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     float mLastDeltaP = 0f;
     float mFlingDownScrollP;
     int mFlingDownY;
-
     OverScroller mScroller;
     ObjectAnimator mScrollAnimator;
     float mFinalAnimatedScroll;
-
     public TaskStackViewScroller(Context context, TaskStackViewScrollerCallbacks cb,
-            TaskStackLayoutAlgorithm layoutAlgorithm) {
+                                 TaskStackLayoutAlgorithm layoutAlgorithm) {
         mContext = context;
         mCb = cb;
         mScroller = new OverScroller(context);
         mLayoutAlgorithm = layoutAlgorithm;
     }
 
-    /** Resets the task scroller. */
+    /**
+     * Resets the task scroller.
+     */
     void reset() {
         mStackScrollP = 0f;
         mLastDeltaP = 0f;
@@ -93,7 +86,9 @@ public class TaskStackViewScroller {
         mLastDeltaP = 0f;
     }
 
-    /** Gets the current stack scroll */
+    /**
+     * Gets the current stack scroll
+     */
     public float getStackScroll() {
         return mStackScrollP;
     }
@@ -132,6 +127,7 @@ public class TaskStackViewScroller {
 
     /**
      * Sets the current stack scroll to the initial state when you first enter recents.
+     *
      * @return whether the stack progress changed.
      */
     public boolean setStackScrollToInitialState() {
@@ -144,7 +140,7 @@ public class TaskStackViewScroller {
      * Starts a fling that is coordinated with the {@link TaskStackViewTouchHandler}.
      */
     public void fling(float downScrollP, int downY, int y, int velY, int minY, int maxY,
-            int overscroll) {
+                      int overscroll) {
         if (DEBUG) {
             Log.d(TAG, "fling: " + downScrollP + ", downY: " + downY + ", y: " + y +
                     ", velY: " + velY + ", minY: " + minY + ", maxY: " + maxY);
@@ -154,7 +150,9 @@ public class TaskStackViewScroller {
         mScroller.fling(0, y, 0, velY, 0, 0, minY, maxY, 0, overscroll);
     }
 
-    /** Bounds the current scroll if necessary */
+    /**
+     * Bounds the current scroll if necessary
+     */
     public boolean boundScroll() {
         float curScroll = getStackScroll();
         float newScroll = getBoundedStackScroll(curScroll);
@@ -165,12 +163,16 @@ public class TaskStackViewScroller {
         return false;
     }
 
-    /** Returns the bounded stack scroll */
+    /**
+     * Returns the bounded stack scroll
+     */
     float getBoundedStackScroll(float scroll) {
         return Utilities.clamp(scroll, mLayoutAlgorithm.mMinScrollP, mLayoutAlgorithm.mMaxScrollP);
     }
 
-    /** Returns the amount that the absolute value of how much the scroll is out of bounds. */
+    /**
+     * Returns the amount that the absolute value of how much the scroll is out of bounds.
+     */
     float getScrollAmountOutOfBounds(float scroll) {
         if (scroll < mLayoutAlgorithm.mMinScrollP) {
             return Math.abs(scroll - mLayoutAlgorithm.mMinScrollP);
@@ -180,12 +182,16 @@ public class TaskStackViewScroller {
         return 0f;
     }
 
-    /** Returns whether the specified scroll is out of bounds */
+    /**
+     * Returns whether the specified scroll is out of bounds
+     */
     boolean isScrollOutOfBounds() {
         return Float.compare(getScrollAmountOutOfBounds(mStackScrollP), 0f) != 0;
     }
 
-    /** Animates the stack scroll into bounds */
+    /**
+     * Animates the stack scroll into bounds
+     */
     ObjectAnimator animateBoundScroll() {
         // TODO: Take duration for snap back
         float curScroll = getStackScroll();
@@ -197,14 +203,18 @@ public class TaskStackViewScroller {
         return mScrollAnimator;
     }
 
-    /** Animates the stack scroll */
+    /**
+     * Animates the stack scroll
+     */
     void animateScroll(float newScroll, final Runnable postRunnable) {
         int duration = mContext.getResources().getInteger(
                 R.integer.recents_animate_task_stack_scroll_duration);
         animateScroll(newScroll, duration, postRunnable);
     }
 
-    /** Animates the stack scroll */
+    /**
+     * Animates the stack scroll
+     */
     void animateScroll(float newScroll, int duration, final Runnable postRunnable) {
         // Finish any current scrolling animations
         if (mScrollAnimator != null && mScrollAnimator.isRunning()) {
@@ -236,14 +246,16 @@ public class TaskStackViewScroller {
         }
     }
 
-    /** Aborts any current stack scrolls */
+    /**
+     * Aborts any current stack scrolls
+     */
     void stopBoundScrollAnimation() {
         Utilities.cancelAnimationWithoutCallbacks(mScrollAnimator);
     }
 
-    /**** OverScroller ****/
-
-    /** Called from the view draw, computes the next scroll. */
+    /**
+     * Called from the view draw, computes the next scroll.
+     */
     boolean computeScroll() {
         if (mScroller.computeScrollOffset()) {
             float deltaP = mLayoutAlgorithm.getDeltaPForY(mFlingDownY, mScroller.getCurrY());
@@ -256,7 +268,11 @@ public class TaskStackViewScroller {
         return false;
     }
 
-    /** Returns whether the overscroller is scrolling. */
+    /**** OverScroller ****/
+
+    /**
+     * Returns whether the overscroller is scrolling.
+     */
     boolean isScrolling() {
         return !mScroller.isFinished();
     }
@@ -265,7 +281,9 @@ public class TaskStackViewScroller {
         return mScroller.getCurrVelocity();
     }
 
-    /** Stops the scroller and any current fling. */
+    /**
+     * Stops the scroller and any current fling.
+     */
     void stopScroller() {
         if (!mScroller.isFinished()) {
             mScroller.abortAnimation();
@@ -273,8 +291,14 @@ public class TaskStackViewScroller {
     }
 
     public void dump(String prefix, PrintWriter writer) {
-        writer.print(prefix); writer.print(TAG);
-        writer.print(" stackScroll:"); writer.print(mStackScrollP);
+        writer.print(prefix);
+        writer.print(TAG);
+        writer.print(" stackScroll:");
+        writer.print(mStackScrollP);
         writer.println();
+    }
+
+    public interface TaskStackViewScrollerCallbacks {
+        void onStackScrollChanged(float prevScroll, float curScroll, AnimationProps animation);
     }
 }

@@ -35,7 +35,8 @@ public interface NavGesture extends Plugin {
 
         public void setBarState(boolean vertical, boolean isRtl);
 
-        public default void destroy() { }
+        public default void destroy() {
+        }
     }
 
 }

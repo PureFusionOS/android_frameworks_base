@@ -54,28 +54,12 @@ public class AssistManager implements ConfigurationChangedReceiver {
     private static final long TIMEOUT_ACTIVITY = 1000;
 
     protected final Context mContext;
+    protected final AssistUtils mAssistUtils;
     private final WindowManager mWindowManager;
     private final AssistDisclosure mAssistDisclosure;
     private final InterestingConfigChanges mInterestingConfigChanges;
-
-    private AssistOrbContainer mView;
     private final DeviceProvisionedController mDeviceProvisionedController;
-    protected final AssistUtils mAssistUtils;
-
-    private IVoiceInteractionSessionShowCallback mShowCallback =
-            new IVoiceInteractionSessionShowCallback.Stub() {
-
-        @Override
-        public void onFailed() throws RemoteException {
-            mView.post(mHideRunnable);
-        }
-
-        @Override
-        public void onShown() throws RemoteException {
-            mView.post(mHideRunnable);
-        }
-    };
-
+    private AssistOrbContainer mView;
     private Runnable mHideRunnable = new Runnable() {
         @Override
         public void run() {
@@ -83,6 +67,19 @@ public class AssistManager implements ConfigurationChangedReceiver {
             mView.show(false /* show */, true /* animate */);
         }
     };
+    private IVoiceInteractionSessionShowCallback mShowCallback =
+            new IVoiceInteractionSessionShowCallback.Stub() {
+
+                @Override
+                public void onFailed() throws RemoteException {
+                    mView.post(mHideRunnable);
+                }
+
+                @Override
+                public void onShown() throws RemoteException {
+                    mView.post(mHideRunnable);
+                }
+            };
 
     public AssistManager(DeviceProvisionedController controller, Context context) {
         mContext = context;
@@ -101,16 +98,16 @@ public class AssistManager implements ConfigurationChangedReceiver {
     protected void registerVoiceInteractionSessionListener() {
         mAssistUtils.registerVoiceInteractionSessionListener(
                 new IVoiceInteractionSessionListener.Stub() {
-            @Override
-            public void onVoiceSessionShown() throws RemoteException {
-                Log.v(TAG, "Voice open");
-            }
+                    @Override
+                    public void onVoiceSessionShown() throws RemoteException {
+                        Log.v(TAG, "Voice open");
+                    }
 
-            @Override
-            public void onVoiceSessionHidden() throws RemoteException {
-                Log.v(TAG, "Voice closed");
-            }
-        });
+                    @Override
+                    public void onVoiceSessionHidden() throws RemoteException {
+                        Log.v(TAG, "Voice closed");
+                    }
+                });
     }
 
     public void onConfigurationChanged(Configuration newConfiguration) {
@@ -186,7 +183,7 @@ public class AssistManager implements ConfigurationChangedReceiver {
     }
 
     private void startAssistInternal(Bundle args, @NonNull ComponentName assistComponent,
-            boolean isService) {
+                                     boolean isService) {
         if (isService) {
             startVoiceInteractor(args);
         } else {
@@ -265,16 +262,16 @@ public class AssistManager implements ConfigurationChangedReceiver {
     }
 
     public void replaceDrawable(ImageView v, ComponentName component, String name,
-            boolean isService) {
+                                boolean isService) {
         if (component != null) {
             try {
                 PackageManager packageManager = mContext.getPackageManager();
                 // Look for the search icon specified in the activity meta-data
                 Bundle metaData = isService
                         ? packageManager.getServiceInfo(
-                                component, PackageManager.GET_META_DATA).metaData
+                        component, PackageManager.GET_META_DATA).metaData
                         : packageManager.getActivityInfo(
-                                component, PackageManager.GET_META_DATA).metaData;
+                        component, PackageManager.GET_META_DATA).metaData;
                 if (metaData != null) {
                     int iconResId = metaData.getInt(name);
                     if (iconResId != 0) {

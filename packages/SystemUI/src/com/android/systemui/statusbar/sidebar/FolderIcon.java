@@ -42,32 +42,28 @@ import java.util.ArrayList;
  * An icon that can appear on in the workspace representing an {@link Folder}.
  */
 public class FolderIcon extends LinearLayout implements FolderListener {
-    private static boolean sStaticValuesDirty = true;
-
     // The number of icons to display in the
     private static final int NUM_ITEMS_IN_PREVIEW = 3;
-
     private static final int STYLE_STACKED = 0;
     private static final int STYLE_GRID = 1;
     private static final int STYLE_CAROUSEL = 2;
-
     // The amount of vertical spread between items in the stack [0...1]
     private static final float PERSPECTIVE_SHIFT_FACTOR = 0.24f;
-
     // The degree to which the item in the back of the stack is scaled [0...1]
     // (0 means it's not scaled at all, 1 means it's scaled to nothing)
     private static final float PERSPECTIVE_SCALE_FACTOR = 0.35f;
-
     public static Drawable sSharedFolderLeaveBehind = null;
-
+    private static boolean sStaticValuesDirty = true;
+    private static LayoutInflater sInflater;
+    private static int sPreviewSize;
+    private static int sPreviewPadding;
+    boolean mAnimating = false;
     private ImageView mPreviewBackground;
     private TextView mFolderName;
     private FolderInfo mInfo;
     private Folder mFolder;
-
     private int mNumItemsInPreview = NUM_ITEMS_IN_PREVIEW;
     private int mFolderIconStyle = STYLE_GRID;
-
     // These variables are all associated with the drawing of the preview; they are stored
     // as member variables for shared usage and to avoid computation on each frame
     private int mIntrinsicIconSize;
@@ -78,11 +74,6 @@ public class FolderIcon extends LinearLayout implements FolderListener {
     private int mPreviewOffsetX;
     private int mPreviewOffsetY;
     private float mMaxPerspectiveShift;
-    boolean mAnimating = false;
-    private static LayoutInflater sInflater;
-    private static int sPreviewSize;
-    private static int sPreviewPadding;
-
     private PreviewItemDrawingParams mParams = new PreviewItemDrawingParams(0, 0, 0, 0);
     private PreviewItemDrawingParams mAnimParams = new PreviewItemDrawingParams(0, 0, 0, 0);
     private ArrayList<AppItemInfo> mHiddenItems = new ArrayList<AppItemInfo>();
@@ -97,14 +88,8 @@ public class FolderIcon extends LinearLayout implements FolderListener {
         init(context);
     }
 
-    private void init(Context context) {
-        //mFolderIconStyle = PreferencesProvider.Interface.Homescreen.FolderIconStyle.getFolderIconStyle(getContext());
-        mNumItemsInPreview = (mFolderIconStyle == STYLE_GRID) ? 4 : 3;
-        sPreviewSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
-    }
-
     public static FolderIcon fromXml(int resId, ViewGroup group, OnClickListener listener,
-            FolderInfo folderInfo, Context context, boolean isSidebar) {
+                                     FolderInfo folderInfo, Context context, boolean isSidebar) {
         if (sInflater == null)
             sInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         FolderIcon icon = (FolderIcon) sInflater.inflate(resId, group, false);
@@ -128,6 +113,12 @@ public class FolderIcon extends LinearLayout implements FolderListener {
         folderInfo.addListener(icon);
 
         return icon;
+    }
+
+    private void init(Context context) {
+        //mFolderIconStyle = PreferencesProvider.Interface.Homescreen.FolderIconStyle.getFolderIconStyle(getContext());
+        mNumItemsInPreview = (mFolderIconStyle == STYLE_GRID) ? 4 : 3;
+        sPreviewSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
     }
 
     @Override
@@ -186,20 +177,6 @@ public class FolderIcon extends LinearLayout implements FolderListener {
         computePreviewDrawingParams(bounds.right - bounds.left, getMeasuredWidth());
     }
 
-    class PreviewItemDrawingParams {
-        PreviewItemDrawingParams(float transX, float transY, float scale, int overlayAlpha) {
-            this.transX = transX;
-            this.transY = transY;
-            this.scale = scale;
-            this.overlayAlpha = overlayAlpha;
-        }
-        float transX;
-        float transY;
-        float scale;
-        int overlayAlpha;
-        Drawable drawable;
-    }
-
     private float getLocalCenterForIndex(int index, int[] center) {
         mParams = computePreviewItemDrawingParams(Math.min(mNumItemsInPreview, index), mParams);
 
@@ -214,7 +191,7 @@ public class FolderIcon extends LinearLayout implements FolderListener {
     }
 
     private PreviewItemDrawingParams computePreviewItemDrawingParams(int index,
-            PreviewItemDrawingParams params) {
+                                                                     PreviewItemDrawingParams params) {
         switch (mFolderIconStyle) {
             case STYLE_STACKED:
                 return computePreviewItemDrawingParamsStacked(index, params);
@@ -227,7 +204,7 @@ public class FolderIcon extends LinearLayout implements FolderListener {
     }
 
     private PreviewItemDrawingParams computePreviewItemDrawingParamsStacked(int index,
-            PreviewItemDrawingParams params) {
+                                                                            PreviewItemDrawingParams params) {
         index = mNumItemsInPreview - index - 1;
         float r = (index * 1.0f) / (mNumItemsInPreview - 1);
         float scale = (1 - PERSPECTIVE_SCALE_FACTOR * (1 - r));
@@ -255,7 +232,7 @@ public class FolderIcon extends LinearLayout implements FolderListener {
     }
 
     private PreviewItemDrawingParams computePreviewItemDrawingParamsGrid(int index,
-            PreviewItemDrawingParams params) {
+                                                                         PreviewItemDrawingParams params) {
         //index = mNumItemsInPreview - index - 1;
         float iconScale = 0.45f;
 
@@ -284,7 +261,7 @@ public class FolderIcon extends LinearLayout implements FolderListener {
     }
 
     private PreviewItemDrawingParams computePreviewItemDrawingParamsCarousel(int index,
-                                                                            PreviewItemDrawingParams params) {
+                                                                             PreviewItemDrawingParams params) {
         float r = (index == 0) ? ((mNumItemsInPreview - 2) * 1.0f) / (mNumItemsInPreview - 1) :
                 0;
         float scale = (1 - PERSPECTIVE_SCALE_FACTOR * (1 - r));
@@ -293,12 +270,12 @@ public class FolderIcon extends LinearLayout implements FolderListener {
         float xOffset;
         int alpha;
         float scaledSize = scale * mBaselineIconSize;
-        if (index > 0 ) {
-            yOffset = scaledSize/3;
+        if (index > 0) {
+            yOffset = scaledSize / 3;
             xOffset = index == 1 ? 0f : mAvailableSpaceInPreview - scaledSize;
             alpha = 80;
         } else {
-            yOffset = mMaxPerspectiveShift + scaledSize/3;
+            yOffset = mMaxPerspectiveShift + scaledSize / 3;
             xOffset = (mAvailableSpaceInPreview - scaledSize) / 2;
             alpha = 0;
         }
@@ -375,16 +352,16 @@ public class FolderIcon extends LinearLayout implements FolderListener {
         }
     }
 
+    public boolean getTextVisible() {
+        return mFolderName.getVisibility() == VISIBLE;
+    }
+
     public void setTextVisible(boolean visible) {
         if (visible) {
             mFolderName.setVisibility(VISIBLE);
         } else {
             mFolderName.setVisibility(GONE);
         }
-    }
-
-    public boolean getTextVisible() {
-        return mFolderName.getVisibility() == VISIBLE;
     }
 
     public void onItemsChanged() {
@@ -405,5 +382,19 @@ public class FolderIcon extends LinearLayout implements FolderListener {
     public void onTitleChanged(CharSequence title) {
         mFolderName.setText(title.toString());
         setContentDescription(title);
+    }
+
+    class PreviewItemDrawingParams {
+        float transX;
+        float transY;
+        float scale;
+        int overlayAlpha;
+        Drawable drawable;
+        PreviewItemDrawingParams(float transX, float transY, float scale, int overlayAlpha) {
+            this.transX = transX;
+            this.transY = transY;
+            this.scale = scale;
+            this.overlayAlpha = overlayAlpha;
+        }
     }
 }

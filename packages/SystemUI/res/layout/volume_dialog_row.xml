@@ -13,14 +13,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/volume_row_height"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/volume_row_padding_bottom" >
+    android:paddingBottom="@dimen/volume_row_padding_bottom">
 
     <TextView
         android:id="@+id/volume_row_header"
@@ -28,29 +27,30 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.Volume.Header"
-        android:paddingStart="@dimen/volume_row_header_padding_start" />
+        android:paddingStart="@dimen/volume_row_header_padding_start"
+        android:textAppearance="@style/TextAppearance.Volume.Header" />
 
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/volume_row_slider_height"
-            android:orientation="horizontal"
-            android:paddingStart="@dimen/volume_row_padding_start" >
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/volume_row_slider_height"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/volume_row_padding_start">
+
         <com.android.keyguard.AlphaOptimizedImageButton
-                android:id="@+id/volume_row_icon"
-                style="@style/VolumeButtons"
-                android:layout_width="@dimen/volume_button_size"
-                android:layout_height="@dimen/volume_button_size"
-                android:soundEffectsEnabled="false" />
+            android:id="@+id/volume_row_icon"
+            style="@style/VolumeButtons"
+            android:layout_width="@dimen/volume_button_size"
+            android:layout_height="@dimen/volume_button_size"
+            android:soundEffectsEnabled="false" />
 
         <SeekBar
-                android:id="@+id/volume_row_slider"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignWithParentIfMissing="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:paddingStart="@dimen/volume_row_slider_padding_start"/>
+            android:id="@+id/volume_row_slider"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignWithParentIfMissing="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingStart="@dimen/volume_row_slider_padding_start" />
     </LinearLayout>
 
 </LinearLayout>

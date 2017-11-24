@@ -50,7 +50,9 @@ public class ExpandableIndicator extends ImageView {
         setContentDescription(getContentDescription(expanded));
     }
 
-    /** Whether the icons are using the default direction or the opposite */
+    /**
+     * Whether the icons are using the default direction or the opposite
+     */
     public void setDefaultDirection(boolean isDefaultDirection) {
         mIsDefaultDirection = isDefaultDirection;
         updateIndicatorDrawable();

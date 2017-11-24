@@ -41,54 +41,50 @@ import java.util.ArrayList;
  * are coalesced, note that they are all idempotent.
  */
 public class CommandQueue extends IStatusBar.Stub {
-    private static final int INDEX_MASK = 0xffff;
-    private static final int MSG_SHIFT  = 16;
-    private static final int MSG_MASK   = 0xffff << MSG_SHIFT;
-
-    private static final int OP_SET_ICON    = 1;
-    private static final int OP_REMOVE_ICON = 2;
-
-    private static final int MSG_ICON                          = 1 << MSG_SHIFT;
-    private static final int MSG_DISABLE                       = 2 << MSG_SHIFT;
-    private static final int MSG_EXPAND_NOTIFICATIONS          = 3 << MSG_SHIFT;
-    private static final int MSG_COLLAPSE_PANELS               = 4 << MSG_SHIFT;
-    private static final int MSG_EXPAND_SETTINGS               = 5 << MSG_SHIFT;
-    private static final int MSG_SET_SYSTEMUI_VISIBILITY       = 6 << MSG_SHIFT;
-    private static final int MSG_TOP_APP_WINDOW_CHANGED        = 7 << MSG_SHIFT;
-    private static final int MSG_SHOW_IME_BUTTON               = 8 << MSG_SHIFT;
-    private static final int MSG_TOGGLE_RECENT_APPS            = 9 << MSG_SHIFT;
-    private static final int MSG_PRELOAD_RECENT_APPS           = 10 << MSG_SHIFT;
-    private static final int MSG_CANCEL_PRELOAD_RECENT_APPS    = 11 << MSG_SHIFT;
-    private static final int MSG_SET_WINDOW_STATE              = 12 << MSG_SHIFT;
-    private static final int MSG_SHOW_RECENT_APPS              = 13 << MSG_SHIFT;
-    private static final int MSG_HIDE_RECENT_APPS              = 14 << MSG_SHIFT;
-    private static final int MSG_SHOW_SCREEN_PIN_REQUEST       = 18 << MSG_SHIFT;
-    private static final int MSG_APP_TRANSITION_PENDING        = 19 << MSG_SHIFT;
-    private static final int MSG_APP_TRANSITION_CANCELLED      = 20 << MSG_SHIFT;
-    private static final int MSG_APP_TRANSITION_STARTING       = 21 << MSG_SHIFT;
-    private static final int MSG_ASSIST_DISCLOSURE             = 22 << MSG_SHIFT;
-    private static final int MSG_START_ASSIST                  = 23 << MSG_SHIFT;
-    private static final int MSG_CAMERA_LAUNCH_GESTURE         = 24 << MSG_SHIFT;
-    private static final int MSG_TOGGLE_KEYBOARD_SHORTCUTS     = 25 << MSG_SHIFT;
-    private static final int MSG_SHOW_PICTURE_IN_PICTURE_MENU  = 26 << MSG_SHIFT;
-    private static final int MSG_ADD_QS_TILE                   = 27 << MSG_SHIFT;
-    private static final int MSG_REMOVE_QS_TILE                = 28 << MSG_SHIFT;
-    private static final int MSG_CLICK_QS_TILE                 = 29 << MSG_SHIFT;
-    private static final int MSG_TOGGLE_APP_SPLIT_SCREEN       = 30 << MSG_SHIFT;
-    private static final int MSG_APP_TRANSITION_FINISHED       = 31 << MSG_SHIFT;
-    private static final int MSG_DISMISS_KEYBOARD_SHORTCUTS    = 32 << MSG_SHIFT;
-    private static final int MSG_HANDLE_SYSNAV_KEY             = 33 << MSG_SHIFT;
-    private static final int MSG_SHOW_GLOBAL_ACTIONS           = 34 << MSG_SHIFT;
-    private static final int MSG_RESTART_UI                    = 35 << MSG_SHIFT;
-    private static final int MSG_SET_AUTOROTATE_STATUS         = 36 << MSG_SHIFT;
-
     public static final int FLAG_EXCLUDE_NONE = 0;
     public static final int FLAG_EXCLUDE_SEARCH_PANEL = 1 << 0;
     public static final int FLAG_EXCLUDE_RECENTS_PANEL = 1 << 1;
     public static final int FLAG_EXCLUDE_NOTIFICATION_PANEL = 1 << 2;
     public static final int FLAG_EXCLUDE_INPUT_METHODS_PANEL = 1 << 3;
     public static final int FLAG_EXCLUDE_COMPAT_MODE_PANEL = 1 << 4;
-
+    private static final int INDEX_MASK = 0xffff;
+    private static final int MSG_SHIFT = 16;
+    private static final int MSG_MASK = 0xffff << MSG_SHIFT;
+    private static final int OP_SET_ICON = 1;
+    private static final int OP_REMOVE_ICON = 2;
+    private static final int MSG_ICON = 1 << MSG_SHIFT;
+    private static final int MSG_DISABLE = 2 << MSG_SHIFT;
+    private static final int MSG_EXPAND_NOTIFICATIONS = 3 << MSG_SHIFT;
+    private static final int MSG_COLLAPSE_PANELS = 4 << MSG_SHIFT;
+    private static final int MSG_EXPAND_SETTINGS = 5 << MSG_SHIFT;
+    private static final int MSG_SET_SYSTEMUI_VISIBILITY = 6 << MSG_SHIFT;
+    private static final int MSG_TOP_APP_WINDOW_CHANGED = 7 << MSG_SHIFT;
+    private static final int MSG_SHOW_IME_BUTTON = 8 << MSG_SHIFT;
+    private static final int MSG_TOGGLE_RECENT_APPS = 9 << MSG_SHIFT;
+    private static final int MSG_PRELOAD_RECENT_APPS = 10 << MSG_SHIFT;
+    private static final int MSG_CANCEL_PRELOAD_RECENT_APPS = 11 << MSG_SHIFT;
+    private static final int MSG_SET_WINDOW_STATE = 12 << MSG_SHIFT;
+    private static final int MSG_SHOW_RECENT_APPS = 13 << MSG_SHIFT;
+    private static final int MSG_HIDE_RECENT_APPS = 14 << MSG_SHIFT;
+    private static final int MSG_SHOW_SCREEN_PIN_REQUEST = 18 << MSG_SHIFT;
+    private static final int MSG_APP_TRANSITION_PENDING = 19 << MSG_SHIFT;
+    private static final int MSG_APP_TRANSITION_CANCELLED = 20 << MSG_SHIFT;
+    private static final int MSG_APP_TRANSITION_STARTING = 21 << MSG_SHIFT;
+    private static final int MSG_ASSIST_DISCLOSURE = 22 << MSG_SHIFT;
+    private static final int MSG_START_ASSIST = 23 << MSG_SHIFT;
+    private static final int MSG_CAMERA_LAUNCH_GESTURE = 24 << MSG_SHIFT;
+    private static final int MSG_TOGGLE_KEYBOARD_SHORTCUTS = 25 << MSG_SHIFT;
+    private static final int MSG_SHOW_PICTURE_IN_PICTURE_MENU = 26 << MSG_SHIFT;
+    private static final int MSG_ADD_QS_TILE = 27 << MSG_SHIFT;
+    private static final int MSG_REMOVE_QS_TILE = 28 << MSG_SHIFT;
+    private static final int MSG_CLICK_QS_TILE = 29 << MSG_SHIFT;
+    private static final int MSG_TOGGLE_APP_SPLIT_SCREEN = 30 << MSG_SHIFT;
+    private static final int MSG_APP_TRANSITION_FINISHED = 31 << MSG_SHIFT;
+    private static final int MSG_DISMISS_KEYBOARD_SHORTCUTS = 32 << MSG_SHIFT;
+    private static final int MSG_HANDLE_SYSNAV_KEY = 33 << MSG_SHIFT;
+    private static final int MSG_SHOW_GLOBAL_ACTIONS = 34 << MSG_SHIFT;
+    private static final int MSG_RESTART_UI = 35 << MSG_SHIFT;
+    private static final int MSG_SET_AUTOROTATE_STATUS = 36 << MSG_SHIFT;
     private static final String SHOW_IME_SWITCHER_KEY = "showImeSwitcherKey";
 
     private final Object mLock = new Object();
@@ -96,51 +92,6 @@ public class CommandQueue extends IStatusBar.Stub {
     private Handler mHandler = new H(Looper.getMainLooper());
     private int mDisable1;
     private int mDisable2;
-
-    /**
-     * These methods are called back on the main thread.
-     */
-    public interface Callbacks {
-        default void setIcon(String slot, StatusBarIcon icon) { }
-        default void removeIcon(String slot) { }
-        default void disable(int state1, int state2, boolean animate) { }
-        default void animateExpandNotificationsPanel() { }
-        default void animateCollapsePanels(int flags) { }
-        default void animateExpandSettingsPanel(String obj) { }
-        default void setSystemUiVisibility(int vis, int fullscreenStackVis,
-                int dockedStackVis, int mask, Rect fullscreenStackBounds, Rect dockedStackBounds) {
-        }
-        default void topAppWindowChanged(boolean visible) { }
-        default void setImeWindowStatus(IBinder token, int vis, int backDisposition,
-                boolean showImeSwitcher) { }
-        default void showRecentApps(boolean triggeredFromAltTab, boolean fromHome) { }
-        default void hideRecentApps(boolean triggeredFromAltTab, boolean triggeredFromHomeKey) { }
-        default void toggleRecentApps() { }
-        default void toggleSplitScreen() { }
-        default void preloadRecentApps() { }
-        default void dismissKeyboardShortcutsMenu() { }
-        default void toggleKeyboardShortcutsMenu(int deviceId) { }
-        default void cancelPreloadRecentApps() { }
-        default void setWindowState(int window, int state) { }
-        default void showScreenPinningRequest(int taskId) { }
-        default void appTransitionPending(boolean forced) { }
-        default void appTransitionCancelled() { }
-        default void appTransitionStarting(long startTime, long duration, boolean forced) { }
-        default void appTransitionFinished() { }
-        default void showAssistDisclosure() { }
-        default void startAssist(Bundle args) { }
-        default void onCameraLaunchGestureDetected(int source) { }
-        default void showPictureInPictureMenu() { }
-
-        default void addQsTile(ComponentName tile) { }
-        default void remQsTile(ComponentName tile) { }
-        default void clickTile(ComponentName tile) { }
-
-        default void handleSystemNavigationKey(int arg1) { }
-        default void handleShowGlobalActionsMenu() { }
-        default void restartUI() { }
-        default void setAutoRotate(boolean enabled) { }
-    }
 
     @VisibleForTesting
     protected CommandQueue() {
@@ -223,7 +174,7 @@ public class CommandQueue extends IStatusBar.Stub {
     }
 
     public void setSystemUiVisibility(int vis, int fullscreenStackVis, int dockedStackVis,
-            int mask, Rect fullscreenStackBounds, Rect dockedStackBounds) {
+                                      int mask, Rect fullscreenStackBounds, Rect dockedStackBounds) {
         synchronized (mLock) {
             // Don't coalesce these, since it might have one time flags set such as
             // STATUS_BAR_UNHIDE which might get lost.
@@ -247,7 +198,7 @@ public class CommandQueue extends IStatusBar.Stub {
     }
 
     public void setImeWindowStatus(IBinder token, int vis, int backDisposition,
-            boolean showImeSwitcher) {
+                                   boolean showImeSwitcher) {
         synchronized (mLock) {
             mHandler.removeMessages(MSG_SHOW_IME_BUTTON);
             Message m = mHandler.obtainMessage(MSG_SHOW_IME_BUTTON, vis, backDisposition, token);
@@ -446,7 +397,125 @@ public class CommandQueue extends IStatusBar.Stub {
         synchronized (mLock) {
             mHandler.removeMessages(MSG_SET_AUTOROTATE_STATUS);
             mHandler.obtainMessage(MSG_SET_AUTOROTATE_STATUS,
-                enabled ? 1 : 0, 0, null).sendToTarget();
+                    enabled ? 1 : 0, 0, null).sendToTarget();
+        }
+    }
+
+    /**
+     * These methods are called back on the main thread.
+     */
+    public interface Callbacks {
+        default void setIcon(String slot, StatusBarIcon icon) {
+        }
+
+        default void removeIcon(String slot) {
+        }
+
+        default void disable(int state1, int state2, boolean animate) {
+        }
+
+        default void animateExpandNotificationsPanel() {
+        }
+
+        default void animateCollapsePanels(int flags) {
+        }
+
+        default void animateExpandSettingsPanel(String obj) {
+        }
+
+        default void setSystemUiVisibility(int vis, int fullscreenStackVis,
+                                           int dockedStackVis, int mask, Rect fullscreenStackBounds, Rect dockedStackBounds) {
+        }
+
+        default void topAppWindowChanged(boolean visible) {
+        }
+
+        default void setImeWindowStatus(IBinder token, int vis, int backDisposition,
+                                        boolean showImeSwitcher) {
+        }
+
+        default void showRecentApps(boolean triggeredFromAltTab, boolean fromHome) {
+        }
+
+        default void hideRecentApps(boolean triggeredFromAltTab, boolean triggeredFromHomeKey) {
+        }
+
+        default void toggleRecentApps() {
+        }
+
+        default void toggleSplitScreen() {
+        }
+
+        default void preloadRecentApps() {
+        }
+
+        default void dismissKeyboardShortcutsMenu() {
+        }
+
+        default void toggleKeyboardShortcutsMenu(int deviceId) {
+        }
+
+        default void cancelPreloadRecentApps() {
+        }
+
+        default void setWindowState(int window, int state) {
+        }
+
+        default void showScreenPinningRequest(int taskId) {
+        }
+
+        default void appTransitionPending(boolean forced) {
+        }
+
+        default void appTransitionCancelled() {
+        }
+
+        default void appTransitionStarting(long startTime, long duration, boolean forced) {
+        }
+
+        default void appTransitionFinished() {
+        }
+
+        default void showAssistDisclosure() {
+        }
+
+        default void startAssist(Bundle args) {
+        }
+
+        default void onCameraLaunchGestureDetected(int source) {
+        }
+
+        default void showPictureInPictureMenu() {
+        }
+
+        default void addQsTile(ComponentName tile) {
+        }
+
+        default void remQsTile(ComponentName tile) {
+        }
+
+        default void clickTile(ComponentName tile) {
+        }
+
+        default void handleSystemNavigationKey(int arg1) {
+        }
+
+        default void handleShowGlobalActionsMenu() {
+        }
+
+        default void restartUI() {
+        }
+
+        default void setAutoRotate(boolean enabled) {
+        }
+    }
+
+    // Need this class since CommandQueue already extends IStatusBar.Stub, so CommandQueueStart
+    // is needed so it can extend SystemUI.
+    public static class CommandQueueStart extends SystemUI {
+        @Override
+        public void start() {
+            putComponent(CommandQueue.class, new CommandQueue());
         }
     }
 
@@ -642,15 +711,6 @@ public class CommandQueue extends IStatusBar.Stub {
                     }
                     break;
             }
-        }
-    }
-
-    // Need this class since CommandQueue already extends IStatusBar.Stub, so CommandQueueStart
-    // is needed so it can extend SystemUI.
-    public static class CommandQueueStart extends SystemUI {
-        @Override
-        public void start() {
-            putComponent(CommandQueue.class, new CommandQueue());
         }
     }
 }

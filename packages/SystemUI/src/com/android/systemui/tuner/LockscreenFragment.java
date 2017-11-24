@@ -55,19 +55,30 @@ import java.util.function.Consumer;
 
 public class LockscreenFragment extends PreferenceFragment {
 
-    private static final String KEY_LEFT = "left";
-    private static final String KEY_RIGHT = "right";
-    private static final String KEY_CUSTOMIZE = "customize";
-    private static final String KEY_SHORTCUT = "shortcut";
-
     public static final String LOCKSCREEN_LEFT_BUTTON = "sysui_keyguard_left";
     public static final String LOCKSCREEN_LEFT_UNLOCK = "sysui_keyguard_left_unlock";
     public static final String LOCKSCREEN_RIGHT_BUTTON = "sysui_keyguard_right";
     public static final String LOCKSCREEN_RIGHT_UNLOCK = "sysui_keyguard_right_unlock";
-
+    private static final String KEY_LEFT = "left";
+    private static final String KEY_RIGHT = "right";
+    private static final String KEY_CUSTOMIZE = "customize";
+    private static final String KEY_SHORTCUT = "shortcut";
     private final ArrayList<Tunable> mTunables = new ArrayList<>();
     private TunerService mTunerService;
     private Handler mHandler;
+
+    public static ActivityInfo getActivityinfo(Context context, String value) {
+        ComponentName component = ComponentName.unflattenFromString(value);
+        try {
+            return context.getPackageManager().getActivityInfo(component, 0);
+        } catch (NameNotFoundException e) {
+            return null;
+        }
+    }
+
+    public static Shortcut getShortcutInfo(Context context, String value) {
+        return Shortcut.create(context, value);
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -136,19 +147,6 @@ public class LockscreenFragment extends PreferenceFragment {
     private void addTunable(Tunable t, String... keys) {
         mTunables.add(t);
         mTunerService.addTunable(t, keys);
-    }
-
-    public static ActivityInfo getActivityinfo(Context context, String value) {
-        ComponentName component = ComponentName.unflattenFromString(value);
-        try {
-            return context.getPackageManager().getActivityInfo(component, 0);
-        } catch (NameNotFoundException e) {
-            return null;
-        }
-    }
-
-    public static Shortcut getShortcutInfo(Context context, String value) {
-        return Shortcut.create(context, value);
     }
 
     public static class Holder extends ViewHolder {
@@ -258,9 +256,9 @@ public class LockscreenFragment extends PreferenceFragment {
     }
 
     public static class Adapter extends RecyclerView.Adapter<Holder> {
-        private ArrayList<Item> mItems = new ArrayList<>();
         private final Context mContext;
         private final Consumer<Item> mCallback;
+        private ArrayList<Item> mItems = new ArrayList<>();
 
         public Adapter(Context context, Consumer<Item> callback) {
             mContext = context;

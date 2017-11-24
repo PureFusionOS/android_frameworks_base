@@ -124,7 +124,8 @@ public class ScreenPinningRequest implements View.OnClickListener {
         if (v.getId() == R.id.screen_pinning_ok_button || mRequestWindow == v) {
             try {
                 ActivityManager.getService().startSystemLockTaskMode(taskId);
-            } catch (RemoteException e) {}
+            } catch (RemoteException e) {
+            }
         }
         clearPrompt();
     }
@@ -134,16 +135,35 @@ public class ScreenPinningRequest implements View.OnClickListener {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 rotation == ROTATION_SEASCAPE ? (Gravity.CENTER_VERTICAL | Gravity.LEFT) :
-                rotation == ROTATION_LANDSCAPE ? (Gravity.CENTER_VERTICAL | Gravity.RIGHT)
-                            : (Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM));
+                        rotation == ROTATION_LANDSCAPE ? (Gravity.CENTER_VERTICAL | Gravity.RIGHT)
+                                : (Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM));
     }
 
     private class RequestWindowView extends FrameLayout {
         private static final int OFFSET_DP = 96;
 
         private final ColorDrawable mColor = new ColorDrawable(0);
+        private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
+                    post(mUpdateLayoutRunnable);
+                } else if (intent.getAction().equals(Intent.ACTION_USER_SWITCHED)
+                        || intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                    clearPrompt();
+                }
+            }
+        };
         private ValueAnimator mColorAnim;
         private ViewGroup mLayout;
+        private final Runnable mUpdateLayoutRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mLayout != null && mLayout.getParent() != null) {
+                    mLayout.setLayoutParams(getRequestLayoutParams(getRotation(mContext)));
+                }
+            }
+        };
         private boolean mShowCancel;
 
         public RequestWindowView(Context context, boolean showCancel) {
@@ -220,8 +240,8 @@ public class ScreenPinningRequest implements View.OnClickListener {
             // other view for this single case.
             mLayout = (ViewGroup) View.inflate(getContext(),
                     rotation == ROTATION_SEASCAPE ? R.layout.screen_pinning_request_sea_phone :
-                    rotation == ROTATION_LANDSCAPE ? R.layout.screen_pinning_request_land_phone
-                            : R.layout.screen_pinning_request,
+                            rotation == ROTATION_LANDSCAPE ? R.layout.screen_pinning_request_land_phone
+                                    : R.layout.screen_pinning_request,
                     null);
             // Catch touches so they don't trigger cancel/activate, like outside does.
             mLayout.setClickable(true);
@@ -288,27 +308,6 @@ public class ScreenPinningRequest implements View.OnClickListener {
             removeAllViews();
             inflateView(getRotation(mContext));
         }
-
-        private final Runnable mUpdateLayoutRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (mLayout != null && mLayout.getParent() != null) {
-                    mLayout.setLayoutParams(getRequestLayoutParams(getRotation(mContext)));
-                }
-            }
-        };
-
-        private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
-                    post(mUpdateLayoutRunnable);
-                } else if (intent.getAction().equals(Intent.ACTION_USER_SWITCHED)
-                        || intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                    clearPrompt();
-                }
-            }
-        };
     }
 
 }

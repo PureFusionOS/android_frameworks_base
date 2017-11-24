@@ -34,11 +34,11 @@ import java.util.Objects;
 /**
  * Text displayed over one or two lines, centered horizontally.  A caret is always drawn at the end
  * of the first line, and considered part of the content for centering purposes.
- *
+ * <p>
  * Text overflow rules:
- *   First line: break on a word, unless a single word takes up the entire line - in which case
- *               truncate.
- *   Second line: ellipsis if necessary
+ * First line: break on a word, unless a single word takes up the entire line - in which case
+ * truncate.
+ * Second line: ellipsis if necessary
  */
 public class QSDualTileLabel extends LinearLayout {
 
@@ -49,6 +49,12 @@ public class QSDualTileLabel extends LinearLayout {
     private final int mHorizontalPaddingPx;
 
     private String mText;
+    private final Runnable mUpdateText = new Runnable() {
+        @Override
+        public void run() {
+            updateText();
+        }
+    };
 
     public QSDualTileLabel(Context context) {
         super(context);
@@ -81,7 +87,7 @@ public class QSDualTileLabel extends LinearLayout {
         addOnLayoutChangeListener(new OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right,
-                    int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                                       int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 if ((oldRight - oldLeft) != (right - left)) {
                     rescheduleUpdateText();
                 }
@@ -115,15 +121,15 @@ public class QSDualTileLabel extends LinearLayout {
         return tv;
     }
 
+    public String getText() {
+        return mText;
+    }
+
     public void setText(CharSequence text) {
         final String newText = text == null ? null : text.toString().trim();
         if (Objects.equals(newText, mText)) return;
         mText = newText;
         rescheduleUpdateText();
-    }
-
-    public String getText() {
-        return mText;
     }
 
     public void setTextSize(int unit, float size) {
@@ -192,11 +198,4 @@ public class QSDualTileLabel extends LinearLayout {
         mSecondLine.setText(mText.substring(lastWordBoundary).trim());
         mSecondLine.setVisibility(VISIBLE);
     }
-
-    private final Runnable mUpdateText = new Runnable() {
-        @Override
-        public void run() {
-            updateText();
-        }
-    };
 }

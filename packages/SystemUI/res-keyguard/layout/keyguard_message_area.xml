@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 **
 ** Copyright 2012, The Android Open Source Project
 **
@@ -18,14 +17,13 @@
 -->
 
 <!-- This contains emergency call button and carrier as shared by pin/pattern/password screens -->
-<com.android.keyguard.KeyguardMessageArea
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.keyguard.KeyguardMessageArea xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/keyguard_message_area"
+    style="@style/Keyguard.TextView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    style="@style/Keyguard.TextView"
-    android:id="@+id/keyguard_message_area"
-    android:singleLine="true"
     android:ellipsize="marquee"
-    android:focusable="true" />
+    android:focusable="true"
+    android:gravity="center"
+    android:singleLine="true" />
 

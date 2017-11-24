@@ -26,31 +26,28 @@ import java.util.List;
 /* A view pool to manage more views than we can visibly handle */
 public class ViewPool<V, T> {
 
-    /* An interface to the consumer of a view pool */
-    public interface ViewPoolConsumer<V, T> {
-        public V createView(Context context);
-        public void onReturnViewToPool(V v);
-        public void onPickUpViewFromPool(V v, T prepareData, boolean isNewView);
-        public boolean hasPreferredData(V v, T preferredData);
-    }
-
     Context mContext;
     ViewPoolConsumer<V, T> mViewCreator;
     LinkedList<V> mPool = new LinkedList<V>();
-
-    /** Initializes the pool with a fixed predetermined pool size */
+    /**
+     * Initializes the pool with a fixed predetermined pool size
+     */
     public ViewPool(Context context, ViewPoolConsumer<V, T> viewCreator) {
         mContext = context;
         mViewCreator = viewCreator;
     }
 
-    /** Returns a view into the pool */
+    /**
+     * Returns a view into the pool
+     */
     void returnViewToPool(V v) {
         mViewCreator.onReturnViewToPool(v);
         mPool.push(v);
     }
 
-    /** Gets a view from the pool and prepares it */
+    /**
+     * Gets a view from the pool and prepares it
+     */
     V pickUpViewFromPool(T preferredData, T prepareData) {
         V v = null;
         boolean isNewView = false;
@@ -82,5 +79,16 @@ public class ViewPool<V, T> {
      */
     List<V> getViews() {
         return mPool;
+    }
+
+    /* An interface to the consumer of a view pool */
+    public interface ViewPoolConsumer<V, T> {
+        public V createView(Context context);
+
+        public void onReturnViewToPool(V v);
+
+        public void onPickUpViewFromPool(V v, T prepareData, boolean isNewView);
+
+        public boolean hasPreferredData(V v, T preferredData);
     }
 }

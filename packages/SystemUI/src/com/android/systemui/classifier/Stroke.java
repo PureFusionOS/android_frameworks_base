@@ -24,12 +24,11 @@ import java.util.ArrayList;
  */
 public class Stroke {
     private final float NANOS_TO_SECONDS = 1e9f;
-
+    private final float mDpi;
     private ArrayList<Point> mPoints = new ArrayList<>();
     private long mStartTimeNano;
     private long mEndTimeNano;
     private float mLength;
-    private final float mDpi;
 
     public Stroke(long eventTimeNano, float dpi) {
         mDpi = dpi;

@@ -37,7 +37,7 @@ public class DragStartEvent extends EventBus.Event {
     }
 
     public DragStartEvent(Task task, TaskView taskView, Point tlOffset,
-            boolean isUserTouchInitiated) {
+                          boolean isUserTouchInitiated) {
         this.task = task;
         this.taskView = taskView;
         this.tlOffset = tlOffset;

@@ -31,6 +31,7 @@ public interface QSFactory extends Plugin {
     int VERSION = 1;
 
     QSTile createTile(String tileSpec);
+
     QSTileView createTileView(QSTile tile, boolean collapsedView);
 
 }

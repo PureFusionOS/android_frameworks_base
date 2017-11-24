@@ -42,6 +42,7 @@ public class ViewInvertHelper {
         this(v.getContext(), fadeDuration);
         addTarget(v);
     }
+
     public ViewInvertHelper(Context context, long fadeDuration) {
         mFadeDuration = fadeDuration;
     }
@@ -105,10 +106,10 @@ public class ViewInvertHelper {
     private void updateInvertPaint(float intensity) {
         float components = 1 - 2 * intensity;
         final float[] invert = {
-                components, 0f,         0f,         0f, 255f * intensity,
-                0f,         components, 0f,         0f, 255f * intensity,
-                0f,         0f,         components, 0f, 255f * intensity,
-                0f,         0f,         0f,         1f, 0f
+                components, 0f, 0f, 0f, 255f * intensity,
+                0f, components, 0f, 0f, 255f * intensity,
+                0f, 0f, components, 0f, 255f * intensity,
+                0f, 0f, 0f, 1f, 0f
         };
         mMatrix.set(invert);
         mGrayscaleMatrix.setSaturation(1 - intensity);

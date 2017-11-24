@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 Copyright (C) 2015 The Android Open Source Project
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,46 +13,43 @@ Copyright (C) 2015 The Android Open Source Project
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<set
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="133"
-        android:propertyXName="translateX"
-        android:propertyYName="translateY"
+        android:interpolator="@interpolator/error_to_trustedstate_animation_interpolator_0"
         android:pathData="M -0.00391,5.333 c 0.00065,-0.22217 0.00326,-1.11083 0.00391,-1.333"
-        android:interpolator="@interpolator/error_to_trustedstate_animation_interpolator_0" />
-    <set
-        android:ordering="sequentially" >
+        android:propertyXName="translateX"
+        android:propertyYName="translateY" />
+    <set android:ordering="sequentially">
         <objectAnimator
             android:duration="83"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="scaleX"
             android:valueFrom="1.0"
             android:valueTo="1.0"
-            android:valueType="floatType"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueType="floatType" />
         <objectAnimator
             android:duration="16"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="scaleX"
             android:valueFrom="1.0"
             android:valueTo="0.0"
-            android:valueType="floatType"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueType="floatType" />
     </set>
-    <set
-        android:ordering="sequentially" >
+    <set android:ordering="sequentially">
         <objectAnimator
             android:duration="83"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="scaleY"
             android:valueFrom="1.0"
             android:valueTo="1.0"
-            android:valueType="floatType"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueType="floatType" />
         <objectAnimator
             android:duration="16"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="scaleY"
             android:valueFrom="1.0"
             android:valueTo="0.0"
-            android:valueType="floatType"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueType="floatType" />
     </set>
 </set>

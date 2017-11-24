@@ -44,10 +44,9 @@ import com.android.internal.telephony.PhoneConstants;
  * Displays a PIN pad for unlocking.
  */
 public class KeyguardSimPinView extends KeyguardPinBasedInputView {
+    public static final String TAG = "KeyguardSimPinView";
     private static final String LOG_TAG = "KeyguardSimPinView";
     private static final boolean DEBUG = KeyguardConstants.DEBUG_SIM_STATES;
-    public static final String TAG = "KeyguardSimPinView";
-
     private ProgressDialog mSimUnlockProgressDialog = null;
     private CheckSimPin mCheckSimPinThread;
 
@@ -58,9 +57,11 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
     KeyguardUpdateMonitorCallback mUpdateMonitorCallback = new KeyguardUpdateMonitorCallback() {
         @Override
         public void onSimStateChanged(int subId, int slotId, State simState) {
-           if (DEBUG) Log.v(TAG, "onSimStateChanged(subId=" + subId + ",state=" + simState + ")");
-           resetState();
-       };
+            if (DEBUG) Log.v(TAG, "onSimStateChanged(subId=" + subId + ",state=" + simState + ")");
+            resetState();
+        }
+
+        ;
     };
 
     public KeyguardSimPinView(Context context) {
@@ -173,50 +174,6 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
         }
     }
 
-    /**
-     * Since the IPC can block, we want to run the request in a separate thread
-     * with a callback.
-     */
-    private abstract class CheckSimPin extends Thread {
-        private final String mPin;
-        private int mSubId;
-
-        protected CheckSimPin(String pin, int subId) {
-            mPin = pin;
-            mSubId = subId;
-        }
-
-        abstract void onSimCheckResponse(final int result, final int attemptsRemaining);
-
-        @Override
-        public void run() {
-            try {
-                if (DEBUG) {
-                    Log.v(TAG, "call supplyPinReportResultForSubscriber(subid=" + mSubId + ")");
-                }
-                final int[] result = ITelephony.Stub.asInterface(ServiceManager
-                        .checkService("phone")).supplyPinReportResultForSubscriber(mSubId, mPin);
-                if (DEBUG) {
-                    Log.v(TAG, "supplyPinReportResult returned: " + result[0] + " " + result[1]);
-                }
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        onSimCheckResponse(result[0], result[1]);
-                    }
-                });
-            } catch (RemoteException e) {
-                Log.e(TAG, "RemoteException for supplyPinReportResult:", e);
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        onSimCheckResponse(PhoneConstants.PIN_GENERAL_FAILURE, -1);
-                    }
-                });
-            }
-        }
-    }
-
     private Dialog getSimUnlockProgressDialog() {
         if (mSimUnlockProgressDialog == null) {
             mSimUnlockProgressDialog = new ProgressDialog(mContext);
@@ -314,6 +271,50 @@ public class KeyguardSimPinView extends KeyguardPinBasedInputView {
     @Override
     public boolean startDisappearAnimation(Runnable finishRunnable) {
         return false;
+    }
+
+    /**
+     * Since the IPC can block, we want to run the request in a separate thread
+     * with a callback.
+     */
+    private abstract class CheckSimPin extends Thread {
+        private final String mPin;
+        private int mSubId;
+
+        protected CheckSimPin(String pin, int subId) {
+            mPin = pin;
+            mSubId = subId;
+        }
+
+        abstract void onSimCheckResponse(final int result, final int attemptsRemaining);
+
+        @Override
+        public void run() {
+            try {
+                if (DEBUG) {
+                    Log.v(TAG, "call supplyPinReportResultForSubscriber(subid=" + mSubId + ")");
+                }
+                final int[] result = ITelephony.Stub.asInterface(ServiceManager
+                        .checkService("phone")).supplyPinReportResultForSubscriber(mSubId, mPin);
+                if (DEBUG) {
+                    Log.v(TAG, "supplyPinReportResult returned: " + result[0] + " " + result[1]);
+                }
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onSimCheckResponse(result[0], result[1]);
+                    }
+                });
+            } catch (RemoteException e) {
+                Log.e(TAG, "RemoteException for supplyPinReportResult:", e);
+                post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onSimCheckResponse(PhoneConstants.PIN_GENERAL_FAILURE, -1);
+                    }
+                });
+            }
+        }
     }
 }
 

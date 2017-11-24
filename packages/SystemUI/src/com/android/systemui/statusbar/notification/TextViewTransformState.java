@@ -24,12 +24,20 @@ import android.widget.TextView;
 
 /**
  * A transform state of a mText view.
-*/
+ */
 public class TextViewTransformState extends TransformState {
 
     private static Pools.SimplePool<TextViewTransformState> sInstancePool
             = new Pools.SimplePool<>(40);
     private TextView mText;
+
+    public static TextViewTransformState obtain() {
+        TextViewTransformState instance = sInstancePool.acquire();
+        if (instance != null) {
+            return instance;
+        }
+        return new TextViewTransformState();
+    }
 
     @Override
     public void initFrom(View view) {
@@ -43,7 +51,7 @@ public class TextViewTransformState extends TransformState {
     protected boolean sameAs(TransformState otherState) {
         if (otherState instanceof TextViewTransformState) {
             TextViewTransformState otherTvs = (TextViewTransformState) otherState;
-            if(TextUtils.equals(otherTvs.mText.getText(), mText.getText())) {
+            if (TextUtils.equals(otherTvs.mText.getText(), mText.getText())) {
                 int ownEllipsized = getEllipsisCount();
                 int otherEllipsized = otherTvs.getEllipsisCount();
                 return ownEllipsized == otherEllipsized
@@ -67,14 +75,6 @@ public class TextViewTransformState extends TransformState {
             }
         }
         return 0;
-    }
-
-    public static TextViewTransformState obtain() {
-        TextViewTransformState instance = sInstancePool.acquire();
-        if (instance != null) {
-            return instance;
-        }
-        return new TextViewTransformState();
     }
 
     @Override

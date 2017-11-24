@@ -32,7 +32,9 @@ import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
-/** Quick settings tile: Expanded desktop **/
+/**
+ * Quick settings tile: Expanded desktop
+ **/
 public class ExpandedDesktopTile extends QSTileImpl<BooleanState> {
 
     private static final int STATE_ENABLE_FOR_ALL = 1;
@@ -62,7 +64,7 @@ public class ExpandedDesktopTile extends QSTileImpl<BooleanState> {
     @Override
     public Intent getLongClickIntent() {
         return new Intent().setComponent(new ComponentName(
-            "com.android.settings", "com.android.settings.Settings$ExpandedDesktopSettingsActivity"));
+                "com.android.settings", "com.android.settings.Settings$ExpandedDesktopSettingsActivity"));
     }
 
     @Override
@@ -100,7 +102,7 @@ public class ExpandedDesktopTile extends QSTileImpl<BooleanState> {
 
     private void writeValue(String value) {
         Settings.Global.putString(mContext.getContentResolver(),
-             Settings.Global.POLICY_CONTROL, value);
+                Settings.Global.POLICY_CONTROL, value);
     }
 
     private void enableForAll() {
@@ -145,7 +147,7 @@ public class ExpandedDesktopTile extends QSTileImpl<BooleanState> {
         public void startObserving() {
             mExpandedDesktopState = getExpandedDesktopState(mContext.getContentResolver());
             mContext.getContentResolver().registerContentObserver(
-                Settings.Global.getUriFor(Settings.Global.POLICY_CONTROL),
+                    Settings.Global.getUriFor(Settings.Global.POLICY_CONTROL),
                     false, this);
         }
 

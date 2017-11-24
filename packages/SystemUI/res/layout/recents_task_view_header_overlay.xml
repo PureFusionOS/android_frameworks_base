@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -12,41 +11,42 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<!-- The layouts params are calculated in TaskViewHeader.java -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+--><!-- The layouts params are calculated in TaskViewHeader.java -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <com.android.systemui.recents.views.FixedSizeImageView
         android:id="@+id/app_icon"
-        android:contentDescription="@string/recents_app_info_button_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
-        android:paddingTop="8dp"
+        android:contentDescription="@string/recents_app_info_button_label"
         android:paddingBottom="8dp"
+        android:paddingEnd="12dp"
         android:paddingStart="16dp"
-        android:paddingEnd="12dp" />
+        android:paddingTop="8dp" />
+
     <TextView
         android:id="@+id/app_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
-        android:textSize="16sp"
-        android:textColor="#ffffffff"
-        android:text="@string/recents_empty_message"
-        android:fontFamily="sans-serif-medium"
-        android:singleLine="true"
-        android:maxLines="2"
         android:ellipsize="marquee"
-        android:fadingEdge="horizontal" />
+        android:fadingEdge="horizontal"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="2"
+        android:singleLine="true"
+        android:text="@string/recents_empty_message"
+        android:textColor="#ffffffff"
+        android:textSize="16sp" />
+
     <com.android.systemui.recents.views.FixedSizeImageView
         android:id="@+id/app_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
-        android:padding="@dimen/recents_task_view_header_button_padding"
         android:background="?android:selectableItemBackground"
+        android:padding="@dimen/recents_task_view_header_button_padding"
         android:src="@drawable/recents_info_light" />
 </FrameLayout>

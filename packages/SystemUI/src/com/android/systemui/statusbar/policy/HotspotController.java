@@ -21,9 +21,11 @@ import com.android.systemui.statusbar.policy.HotspotController.Callback;
 
 public interface HotspotController extends CallbackController<Callback>, Dumpable {
     boolean isHotspotEnabled();
-    boolean isHotspotTransient();
 
     void setHotspotEnabled(boolean enabled);
+
+    boolean isHotspotTransient();
+
     boolean isHotspotSupported();
 
     public interface Callback {

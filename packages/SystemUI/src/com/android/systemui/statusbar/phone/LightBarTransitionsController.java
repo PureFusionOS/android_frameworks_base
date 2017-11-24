@@ -47,6 +47,12 @@ public class LightBarTransitionsController implements Dumpable, Callbacks {
     private final KeyguardMonitor mKeyguardMonitor;
 
     private boolean mTransitionDeferring;
+    private final Runnable mTransitionDeferringDoneRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mTransitionDeferring = false;
+        }
+    };
     private long mTransitionDeferringStartTime;
     private long mTransitionDeferringDuration;
     private boolean mTransitionPending;
@@ -55,13 +61,6 @@ public class LightBarTransitionsController implements Dumpable, Callbacks {
     private ValueAnimator mTintAnimator;
     private float mDarkIntensity;
     private float mNextDarkIntensity;
-
-    private final Runnable mTransitionDeferringDoneRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mTransitionDeferring = false;
-        }
-    };
 
     public LightBarTransitionsController(Context context, DarkIntensityApplier applier) {
         mApplier = applier;
@@ -78,7 +77,7 @@ public class LightBarTransitionsController implements Dumpable, Callbacks {
 
     public void saveState(Bundle outState) {
         float intensity = mTintAnimator != null && mTintAnimator.isRunning()
-                ?  mNextDarkIntensity : mDarkIntensity;
+                ? mNextDarkIntensity : mDarkIntensity;
         outState.putFloat(EXTRA_DARK_INTENSITY, intensity);
     }
 
@@ -154,7 +153,7 @@ public class LightBarTransitionsController implements Dumpable, Callbacks {
     }
 
     private void animateIconTint(float targetDarkIntensity, long delay,
-            long duration) {
+                                 long duration) {
         if (mTintAnimator != null) {
             mTintAnimator.cancel();
         }
@@ -178,7 +177,8 @@ public class LightBarTransitionsController implements Dumpable, Callbacks {
 
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-        pw.print("  mTransitionDeferring="); pw.print(mTransitionDeferring);
+        pw.print("  mTransitionDeferring=");
+        pw.print(mTransitionDeferring);
         if (mTransitionDeferring) {
             pw.println();
             pw.print("   mTransitionDeferringStartTime=");
@@ -188,12 +188,17 @@ public class LightBarTransitionsController implements Dumpable, Callbacks {
             TimeUtils.formatDuration(mTransitionDeferringDuration, pw);
             pw.println();
         }
-        pw.print("  mTransitionPending="); pw.print(mTransitionPending);
-        pw.print(" mTintChangePending="); pw.println(mTintChangePending);
+        pw.print("  mTransitionPending=");
+        pw.print(mTransitionPending);
+        pw.print(" mTintChangePending=");
+        pw.println(mTintChangePending);
 
-        pw.print("  mPendingDarkIntensity="); pw.print(mPendingDarkIntensity);
-        pw.print(" mDarkIntensity="); pw.print(mDarkIntensity);
-        pw.print(" mNextDarkIntensity="); pw.println(mNextDarkIntensity);
+        pw.print("  mPendingDarkIntensity=");
+        pw.print(mPendingDarkIntensity);
+        pw.print(" mDarkIntensity=");
+        pw.print(mDarkIntensity);
+        pw.print(" mNextDarkIntensity=");
+        pw.println(mNextDarkIntensity);
     }
 
     /**

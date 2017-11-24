@@ -28,7 +28,7 @@ public class EthernetSignalController extends
         SignalController<SignalController.State, SignalController.IconGroup> {
 
     public EthernetSignalController(Context context,
-            CallbackHandler callbackHandler, NetworkControllerImpl networkController) {
+                                    CallbackHandler callbackHandler, NetworkControllerImpl networkController) {
         super("EthernetSignalController", context, NetworkCapabilities.TRANSPORT_ETHERNET,
                 callbackHandler, networkController);
         mCurrentState.iconGroup = mLastState.iconGroup = new IconGroup(

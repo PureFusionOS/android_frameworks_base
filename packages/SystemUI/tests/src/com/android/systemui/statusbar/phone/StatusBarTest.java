@@ -259,7 +259,7 @@ public class StatusBarTest extends SysuiTestCase {
 
     @Test
     public void onActivatedMetrics() {
-        ActivatableNotificationView view =  mock(ActivatableNotificationView.class);
+        ActivatableNotificationView view = mock(ActivatableNotificationView.class);
         mStatusBar.onActivated(view);
 
         MetricsAsserts.assertHasLog("missing lockscreen note tap log",
@@ -380,10 +380,10 @@ public class StatusBarTest extends SysuiTestCase {
 
     static class TestableStatusBar extends StatusBar {
         public TestableStatusBar(StatusBarKeyguardViewManager man,
-                UnlockMethodCache unlock, KeyguardIndicationController key,
-                NotificationStackScrollLayout stack, HeadsUpManager hum, NotificationData nd,
-                PowerManager pm, SystemServicesProxy ssp, NotificationPanelView panelView,
-                IStatusBarService barService) {
+                                 UnlockMethodCache unlock, KeyguardIndicationController key,
+                                 NotificationStackScrollLayout stack, HeadsUpManager hum, NotificationData nd,
+                                 PowerManager pm, SystemServicesProxy ssp, NotificationPanelView panelView,
+                                 IStatusBarService barService) {
             mStatusBarKeyguardViewManager = man;
             mUnlockMethodCache = unlock;
             mKeyguardIndicationController = key;

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /**
  * Copyright (c) 2009, The Android Open Source Project
  *
@@ -25,8 +24,8 @@
     <string name="status_bar_no_recent_apps" msgid="7374907845131203189">"თქვენი ბოლო ეკრანები აქ გამოჩნდება"</string>
     <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"ბოლო აპების გაუქმება"</string>
     <plurals name="status_bar_accessibility_recent_apps" formatted="false" msgid="9138535907802238759">
-      <item quantity="other">%d ეკრანი მიმოხილვაში</item>
-      <item quantity="one">1 ეკრანი მიმოხილვაში</item>
+        <item quantity="other">%d ეკრანი მიმოხილვაში</item>
+        <item quantity="one">1 ეკრანი მიმოხილვაში</item>
     </plurals>
     <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"შეტყობინებები არ არის."</string>
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"მიმდინარე"</string>
@@ -251,8 +250,8 @@
     <string name="accessibility_clear_all" msgid="5235938559247164925">"ყველა შეტყობინების წაშლა"</string>
     <string name="notification_group_overflow_indicator" msgid="1863231301642314183">"+ <xliff:g id="NUMBER">%s</xliff:g>"</string>
     <plurals name="notification_group_overflow_description" formatted="false" msgid="4579313201268495404">
-      <item quantity="other">კიდევ <xliff:g id="NUMBER_1">%s</xliff:g> შეტყობინება ჯგუფში.</item>
-      <item quantity="one">კიდევ <xliff:g id="NUMBER_0">%s</xliff:g> შეტყობინება ჯგუფში.</item>
+        <item quantity="other">კიდევ <xliff:g id="NUMBER_1">%s</xliff:g> შეტყობინება ჯგუფში.</item>
+        <item quantity="one">კიდევ <xliff:g id="NUMBER_0">%s</xliff:g> შეტყობინება ჯგუფში.</item>
     </plurals>
     <string name="status_bar_notification_inspect_item_title" msgid="5668348142410115323">"შეტყობინების პარამეტრები"</string>
     <string name="status_bar_notification_app_settings_title" msgid="5525260160341558869">"<xliff:g id="APP_NAME">%s</xliff:g> პარამეტრები"</string>
@@ -341,8 +340,7 @@
     <string name="recents_accessibility_split_screen_top" msgid="9056056469282256287">"ეკრანის გაყოფა ზემოთ"</string>
     <string name="recents_accessibility_split_screen_left" msgid="8987144699630620019">"ეკრანის გაყოფა მარცხნივ"</string>
     <string name="recents_accessibility_split_screen_right" msgid="275069779299592867">"ეკრანის გაყოფა მარჯვნივ"</string>
-  <string-array name="recents_blacklist_array">
-  </string-array>
+    <string-array name="recents_blacklist_array"></string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"დატენილია"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"მიმდინარეობს დატენვა"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"<xliff:g id="CHARGING_TIME">%s</xliff:g> სრულად დატენვამდე"</string>
@@ -551,13 +549,13 @@
     <string name="notification_num_channels" msgid="2048144408999179471">"შეტყობინებების <xliff:g id="NUMBER">%d</xliff:g> კატეგორია"</string>
     <string name="notification_default_channel_desc" msgid="2506053815870808359">"ამ აპს შეტყობინებების კატეგორიები არ აქვს"</string>
     <plurals name="notification_num_channels_desc" formatted="false" msgid="5492793452274077663">
-      <item quantity="other">ამ აპის შეტყობინებების <xliff:g id="NUMBER_1">%d</xliff:g> კატეგორიიდან 1</item>
-      <item quantity="one">ამ აპის შეტყობინებების <xliff:g id="NUMBER_0">%d</xliff:g> კატეგორიიდან 1</item>
+        <item quantity="other">ამ აპის შეტყობინებების <xliff:g id="NUMBER_1">%d</xliff:g> კატეგორიიდან 1</item>
+        <item quantity="one">ამ აპის შეტყობინებების <xliff:g id="NUMBER_0">%d</xliff:g> კატეგორიიდან 1</item>
     </plurals>
     <string name="notification_channels_list_desc_2" msgid="6214732715833946441">"<xliff:g id="CHANNEL_NAME_1">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2">%2$s</xliff:g>"</string>
     <plurals name="notification_channels_list_desc_2_and_others" formatted="false" msgid="2747813553355336157">
-      <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> და <xliff:g id="NUMBER_5">%3$d</xliff:g> სხვა</item>
-      <item quantity="one"><xliff:g id="CHANNEL_NAME_1_0">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_1">%2$s</xliff:g> და <xliff:g id="NUMBER_2">%3$d</xliff:g> სხვა</item>
+        <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> და <xliff:g id="NUMBER_5">%3$d</xliff:g> სხვა</item>
+        <item quantity="one"><xliff:g id="CHANNEL_NAME_1_0">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_1">%2$s</xliff:g> და <xliff:g id="NUMBER_2">%3$d</xliff:g> სხვა</item>
     </plurals>
     <string name="notification_channel_controls_opened_accessibility" msgid="6553950422055908113">"შეტყობინებების მართვა „<xliff:g id="APP_NAME">%1$s</xliff:g>“-ისთვის გახსნილია"</string>
     <string name="notification_channel_controls_closed_accessibility" msgid="7521619812603693144">"შეტყობინებების მართვა „<xliff:g id="APP_NAME">%1$s</xliff:g>“-ისთვის დახურულია"</string>
@@ -640,18 +638,18 @@
     <string name="left_nav_bar_button_type" msgid="8555981238887546528">"მარცხენა დამატებითი ღილაკის ტიპი"</string>
     <string name="right_nav_bar_button_type" msgid="2481056627065649656">"მარჯვენა დამატებითი ღილაკის ტიპი"</string>
     <string name="nav_bar_default" msgid="8587114043070993007">"(ნაგულისხმევი)"</string>
-  <string-array name="nav_bar_buttons">
-    <item msgid="1545641631806817203">"გაცვლის ბუფერი"</item>
-    <item msgid="5742013440802239414">"კლავიშის კოდი"</item>
-    <item msgid="8802889973626281575">"კლავიატურის გადამრთველი"</item>
-    <item msgid="8175437057325747277">"არცერთი"</item>
-  </string-array>
-  <string-array name="nav_bar_layouts">
-    <item msgid="8077901629964902399">"ჩვეულებრივი"</item>
-    <item msgid="8256205964297588988">"კომპაქტური"</item>
-    <item msgid="8719936228094005878">"მარცხნივ გადახრილი"</item>
-    <item msgid="586019486955594690">"მარჯვნივ გადახრილი"</item>
-  </string-array>
+    <string-array name="nav_bar_buttons">
+        <item msgid="1545641631806817203">"გაცვლის ბუფერი"</item>
+        <item msgid="5742013440802239414">"კლავიშის კოდი"</item>
+        <item msgid="8802889973626281575">"კლავიატურის გადამრთველი"</item>
+        <item msgid="8175437057325747277">"არცერთი"</item>
+    </string-array>
+    <string-array name="nav_bar_layouts">
+        <item msgid="8077901629964902399">"ჩვეულებრივი"</item>
+        <item msgid="8256205964297588988">"კომპაქტური"</item>
+        <item msgid="8719936228094005878">"მარცხნივ გადახრილი"</item>
+        <item msgid="586019486955594690">"მარჯვნივ გადახრილი"</item>
+    </string-array>
     <string name="menu_ime" msgid="4998010205321292416">"კლავიატურის გადამრთველი"</string>
     <string name="save" msgid="2311877285724540644">"შენახვა"</string>
     <string name="reset" msgid="2448168080964209908">"საწყისზე დაბრუნება"</string>
@@ -666,16 +664,16 @@
     <string name="drag_to_remove_tiles" msgid="3361212377437088062">"ამოსაშლელად, ჩავლებით გადმოიტანეთ აქ"</string>
     <string name="qs_edit" msgid="2232596095725105230">"რედაქტირება"</string>
     <string name="tuner_time" msgid="6572217313285536011">"დრო"</string>
-  <string-array name="clock_options">
-    <item msgid="5965318737560463480">"საათების, წუთებისა და წამების ჩვენება"</item>
-    <item msgid="1427801730816895300">"საათებისა და წუთების ჩვენება (ნაგულისხმევი)"</item>
-    <item msgid="3830170141562534721">"აღარ მაჩვენო ეს ხატულა"</item>
-  </string-array>
-  <string-array name="battery_options">
-    <item msgid="3160236755818672034">"პროცენტულობის ყოველთვის ჩვენება"</item>
-    <item msgid="2139628951880142927">"პროცენტულობის დატენვისას ჩვენება (ნაგულისხმევი)"</item>
-    <item msgid="3327323682209964956">"აღარ მაჩვენო ეს ხატულა"</item>
-  </string-array>
+    <string-array name="clock_options">
+        <item msgid="5965318737560463480">"საათების, წუთებისა და წამების ჩვენება"</item>
+        <item msgid="1427801730816895300">"საათებისა და წუთების ჩვენება (ნაგულისხმევი)"</item>
+        <item msgid="3830170141562534721">"აღარ მაჩვენო ეს ხატულა"</item>
+    </string-array>
+    <string-array name="battery_options">
+        <item msgid="3160236755818672034">"პროცენტულობის ყოველთვის ჩვენება"</item>
+        <item msgid="2139628951880142927">"პროცენტულობის დატენვისას ჩვენება (ნაგულისხმევი)"</item>
+        <item msgid="3327323682209964956">"აღარ მაჩვენო ეს ხატულა"</item>
+    </string-array>
     <string name="other" msgid="4060683095962566764">"სხვა"</string>
     <string name="accessibility_divider" msgid="5903423481953635044">"გაყოფილი ეკრანის რეჟიმის გამყოფი"</string>
     <string name="accessibility_action_divider_left_full" msgid="2801570521881574972">"მარცხენა ნაწილის სრულ ეკრანზე გაშლა"</string>

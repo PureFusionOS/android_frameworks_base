@@ -27,7 +27,7 @@ import com.android.systemui.statusbar.policy.ConfigurationController;
 
 /**
  * A view that only shows its drawable while the phone is charging.
- *
+ * <p>
  * Also reloads its drawable upon density changes.
  */
 public class ChargingView extends ImageView implements

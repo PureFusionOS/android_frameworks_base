@@ -57,7 +57,7 @@ import java.util.List;
 
 /**
  * Allows full-screen customization of QS, through show() and hide().
- *
+ * <p>
  * This adds itself to the status bar window, so it can appear on top of quick settings and
  * *someday* do fancy animations to get into/out of it.
  */
@@ -72,14 +72,54 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
     private Toolbar mToolbar;
     private boolean mCustomizing;
     private NotificationsQuickSettingsContainer mNotifQsContainer;
+    private final AnimatorListener mCollapseAnimationListener = new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            if (!isShown) {
+                setVisibility(View.GONE);
+            }
+            mNotifQsContainer.setCustomizerAnimating(false);
+            mRecyclerView.setAdapter(mTileAdapter);
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+            if (!isShown) {
+                setVisibility(View.GONE);
+            }
+            mNotifQsContainer.setCustomizerAnimating(false);
+        }
+    };
     private QS mQs;
     private boolean mFinishedFetchingTiles = false;
     private int mX;
     private int mY;
     private boolean mOpening;
+    private final AnimatorListener mExpandAnimationListener = new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            if (isShown) {
+                setCustomizing(true);
+            }
+            mOpening = false;
+            mNotifQsContainer.setCustomizerAnimating(false);
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+            mOpening = false;
+            mNotifQsContainer.setCustomizerAnimating(false);
+        }
+    };
     private GridLayoutManager mLayout;
     private Menu mColumnsSubMenu;
     private Menu mColumnsLandscapeSubMenu;
+    private final Callback mKeyguardCallback = () -> {
+        if (!isAttachedToWindow()) return;
+        if (Dependency.get(KeyguardMonitor.class).isShowing() && !mOpening) {
+            hide(0, 0);
+        }
+    };
     private Menu mRowsSubMenu;
 
     public QSCustomizer(Context context, AttributeSet attrs) {
@@ -123,7 +163,7 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
 
         mToolbar.setTitle(R.string.qs_edit);
         int defaultColumns = Math.max(1,
-                    mContext.getResources().getInteger(R.integer.quick_settings_num_columns));
+                mContext.getResources().getInteger(R.integer.quick_settings_num_columns));
         mRecyclerView = (RecyclerView) findViewById(android.R.id.list);
         mTileAdapter = new TileAdapter(getContext());
         mRecyclerView.setAdapter(mTileAdapter);
@@ -218,13 +258,13 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
         return isShown;
     }
 
+    public boolean isCustomizing() {
+        return mCustomizing;
+    }
+
     private void setCustomizing(boolean customizing) {
         mCustomizing = customizing;
         mQs.notifyCustomizeChanged();
-    }
-
-    public boolean isCustomizing() {
-        return mCustomizing;
     }
 
     @Override
@@ -324,49 +364,6 @@ public class QSCustomizer extends LinearLayout implements OnMenuItemClickListene
             mTileAdapter.saveSpecs(mHost);
         }
     }
-
-    private final Callback mKeyguardCallback = () -> {
-        if (!isAttachedToWindow()) return;
-        if (Dependency.get(KeyguardMonitor.class).isShowing() && !mOpening) {
-            hide(0, 0);
-        }
-    };
-
-    private final AnimatorListener mExpandAnimationListener = new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(Animator animation) {
-            if (isShown) {
-                setCustomizing(true);
-            }
-            mOpening = false;
-            mNotifQsContainer.setCustomizerAnimating(false);
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-            mOpening = false;
-            mNotifQsContainer.setCustomizerAnimating(false);
-        }
-    };
-
-    private final AnimatorListener mCollapseAnimationListener = new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(Animator animation) {
-            if (!isShown) {
-                setVisibility(View.GONE);
-            }
-            mNotifQsContainer.setCustomizerAnimating(false);
-            mRecyclerView.setAdapter(mTileAdapter);
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-            if (!isShown) {
-                setVisibility(View.GONE);
-            }
-            mNotifQsContainer.setCustomizerAnimating(false);
-        }
-    };
 
     public void updateSettings() {
         final Resources res = mContext.getResources();

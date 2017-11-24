@@ -49,16 +49,17 @@ import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
 
 import java.util.List;
 
-/** Quick settings tile: Wifi **/
+/**
+ * Quick settings tile: Wifi
+ **/
 public class WifiTile extends QSTileImpl<SignalState> {
     private static final Intent WIFI_SETTINGS = new Intent(Settings.ACTION_WIFI_SETTINGS);
 
     protected final NetworkController mController;
+    protected final WifiSignalCallback mSignalCallback = new WifiSignalCallback();
     private final AccessPointController mWifiController;
     private final WifiDetailAdapter mDetailAdapter;
     private final QSTile.SignalState mStateBeforeClick = newTileState();
-
-    protected final WifiSignalCallback mSignalCallback = new WifiSignalCallback();
     private final ActivityStarter mActivityStarter;
 
     public WifiTile(QSHost host) {
@@ -67,6 +68,15 @@ public class WifiTile extends QSTileImpl<SignalState> {
         mWifiController = mController.getAccessPointController();
         mDetailAdapter = (WifiDetailAdapter) createDetailAdapter();
         mActivityStarter = Dependency.get(ActivityStarter.class);
+    }
+
+    private static String removeDoubleQuotes(String string) {
+        if (string == null) return null;
+        final int length = string.length();
+        if ((length > 1) && (string.charAt(0) == '"') && (string.charAt(length - 1) == '"')) {
+            return string.substring(1, length - 1);
+        }
+        return string;
     }
 
     @Override
@@ -215,15 +225,6 @@ public class WifiTile extends QSTileImpl<SignalState> {
         return mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI);
     }
 
-    private static String removeDoubleQuotes(String string) {
-        if (string == null) return null;
-        final int length = string.length();
-        if ((length > 1) && (string.charAt(0) == '"') && (string.charAt(length - 1) == '"')) {
-            return string.substring(1, length - 1);
-        }
-        return string;
-    }
-
     protected static final class CallbackInfo {
         boolean enabled;
         boolean connected;
@@ -254,7 +255,7 @@ public class WifiTile extends QSTileImpl<SignalState> {
 
         @Override
         public void setWifiIndicators(boolean enabled, IconState statusIcon, IconState qsIcon,
-                boolean activityIn, boolean activityOut, String description, boolean isTransient) {
+                                      boolean activityIn, boolean activityOut, String description, boolean isTransient) {
             if (DEBUG) Log.d(TAG, "onWifiSignalChanged enabled=" + enabled);
             mInfo.enabled = enabled;
             mInfo.connected = qsIcon.visible;

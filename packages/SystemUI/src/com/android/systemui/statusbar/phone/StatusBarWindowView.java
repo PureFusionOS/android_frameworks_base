@@ -68,18 +68,15 @@ import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 public class StatusBarWindowView extends FrameLayout {
     public static final String TAG = "StatusBarWindowView";
     public static final boolean DEBUG = StatusBar.DEBUG;
-
+    private final Paint mTransparentSrcPaint = new Paint();
     private DragDownHelper mDragDownHelper;
     private DoubleTapHelper mDoubleTapHelper;
     private NotificationStackScrollLayout mStackScrollLayout;
     private NotificationPanelView mNotificationPanel;
     private View mBrightnessMirror;
-
     private int mRightInset = 0;
     private int mLeftInset = 0;
-
     private StatusBar mService;
-    private final Paint mTransparentSrcPaint = new Paint();
     private FalsingManager mFalsingManager;
 
     // Implements the floating action mode for TextView's Cut/Copy/Past menu. Normally provided by
@@ -90,419 +87,6 @@ public class StatusBarWindowView extends FrameLayout {
     private ViewTreeObserver.OnPreDrawListener mFloatingToolbarPreDrawListener;
     private boolean mTouchCancelled;
     private boolean mTouchActive;
-
-    public StatusBarWindowView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        setMotionEventSplittingEnabled(false);
-        mTransparentSrcPaint.setColor(0);
-        mTransparentSrcPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
-        mFalsingManager = FalsingManager.getInstance(context);
-        mDoubleTapHelper = new DoubleTapHelper(this, active -> {}, () -> {
-            mService.wakeUpIfDozing(SystemClock.uptimeMillis(), this);
-            return true;
-        }, null, null);
-    }
-
-    @Override
-    protected boolean fitSystemWindows(Rect insets) {
-        if (getFitsSystemWindows()) {
-            boolean paddingChanged = insets.top != getPaddingTop()
-                    || insets.bottom != getPaddingBottom();
-
-            // Super-special right inset handling, because scrims and backdrop need to ignore it.
-            if (insets.right != mRightInset || insets.left != mLeftInset) {
-                mRightInset = insets.right;
-                mLeftInset = insets.left;
-                applyMargins();
-            }
-            // Drop top inset, and pass through bottom inset.
-            if (paddingChanged) {
-                setPadding(0, 0, 0, 0);
-            }
-            insets.left = 0;
-            insets.top = 0;
-            insets.right = 0;
-        } else {
-            if (mRightInset != 0 || mLeftInset != 0) {
-                mRightInset = 0;
-                mLeftInset = 0;
-                applyMargins();
-            }
-            boolean changed = getPaddingLeft() != 0
-                    || getPaddingRight() != 0
-                    || getPaddingTop() != 0
-                    || getPaddingBottom() != 0;
-            if (changed) {
-                setPadding(0, 0, 0, 0);
-            }
-            insets.top = 0;
-        }
-        return false;
-    }
-
-    private void applyMargins() {
-        final int N = getChildCount();
-        for (int i = 0; i < N; i++) {
-            View child = getChildAt(i);
-            if (child.getLayoutParams() instanceof LayoutParams) {
-                LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                if (!lp.ignoreRightInset
-                        && (lp.rightMargin != mRightInset || lp.leftMargin != mLeftInset)) {
-                    lp.rightMargin = mRightInset;
-                    lp.leftMargin = mLeftInset;
-                    child.requestLayout();
-                }
-            }
-        }
-    }
-
-    @Override
-    public FrameLayout.LayoutParams generateLayoutParams(AttributeSet attrs) {
-        return new LayoutParams(getContext(), attrs);
-    }
-
-    @Override
-    protected FrameLayout.LayoutParams generateDefaultLayoutParams() {
-        return new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        mStackScrollLayout = (NotificationStackScrollLayout) findViewById(
-                R.id.notification_stack_scroller);
-        mNotificationPanel = (NotificationPanelView) findViewById(R.id.notification_panel);
-        mBrightnessMirror = findViewById(R.id.brightness_mirror);
-    }
-
-    @Override
-    public void onViewAdded(View child) {
-        super.onViewAdded(child);
-        if (child.getId() == R.id.brightness_mirror) {
-            mBrightnessMirror = child;
-        }
-    }
-
-    public void setService(StatusBar service) {
-        mService = service;
-        setDragDownHelper(new DragDownHelper(getContext(), this, mStackScrollLayout, mService));
-    }
-
-    @VisibleForTesting
-    void setDragDownHelper(DragDownHelper dragDownHelper) {
-        mDragDownHelper = dragDownHelper;
-    }
-
-    @Override
-    protected void onAttachedToWindow () {
-        super.onAttachedToWindow();
-
-        // We need to ensure that our window doesn't suffer from overdraw which would normally
-        // occur if our window is translucent. Since we are drawing the whole window anyway with
-        // the scrim, we don't need the window to be cleared in the beginning.
-        if (mService.isScrimSrcModeEnabled()) {
-            IBinder windowToken = getWindowToken();
-            WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
-            lp.token = windowToken;
-            setLayoutParams(lp);
-            WindowManagerGlobal.getInstance().changeCanvasOpacity(windowToken, true);
-            setWillNotDraw(false);
-        } else {
-            setWillNotDraw(!DEBUG);
-        }
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (mService.interceptMediaKey(event)) {
-            return true;
-        }
-        if (super.dispatchKeyEvent(event)) {
-            return true;
-        }
-        boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
-        switch (event.getKeyCode()) {
-            case KeyEvent.KEYCODE_BACK:
-                if (!down) {
-                    mService.onBackPressed();
-                }
-                return true;
-            case KeyEvent.KEYCODE_MENU:
-                if (!down) {
-                    return mService.onMenuPressed();
-                }
-            case KeyEvent.KEYCODE_SPACE:
-                if (!down) {
-                    return mService.onSpacePressed();
-                }
-                break;
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                if (mService.isDozing()) {
-                    MediaSessionLegacyHelper.getHelper(mContext).sendVolumeKeyEvent(
-                            event, AudioManager.USE_DEFAULT_STREAM_TYPE, true);
-                    return true;
-                }
-                break;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        boolean isDown = ev.getActionMasked() == MotionEvent.ACTION_DOWN;
-        if (isDown && mNotificationPanel.isFullyCollapsed()) {
-            mNotificationPanel.startExpandLatencyTracking();
-        }
-        if (isDown) {
-            mTouchActive = true;
-            mTouchCancelled = false;
-        } else if (ev.getActionMasked() == MotionEvent.ACTION_UP
-                || ev.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-            mTouchActive = false;
-        }
-        if (mTouchCancelled) {
-            return false;
-        }
-        mFalsingManager.onTouchEvent(ev, getWidth(), getHeight());
-        if (mBrightnessMirror != null && mBrightnessMirror.getVisibility() == VISIBLE) {
-            // Disallow new pointers while the brightness mirror is visible. This is so that you
-            // can't touch anything other than the brightness slider while the mirror is showing
-            // and the rest of the panel is transparent.
-            if (ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
-                return false;
-            }
-        }
-        if (isDown) {
-            mStackScrollLayout.closeControlsIfOutsideTouch(ev);
-        }
-        if (mService.isDozing()) {
-            mService.mDozeScrimController.extendPulse();
-        }
-
-        return super.dispatchTouchEvent(ev);
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (mService.isDozing() && !mStackScrollLayout.hasPulsingNotifications()) {
-            // Capture all touch events in always-on.
-            return true;
-        }
-        boolean intercept = false;
-        if (mNotificationPanel.isFullyExpanded()
-                && mStackScrollLayout.getVisibility() == View.VISIBLE
-                && mService.getBarState() == StatusBarState.KEYGUARD
-                && !mService.isBouncerShowing()
-                && !mService.isDozing()) {
-            intercept = mDragDownHelper.onInterceptTouchEvent(ev);
-        }
-        if (!intercept) {
-            super.onInterceptTouchEvent(ev);
-        }
-        if (intercept) {
-            MotionEvent cancellation = MotionEvent.obtain(ev);
-            cancellation.setAction(MotionEvent.ACTION_CANCEL);
-            mStackScrollLayout.onInterceptTouchEvent(cancellation);
-            mNotificationPanel.onInterceptTouchEvent(cancellation);
-            cancellation.recycle();
-        }
-        return intercept;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        boolean handled = false;
-        if (mService.isDozing()) {
-            mDoubleTapHelper.onTouchEvent(ev);
-            handled = true;
-        }
-        if ((mService.getBarState() == StatusBarState.KEYGUARD && !handled)
-                || mDragDownHelper.isDraggingDown()) {
-            // we still want to finish our drag down gesture when locking the screen
-            handled = mDragDownHelper.onTouchEvent(ev);
-        }
-        if (!handled) {
-            handled = super.onTouchEvent(ev);
-        }
-        final int action = ev.getAction();
-        if (!handled && (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL)) {
-            mService.setInteracting(StatusBarManager.WINDOW_STATUS_BAR, false);
-        }
-        return handled;
-    }
-
-    @Override
-    public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        if (mService.isScrimSrcModeEnabled()) {
-            // We need to ensure that our window is always drawn fully even when we have paddings,
-            // since we simulate it to be opaque.
-            int paddedBottom = getHeight() - getPaddingBottom();
-            int paddedRight = getWidth() - getPaddingRight();
-            if (getPaddingTop() != 0) {
-                canvas.drawRect(0, 0, getWidth(), getPaddingTop(), mTransparentSrcPaint);
-            }
-            if (getPaddingBottom() != 0) {
-                canvas.drawRect(0, paddedBottom, getWidth(), getHeight(), mTransparentSrcPaint);
-            }
-            if (getPaddingLeft() != 0) {
-                canvas.drawRect(0, getPaddingTop(), getPaddingLeft(), paddedBottom,
-                        mTransparentSrcPaint);
-            }
-            if (getPaddingRight() != 0) {
-                canvas.drawRect(paddedRight, getPaddingTop(), getWidth(), paddedBottom,
-                        mTransparentSrcPaint);
-            }
-        }
-        if (DEBUG) {
-            Paint pt = new Paint();
-            pt.setColor(0x80FFFF00);
-            pt.setStrokeWidth(12.0f);
-            pt.setStyle(Paint.Style.STROKE);
-            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), pt);
-        }
-    }
-
-    public void cancelExpandHelper() {
-        if (mStackScrollLayout != null) {
-            mStackScrollLayout.cancelExpandHelper();
-        }
-    }
-
-    public void cancelCurrentTouch() {
-        if (mTouchActive) {
-            final long now = SystemClock.uptimeMillis();
-            MotionEvent event = MotionEvent.obtain(now, now,
-                    MotionEvent.ACTION_CANCEL, 0.0f, 0.0f, 0);
-            event.setSource(InputDevice.SOURCE_TOUCHSCREEN);
-            dispatchTouchEvent(event);
-            event.recycle();
-            mTouchCancelled = true;
-        }
-    }
-
-    public class LayoutParams extends FrameLayout.LayoutParams {
-
-        public boolean ignoreRightInset;
-
-        public LayoutParams(int width, int height) {
-            super(width, height);
-        }
-
-        public LayoutParams(Context c, AttributeSet attrs) {
-            super(c, attrs);
-
-            TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.StatusBarWindowView_Layout);
-            ignoreRightInset = a.getBoolean(
-                    R.styleable.StatusBarWindowView_Layout_ignoreRightInset, false);
-            a.recycle();
-        }
-    }
-
-    @Override
-    public ActionMode startActionModeForChild(View originalView, ActionMode.Callback callback,
-            int type) {
-        if (type == ActionMode.TYPE_FLOATING) {
-            return startActionMode(originalView, callback, type);
-        }
-        return super.startActionModeForChild(originalView, callback, type);
-    }
-
-    private ActionMode createFloatingActionMode(
-            View originatingView, ActionMode.Callback2 callback) {
-        if (mFloatingActionMode != null) {
-            mFloatingActionMode.finish();
-        }
-        cleanupFloatingActionModeViews();
-        mFloatingToolbar = new FloatingToolbar(mContext, mFakeWindow);
-        final FloatingActionMode mode =
-                new FloatingActionMode(mContext, callback, originatingView, mFloatingToolbar);
-        mFloatingActionModeOriginatingView = originatingView;
-        mFloatingToolbarPreDrawListener =
-                new ViewTreeObserver.OnPreDrawListener() {
-                    @Override
-                    public boolean onPreDraw() {
-                        mode.updateViewLocationInWindow();
-                        return true;
-                    }
-                };
-        return mode;
-    }
-
-    private void setHandledFloatingActionMode(ActionMode mode) {
-        mFloatingActionMode = mode;
-        mFloatingActionMode.invalidate();  // Will show the floating toolbar if necessary.
-        mFloatingActionModeOriginatingView.getViewTreeObserver()
-                .addOnPreDrawListener(mFloatingToolbarPreDrawListener);
-    }
-
-    private void cleanupFloatingActionModeViews() {
-        if (mFloatingToolbar != null) {
-            mFloatingToolbar.dismiss();
-            mFloatingToolbar = null;
-        }
-        if (mFloatingActionModeOriginatingView != null) {
-            if (mFloatingToolbarPreDrawListener != null) {
-                mFloatingActionModeOriginatingView.getViewTreeObserver()
-                        .removeOnPreDrawListener(mFloatingToolbarPreDrawListener);
-                mFloatingToolbarPreDrawListener = null;
-            }
-            mFloatingActionModeOriginatingView = null;
-        }
-    }
-
-    private ActionMode startActionMode(
-            View originatingView, ActionMode.Callback callback, int type) {
-        ActionMode.Callback2 wrappedCallback = new ActionModeCallback2Wrapper(callback);
-        ActionMode mode = createFloatingActionMode(originatingView, wrappedCallback);
-        if (mode != null && wrappedCallback.onCreateActionMode(mode, mode.getMenu())) {
-            setHandledFloatingActionMode(mode);
-        } else {
-            mode = null;
-        }
-        return mode;
-    }
-
-    private class ActionModeCallback2Wrapper extends ActionMode.Callback2 {
-        private final ActionMode.Callback mWrapped;
-
-        public ActionModeCallback2Wrapper(ActionMode.Callback wrapped) {
-            mWrapped = wrapped;
-        }
-
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            return mWrapped.onCreateActionMode(mode, menu);
-        }
-
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            requestFitSystemWindows();
-            return mWrapped.onPrepareActionMode(mode, menu);
-        }
-
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            return mWrapped.onActionItemClicked(mode, item);
-        }
-
-        public void onDestroyActionMode(ActionMode mode) {
-            mWrapped.onDestroyActionMode(mode);
-            if (mode == mFloatingActionMode) {
-                cleanupFloatingActionModeViews();
-                mFloatingActionMode = null;
-            }
-            requestFitSystemWindows();
-        }
-
-        @Override
-        public void onGetContentRect(ActionMode mode, View view, Rect outRect) {
-            if (mWrapped instanceof ActionMode.Callback2) {
-                ((ActionMode.Callback2) mWrapped).onGetContentRect(mode, view, outRect);
-            } else {
-                super.onGetContentRect(mode, view, outRect);
-            }
-        }
-    }
-
     /**
      * Minimal window to satisfy FloatingToolbar.
      */
@@ -691,12 +275,12 @@ public class StatusBarWindowView extends FrameLayout {
         }
 
         @Override
-        public void setVolumeControlStream(int streamType) {
+        public int getVolumeControlStream() {
+            return 0;
         }
 
         @Override
-        public int getVolumeControlStream() {
-            return 0;
+        public void setVolumeControlStream(int streamType) {
         }
 
         @Override
@@ -738,11 +322,424 @@ public class StatusBarWindowView extends FrameLayout {
         }
     };
 
+    public StatusBarWindowView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        setMotionEventSplittingEnabled(false);
+        mTransparentSrcPaint.setColor(0);
+        mTransparentSrcPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+        mFalsingManager = FalsingManager.getInstance(context);
+        mDoubleTapHelper = new DoubleTapHelper(this, active -> {
+        }, () -> {
+            mService.wakeUpIfDozing(SystemClock.uptimeMillis(), this);
+            return true;
+        }, null, null);
+    }
+
+    @Override
+    protected boolean fitSystemWindows(Rect insets) {
+        if (getFitsSystemWindows()) {
+            boolean paddingChanged = insets.top != getPaddingTop()
+                    || insets.bottom != getPaddingBottom();
+
+            // Super-special right inset handling, because scrims and backdrop need to ignore it.
+            if (insets.right != mRightInset || insets.left != mLeftInset) {
+                mRightInset = insets.right;
+                mLeftInset = insets.left;
+                applyMargins();
+            }
+            // Drop top inset, and pass through bottom inset.
+            if (paddingChanged) {
+                setPadding(0, 0, 0, 0);
+            }
+            insets.left = 0;
+            insets.top = 0;
+            insets.right = 0;
+        } else {
+            if (mRightInset != 0 || mLeftInset != 0) {
+                mRightInset = 0;
+                mLeftInset = 0;
+                applyMargins();
+            }
+            boolean changed = getPaddingLeft() != 0
+                    || getPaddingRight() != 0
+                    || getPaddingTop() != 0
+                    || getPaddingBottom() != 0;
+            if (changed) {
+                setPadding(0, 0, 0, 0);
+            }
+            insets.top = 0;
+        }
+        return false;
+    }
+
+    private void applyMargins() {
+        final int N = getChildCount();
+        for (int i = 0; i < N; i++) {
+            View child = getChildAt(i);
+            if (child.getLayoutParams() instanceof LayoutParams) {
+                LayoutParams lp = (LayoutParams) child.getLayoutParams();
+                if (!lp.ignoreRightInset
+                        && (lp.rightMargin != mRightInset || lp.leftMargin != mLeftInset)) {
+                    lp.rightMargin = mRightInset;
+                    lp.leftMargin = mLeftInset;
+                    child.requestLayout();
+                }
+            }
+        }
+    }
+
+    @Override
+    public FrameLayout.LayoutParams generateLayoutParams(AttributeSet attrs) {
+        return new LayoutParams(getContext(), attrs);
+    }
+
+    @Override
+    protected FrameLayout.LayoutParams generateDefaultLayoutParams() {
+        return new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        mStackScrollLayout = (NotificationStackScrollLayout) findViewById(
+                R.id.notification_stack_scroller);
+        mNotificationPanel = (NotificationPanelView) findViewById(R.id.notification_panel);
+        mBrightnessMirror = findViewById(R.id.brightness_mirror);
+    }
+
+    @Override
+    public void onViewAdded(View child) {
+        super.onViewAdded(child);
+        if (child.getId() == R.id.brightness_mirror) {
+            mBrightnessMirror = child;
+        }
+    }
+
+    public void setService(StatusBar service) {
+        mService = service;
+        setDragDownHelper(new DragDownHelper(getContext(), this, mStackScrollLayout, mService));
+    }
+
+    @VisibleForTesting
+    void setDragDownHelper(DragDownHelper dragDownHelper) {
+        mDragDownHelper = dragDownHelper;
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        // We need to ensure that our window doesn't suffer from overdraw which would normally
+        // occur if our window is translucent. Since we are drawing the whole window anyway with
+        // the scrim, we don't need the window to be cleared in the beginning.
+        if (mService.isScrimSrcModeEnabled()) {
+            IBinder windowToken = getWindowToken();
+            WindowManager.LayoutParams lp = (WindowManager.LayoutParams) getLayoutParams();
+            lp.token = windowToken;
+            setLayoutParams(lp);
+            WindowManagerGlobal.getInstance().changeCanvasOpacity(windowToken, true);
+            setWillNotDraw(false);
+        } else {
+            setWillNotDraw(!DEBUG);
+        }
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (mService.interceptMediaKey(event)) {
+            return true;
+        }
+        if (super.dispatchKeyEvent(event)) {
+            return true;
+        }
+        boolean down = event.getAction() == KeyEvent.ACTION_DOWN;
+        switch (event.getKeyCode()) {
+            case KeyEvent.KEYCODE_BACK:
+                if (!down) {
+                    mService.onBackPressed();
+                }
+                return true;
+            case KeyEvent.KEYCODE_MENU:
+                if (!down) {
+                    return mService.onMenuPressed();
+                }
+            case KeyEvent.KEYCODE_SPACE:
+                if (!down) {
+                    return mService.onSpacePressed();
+                }
+                break;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                if (mService.isDozing()) {
+                    MediaSessionLegacyHelper.getHelper(mContext).sendVolumeKeyEvent(
+                            event, AudioManager.USE_DEFAULT_STREAM_TYPE, true);
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        boolean isDown = ev.getActionMasked() == MotionEvent.ACTION_DOWN;
+        if (isDown && mNotificationPanel.isFullyCollapsed()) {
+            mNotificationPanel.startExpandLatencyTracking();
+        }
+        if (isDown) {
+            mTouchActive = true;
+            mTouchCancelled = false;
+        } else if (ev.getActionMasked() == MotionEvent.ACTION_UP
+                || ev.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+            mTouchActive = false;
+        }
+        if (mTouchCancelled) {
+            return false;
+        }
+        mFalsingManager.onTouchEvent(ev, getWidth(), getHeight());
+        if (mBrightnessMirror != null && mBrightnessMirror.getVisibility() == VISIBLE) {
+            // Disallow new pointers while the brightness mirror is visible. This is so that you
+            // can't touch anything other than the brightness slider while the mirror is showing
+            // and the rest of the panel is transparent.
+            if (ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
+                return false;
+            }
+        }
+        if (isDown) {
+            mStackScrollLayout.closeControlsIfOutsideTouch(ev);
+        }
+        if (mService.isDozing()) {
+            mService.mDozeScrimController.extendPulse();
+        }
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (mService.isDozing() && !mStackScrollLayout.hasPulsingNotifications()) {
+            // Capture all touch events in always-on.
+            return true;
+        }
+        boolean intercept = false;
+        if (mNotificationPanel.isFullyExpanded()
+                && mStackScrollLayout.getVisibility() == View.VISIBLE
+                && mService.getBarState() == StatusBarState.KEYGUARD
+                && !mService.isBouncerShowing()
+                && !mService.isDozing()) {
+            intercept = mDragDownHelper.onInterceptTouchEvent(ev);
+        }
+        if (!intercept) {
+            super.onInterceptTouchEvent(ev);
+        }
+        if (intercept) {
+            MotionEvent cancellation = MotionEvent.obtain(ev);
+            cancellation.setAction(MotionEvent.ACTION_CANCEL);
+            mStackScrollLayout.onInterceptTouchEvent(cancellation);
+            mNotificationPanel.onInterceptTouchEvent(cancellation);
+            cancellation.recycle();
+        }
+        return intercept;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        boolean handled = false;
+        if (mService.isDozing()) {
+            mDoubleTapHelper.onTouchEvent(ev);
+            handled = true;
+        }
+        if ((mService.getBarState() == StatusBarState.KEYGUARD && !handled)
+                || mDragDownHelper.isDraggingDown()) {
+            // we still want to finish our drag down gesture when locking the screen
+            handled = mDragDownHelper.onTouchEvent(ev);
+        }
+        if (!handled) {
+            handled = super.onTouchEvent(ev);
+        }
+        final int action = ev.getAction();
+        if (!handled && (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL)) {
+            mService.setInteracting(StatusBarManager.WINDOW_STATUS_BAR, false);
+        }
+        return handled;
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (mService.isScrimSrcModeEnabled()) {
+            // We need to ensure that our window is always drawn fully even when we have paddings,
+            // since we simulate it to be opaque.
+            int paddedBottom = getHeight() - getPaddingBottom();
+            int paddedRight = getWidth() - getPaddingRight();
+            if (getPaddingTop() != 0) {
+                canvas.drawRect(0, 0, getWidth(), getPaddingTop(), mTransparentSrcPaint);
+            }
+            if (getPaddingBottom() != 0) {
+                canvas.drawRect(0, paddedBottom, getWidth(), getHeight(), mTransparentSrcPaint);
+            }
+            if (getPaddingLeft() != 0) {
+                canvas.drawRect(0, getPaddingTop(), getPaddingLeft(), paddedBottom,
+                        mTransparentSrcPaint);
+            }
+            if (getPaddingRight() != 0) {
+                canvas.drawRect(paddedRight, getPaddingTop(), getWidth(), paddedBottom,
+                        mTransparentSrcPaint);
+            }
+        }
+        if (DEBUG) {
+            Paint pt = new Paint();
+            pt.setColor(0x80FFFF00);
+            pt.setStrokeWidth(12.0f);
+            pt.setStyle(Paint.Style.STROKE);
+            canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), pt);
+        }
+    }
+
+    public void cancelExpandHelper() {
+        if (mStackScrollLayout != null) {
+            mStackScrollLayout.cancelExpandHelper();
+        }
+    }
+
+    public void cancelCurrentTouch() {
+        if (mTouchActive) {
+            final long now = SystemClock.uptimeMillis();
+            MotionEvent event = MotionEvent.obtain(now, now,
+                    MotionEvent.ACTION_CANCEL, 0.0f, 0.0f, 0);
+            event.setSource(InputDevice.SOURCE_TOUCHSCREEN);
+            dispatchTouchEvent(event);
+            event.recycle();
+            mTouchCancelled = true;
+        }
+    }
+
+    @Override
+    public ActionMode startActionModeForChild(View originalView, ActionMode.Callback callback,
+                                              int type) {
+        if (type == ActionMode.TYPE_FLOATING) {
+            return startActionMode(originalView, callback, type);
+        }
+        return super.startActionModeForChild(originalView, callback, type);
+    }
+
+    private ActionMode createFloatingActionMode(
+            View originatingView, ActionMode.Callback2 callback) {
+        if (mFloatingActionMode != null) {
+            mFloatingActionMode.finish();
+        }
+        cleanupFloatingActionModeViews();
+        mFloatingToolbar = new FloatingToolbar(mContext, mFakeWindow);
+        final FloatingActionMode mode =
+                new FloatingActionMode(mContext, callback, originatingView, mFloatingToolbar);
+        mFloatingActionModeOriginatingView = originatingView;
+        mFloatingToolbarPreDrawListener =
+                new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        mode.updateViewLocationInWindow();
+                        return true;
+                    }
+                };
+        return mode;
+    }
+
+    private void setHandledFloatingActionMode(ActionMode mode) {
+        mFloatingActionMode = mode;
+        mFloatingActionMode.invalidate();  // Will show the floating toolbar if necessary.
+        mFloatingActionModeOriginatingView.getViewTreeObserver()
+                .addOnPreDrawListener(mFloatingToolbarPreDrawListener);
+    }
+
+    private void cleanupFloatingActionModeViews() {
+        if (mFloatingToolbar != null) {
+            mFloatingToolbar.dismiss();
+            mFloatingToolbar = null;
+        }
+        if (mFloatingActionModeOriginatingView != null) {
+            if (mFloatingToolbarPreDrawListener != null) {
+                mFloatingActionModeOriginatingView.getViewTreeObserver()
+                        .removeOnPreDrawListener(mFloatingToolbarPreDrawListener);
+                mFloatingToolbarPreDrawListener = null;
+            }
+            mFloatingActionModeOriginatingView = null;
+        }
+    }
+
+    private ActionMode startActionMode(
+            View originatingView, ActionMode.Callback callback, int type) {
+        ActionMode.Callback2 wrappedCallback = new ActionModeCallback2Wrapper(callback);
+        ActionMode mode = createFloatingActionMode(originatingView, wrappedCallback);
+        if (mode != null && wrappedCallback.onCreateActionMode(mode, mode.getMenu())) {
+            setHandledFloatingActionMode(mode);
+        } else {
+            mode = null;
+        }
+        return mode;
+    }
+
     public void setLockscreenDoubleTapToSleep() {
         boolean isDoubleTapEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN, 0, UserHandle.USER_CURRENT) == 1;
         if (mNotificationPanel != null) {
             mNotificationPanel.setLockscreenDoubleTapToSleep(isDoubleTapEnabled);
+        }
+    }
+
+    public class LayoutParams extends FrameLayout.LayoutParams {
+
+        public boolean ignoreRightInset;
+
+        public LayoutParams(int width, int height) {
+            super(width, height);
+        }
+
+        public LayoutParams(Context c, AttributeSet attrs) {
+            super(c, attrs);
+
+            TypedArray a = c.obtainStyledAttributes(attrs, R.styleable.StatusBarWindowView_Layout);
+            ignoreRightInset = a.getBoolean(
+                    R.styleable.StatusBarWindowView_Layout_ignoreRightInset, false);
+            a.recycle();
+        }
+    }
+
+    private class ActionModeCallback2Wrapper extends ActionMode.Callback2 {
+        private final ActionMode.Callback mWrapped;
+
+        public ActionModeCallback2Wrapper(ActionMode.Callback wrapped) {
+            mWrapped = wrapped;
+        }
+
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            return mWrapped.onCreateActionMode(mode, menu);
+        }
+
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            requestFitSystemWindows();
+            return mWrapped.onPrepareActionMode(mode, menu);
+        }
+
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            return mWrapped.onActionItemClicked(mode, item);
+        }
+
+        public void onDestroyActionMode(ActionMode mode) {
+            mWrapped.onDestroyActionMode(mode);
+            if (mode == mFloatingActionMode) {
+                cleanupFloatingActionModeViews();
+                mFloatingActionMode = null;
+            }
+            requestFitSystemWindows();
+        }
+
+        @Override
+        public void onGetContentRect(ActionMode mode, View view, Rect outRect) {
+            if (mWrapped instanceof ActionMode.Callback2) {
+                ((ActionMode.Callback2) mWrapped).onGetContentRect(mode, view, outRect);
+            } else {
+                super.onGetContentRect(mode, view, outRect);
+            }
         }
     }
 }

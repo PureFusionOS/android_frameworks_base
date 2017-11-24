@@ -44,10 +44,14 @@ public class DeadZone extends View {
     public static final int VERTICAL = 1;  // Consume taps along the left edge.
 
     private static final boolean CHATTY = false; // print to logcat when we eat a click
-
+    private final Runnable mDebugFlash = new Runnable() {
+        @Override
+        public void run() {
+            ObjectAnimator.ofFloat(DeadZone.this, "flash", 1f, 0f).setDuration(150).start();
+        }
+    };
     private boolean mShouldFlash;
     private float mFlashFrac = 0f;
-
     private int mSizeMax;
     private int mSizeMin;
     // Upon activity elsewhere in the UI, the dead zone will hold steady for
@@ -56,13 +60,6 @@ public class DeadZone extends View {
     private boolean mVertical;
     private long mLastPokeTime;
     private int mDisplayRotation;
-
-    private final Runnable mDebugFlash = new Runnable() {
-        @Override
-        public void run() {
-            ObjectAnimator.ofFloat(DeadZone.this, "flash", 1f, 0f).setDuration(150).start();
-        }
-    };
 
     public DeadZone(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -168,13 +165,13 @@ public class DeadZone extends View {
         if (mShouldFlash) postInvalidate();
     }
 
+    public float getFlash() {
+        return mFlashFrac;
+    }
+
     public void setFlash(float f) {
         mFlashFrac = f;
         postInvalidate();
-    }
-
-    public float getFlash() {
-        return mFlashFrac;
     }
 
     @Override

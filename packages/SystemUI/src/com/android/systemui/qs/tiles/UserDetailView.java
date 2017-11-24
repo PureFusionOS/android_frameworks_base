@@ -29,6 +29,7 @@ import com.android.settingslib.RestrictedLockUtils;
 import com.android.systemui.R;
 import com.android.systemui.qs.PseudoGridView;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
+
 /**
  * Quick settings detail view for user switching.
  */
@@ -73,7 +74,7 @@ public class UserDetailView extends PseudoGridView {
         }
 
         public UserDetailItemView createUserDetailItemView(View convertView, ViewGroup parent,
-                UserSwitcherController.UserRecord item) {
+                                                           UserSwitcherController.UserRecord item) {
             UserDetailItemView v = UserDetailItemView.convertOrInflate(
                     mContext, convertView, parent);
             if (v != convertView) {

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
 ** Copyright 2014, The Android Open Source Project
 **
@@ -18,19 +17,31 @@
 -->
 
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-     android:background="#ff000000" android:shareInterpolator="false" android:zAdjustment="normal">
+    android:background="#ff000000"
+    android:shareInterpolator="false"
+    android:zAdjustment="normal">
 
-    <alpha android:fromAlpha="0.6" android:toAlpha="1.0"
-        android:fillEnabled="true" android:fillBefore="true" android:fillAfter="true"
+    <alpha
+        android:duration="150"
+        android:fillAfter="true"
+        android:fillBefore="true"
+        android:fillEnabled="true"
+        android:fromAlpha="0.6"
         android:interpolator="@android:interpolator/decelerate_cubic"
         android:startOffset="75"
-        android:duration="150"/>
+        android:toAlpha="1.0" />
 
-    <scale android:fromXScale="0.9" android:toXScale="1.0"
-        android:fromYScale="0.9" android:toYScale="1.0"
-        android:fillEnabled="true" android:fillBefore="true" android:fillAfter="true"
+    <scale
+        android:duration="225"
+        android:fillAfter="true"
+        android:fillBefore="true"
+        android:fillEnabled="true"
+        android:fromXScale="0.9"
+        android:fromYScale="0.9"
         android:interpolator="@android:interpolator/linear_out_slow_in"
-        android:pivotX="50%p" android:pivotY="50%p"
+        android:pivotX="50%p"
+        android:pivotY="50%p"
         android:startOffset="75"
-        android:duration="225" />
+        android:toXScale="1.0"
+        android:toYScale="1.0" />
 </set>

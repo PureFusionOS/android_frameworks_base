@@ -64,7 +64,7 @@ public class SystemUIApplication extends Application implements SysUiServiceProv
     /**
      * The classes of the stuff to start.
      */
-    private final Class<?>[] SERVICES = new Class[] {
+    private final Class<?>[] SERVICES = new Class[]{
             Dependency.class,
             NotificationChannels.class,
             CommandQueue.CommandQueueStart.class,
@@ -89,7 +89,7 @@ public class SystemUIApplication extends Application implements SysUiServiceProv
      * The classes of the stuff to start for each user.  This is a subset of the services listed
      * above.
      */
-    private final Class<?>[] SERVICES_PER_USER = new Class[] {
+    private final Class<?>[] SERVICES_PER_USER = new Class[]{
             Dependency.class,
             NotificationChannels.class,
             Recents.class
@@ -99,9 +99,9 @@ public class SystemUIApplication extends Application implements SysUiServiceProv
      * Hold a reference on the stuff we start.
      */
     private final SystemUI[] mServices = new SystemUI[SERVICES.length];
+    private final Map<Class<?>, Object> mComponents = new HashMap<>();
     private boolean mServicesStarted;
     private boolean mBootCompleted;
-    private final Map<Class<?>, Object> mComponents = new HashMap<>();
 
     @Override
     public void onCreate() {

@@ -79,32 +79,17 @@ public class NotificationInfo extends LinearLayout implements NotificationGuts.G
         super(context, attrs);
     }
 
-    // Specify a CheckSaveListener to override when/if the user's changes are committed.
-    public interface CheckSaveListener {
-        // Invoked when importance has changed and the NotificationInfo wants to try to save it.
-        // Listener should run saveImportance unless the change should be canceled.
-        void checkSave(Runnable saveImportance);
-    }
-
-    public interface OnSettingsClickListener {
-        void onClick(View v, NotificationChannel channel, int appUid);
-    }
-
-    public interface OnAppSettingsClickListener {
-        void onClick(View v, Intent intent);
-    }
-
     public void bindNotification(final PackageManager pm,
-            final INotificationManager iNotificationManager,
-            final String pkg,
-            final List<NotificationChannel> notificationChannels,
-            int startingUserImportance,
-            final StatusBarNotification sbn,
-            OnSettingsClickListener onSettingsClick,
-            OnAppSettingsClickListener onAppSettingsClick,
-            OnClickListener onDoneClick,
-            CheckSaveListener checkSaveListener,
-            final Set<String> nonBlockablePkgs)
+                                 final INotificationManager iNotificationManager,
+                                 final String pkg,
+                                 final List<NotificationChannel> notificationChannels,
+                                 int startingUserImportance,
+                                 final StatusBarNotification sbn,
+                                 OnSettingsClickListener onSettingsClick,
+                                 OnAppSettingsClickListener onAppSettingsClick,
+                                 OnClickListener onDoneClick,
+                                 CheckSaveListener checkSaveListener,
+                                 final Set<String> nonBlockablePkgs)
             throws RemoteException {
         mINotificationManager = iNotificationManager;
         mPkg = pkg;
@@ -139,14 +124,14 @@ public class NotificationInfo extends LinearLayout implements NotificationGuts.G
                 pkg, mAppUid, false /* includeDeleted */);
         if (mNotificationChannels.isEmpty()) {
             throw new IllegalArgumentException("bindNotification requires at least one channel");
-        } else  {
+        } else {
             if (mNotificationChannels.size() == 1) {
                 mSingleNotificationChannel = mNotificationChannels.get(0);
                 // Special behavior for the Default channel if no other channels have been defined.
                 mIsSingleDefaultChannel =
                         (mSingleNotificationChannel.getId()
                                 .equals(NotificationChannel.DEFAULT_CHANNEL_ID) &&
-                        numTotalChannels <= 1);
+                                numTotalChannels <= 1);
             } else {
                 mSingleNotificationChannel = null;
                 mIsSingleDefaultChannel = false;
@@ -358,7 +343,7 @@ public class NotificationInfo extends LinearLayout implements NotificationGuts.G
     }
 
     private Intent getAppSettingsIntent(PackageManager pm, String packageName,
-            NotificationChannel channel, int id, String tag) {
+                                        NotificationChannel channel, int id, String tag) {
         Intent intent = new Intent(Intent.ACTION_MAIN)
                 .addCategory(Notification.INTENT_CATEGORY_NOTIFICATION_PREFERENCES)
                 .setPackage(packageName);
@@ -398,7 +383,9 @@ public class NotificationInfo extends LinearLayout implements NotificationGuts.G
     public boolean handleCloseControls(boolean save, boolean force) {
         if (save && hasImportanceChanged()) {
             if (mCheckSaveListener != null) {
-                mCheckSaveListener.checkSave(() -> { saveImportance(); });
+                mCheckSaveListener.checkSave(() -> {
+                    saveImportance();
+                });
             } else {
                 saveImportance();
             }
@@ -409,5 +396,20 @@ public class NotificationInfo extends LinearLayout implements NotificationGuts.G
     @Override
     public int getActualHeight() {
         return getHeight();
+    }
+
+    // Specify a CheckSaveListener to override when/if the user's changes are committed.
+    public interface CheckSaveListener {
+        // Invoked when importance has changed and the NotificationInfo wants to try to save it.
+        // Listener should run saveImportance unless the change should be canceled.
+        void checkSave(Runnable saveImportance);
+    }
+
+    public interface OnSettingsClickListener {
+        void onClick(View v, NotificationChannel channel, int appUid);
+    }
+
+    public interface OnAppSettingsClickListener {
+        void onClick(View v, Intent intent);
     }
 }

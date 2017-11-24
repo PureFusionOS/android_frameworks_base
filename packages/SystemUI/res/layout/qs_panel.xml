@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,14 +12,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<com.android.systemui.qs.QSContainerImpl
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.systemui.qs.QSContainerImpl xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/quick_settings_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/colorPrimaryDark"
-    android:clipToPadding="false"
-    android:clipChildren="false">
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <View
         android:id="@+id/qs_background"
@@ -31,21 +29,26 @@
 
     <com.android.systemui.qs.QSPanel
         android:id="@+id/quick_settings_panel"
-        android:layout_marginTop="28dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="4dp"
+        android:layout_marginBottom="48dp"
+        android:layout_marginTop="28dp"
         android:background="#00000000"
-        android:layout_marginBottom="48dp" />
+        android:elevation="4dp" />
 
     <include layout="@layout/quick_status_bar_expanded_header" />
 
-    <include android:id="@+id/qs_footer"
+    <include
+        android:id="@+id/qs_footer"
         layout="@layout/qs_footer" />
 
-    <include android:id="@+id/qs_detail" layout="@layout/qs_detail" />
+    <include
+        android:id="@+id/qs_detail"
+        layout="@layout/qs_detail" />
 
-    <include android:id="@+id/qs_customize" layout="@layout/qs_customize_panel"
+    <include
+        android:id="@+id/qs_customize"
+        layout="@layout/qs_customize_panel"
         android:visibility="gone" />
 
 </com.android.systemui.qs.QSContainerImpl>

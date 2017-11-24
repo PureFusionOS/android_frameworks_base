@@ -36,7 +36,6 @@ import com.android.internal.widget.LockPatternUtils;
 /**
  * Subclass of the current view flipper that allows us to overload dispatchTouchEvent() so
  * we can emulate {@link WindowManager.LayoutParams#FLAG_SLIPPERY} within a view hierarchy.
- *
  */
 public class KeyguardSecurityViewFlipper extends ViewFlipper implements KeyguardSecurityView {
     private static final String TAG = "KeyguardSecurityViewFlipper";
@@ -287,7 +286,9 @@ public class KeyguardSecurityViewFlipper extends ViewFlipper implements Keyguard
             a.recycle();
         }
 
-        /** @hide */
+        /**
+         * @hide
+         */
         @Override
         protected void encodeProperties(@NonNull ViewHierarchyEncoder encoder) {
             super.encodeProperties(encoder);

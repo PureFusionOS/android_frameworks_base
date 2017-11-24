@@ -44,6 +44,16 @@ public class DozeScrimController {
 
     private boolean mDozing;
     private DozeHost.PulseCallback mPulseCallback;
+    private final Runnable mPulseOutFinished = new Runnable() {
+        @Override
+        public void run() {
+            if (DEBUG) Log.d(TAG, "Pulse out finished");
+            DozeLog.tracePulseFinish();
+
+            // Signal that the pulse is all finished so we can turn the screen off now.
+            pulseFinished();
+        }
+    };
     private int mPulseReason;
     private Animator mInFrontAnimator;
     private Animator mBehindAnimator;
@@ -51,6 +61,50 @@ public class DozeScrimController {
     private float mBehindTarget;
     private boolean mDozingAborted;
     private boolean mWakeAndUnlocking;
+    private final Runnable mPulseOut = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.removeCallbacks(mPulseOutExtended);
+            if (DEBUG) Log.d(TAG, "Pulse out, mDozing=" + mDozing);
+            if (!mDozing) return;
+            startScrimAnimation(true /* inFront */, mDozeParameters.getAlwaysOn() ? 0 : 1,
+                    mDozeParameters.getPulseOutDuration(),
+                    Interpolators.ALPHA_IN, mPulseOutFinished);
+        }
+    };
+    private final Runnable mPulseOutExtended = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.removeCallbacks(mPulseOut);
+            mPulseOut.run();
+        }
+    };
+    private final Runnable mPulseInFinished = new Runnable() {
+        @Override
+        public void run() {
+            if (DEBUG) Log.d(TAG, "Pulse in finished, mDozing=" + mDozing);
+            if (!mDozing) return;
+            mHandler.postDelayed(mPulseOut, mDozeParameters.getPulseVisibleDuration());
+            mHandler.postDelayed(mPulseOutExtended,
+                    mDozeParameters.getPulseVisibleDurationExtended());
+        }
+    };
+    private final Runnable mPulseIn = new Runnable() {
+        @Override
+        public void run() {
+            if (DEBUG) Log.d(TAG, "Pulse in, mDozing=" + mDozing + " mPulseReason="
+                    + DozeLog.pulseReasonToString(mPulseReason));
+            if (!mDozing) return;
+            DozeLog.tracePulseStart(mPulseReason);
+
+            // Signal that the pulse is ready to turn the screen on and draw.
+            pulseStarted();
+
+            if (mDozeParameters.getAlwaysOn()) {
+                mHandler.post(DozeScrimController.this::onScreenTurnedOn);
+            }
+        }
+    };
 
     public DozeScrimController(ScrimController scrimController, Context context) {
         mContext = context;
@@ -94,7 +148,9 @@ public class DozeScrimController {
         }
     }
 
-    /** When dozing, fade screen contents in and out using the front scrim. */
+    /**
+     * When dozing, fade screen contents in and out using the front scrim.
+     */
     public void pulse(@NonNull DozeHost.PulseCallback callback, int reason) {
         if (callback == null) {
             throw new IllegalArgumentException("callback must not be null");
@@ -190,12 +246,12 @@ public class DozeScrimController {
     }
 
     private void startScrimAnimation(final boolean inFront, float target, long duration,
-            Interpolator interpolator) {
+                                     Interpolator interpolator) {
         startScrimAnimation(inFront, target, duration, interpolator, null /* endRunnable */);
     }
 
     private void startScrimAnimation(final boolean inFront, float target, long duration,
-            Interpolator interpolator, final Runnable endRunnable) {
+                                     Interpolator interpolator, final Runnable endRunnable) {
         Animator current = getCurrentAnimator(inFront);
         if (current != null) {
             float currentTarget = getCurrentTarget(inFront);
@@ -268,63 +324,4 @@ public class DozeScrimController {
                 ? mScrimController.getDozeInFrontAlpha()
                 : mScrimController.getDozeBehindAlpha();
     }
-
-    private final Runnable mPulseIn = new Runnable() {
-        @Override
-        public void run() {
-            if (DEBUG) Log.d(TAG, "Pulse in, mDozing=" + mDozing + " mPulseReason="
-                    + DozeLog.pulseReasonToString(mPulseReason));
-            if (!mDozing) return;
-            DozeLog.tracePulseStart(mPulseReason);
-
-            // Signal that the pulse is ready to turn the screen on and draw.
-            pulseStarted();
-
-            if (mDozeParameters.getAlwaysOn()) {
-                mHandler.post(DozeScrimController.this::onScreenTurnedOn);
-            }
-        }
-    };
-
-    private final Runnable mPulseInFinished = new Runnable() {
-        @Override
-        public void run() {
-            if (DEBUG) Log.d(TAG, "Pulse in finished, mDozing=" + mDozing);
-            if (!mDozing) return;
-            mHandler.postDelayed(mPulseOut, mDozeParameters.getPulseVisibleDuration());
-            mHandler.postDelayed(mPulseOutExtended,
-                    mDozeParameters.getPulseVisibleDurationExtended());
-        }
-    };
-
-    private final Runnable mPulseOutExtended = new Runnable() {
-        @Override
-        public void run() {
-            mHandler.removeCallbacks(mPulseOut);
-            mPulseOut.run();
-        }
-    };
-
-    private final Runnable mPulseOut = new Runnable() {
-        @Override
-        public void run() {
-            mHandler.removeCallbacks(mPulseOutExtended);
-            if (DEBUG) Log.d(TAG, "Pulse out, mDozing=" + mDozing);
-            if (!mDozing) return;
-            startScrimAnimation(true /* inFront */, mDozeParameters.getAlwaysOn() ? 0 : 1,
-                    mDozeParameters.getPulseOutDuration(),
-                    Interpolators.ALPHA_IN, mPulseOutFinished);
-        }
-    };
-
-    private final Runnable mPulseOutFinished = new Runnable() {
-        @Override
-        public void run() {
-            if (DEBUG) Log.d(TAG, "Pulse out finished");
-            DozeLog.tracePulseFinish();
-
-            // Signal that the pulse is all finished so we can turn the screen off now.
-            pulseFinished();
-        }
-    };
 }

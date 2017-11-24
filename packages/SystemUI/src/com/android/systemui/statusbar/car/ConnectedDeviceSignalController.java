@@ -42,9 +42,9 @@ public class ConnectedDeviceSignalController extends BroadcastReceiver implement
     /**
      * All possible signal strength icons. According to the Bluetooth HFP 1.5 specification,
      * signal strength is indicated by a value from 1-5, where these values represent the following:
-     *
+     * <p>
      * <p>0%% - 0, 1-25%% - 1, 26-50%% - 2, 51-75%% - 3, 76-99%% - 4, 100%% - 5
-     *
+     * <p>
      * <p>As a result, these are treated as an index into this array for the corresponding icon.
      * Note that the icon is the same for 0 and 1.
      */
@@ -70,6 +70,21 @@ public class ConnectedDeviceSignalController extends BroadcastReceiver implement
     private final SignalDrawable mSignalDrawable;
 
     private BluetoothHeadsetClient mBluetoothHeadsetClient;
+    private final ServiceListener mHfpServiceListener = new ServiceListener() {
+        @Override
+        public void onServiceConnected(int profile, BluetoothProfile proxy) {
+            if (profile == BluetoothProfile.HEADSET_CLIENT) {
+                mBluetoothHeadsetClient = (BluetoothHeadsetClient) proxy;
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(int profile) {
+            if (profile == BluetoothProfile.HEADSET_CLIENT) {
+                mBluetoothHeadsetClient = null;
+            }
+        }
+    };
 
     public ConnectedDeviceSignalController(Context context, View signalsView) {
         mContext = context;
@@ -87,7 +102,7 @@ public class ConnectedDeviceSignalController extends BroadcastReceiver implement
                 new ScalingDrawableWrapper(mSignalDrawable, mIconScaleFactor));
 
         if (mAdapter == null) {
-          return;
+            return;
         }
 
         mAdapter.getProfileProxy(context.getApplicationContext(), mHfpServiceListener,
@@ -236,20 +251,4 @@ public class ConnectedDeviceSignalController extends BroadcastReceiver implement
             mSignalsView.setVisibility(View.GONE);
         }
     }
-
-    private final ServiceListener mHfpServiceListener = new ServiceListener() {
-        @Override
-        public void onServiceConnected(int profile, BluetoothProfile proxy) {
-            if (profile == BluetoothProfile.HEADSET_CLIENT) {
-                mBluetoothHeadsetClient = (BluetoothHeadsetClient) proxy;
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(int profile) {
-            if (profile == BluetoothProfile.HEADSET_CLIENT) {
-                mBluetoothHeadsetClient = null;
-            }
-        }
-    };
 }

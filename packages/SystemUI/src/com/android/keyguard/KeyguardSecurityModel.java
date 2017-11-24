@@ -24,23 +24,8 @@ import com.android.internal.widget.LockPatternUtils;
 
 public class KeyguardSecurityModel {
 
-    /**
-     * The different types of security available.
-     * @see KeyguardSecurityContainer#showSecurityScreen
-     */
-    public enum SecurityMode {
-        Invalid, // NULL state
-        None, // No security enabled
-        Pattern, // Unlock by drawing a pattern.
-        Password, // Unlock by entering an alphanumeric password
-        PIN, // Strictly numeric password
-        SimPin, // Unlock by entering a sim pin.
-        SimPuk // Unlock by entering a sim puk
-    }
-
     private final Context mContext;
     private final boolean mIsPukScreenAvailable;
-
     private LockPatternUtils mLockPatternUtils;
 
     KeyguardSecurityModel(Context context) {
@@ -87,5 +72,20 @@ public class KeyguardSecurityModel {
             default:
                 throw new IllegalStateException("Unknown security quality:" + security);
         }
+    }
+
+    /**
+     * The different types of security available.
+     *
+     * @see KeyguardSecurityContainer#showSecurityScreen
+     */
+    public enum SecurityMode {
+        Invalid, // NULL state
+        None, // No security enabled
+        Pattern, // Unlock by drawing a pattern.
+        Password, // Unlock by entering an alphanumeric password
+        PIN, // Strictly numeric password
+        SimPin, // Unlock by entering a sim pin.
+        SimPuk // Unlock by entering a sim puk
     }
 }

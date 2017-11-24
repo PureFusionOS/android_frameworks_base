@@ -47,19 +47,18 @@ import java.lang.reflect.Field;
 public class StatusBarWindowManager implements RemoteInputController.Callback, Dumpable {
 
     private static final String TAG = "StatusBarWindowManager";
-
+    private static float mScreenBrightnessDoze;
     private final Context mContext;
     private final WindowManager mWindowManager;
     private final IActivityManager mActivityManager;
+    private final boolean mKeyguardScreenRotation;
+    private final State mCurrentState = new State();
     private View mStatusBarView;
     private WindowManager.LayoutParams mLp;
     private WindowManager.LayoutParams mLpChanged;
     private boolean mHasTopUi;
     private boolean mHasTopUiChanged;
     private int mBarHeight;
-    private final boolean mKeyguardScreenRotation;
-    private static float mScreenBrightnessDoze;
-    private final State mCurrentState = new State();
     private OtherwisedCollapsedListener mListener;
 
     public StatusBarWindowManager(Context context) {
@@ -85,7 +84,7 @@ public class StatusBarWindowManager implements RemoteInputController.Callback, D
      * Adds the status bar view to the window manager.
      *
      * @param statusBarView The view to add.
-     * @param barHeight The height of the status bar in collapsed state.
+     * @param barHeight     The height of the status bar in collapsed state.
      */
     public void add(View statusBarView, int barHeight) {
 
@@ -389,6 +388,15 @@ public class StatusBarWindowManager implements RemoteInputController.Callback, D
         return !mCurrentState.backdropShowing;
     }
 
+    /**
+     * Custom listener to pipe data back to plugins about whether or not the status bar would be
+     * collapsed if not for the plugin.
+     * TODO: Find cleaner way to do this.
+     */
+    public interface OtherwisedCollapsedListener {
+        void setWouldOtherwiseCollapse(boolean otherwiseCollapse);
+    }
+
     private static class State {
         boolean keyguardShowing;
         boolean keyguardOccluded;
@@ -444,14 +452,5 @@ public class StatusBarWindowManager implements RemoteInputController.Callback, D
 
             return result.toString();
         }
-    }
-
-    /**
-     * Custom listener to pipe data back to plugins about whether or not the status bar would be
-     * collapsed if not for the plugin.
-     * TODO: Find cleaner way to do this.
-     */
-    public interface OtherwisedCollapsedListener {
-        void setWouldOtherwiseCollapse(boolean otherwiseCollapse);
     }
 }

@@ -186,7 +186,7 @@ public final class ForegroundServicesDialog extends AlertActivity implements
 
         public @NonNull
         View getView(int position, @Nullable View convertView,
-                @NonNull ViewGroup parent) {
+                     @NonNull ViewGroup parent) {
             final View view;
             if (convertView == null) {
                 view = mInflater.inflate(R.layout.foreground_service_item, parent, false);

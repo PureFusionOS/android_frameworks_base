@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -71,7 +70,8 @@
     <!-- On the keyguard screen, when pattern lock is disabled, only tell them to press menu to unlock.  This is shown in small font at the bottom. -->
     <string name="keyguard_instructions_when_pattern_disabled">Press Menu to unlock.</string>
 
-    <!-- SIM messages --><skip />
+    <!-- SIM messages -->
+    <skip />
     <!-- When the user inserts a sim card from an unsupported network, it becomes network locked -->
     <string name="keyguard_network_locked_message">Network locked</string>
     <!-- Shown when there is no SIM card. -->
@@ -114,9 +114,10 @@
     <string name="keyguard_accessibility_sim_puk_area">SIM PUK area</string>
 
     <!-- Accessibility description for the text view that indicates when the next alarm is set (not shown on screen). [CHAR_LIMIT=none] -->
-    <string name="keyguard_accessibility_next_alarm">Next alarm set for <xliff:g id="alarm" example="Fri 8:30 AM">%1$s</xliff:g></string>
+    <string name="keyguard_accessibility_next_alarm">Next alarm set for <xliff:g example="Fri 8:30 AM" id="alarm">%1$s</xliff:g></string>
 
-    <!-- KeyguardPinView - accessibility support --><skip />
+    <!-- KeyguardPinView - accessibility support -->
+    <skip />
     <!-- Description of the Delete button in a KeyboardView. [CHAR LIMIT=NONE] -->
     <string name="keyboardview_keycode_delete">Delete</string>
     <!-- Description of the Enter button in a KeyboardView. [CHAR LIMIT=NONE] -->
@@ -137,7 +138,7 @@
     <!-- Instructions for using the SIM PIN unlock screen -->
     <string name="kg_sim_pin_instructions">Enter SIM PIN</string>
     <!-- Instructions for using the SIM PIN unlock screen when there's more than one SIM -->
-    <string name="kg_sim_pin_instructions_multi">Enter SIM PIN for \"<xliff:g id="carrier" example="CARD 1">%1$s</xliff:g>\"</string>
+    <string name="kg_sim_pin_instructions_multi">Enter SIM PIN for \"<xliff:g example="CARD 1" id="carrier">%1$s</xliff:g>\"</string>
     <!-- Instructions for using the PIN unlock screen -->
     <string name="kg_pin_instructions">Enter PIN</string>
     <!-- Instructions for using the password unlock screen -->
@@ -145,7 +146,7 @@
     <!-- Hint shown in the PUK screen that asks the user to enter the PUK code given to them by their provider -->
     <string name="kg_puk_enter_puk_hint">SIM is now disabled. Enter PUK code to continue. Contact carrier for details.</string>
     <!-- Hint shown when there are multiple SIMs in the device to ask the user to enter the PUK code given to them by their provider -->
-    <string name="kg_puk_enter_puk_hint_multi">SIM \"<xliff:g id="carrier" example="CARD 1">%1$s</xliff:g>\" is now disabled. Enter PUK code to continue. Contact carrier for details.</string>
+    <string name="kg_puk_enter_puk_hint_multi">SIM \"<xliff:g example="CARD 1" id="carrier">%1$s</xliff:g>\" is now disabled. Enter PUK code to continue. Contact carrier for details.</string>
     <!-- Hint shown in the PUK unlock screen PIN TextView -->
     <string name="kg_puk_enter_pin_hint">Enter desired PIN code</string>
     <!-- Message shown when the user needs to confirm the PIN they just entered in the PUK screen -->
@@ -158,7 +159,7 @@
     <string name="kg_invalid_sim_puk_hint">PUK code should be 8 numbers or more.</string>
     <!-- Message shown when the user enters an invalid PUK code -->
     <string name="kg_invalid_puk">Re-enter the correct PUK code. Repeated attempts will permanently disable the SIM.</string>
-      <!-- String shown in PUK screen when PIN codes don't match -->
+    <!-- String shown in PUK screen when PIN codes don't match -->
     <string name="kg_invalid_confirm_pin_hint" product="default">PIN codes does not match</string>
     <!-- Message shown when the user exceeds the maximum number of pattern attempts -->
     <string name="kg_login_too_many_attempts">Too many pattern attempts</string>

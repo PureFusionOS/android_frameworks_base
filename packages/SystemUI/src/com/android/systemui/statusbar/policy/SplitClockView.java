@@ -56,6 +56,41 @@ public class SplitClockView extends LinearLayout {
         super(context, attrs);
     }
 
+    /**
+     * @return the index where the AM/PM part starts at the end in {@code formatString} including
+     * leading white spaces or {@code -1} if no AM/PM part is found or {@code formatString}
+     * doesn't end with AM/PM part
+     */
+    private static int getAmPmPartEndIndex(String formatString) {
+        boolean hasAmPm = false;
+        int length = formatString.length();
+        for (int i = length - 1; i >= 0; i--) {
+            char c = formatString.charAt(i);
+            boolean isAmPm = c == 'a';
+            boolean isWhitespace = Character.isWhitespace(c);
+            if (isAmPm) {
+                hasAmPm = true;
+            }
+            if (isAmPm || isWhitespace) {
+                continue;
+            }
+            if (i == length - 1) {
+
+                // First character was not AM/PM and not whitespace, so it's not ending with AM/PM.
+                return -1;
+            } else {
+
+                // If we have AM/PM at all, return last index, or -1 to indicate that it's not
+                // ending with AM/PM.
+                return hasAmPm ? i + 1 : -1;
+            }
+        }
+
+        // Only AM/PM and whitespaces? The whole string is AM/PM. Else: Only whitespaces in the
+        // string.
+        return hasAmPm ? 0 : -1;
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -105,41 +140,6 @@ public class SplitClockView extends LinearLayout {
         mTimeView.setContentDescriptionFormat24Hour(formatString);
         mAmPmView.setFormat12Hour(amPmString);
         mAmPmView.setFormat24Hour(amPmString);
-    }
-
-    /**
-     * @return the index where the AM/PM part starts at the end in {@code formatString} including
-     *         leading white spaces or {@code -1} if no AM/PM part is found or {@code formatString}
-     *         doesn't end with AM/PM part
-     */
-    private static int getAmPmPartEndIndex(String formatString) {
-        boolean hasAmPm = false;
-        int length = formatString.length();
-        for (int i = length - 1; i >= 0; i--) {
-            char c = formatString.charAt(i);
-            boolean isAmPm = c == 'a';
-            boolean isWhitespace = Character.isWhitespace(c);
-            if (isAmPm) {
-                hasAmPm = true;
-            }
-            if (isAmPm || isWhitespace) {
-                continue;
-            }
-            if (i == length - 1) {
-
-                // First character was not AM/PM and not whitespace, so it's not ending with AM/PM.
-                return -1;
-            } else {
-
-                // If we have AM/PM at all, return last index, or -1 to indicate that it's not
-                // ending with AM/PM.
-                return hasAmPm ? i + 1 : -1;
-            }
-        }
-
-        // Only AM/PM and whitespaces? The whole string is AM/PM. Else: Only whitespaces in the
-        // string.
-        return hasAmPm ? 0 : -1;
     }
 
 }

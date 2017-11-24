@@ -22,7 +22,7 @@ import android.os.Bundle;
 import com.android.internal.util.fusion.Action;
 import com.android.internal.util.fusion.ActionConstants;
 
-public class Torch extends Activity  {
+public class Torch extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -12,11 +12,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<set xmlns:android="http://schemas.android.com/apk/res/android" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="500"
-        android:propertyXName="translateX"
-        android:propertyYName="translateY"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         android:pathData="M 0,0 c 31.33333,0 156.66667,0 188,0 "
-        android:interpolator="@android:interpolator/fast_out_slow_in" />
+        android:propertyXName="translateX"
+        android:propertyYName="translateY" />
 </set>

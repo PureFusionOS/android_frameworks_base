@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 **
 ** Copyright 2016, The Android Open Source Project
 **
@@ -20,11 +19,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:paddingTop="350dp"
     android:background="#CC000000"
+    android:clipChildren="false"
     android:gravity="top|center_horizontal"
-    android:clipChildren="false">
+    android:orientation="horizontal"
+    android:paddingTop="350dp">
 
     <com.android.systemui.pip.tv.PipControlsView
         android:id="@+id/pip_controls"

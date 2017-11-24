@@ -37,7 +37,7 @@ public class CustomListPreference extends ListPreference {
     }
 
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder,
-            OnClickListener listener) {
+                                          OnClickListener listener) {
     }
 
     protected void onDialogClosed(boolean positiveResult) {
@@ -57,14 +57,14 @@ public class CustomListPreference extends ListPreference {
      *
      * @param value the value the user is about to choose
      * @return the message to show in a confirmation dialog, or {@code null} to
-     *         not request confirmation
+     * not request confirmation
      */
     protected CharSequence getConfirmationMessage(String value) {
         return null;
     }
 
     protected void onDialogStateRestored(DialogFragment fragment, Dialog dialog,
-            Bundle savedInstanceState) {
+                                         Bundle savedInstanceState) {
     }
 
     public static class CustomListPreferenceDialogFragment extends ListPreferenceDialogFragment {

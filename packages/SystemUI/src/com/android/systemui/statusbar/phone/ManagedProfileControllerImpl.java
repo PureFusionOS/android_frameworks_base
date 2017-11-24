@@ -37,6 +37,15 @@ public class ManagedProfileControllerImpl implements ManagedProfileController {
     private final LinkedList<UserInfo> mProfiles;
     private boolean mListening;
     private int mCurrentUser;
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            reloadManagedProfiles();
+            for (Callback callback : mCallbacks) {
+                callback.onManagedProfileChanged();
+            }
+        }
+    };
 
     public ManagedProfileControllerImpl(Context context) {
         mContext = context;
@@ -55,22 +64,6 @@ public class ManagedProfileControllerImpl implements ManagedProfileController {
     public void removeCallback(Callback callback) {
         if (mCallbacks.remove(callback) && mCallbacks.size() == 0) {
             setListening(false);
-        }
-    }
-
-    public void setWorkModeEnabled(boolean enableWorkMode) {
-        synchronized (mProfiles) {
-            for (UserInfo ui : mProfiles) {
-                if (enableWorkMode) {
-                    if (!mUserManager.trySetQuietModeDisabled(ui.id, null)) {
-                        StatusBarManager statusBarManager = (StatusBarManager) mContext
-                                .getSystemService(android.app.Service.STATUS_BAR_SERVICE);
-                        statusBarManager.collapsePanels();
-                    }
-                } else {
-                    mUserManager.setQuietModeEnabled(ui.id, true);
-                }
-            }
         }
     }
 
@@ -113,6 +106,22 @@ public class ManagedProfileControllerImpl implements ManagedProfileController {
         }
     }
 
+    public void setWorkModeEnabled(boolean enableWorkMode) {
+        synchronized (mProfiles) {
+            for (UserInfo ui : mProfiles) {
+                if (enableWorkMode) {
+                    if (!mUserManager.trySetQuietModeDisabled(ui.id, null)) {
+                        StatusBarManager statusBarManager = (StatusBarManager) mContext
+                                .getSystemService(android.app.Service.STATUS_BAR_SERVICE);
+                        statusBarManager.collapsePanels();
+                    }
+                } else {
+                    mUserManager.setQuietModeEnabled(ui.id, true);
+                }
+            }
+        }
+    }
+
     private void setListening(boolean listening) {
         mListening = listening;
         if (listening) {
@@ -129,14 +138,4 @@ public class ManagedProfileControllerImpl implements ManagedProfileController {
             mContext.unregisterReceiver(mReceiver);
         }
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            reloadManagedProfiles();
-            for (Callback callback : mCallbacks) {
-                callback.onManagedProfileChanged();
-            }
-        }
-    };
 }

@@ -64,7 +64,7 @@ public interface NotificationSwipeActionHelper {
         public CharSequence confirmation;
 
         public SnoozeOption(SnoozeCriterion crit, int minsToSnoozeFor, CharSequence desc,
-                CharSequence confirm) {
+                            CharSequence confirm) {
             criterion = crit;
             snoozeForMinutes = minsToSnoozeFor;
             description = desc;

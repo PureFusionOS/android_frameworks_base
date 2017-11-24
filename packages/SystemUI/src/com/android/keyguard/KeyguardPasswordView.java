@@ -40,6 +40,7 @@ import com.android.internal.widget.LockPatternUtils.RequestThrottledException;
 import com.android.internal.widget.TextViewInputDisabler;
 
 import java.util.List;
+
 /**
  * Displays an alphanumeric (latin-1) key entry for the user to enter
  * an unlock password
@@ -47,25 +48,21 @@ import java.util.List;
 public class KeyguardPasswordView extends KeyguardAbsKeyInputView
         implements KeyguardSecurityView, OnEditorActionListener, TextWatcher {
 
-    private final boolean mShowImeAtScreenOn;
-    private final int mDisappearYTranslation;
-
     // A delay constant to be used in a workaround for the situation where InputMethodManagerService
     // is not switched to the new user yet.
     // TODO: Remove this by ensuring such a race condition never happens.
     private static final int DELAY_MILLIS_TO_REEVALUATE_IME_SWITCH_ICON = 500;  // 500ms
-
+    private final boolean mShowImeAtScreenOn;
+    private final int mDisappearYTranslation;
+    private final boolean quickUnlock = (Settings.System.getInt(getContext().getContentResolver(),
+            Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
+    private final int userId = KeyguardUpdateMonitor.getCurrentUser();
     InputMethodManager mImm;
     private TextView mPasswordEntry;
     private TextViewInputDisabler mPasswordEntryDisabler;
     private View mSwitchImeButton;
-
     private Interpolator mLinearOutSlowInInterpolator;
     private Interpolator mFastOutLinearInInterpolator;
-
-    private final boolean quickUnlock = (Settings.System.getInt(getContext().getContentResolver(),
-            Settings.System.LOCKSCREEN_QUICK_UNLOCK_CONTROL, 0) == 1);
-    private final int userId = KeyguardUpdateMonitor.getCurrentUser();
 
     public KeyguardPasswordView(Context context) {
         this(context, null);
@@ -255,12 +252,12 @@ public class KeyguardPasswordView extends KeyguardAbsKeyInputView
     /**
      * Method adapted from com.android.inputmethod.latin.Utils
      *
-     * @param imm The input method manager
+     * @param imm                            The input method manager
      * @param shouldIncludeAuxiliarySubtypes
      * @return true if we have multiple IMEs to choose from
      */
     private boolean hasMultipleEnabledIMEsOrSubtypes(InputMethodManager imm,
-            final boolean shouldIncludeAuxiliarySubtypes) {
+                                                     final boolean shouldIncludeAuxiliarySubtypes) {
         final List<InputMethodInfo> enabledImis = imm.getEnabledInputMethodList();
 
         // Number of the filtered IMEs
@@ -295,8 +292,8 @@ public class KeyguardPasswordView extends KeyguardAbsKeyInputView
         }
 
         return filteredImisCount > 1
-        // imm.getEnabledInputMethodSubtypeList(null, false) will return the current IME's enabled
-        // input method subtype (The current IME should be LatinIME.)
+                // imm.getEnabledInputMethodSubtypeList(null, false) will return the current IME's enabled
+                // input method subtype (The current IME should be LatinIME.)
                 || imm.getEnabledInputMethodSubtypeList(null, false).size() > 1;
     }
 

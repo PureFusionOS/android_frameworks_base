@@ -33,13 +33,17 @@ public class SegmentedButtons extends LinearLayout {
     private static final int LABEL_RES_KEY = R.id.label;
     private static final Typeface REGULAR = Typeface.create("sans-serif", Typeface.NORMAL);
     private static final Typeface MEDIUM = Typeface.create("sans-serif-medium", Typeface.NORMAL);
-
-    private final Context mContext;
     protected final LayoutInflater mInflater;
+    private final Context mContext;
     private final ConfigurableTexts mConfigurableTexts;
-
-    private Callback mCallback;
     protected Object mSelectedValue;
+    private Callback mCallback;
+    private final View.OnClickListener mClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            setSelectedValue(v.getTag(), true /* fromClick */);
+        }
+    };
 
     public SegmentedButtons(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -115,13 +119,6 @@ public class SegmentedButtons extends LinearLayout {
             mCallback.onInteraction();
         }
     }
-
-    private final View.OnClickListener mClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            setSelectedValue(v.getTag(), true /* fromClick */);
-        }
-    };
 
     public interface Callback extends Interaction.Callback {
         void onSelected(Object value, boolean fromClick);

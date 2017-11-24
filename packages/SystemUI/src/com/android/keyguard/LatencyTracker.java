@@ -40,61 +40,46 @@ import com.android.systemui.EventLogTags;
  */
 public class LatencyTracker {
 
-    private static final String ACTION_RELOAD_PROPERTY =
-            "com.android.systemui.RELOAD_LATENCY_TRACKER_PROPERTY";
-
-    private static final String TAG = "LatencyTracker";
-
     /**
      * Time it takes until the first frame of the notification panel to be displayed while expanding
      */
     public static final int ACTION_EXPAND_PANEL = 0;
-
     /**
      * Time it takes until the first frame of recents is drawn after invoking it with the button.
      */
     public static final int ACTION_TOGGLE_RECENTS = 1;
-
     /**
      * Time between we get a fingerprint acquired signal until we start with the unlock animation
      */
     public static final int ACTION_FINGERPRINT_WAKE_AND_UNLOCK = 2;
-
     /**
      * Time it takes to check PIN/Pattern/Password.
      */
     public static final int ACTION_CHECK_CREDENTIAL = 3;
-
     /**
      * Time it takes to check fully PIN/Pattern/Password, i.e. that's the time spent including the
      * actions to unlock a user.
      */
     public static final int ACTION_CHECK_CREDENTIAL_UNLOCKED = 4;
-
     /**
      * Time it takes to turn on the screen.
      */
     public static final int ACTION_TURN_ON_SCREEN = 5;
-
-    private static final String[] NAMES = new String[] {
+    private static final String ACTION_RELOAD_PROPERTY =
+            "com.android.systemui.RELOAD_LATENCY_TRACKER_PROPERTY";
+    private static final String TAG = "LatencyTracker";
+    private static final String[] NAMES = new String[]{
             "expand panel",
             "toggle recents",
             "fingerprint wake-and-unlock",
             "check credential",
             "check credential unlocked",
-            "turn on screen" };
+            "turn on screen"};
 
     private static LatencyTracker sLatencyTracker;
 
     private final SparseLongArray mStartRtc = new SparseLongArray();
     private boolean mEnabled;
-
-    public static LatencyTracker getInstance(Context context) {
-        if (sLatencyTracker == null) {
-            sLatencyTracker = new LatencyTracker(context);
-        }
-        return sLatencyTracker;
-    }
 
     private LatencyTracker(Context context) {
         context.registerReceiver(new BroadcastReceiver() {
@@ -106,12 +91,19 @@ public class LatencyTracker {
         reloadProperty();
     }
 
-    private void reloadProperty() {
-        mEnabled = SystemProperties.getBoolean("debug.systemui.latency_tracking", false);
+    public static LatencyTracker getInstance(Context context) {
+        if (sLatencyTracker == null) {
+            sLatencyTracker = new LatencyTracker(context);
+        }
+        return sLatencyTracker;
     }
 
     public static boolean isEnabled(Context ctx) {
         return Build.IS_DEBUGGABLE && getInstance(ctx).mEnabled;
+    }
+
+    private void reloadProperty() {
+        mEnabled = SystemProperties.getBoolean("debug.systemui.latency_tracking", false);
     }
 
     /**

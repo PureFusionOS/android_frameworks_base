@@ -20,17 +20,10 @@ import android.content.Context;
 import android.os.PowerManager;
 import android.support.annotation.VisibleForTesting;
 
-/** WakeLock wrapper for testability */
+/**
+ * WakeLock wrapper for testability
+ */
 public interface WakeLock {
-
-    /** @see android.os.PowerManager.WakeLock#acquire() */
-    void acquire();
-
-    /** @see android.os.PowerManager.WakeLock#release() */
-    void release();
-
-    /** @see android.os.PowerManager.WakeLock#wrap(Runnable) */
-    Runnable wrap(Runnable r);
 
     static WakeLock createPartial(Context context, String tag) {
         return wrap(createPartialInner(context, tag));
@@ -39,7 +32,7 @@ public interface WakeLock {
     @VisibleForTesting
     static PowerManager.WakeLock createPartialInner(Context context, String tag) {
         return context.getSystemService(PowerManager.class)
-                    .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, tag);
+                .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, tag);
     }
 
     static WakeLock wrap(final PowerManager.WakeLock inner) {
@@ -60,4 +53,19 @@ public interface WakeLock {
             }
         };
     }
+
+    /**
+     * @see android.os.PowerManager.WakeLock#acquire()
+     */
+    void acquire();
+
+    /**
+     * @see android.os.PowerManager.WakeLock#release()
+     */
+    void release();
+
+    /**
+     * @see android.os.PowerManager.WakeLock#wrap(Runnable)
+     */
+    Runnable wrap(Runnable r);
 }

@@ -48,9 +48,15 @@ import java.util.Date;
 
 public class DetailedWeatherView extends FrameLayout {
 
+    /**
+     * The background colors of the app, it changes thru out the day to mimic the sky.
+     **/
+    public static final String[] BACKGROUND_SPECTRUM = {"#212121", "#27232e", "#2d253a",
+            "#332847", "#382a53", "#3e2c5f", "#442e6c", "#393a7a", "#2e4687", "#235395", "#185fa2",
+            "#0d6baf", "#0277bd", "#0d6cb1", "#1861a6", "#23569b", "#2d4a8f", "#383f84", "#433478",
+            "#3d3169", "#382e5b", "#322b4d", "#2c273e", "#272430"};
     static final String TAG = "DetailedWeatherView";
     static final boolean DEBUG = false;
-
     private TextView mWeatherCity;
     private TextView mWeatherTimestamp;
     private TextView mWeatherData;
@@ -78,12 +84,6 @@ public class DetailedWeatherView extends FrameLayout {
     private View mWeatherLine;
     private TextView mProviderName;
 
-    /** The background colors of the app, it changes thru out the day to mimic the sky. **/
-    public static final String[] BACKGROUND_SPECTRUM = { "#212121", "#27232e", "#2d253a",
-            "#332847", "#382a53", "#3e2c5f", "#442e6c", "#393a7a", "#2e4687", "#235395", "#185fa2",
-            "#0d6baf", "#0277bd", "#0d6cb1", "#1861a6", "#23569b", "#2d4a8f", "#383f84", "#433478",
-            "#3d3169", "#382e5b", "#322b4d", "#2c273e", "#272430" };
-
     public DetailedWeatherView(Context context) {
         this(context, null);
     }
@@ -94,6 +94,11 @@ public class DetailedWeatherView extends FrameLayout {
 
     public DetailedWeatherView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+    }
+
+    public static int getCurrentHourColor() {
+        final int hourOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        return Color.parseColor(BACKGROUND_SPECTRUM[hourOfDay]);
     }
 
     public void setWeatherClient(OmniJawsClient client) {
@@ -108,21 +113,21 @@ public class DetailedWeatherView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mProgressContainer = findViewById(R.id.progress_container);
-        mWeatherCity  = (TextView) findViewById(R.id.current_weather_city);
-        mWeatherTimestamp  = (TextView) findViewById(R.id.current_weather_timestamp);
-        mWeatherData  = (TextView) findViewById(R.id.current_weather_data);
-        mForecastImage0  = (ImageView) findViewById(R.id.forecast_image_0);
-        mForecastImage1  = (ImageView) findViewById(R.id.forecast_image_1);
-        mForecastImage2  = (ImageView) findViewById(R.id.forecast_image_2);
-        mForecastImage3  = (ImageView) findViewById(R.id.forecast_image_3);
-        mForecastImage4  = (ImageView) findViewById(R.id.forecast_image_4);
+        mWeatherCity = (TextView) findViewById(R.id.current_weather_city);
+        mWeatherTimestamp = (TextView) findViewById(R.id.current_weather_timestamp);
+        mWeatherData = (TextView) findViewById(R.id.current_weather_data);
+        mForecastImage0 = (ImageView) findViewById(R.id.forecast_image_0);
+        mForecastImage1 = (ImageView) findViewById(R.id.forecast_image_1);
+        mForecastImage2 = (ImageView) findViewById(R.id.forecast_image_2);
+        mForecastImage3 = (ImageView) findViewById(R.id.forecast_image_3);
+        mForecastImage4 = (ImageView) findViewById(R.id.forecast_image_4);
         mForecastText0 = (TextView) findViewById(R.id.forecast_text_0);
         mForecastText1 = (TextView) findViewById(R.id.forecast_text_1);
         mForecastText2 = (TextView) findViewById(R.id.forecast_text_2);
         mForecastText3 = (TextView) findViewById(R.id.forecast_text_3);
         mForecastText4 = (TextView) findViewById(R.id.forecast_text_4);
         mCurrentView = findViewById(R.id.current);
-        mCurrentImage  = (ImageView) findViewById(R.id.current_image);
+        mCurrentImage = (ImageView) findViewById(R.id.current_image);
         mCurrentText = (TextView) findViewById(R.id.current_text);
         mStatusMsg = (TextView) findViewById(R.id.status_msg);
         mEmptyView = findViewById(android.R.id.empty);
@@ -180,11 +185,11 @@ public class DetailedWeatherView extends FrameLayout {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         mWeatherTimestamp.setText(getResources().getString(R.string.omnijaws_service_last_update) + " " + sdf.format(timeStamp));
         if (mShowCurrent) {
-            mWeatherData.setText(weatherData.windSpeed + " " + weatherData.windUnits + " " + weatherData.windDirection +" - " +
+            mWeatherData.setText(weatherData.windSpeed + " " + weatherData.windUnits + " " + weatherData.windDirection + " - " +
                     weatherData.humidity);
         } else {
             mWeatherData.setText(weatherData.temp + weatherData.tempUnits + " - " +
-                    weatherData.windSpeed + " " + weatherData.windUnits + " " + weatherData.windDirection +" - " +
+                    weatherData.windSpeed + " " + weatherData.windUnits + " " + weatherData.windDirection + " - " +
                     weatherData.humidity);
         }
 
@@ -259,7 +264,7 @@ public class DetailedWeatherView extends FrameLayout {
         textPaint.setTypeface(font);
         textPaint.setColor(Color.BLACK);
         textPaint.setTextAlign(Paint.Align.LEFT);
-        final int textSize= (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, resources.getDisplayMetrics());
+        final int textSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, resources.getDisplayMetrics());
         textPaint.setTextSize(textSize);
         final int height = imageHeight + footerHeight;
         final int width = imageWidth;
@@ -271,7 +276,7 @@ public class DetailedWeatherView extends FrameLayout {
 
         String str = null;
         if (max != null) {
-            str = min +"/"+max + tempUnits;
+            str = min + "/" + max + tempUnits;
         } else {
             str = min + tempUnits;
         }
@@ -284,11 +289,6 @@ public class DetailedWeatherView extends FrameLayout {
 
     private void forceRefreshWeatherSettings() {
         mWeatherClient.updateWeather();
-    }
-
-    public static int getCurrentHourColor() {
-        final int hourOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        return Color.parseColor(BACKGROUND_SPECTRUM[hourOfDay]);
     }
 
     private void setErrorView() {

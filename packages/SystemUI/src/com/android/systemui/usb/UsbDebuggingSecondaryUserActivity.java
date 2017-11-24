@@ -51,24 +51,6 @@ public class UsbDebuggingSecondaryUserActivity extends AlertActivity
         setupAlert();
     }
 
-    private class UsbDisconnectedReceiver extends BroadcastReceiver {
-        private final Activity mActivity;
-        public UsbDisconnectedReceiver(Activity activity) {
-            mActivity = activity;
-        }
-
-        @Override
-        public void onReceive(Context content, Intent intent) {
-            String action = intent.getAction();
-            if (UsbManager.ACTION_USB_STATE.equals(action)) {
-                boolean connected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
-                if (!connected) {
-                    mActivity.finish();
-                }
-            }
-        }
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -88,5 +70,24 @@ public class UsbDebuggingSecondaryUserActivity extends AlertActivity
     @Override
     public void onClick(DialogInterface dialog, int which) {
         finish();
+    }
+
+    private class UsbDisconnectedReceiver extends BroadcastReceiver {
+        private final Activity mActivity;
+
+        public UsbDisconnectedReceiver(Activity activity) {
+            mActivity = activity;
+        }
+
+        @Override
+        public void onReceive(Context content, Intent intent) {
+            String action = intent.getAction();
+            if (UsbManager.ACTION_USB_STATE.equals(action)) {
+                boolean connected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
+                if (!connected) {
+                    mActivity.finish();
+                }
+            }
+        }
     }
 }

@@ -84,7 +84,7 @@ public class DozeTriggersTest extends SysuiTestCase {
     public void testOnNotification_stillWorksAfterOneFailedProxCheck() throws Exception {
         when(mMachine.getState()).thenReturn(DozeMachine.State.DOZE);
 
-        mInstrumentation.runOnMainSync(()->{
+        mInstrumentation.runOnMainSync(() -> {
             mTriggers.transitionTo(DozeMachine.State.UNINITIALIZED, DozeMachine.State.INITIALIZED);
             mTriggers.transitionTo(DozeMachine.State.INITIALIZED, DozeMachine.State.DOZE);
 
@@ -98,7 +98,7 @@ public class DozeTriggersTest extends SysuiTestCase {
         verify(mMachine, never()).requestState(any());
         verify(mMachine, never()).requestPulse(anyInt());
 
-        mInstrumentation.runOnMainSync(()->{
+        mInstrumentation.runOnMainSync(() -> {
             mHost.callback.onNotificationHeadsUp();
         });
 

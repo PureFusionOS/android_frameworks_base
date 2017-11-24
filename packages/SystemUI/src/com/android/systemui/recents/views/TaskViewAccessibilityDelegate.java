@@ -34,15 +34,12 @@ import com.android.systemui.recents.misc.Utilities;
 import com.android.systemui.recents.model.TaskStack;
 
 public class TaskViewAccessibilityDelegate extends View.AccessibilityDelegate {
-    private static final String TAG = "TaskViewAccessibilityDelegate";
-
-    private final TaskView mTaskView;
-
     protected static final int SPLIT_TASK_TOP = R.id.action_split_task_to_top;
     protected static final int SPLIT_TASK_LEFT = R.id.action_split_task_to_left;
     protected static final int SPLIT_TASK_RIGHT = R.id.action_split_task_to_right;
-
+    private static final String TAG = "TaskViewAccessibilityDelegate";
     protected final SparseArray<AccessibilityAction> mActions = new SparseArray<>();
+    private final TaskView mTaskView;
 
     public TaskViewAccessibilityDelegate(TaskView taskView) {
         mTaskView = taskView;
@@ -62,7 +59,7 @@ public class TaskViewAccessibilityDelegate extends View.AccessibilityDelegate {
                 && !Recents.getSystemServices().hasDockedTask()) {
             TaskStack.DockState[] dockStates = Recents.getConfiguration()
                     .getDockStatesForCurrentOrientation();
-            for (TaskStack.DockState dockState: dockStates) {
+            for (TaskStack.DockState dockState : dockStates) {
                 if (dockState == TaskStack.DockState.TOP) {
                     info.addAction(mActions.get(SPLIT_TASK_TOP));
                 } else if (dockState == TaskStack.DockState.LEFT) {
@@ -88,11 +85,13 @@ public class TaskViewAccessibilityDelegate extends View.AccessibilityDelegate {
         return true;
     }
 
-    /** Simulate a user drag event to split the screen to the respected side */
+    /**
+     * Simulate a user drag event to split the screen to the respected side
+     */
     private void simulateDragIntoMultiwindow(TaskStack.DockState dockState) {
         int orientation = Utilities.getAppConfiguration(mTaskView.getContext()).orientation;
         EventBus.getDefault().send(new DragStartEvent(mTaskView.getTask(), mTaskView,
-                new Point(0,0), false /* isUserTouchInitiated */));
+                new Point(0, 0), false /* isUserTouchInitiated */));
         EventBus.getDefault().send(new DragEndEvent(mTaskView.getTask(), mTaskView, dockState));
     }
 }

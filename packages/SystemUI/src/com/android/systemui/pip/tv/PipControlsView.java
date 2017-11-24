@@ -44,32 +44,29 @@ public class PipControlsView extends LinearLayout {
     private static final String TAG = PipControlsView.class.getSimpleName();
 
     private static final float DISABLED_ACTION_ALPHA = 0.54f;
-
-    /**
-     * An interface to listen user action.
-     */
-    public abstract static interface Listener {
-        /**
-         * Called when an user clicks close PIP button.
-         */
-        public abstract void onClosed();
-    };
-
-    private MediaController mMediaController;
-
     private final PipManager mPipManager = PipManager.getInstance();
+
+    ;
     private final LayoutInflater mLayoutInflater;
     private final Handler mHandler;
+    private MediaController mMediaController;
     private Listener mListener;
-
     private PipControlButtonView mFullButtonView;
     private PipControlButtonView mCloseButtonView;
     private PipControlButtonView mPlayPauseButtonView;
     private ArrayList<PipControlButtonView> mCustomButtonViews = new ArrayList<>();
     private List<RemoteAction> mCustomActions = new ArrayList<>();
-
     private PipControlButtonView mFocusedChild;
-
+    private final OnFocusChangeListener mFocusChangeListener = new OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View view, boolean hasFocus) {
+            if (hasFocus) {
+                mFocusedChild = (PipControlButtonView) view;
+            } else if (mFocusedChild == view) {
+                mFocusedChild = null;
+            }
+        }
+    };
     private MediaController.Callback mMediaControllerCallback = new MediaController.Callback() {
         @Override
         public void onPlaybackStateChanged(PlaybackState state) {
@@ -81,17 +78,6 @@ public class PipControlsView extends LinearLayout {
         @Override
         public void onMediaControllerChanged() {
             updateMediaController();
-        }
-    };
-
-    private final OnFocusChangeListener mFocusChangeListener = new OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View view, boolean hasFocus) {
-            if (hasFocus) {
-                mFocusedChild = (PipControlButtonView) view;
-            } else if (mFocusedChild == view) {
-                mFocusedChild = null;
-            }
         }
     };
 
@@ -297,5 +283,15 @@ public class PipControlsView extends LinearLayout {
      */
     PipControlButtonView getFocusedButton() {
         return mFocusedChild;
+    }
+
+    /**
+     * An interface to listen user action.
+     */
+    public abstract static interface Listener {
+        /**
+         * Called when an user clicks close PIP button.
+         */
+        public abstract void onClosed();
     }
 }

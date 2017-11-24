@@ -46,16 +46,16 @@ public class StatusbarIconsFragment extends TunerFragment {
             prefSet.removePreference(mShowFourG);
         } else {
             mShowFourG.setChecked((Settings.System.getInt(resolver,
-                Settings.System.SHOW_FOURG, 0) == 1));
+                    Settings.System.SHOW_FOURG, 0) == 1));
         }
     }
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
-        if  (preference == mShowFourG) {
-            boolean checked = ((SwitchPreference)preference).isChecked();
+        if (preference == mShowFourG) {
+            boolean checked = ((SwitchPreference) preference).isChecked();
             Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.SHOW_FOURG, checked ? 1:0);
+                    Settings.System.SHOW_FOURG, checked ? 1 : 0);
             return true;
         }
         return super.onPreferenceTreeClick(preference);

@@ -46,7 +46,7 @@ public class DozeUi implements DozeMachine.Part {
     private long mLastTimeTickElapsed = 0;
 
     public DozeUi(Context context, AlarmManager alarmManager, DozeMachine machine,
-            WakeLock wakeLock, DozeHost host, Handler handler) {
+                  WakeLock wakeLock, DozeHost host, Handler handler) {
         mContext = context;
         mAlarmManager = alarmManager;
         mMachine = machine;
@@ -160,7 +160,8 @@ public class DozeUi implements DozeMachine.Part {
         mHost.dozeTimeTick();
 
         // Keep wakelock until a frame has been pushed.
-        mHandler.post(mWakeLock.wrap(() -> {}));
+        mHandler.post(mWakeLock.wrap(() -> {
+        }));
 
         mTimeTickScheduled = false;
         scheduleTimeTick();

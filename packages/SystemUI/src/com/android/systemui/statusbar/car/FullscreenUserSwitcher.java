@@ -33,8 +33,8 @@ public class FullscreenUserSwitcher {
     private UserSwitcherController mUserSwitcherController;
 
     public FullscreenUserSwitcher(StatusBar statusBar,
-            UserSwitcherController userSwitcherController,
-            ViewStub containerStub) {
+                                  UserSwitcherController userSwitcherController,
+                                  ViewStub containerStub) {
         mUserSwitcherController = userSwitcherController;
         mContainer = containerStub.inflate();
         mUserGridView = (UserGridView) mContainer.findViewById(R.id.user_grid);

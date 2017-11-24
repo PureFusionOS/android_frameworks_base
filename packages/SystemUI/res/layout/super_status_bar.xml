@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 **
 ** Copyright 2012, The Android Open Source Project
 **
@@ -18,46 +17,48 @@
 -->
 
 <!-- This is the combined status bar / notification panel window. -->
-<com.android.systemui.statusbar.phone.StatusBarWindowView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.systemui.statusbar.phone.StatusBarWindowView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sysui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
     <com.android.systemui.statusbar.BackDropView
-            android:id="@+id/backdrop"
+        android:id="@+id/backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        sysui:ignoreRightInset="true">
+
+        <ImageView
+            android:id="@+id/backdrop_back"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            sysui:ignoreRightInset="true"
-            >
-        <ImageView android:id="@+id/backdrop_back"
-                   android:layout_width="match_parent"
-                   android:scaleType="centerCrop"
-                   android:layout_height="match_parent" />
-        <ImageView android:id="@+id/backdrop_front"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:scaleType="centerCrop"
-                   android:visibility="invisible" />
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/backdrop_front"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="invisible" />
     </com.android.systemui.statusbar.BackDropView>
 
-    <com.android.systemui.statusbar.ScrimView android:id="@+id/scrim_behind"
+    <com.android.systemui.statusbar.ScrimView
+        android:id="@+id/scrim_behind"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
         sysui:ignoreRightInset="true"
-        sysui:scrimColor="@color/scrim_behind_color"
-        />
+        sysui:scrimColor="@color/scrim_behind_color" />
 
     <com.android.systemui.statusbar.AlphaOptimizedView
         android:id="@+id/heads_up_scrim"
         android:layout_width="match_parent"
         android:layout_height="@dimen/heads_up_scrim_height"
         android:background="@drawable/heads_up_scrim"
-        sysui:ignoreRightInset="true"
-        android:importantForAccessibility="no"/>
+        android:importantForAccessibility="no"
+        sysui:ignoreRightInset="true" />
 
     <FrameLayout
         android:id="@+id/status_bar_container"
@@ -66,21 +67,23 @@
 
     <include layout="@layout/brightness_mirror" />
 
-    <ViewStub android:id="@+id/fullscreen_user_switcher_stub"
-              android:layout="@layout/car_fullscreen_user_switcher"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"/>
+    <ViewStub
+        android:id="@+id/fullscreen_user_switcher_stub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout="@layout/car_fullscreen_user_switcher" />
 
-    <include layout="@layout/status_bar_expanded"
+    <include
+        layout="@layout/status_bar_expanded"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible" />
 
-    <com.android.systemui.statusbar.ScrimView android:id="@+id/scrim_in_front"
+    <com.android.systemui.statusbar.ScrimView
+        android:id="@+id/scrim_in_front"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
-        sysui:ignoreRightInset="true"
-        />
+        sysui:ignoreRightInset="true" />
 
 </com.android.systemui.statusbar.phone.StatusBarWindowView>

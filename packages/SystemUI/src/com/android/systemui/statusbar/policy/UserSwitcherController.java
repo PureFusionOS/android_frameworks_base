@@ -91,13 +91,25 @@ public class UserSwitcherController {
 
     protected final Context mContext;
     protected final UserManager mUserManager;
+    protected final Handler mHandler;
     private final ArrayList<WeakReference<BaseUserAdapter>> mAdapters = new ArrayList<>();
     private final GuestResumeSessionReceiver mGuestResumeSessionReceiver
             = new GuestResumeSessionReceiver();
     private final KeyguardMonitor mKeyguardMonitor;
-    protected final Handler mHandler;
     private final ActivityStarter mActivityStarter;
+    private final KeyguardMonitor.Callback mCallback = new KeyguardMonitor.Callback() {
+        @Override
+        public void onKeyguardShowingChanged() {
 
+            // When Keyguard is going away, we don't need to update our items immediately which
+            // helps making the transition faster.
+            if (!mKeyguardMonitor.isShowing()) {
+                mHandler.post(UserSwitcherController.this::notifyAdapters);
+            } else {
+                notifyAdapters();
+            }
+        }
+    };
     private ArrayList<UserRecord> mUsers = new ArrayList<>();
     private Dialog mExitGuestDialog;
     private Dialog mAddUserDialog;
@@ -109,9 +121,191 @@ public class UserSwitcherController {
     private int mSecondaryUser = UserHandle.USER_NULL;
     private Intent mSecondaryUserServiceIntent;
     private SparseBooleanArray mForcePictureLoadForUserId = new SparseBooleanArray(2);
+    private final PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+        private int mCallState;
+
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            if (mCallState == state) return;
+            if (DEBUG) Log.v(TAG, "Call state changed: " + state);
+            mCallState = state;
+            int currentUserId = ActivityManager.getCurrentUser();
+            UserInfo userInfo = mUserManager.getUserInfo(currentUserId);
+            if (userInfo != null && userInfo.isGuest()) {
+                showGuestNotification(currentUserId);
+            }
+            refreshUsers(UserHandle.USER_NULL);
+        }
+    };
+    private final Runnable mUnpauseRefreshUsers = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.removeCallbacks(this);
+            mPauseRefreshUsers = false;
+            refreshUsers(UserHandle.USER_NULL);
+        }
+    };
+    private final ContentObserver mSettingsObserver = new ContentObserver(new Handler()) {
+        public void onChange(boolean selfChange) {
+            mSimpleUserSwitcher = Settings.Global.getInt(mContext.getContentResolver(),
+                    SIMPLE_USER_SWITCHER_GLOBAL_SETTING, 0) != 0;
+            mAddUsersWhenLocked = Settings.Global.getInt(mContext.getContentResolver(),
+                    Settings.Global.ADD_USERS_WHEN_LOCKED, 0) != 0;
+            refreshUsers(UserHandle.USER_NULL);
+        }
+
+        ;
+    };
+    public final DetailAdapter userDetailAdapter = new DetailAdapter() {
+        private final Intent USER_SETTINGS_INTENT = new Intent(Settings.ACTION_USER_SETTINGS);
+
+        @Override
+        public CharSequence getTitle() {
+            return mContext.getString(R.string.quick_settings_user_title);
+        }
+
+        @Override
+        public View createDetailView(Context context, View convertView, ViewGroup parent) {
+            UserDetailView v;
+            if (!(convertView instanceof UserDetailView)) {
+                v = UserDetailView.inflate(context, parent, false);
+                v.createAndSetAdapter(UserSwitcherController.this);
+            } else {
+                v = (UserDetailView) convertView;
+            }
+            v.refreshAdapter();
+            return v;
+        }
+
+        @Override
+        public Intent getSettingsIntent() {
+            return USER_SETTINGS_INTENT;
+        }
+
+        @Override
+        public Boolean getToggleState() {
+            return null;
+        }
+
+        @Override
+        public void setToggleState(boolean state) {
+        }
+
+        @Override
+        public int getMetricsCategory() {
+            return MetricsEvent.QS_USERDETAIL;
+        }
+    };
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (DEBUG) {
+                Log.v(TAG, "Broadcast: a=" + intent.getAction()
+                        + " user=" + intent.getIntExtra(Intent.EXTRA_USER_HANDLE, -1));
+            }
+
+            boolean unpauseRefreshUsers = false;
+            int forcePictureLoadForId = UserHandle.USER_NULL;
+
+            if (ACTION_REMOVE_GUEST.equals(intent.getAction())) {
+                int currentUser = ActivityManager.getCurrentUser();
+                UserInfo userInfo = mUserManager.getUserInfo(currentUser);
+                if (userInfo != null && userInfo.isGuest()) {
+                    showExitGuestDialog(currentUser);
+                }
+                return;
+            } else if (ACTION_LOGOUT_USER.equals(intent.getAction())) {
+                logoutCurrentUser();
+            } else if (Intent.ACTION_USER_SWITCHED.equals(intent.getAction())) {
+                if (mExitGuestDialog != null && mExitGuestDialog.isShowing()) {
+                    mExitGuestDialog.cancel();
+                    mExitGuestDialog = null;
+                }
+
+                final int currentId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, -1);
+                final UserInfo userInfo = mUserManager.getUserInfo(currentId);
+                final int N = mUsers.size();
+                for (int i = 0; i < N; i++) {
+                    UserRecord record = mUsers.get(i);
+                    if (record.info == null) continue;
+                    boolean shouldBeCurrent = record.info.id == currentId;
+                    if (record.isCurrent != shouldBeCurrent) {
+                        mUsers.set(i, record.copyWithIsCurrent(shouldBeCurrent));
+                    }
+                    if (shouldBeCurrent && !record.isGuest) {
+                        mLastNonGuestUser = record.info.id;
+                    }
+                    if ((userInfo == null || !userInfo.isAdmin()) && record.isRestricted) {
+                        // Immediately remove restricted records in case the AsyncTask is too slow.
+                        mUsers.remove(i);
+                        i--;
+                    }
+                }
+                notifyAdapters();
+
+                // Disconnect from the old secondary user's service
+                if (mSecondaryUser != UserHandle.USER_NULL) {
+                    context.stopServiceAsUser(mSecondaryUserServiceIntent,
+                            UserHandle.of(mSecondaryUser));
+                    mSecondaryUser = UserHandle.USER_NULL;
+                }
+                // Connect to the new secondary user's service (purely to ensure that a persistent
+                // SystemUI application is created for that user)
+                if (userInfo != null && userInfo.id != UserHandle.USER_SYSTEM) {
+                    context.startServiceAsUser(mSecondaryUserServiceIntent,
+                            UserHandle.of(userInfo.id));
+                    mSecondaryUser = userInfo.id;
+                }
+
+                if (UserManager.isSplitSystemUser() && userInfo != null && !userInfo.isGuest()
+                        && userInfo.id != UserHandle.USER_SYSTEM) {
+                    showLogoutNotification(currentId);
+                }
+                if (userInfo != null && userInfo.isGuest()) {
+                    showGuestNotification(currentId);
+                }
+                unpauseRefreshUsers = true;
+            } else if (Intent.ACTION_USER_INFO_CHANGED.equals(intent.getAction())) {
+                forcePictureLoadForId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE,
+                        UserHandle.USER_NULL);
+            } else if (Intent.ACTION_USER_UNLOCKED.equals(intent.getAction())) {
+                // Unlocking the system user may require a refresh
+                int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, UserHandle.USER_NULL);
+                if (userId != UserHandle.USER_SYSTEM) {
+                    return;
+                }
+            }
+            refreshUsers(forcePictureLoadForId);
+            if (unpauseRefreshUsers) {
+                mUnpauseRefreshUsers.run();
+            }
+        }
+
+        private void showLogoutNotification(int userId) {
+            PendingIntent logoutPI = PendingIntent.getBroadcastAsUser(mContext,
+                    0, new Intent(ACTION_LOGOUT_USER), 0, UserHandle.SYSTEM);
+            Notification.Builder builder =
+                    new Notification.Builder(mContext, NotificationChannels.GENERAL)
+                            .setVisibility(Notification.VISIBILITY_SECRET)
+                            .setSmallIcon(R.drawable.ic_person)
+                            .setContentTitle(mContext.getString(
+                                    R.string.user_logout_notification_title))
+                            .setContentText(mContext.getString(
+                                    R.string.user_logout_notification_text))
+                            .setContentIntent(logoutPI)
+                            .setOngoing(true)
+                            .setShowWhen(false)
+                            .addAction(R.drawable.ic_delete,
+                                    mContext.getString(R.string.user_logout_notification_action),
+                                    logoutPI);
+            SystemUI.overrideNotificationAppName(mContext, builder);
+            NotificationManager.from(mContext).notifyAsUser(TAG_LOGOUT_USER,
+                    SystemMessage.NOTE_LOGOUT_USER, builder.build(), new UserHandle(userId));
+        }
+    };
 
     public UserSwitcherController(Context context, KeyguardMonitor keyguardMonitor,
-            Handler handler, ActivityStarter activityStarter) {
+                                  Handler handler, ActivityStarter activityStarter) {
         mContext = context;
         mGuestResumeSessionReceiver.register(context);
         mKeyguardMonitor = keyguardMonitor;
@@ -157,14 +351,14 @@ public class UserSwitcherController {
 
     /**
      * Refreshes users from UserManager.
-     *
+     * <p>
      * The pictures are only loaded if they have not been loaded yet.
      *
      * @param forcePictureLoadForId forces the picture of the given user to be reloaded.
      */
     @SuppressWarnings("unchecked")
     private void refreshUsers(int forcePictureLoadForId) {
-        if (DEBUG) Log.d(TAG, "refreshUsers(forcePictureLoadForId=" + forcePictureLoadForId+")");
+        if (DEBUG) Log.d(TAG, "refreshUsers(forcePictureLoadForId=" + forcePictureLoadForId + ")");
         if (forcePictureLoadForId != UserHandle.USER_NULL) {
             mForcePictureLoadForUserId.put(forcePictureLoadForId, true);
         }
@@ -236,10 +430,10 @@ public class UserSwitcherController {
                 }
 
                 boolean systemCanCreateUsers = !mUserManager.hasBaseUserRestriction(
-                                UserManager.DISALLOW_ADD_USER, UserHandle.SYSTEM);
+                        UserManager.DISALLOW_ADD_USER, UserHandle.SYSTEM);
                 boolean currentUserCanCreateUsers = currentUserInfo != null
                         && (currentUserInfo.isAdmin()
-                                || currentUserInfo.id == UserHandle.USER_SYSTEM)
+                        || currentUserInfo.id == UserHandle.USER_SYSTEM)
                         && systemCanCreateUsers;
                 boolean anyoneCanCreateUsers = systemCanCreateUsers && addUsersWhenLocked;
                 boolean canCreateGuest = (currentUserCanCreateUsers || anyoneCanCreateUsers)
@@ -457,131 +651,6 @@ public class UserSwitcherController {
                 PhoneStateListener.LISTEN_CALL_STATE);
     }
 
-    private final PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-        private int mCallState;
-
-        @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
-            if (mCallState == state) return;
-            if (DEBUG) Log.v(TAG, "Call state changed: " + state);
-            mCallState = state;
-            int currentUserId = ActivityManager.getCurrentUser();
-            UserInfo userInfo = mUserManager.getUserInfo(currentUserId);
-            if (userInfo != null && userInfo.isGuest()) {
-                showGuestNotification(currentUserId);
-            }
-            refreshUsers(UserHandle.USER_NULL);
-        }
-    };
-
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (DEBUG) {
-                Log.v(TAG, "Broadcast: a=" + intent.getAction()
-                       + " user=" + intent.getIntExtra(Intent.EXTRA_USER_HANDLE, -1));
-            }
-
-            boolean unpauseRefreshUsers = false;
-            int forcePictureLoadForId = UserHandle.USER_NULL;
-
-            if (ACTION_REMOVE_GUEST.equals(intent.getAction())) {
-                int currentUser = ActivityManager.getCurrentUser();
-                UserInfo userInfo = mUserManager.getUserInfo(currentUser);
-                if (userInfo != null && userInfo.isGuest()) {
-                    showExitGuestDialog(currentUser);
-                }
-                return;
-            } else if (ACTION_LOGOUT_USER.equals(intent.getAction())) {
-                logoutCurrentUser();
-            } else if (Intent.ACTION_USER_SWITCHED.equals(intent.getAction())) {
-                if (mExitGuestDialog != null && mExitGuestDialog.isShowing()) {
-                    mExitGuestDialog.cancel();
-                    mExitGuestDialog = null;
-                }
-
-                final int currentId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, -1);
-                final UserInfo userInfo = mUserManager.getUserInfo(currentId);
-                final int N = mUsers.size();
-                for (int i = 0; i < N; i++) {
-                    UserRecord record = mUsers.get(i);
-                    if (record.info == null) continue;
-                    boolean shouldBeCurrent = record.info.id == currentId;
-                    if (record.isCurrent != shouldBeCurrent) {
-                        mUsers.set(i, record.copyWithIsCurrent(shouldBeCurrent));
-                    }
-                    if (shouldBeCurrent && !record.isGuest) {
-                        mLastNonGuestUser = record.info.id;
-                    }
-                    if ((userInfo == null || !userInfo.isAdmin()) && record.isRestricted) {
-                        // Immediately remove restricted records in case the AsyncTask is too slow.
-                        mUsers.remove(i);
-                        i--;
-                    }
-                }
-                notifyAdapters();
-
-                // Disconnect from the old secondary user's service
-                if (mSecondaryUser != UserHandle.USER_NULL) {
-                    context.stopServiceAsUser(mSecondaryUserServiceIntent,
-                            UserHandle.of(mSecondaryUser));
-                    mSecondaryUser = UserHandle.USER_NULL;
-                }
-                // Connect to the new secondary user's service (purely to ensure that a persistent
-                // SystemUI application is created for that user)
-                if (userInfo != null && userInfo.id != UserHandle.USER_SYSTEM) {
-                    context.startServiceAsUser(mSecondaryUserServiceIntent,
-                            UserHandle.of(userInfo.id));
-                    mSecondaryUser = userInfo.id;
-                }
-
-                if (UserManager.isSplitSystemUser() && userInfo != null && !userInfo.isGuest()
-                        && userInfo.id != UserHandle.USER_SYSTEM) {
-                    showLogoutNotification(currentId);
-                }
-                if (userInfo != null && userInfo.isGuest()) {
-                    showGuestNotification(currentId);
-                }
-                unpauseRefreshUsers = true;
-            } else if (Intent.ACTION_USER_INFO_CHANGED.equals(intent.getAction())) {
-                forcePictureLoadForId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE,
-                        UserHandle.USER_NULL);
-            } else if (Intent.ACTION_USER_UNLOCKED.equals(intent.getAction())) {
-                // Unlocking the system user may require a refresh
-                int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, UserHandle.USER_NULL);
-                if (userId != UserHandle.USER_SYSTEM) {
-                    return;
-                }
-            }
-            refreshUsers(forcePictureLoadForId);
-            if (unpauseRefreshUsers) {
-                mUnpauseRefreshUsers.run();
-            }
-        }
-
-        private void showLogoutNotification(int userId) {
-            PendingIntent logoutPI = PendingIntent.getBroadcastAsUser(mContext,
-                    0, new Intent(ACTION_LOGOUT_USER), 0, UserHandle.SYSTEM);
-            Notification.Builder builder =
-                    new Notification.Builder(mContext, NotificationChannels.GENERAL)
-                            .setVisibility(Notification.VISIBILITY_SECRET)
-                            .setSmallIcon(R.drawable.ic_person)
-                            .setContentTitle(mContext.getString(
-                                    R.string.user_logout_notification_title))
-                            .setContentText(mContext.getString(
-                                    R.string.user_logout_notification_text))
-                            .setContentIntent(logoutPI)
-                            .setOngoing(true)
-                            .setShowWhen(false)
-                            .addAction(R.drawable.ic_delete,
-                                    mContext.getString(R.string.user_logout_notification_action),
-                                    logoutPI);
-            SystemUI.overrideNotificationAppName(mContext, builder);
-            NotificationManager.from(mContext).notifyAsUser(TAG_LOGOUT_USER,
-                    SystemMessage.NOTE_LOGOUT_USER, builder.build(), new UserHandle(userId));
-        }
-    };
-
     private void showGuestNotification(int guestUserId) {
         boolean canSwitchUsers = mUserManager.canSwitchUsers();
         // Disable 'Remove guest' action if cannot switch users right now
@@ -604,32 +673,15 @@ public class UserSwitcherController {
                 SystemMessage.NOTE_REMOVE_GUEST, builder.build(), new UserHandle(guestUserId));
     }
 
-    private final Runnable mUnpauseRefreshUsers = new Runnable() {
-        @Override
-        public void run() {
-            mHandler.removeCallbacks(this);
-            mPauseRefreshUsers = false;
-            refreshUsers(UserHandle.USER_NULL);
-        }
-    };
-
-    private final ContentObserver mSettingsObserver = new ContentObserver(new Handler()) {
-        public void onChange(boolean selfChange) {
-            mSimpleUserSwitcher = Settings.Global.getInt(mContext.getContentResolver(),
-                    SIMPLE_USER_SWITCHER_GLOBAL_SETTING, 0) != 0;
-            mAddUsersWhenLocked = Settings.Global.getInt(mContext.getContentResolver(),
-                    Settings.Global.ADD_USERS_WHEN_LOCKED, 0) != 0;
-            refreshUsers(UserHandle.USER_NULL);
-        };
-    };
-
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("UserSwitcherController state:");
         pw.println("  mLastNonGuestUser=" + mLastNonGuestUser);
-        pw.print("  mUsers.size="); pw.println(mUsers.size());
+        pw.print("  mUsers.size=");
+        pw.println(mUsers.size());
         for (int i = 0; i < mUsers.size(); i++) {
             final UserRecord u = mUsers.get(i);
-            pw.print("    "); pw.println(u.toString());
+            pw.print("    ");
+            pw.println(u.toString());
         }
     }
 
@@ -653,6 +705,23 @@ public class UserSwitcherController {
     @VisibleForTesting
     public ArrayList<UserRecord> getUsers() {
         return mUsers;
+    }
+
+    private void checkIfAddUserDisallowedByAdminOnly(UserRecord record) {
+        EnforcedAdmin admin = RestrictedLockUtils.checkIfRestrictionEnforced(mContext,
+                UserManager.DISALLOW_ADD_USER, ActivityManager.getCurrentUser());
+        if (admin != null && !RestrictedLockUtils.hasBaseUserRestriction(mContext,
+                UserManager.DISALLOW_ADD_USER, ActivityManager.getCurrentUser())) {
+            record.isDisabledByAdmin = true;
+            record.enforcedAdmin = admin;
+        } else {
+            record.isDisabledByAdmin = false;
+            record.enforcedAdmin = null;
+        }
+    }
+
+    public void startActivity(Intent intent) {
+        mActivityStarter.startActivity(intent, true);
     }
 
     public static abstract class BaseUserAdapter extends BaseAdapter {
@@ -754,37 +823,22 @@ public class UserSwitcherController {
         }
     }
 
-    private void checkIfAddUserDisallowedByAdminOnly(UserRecord record) {
-        EnforcedAdmin admin = RestrictedLockUtils.checkIfRestrictionEnforced(mContext,
-                UserManager.DISALLOW_ADD_USER, ActivityManager.getCurrentUser());
-        if (admin != null && !RestrictedLockUtils.hasBaseUserRestriction(mContext,
-                UserManager.DISALLOW_ADD_USER, ActivityManager.getCurrentUser())) {
-            record.isDisabledByAdmin = true;
-            record.enforcedAdmin = admin;
-        } else {
-            record.isDisabledByAdmin = false;
-            record.enforcedAdmin = null;
-        }
-    }
-
-    public void startActivity(Intent intent) {
-        mActivityStarter.startActivity(intent, true);
-    }
-
     public static final class UserRecord {
         public final UserInfo info;
         public final Bitmap picture;
         public final boolean isGuest;
         public final boolean isCurrent;
         public final boolean isAddUser;
-        /** If true, the record is only visible to the owner and only when unlocked. */
+        /**
+         * If true, the record is only visible to the owner and only when unlocked.
+         */
         public final boolean isRestricted;
         public boolean isDisabledByAdmin;
         public EnforcedAdmin enforcedAdmin;
         public boolean isSwitchToEnabled;
 
         public UserRecord(UserInfo info, Bitmap picture, boolean isGuest, boolean isCurrent,
-                boolean isAddUser, boolean isRestricted, boolean isSwitchToEnabled) {
+                          boolean isAddUser, boolean isRestricted, boolean isSwitchToEnabled) {
             this.info = info;
             this.picture = picture;
             this.isGuest = isGuest;
@@ -834,61 +888,6 @@ public class UserSwitcherController {
             return sb.toString();
         }
     }
-
-    public final DetailAdapter userDetailAdapter = new DetailAdapter() {
-        private final Intent USER_SETTINGS_INTENT = new Intent(Settings.ACTION_USER_SETTINGS);
-
-        @Override
-        public CharSequence getTitle() {
-            return mContext.getString(R.string.quick_settings_user_title);
-        }
-
-        @Override
-        public View createDetailView(Context context, View convertView, ViewGroup parent) {
-            UserDetailView v;
-            if (!(convertView instanceof UserDetailView)) {
-                v = UserDetailView.inflate(context, parent, false);
-                v.createAndSetAdapter(UserSwitcherController.this);
-            } else {
-                v = (UserDetailView) convertView;
-            }
-            v.refreshAdapter();
-            return v;
-        }
-
-        @Override
-        public Intent getSettingsIntent() {
-            return USER_SETTINGS_INTENT;
-        }
-
-        @Override
-        public Boolean getToggleState() {
-            return null;
-        }
-
-        @Override
-        public void setToggleState(boolean state) {
-        }
-
-        @Override
-        public int getMetricsCategory() {
-            return MetricsEvent.QS_USERDETAIL;
-        }
-    };
-
-    private final KeyguardMonitor.Callback mCallback = new KeyguardMonitor.Callback() {
-        @Override
-        public void onKeyguardShowingChanged() {
-
-            // When Keyguard is going away, we don't need to update our items immediately which
-            // helps making the transition faster.
-            if (!mKeyguardMonitor.isShowing()) {
-                mHandler.post(UserSwitcherController.this::notifyAdapters);
-            } else {
-                notifyAdapters();
-            }
-        }
-    };
 
     private final class ExitGuestDialog extends SystemUIDialog implements
             DialogInterface.OnClickListener {

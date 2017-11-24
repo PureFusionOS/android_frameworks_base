@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,41 +13,39 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<set xmlns:android="http://schemas.android.com/apk/res/android" >
-    <set
-        android:ordering="sequentially" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <set android:ordering="sequentially">
         <objectAnimator
             android:duration="133"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="scaleX"
             android:valueFrom="0.9"
-            android:valueTo="0.9"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueTo="0.9" />
         <objectAnimator
             android:duration="333"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="scaleX"
             android:valueFrom="0.9"
-            android:valueTo="1"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueTo="1" />
     </set>
-    <set
-        android:ordering="sequentially" >
+    <set android:ordering="sequentially">
         <objectAnimator
             android:duration="133"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="scaleY"
             android:valueFrom="0.9"
-            android:valueTo="0.9"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueTo="0.9" />
         <objectAnimator
             android:duration="333"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="scaleY"
             android:valueFrom="0.9"
-            android:valueTo="1"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueTo="1" />
     </set>
     <objectAnimator
         android:duration="617"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="rotation"
         android:valueFrom="-221"
-        android:valueTo="0"
-        android:interpolator="@android:interpolator/fast_out_slow_in" />
+        android:valueTo="0" />
 </set>

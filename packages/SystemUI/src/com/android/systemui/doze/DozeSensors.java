@@ -63,11 +63,21 @@ public class DozeSensors {
 
     private final Handler mHandler = new Handler();
     private final ProxSensor mProxSensor;
-
+    private final ContentObserver mSettingsObserver = new ContentObserver(mHandler) {
+        @Override
+        public void onChange(boolean selfChange, Uri uri, int userId) {
+            if (userId != ActivityManager.getCurrentUser()) {
+                return;
+            }
+            for (TriggerSensor s : mSensors) {
+                s.updateListener();
+            }
+        }
+    };
 
     public DozeSensors(Context context, SensorManager sensorManager, DozeParameters dozeParameters,
-            AmbientDisplayConfiguration config, WakeLock wakeLock, Callback callback,
-            Consumer<Boolean> proxCallback) {
+                       AmbientDisplayConfiguration config, WakeLock wakeLock, Callback callback,
+                       Consumer<Boolean> proxCallback) {
         mContext = context;
         mSensorManager = sensorManager;
         mDozeParameters = dozeParameters;
@@ -76,7 +86,7 @@ public class DozeSensors {
         mProxCallback = proxCallback;
         mResolver = mContext.getContentResolver();
 
-        mSensors = new TriggerSensor[] {
+        mSensors = new TriggerSensor[]{
                 new TriggerSensor(
                         mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION),
                         null /* setting */,
@@ -142,27 +152,29 @@ public class DozeSensors {
         mProxSensor.setRegistered(listen);
     }
 
-    private final ContentObserver mSettingsObserver = new ContentObserver(mHandler) {
-        @Override
-        public void onChange(boolean selfChange, Uri uri, int userId) {
-            if (userId != ActivityManager.getCurrentUser()) {
-                return;
-            }
-            for (TriggerSensor s : mSensors) {
-                s.updateListener();
-            }
-        }
-    };
-
     public void setDisableSensorsInterferingWithProximity(boolean disable) {
         mPickupSensor.setDisabled(disable);
     }
 
-    /** Dump current state */
+    /**
+     * Dump current state
+     */
     public void dump(PrintWriter pw) {
         for (TriggerSensor s : mSensors) {
-            pw.print("Sensor: "); pw.println(s.toString());
+            pw.print("Sensor: ");
+            pw.println(s.toString());
         }
+    }
+
+    public interface Callback {
+
+        /**
+         * Called when a sensor requests a pulse
+         *
+         * @param pulseReason              Requesting sensor, e.g. {@link DozeLog#PULSE_REASON_SENSOR_PICKUP}
+         * @param sensorPerformedProxCheck true if the sensor already checked for FAR proximity.
+         */
+        void onSensorPulse(int pulseReason, boolean sensorPerformedProxCheck);
     }
 
     private class ProxSensor implements SensorEventListener {
@@ -301,15 +313,5 @@ public class DozeSensors {
             }
             return sb.append(']').toString();
         }
-    }
-
-    public interface Callback {
-
-        /**
-         * Called when a sensor requests a pulse
-         * @param pulseReason Requesting sensor, e.g. {@link DozeLog#PULSE_REASON_SENSOR_PICKUP}
-         * @param sensorPerformedProxCheck true if the sensor already checked for FAR proximity.
-         */
-        void onSensorPulse(int pulseReason, boolean sensorPerformedProxCheck);
     }
 }

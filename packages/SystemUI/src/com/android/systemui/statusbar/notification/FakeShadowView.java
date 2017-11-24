@@ -51,7 +51,7 @@ public class FakeShadowView extends AlphaOptimizedFrameLayout {
     }
 
     public FakeShadowView(Context context, @Nullable AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                          int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mFakeShadow = new View(context);
         mFakeShadow.setVisibility(INVISIBLE);
@@ -71,7 +71,7 @@ public class FakeShadowView extends AlphaOptimizedFrameLayout {
     }
 
     public void setFakeShadowTranslationZ(float fakeShadowTranslationZ, float outlineAlpha,
-            int shadowYEnd, int outlineTranslation) {
+                                          int shadowYEnd, int outlineTranslation) {
         if (fakeShadowTranslationZ == 0.0f) {
             mFakeShadow.setVisibility(INVISIBLE);
         } else {

@@ -30,7 +30,7 @@ import java.lang.ref.WeakReference;
 
 /**
  * A view that arranges it's children in a grid with a fixed number of evenly spaced columns.
- *
+ * <p>
  * {@see android.widget.GridView}
  */
 public class PseudoGridView extends ViewGroup {
@@ -147,16 +147,16 @@ public class PseudoGridView extends ViewGroup {
         private final BaseAdapter mAdapter;
         private boolean mReleased;
 
-        public static void link(ViewGroup viewGroup, BaseAdapter adapter) {
-            new ViewGroupAdapterBridge(viewGroup, adapter);
-        }
-
         private ViewGroupAdapterBridge(ViewGroup viewGroup, BaseAdapter adapter) {
             mViewGroup = new WeakReference<>(viewGroup);
             mAdapter = adapter;
             mReleased = false;
             mAdapter.registerDataSetObserver(this);
             refresh();
+        }
+
+        public static void link(ViewGroup viewGroup, BaseAdapter adapter) {
+            new ViewGroupAdapterBridge(viewGroup, adapter);
         }
 
         private void refresh() {

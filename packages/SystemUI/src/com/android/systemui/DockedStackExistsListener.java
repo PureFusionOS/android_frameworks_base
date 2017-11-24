@@ -35,6 +35,15 @@ public class DockedStackExistsListener extends IDockedStackListener.Stub {
         mCallback = callback;
     }
 
+    public static void register(Consumer<Boolean> callback) {
+        try {
+            WindowManagerGlobal.getWindowManagerService().registerDockedStackListener(
+                    new DockedStackExistsListener(callback));
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed registering docked stack exists listener", e);
+        }
+    }
+
     @Override
     public void onDividerVisibilityChanged(boolean visible) throws RemoteException {
     }
@@ -56,14 +65,5 @@ public class DockedStackExistsListener extends IDockedStackListener.Stub {
 
     @Override
     public void onDockSideChanged(int newDockSide) throws RemoteException {
-    }
-
-    public static void register(Consumer<Boolean> callback) {
-        try {
-            WindowManagerGlobal.getWindowManagerService().registerDockedStackListener(
-                    new DockedStackExistsListener(callback));
-        } catch (RemoteException e) {
-            Log.e(TAG, "Failed registering docked stack exists listener", e);
-        }
     }
 }

@@ -20,7 +20,7 @@ import com.android.systemui.R;
 
 class EthernetIcons {
     static final int[][] ETHERNET_ICONS = {
-            { R.drawable.stat_sys_ethernet },
-            { R.drawable.stat_sys_ethernet_fully },
+            {R.drawable.stat_sys_ethernet},
+            {R.drawable.stat_sys_ethernet_fully},
     };
 }

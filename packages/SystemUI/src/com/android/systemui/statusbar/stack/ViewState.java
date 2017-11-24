@@ -35,7 +35,7 @@ import com.android.systemui.statusbar.policy.HeadsUpManager;
  * A state of a view. This can be used to apply a set of view properties to a view with
  * {@link com.android.systemui.statusbar.stack.StackScrollState} or start animations with
  * {@link com.android.systemui.statusbar.stack.StackStateAnimator}.
-*/
+ */
 public class ViewState {
 
     /**
@@ -44,6 +44,7 @@ public class ViewState {
      */
     protected static final AnimationProperties NO_NEW_ANIMATIONS = new AnimationProperties() {
         AnimationFilter mAnimationFilter = new AnimationFilter();
+
         @Override
         public AnimationFilter getAnimationFilter() {
             return mAnimationFilter;
@@ -119,6 +120,82 @@ public class ViewState {
     public float scaleX = 1.0f;
     public float scaleY = 1.0f;
 
+    private static boolean isAnimating(View view, int tag) {
+        return getChildTag(view, tag) != null;
+    }
+
+    public static boolean isAnimating(View view, PropertyAnimator.AnimatableProperty property) {
+        return getChildTag(view, property.getAnimatorTag()) != null;
+    }
+
+    public static void startAnimator(Animator animator, AnimatorListenerAdapter listener) {
+        if (listener != null) {
+            // Even if there's a delay we'd want to notify it of the start immediately.
+            listener.onAnimationStart(animator);
+        }
+        animator.start();
+    }
+
+    public static <T> T getChildTag(View child, int tag) {
+        return (T) child.getTag(tag);
+    }
+
+    /**
+     * Cancel the previous animator and get the duration of the new animation.
+     *
+     * @param duration         the new duration
+     * @param previousAnimator the animator which was running before
+     * @return the new duration
+     */
+    public static long cancelAnimatorAndGetNewDuration(long duration,
+                                                       ValueAnimator previousAnimator) {
+        long newDuration = duration;
+        if (previousAnimator != null) {
+            // We take either the desired length of the new animation or the remaining time of
+            // the previous animator, whichever is longer.
+            newDuration = Math.max(previousAnimator.getDuration()
+                    - previousAnimator.getCurrentPlayTime(), newDuration);
+            previousAnimator.cancel();
+        }
+        return newDuration;
+    }
+
+    /**
+     * Get the end value of the yTranslation animation running on a view or the yTranslation
+     * if no animation is running.
+     */
+    public static float getFinalTranslationY(View view) {
+        if (view == null) {
+            return 0;
+        }
+        ValueAnimator yAnimator = getChildTag(view, TAG_ANIMATOR_TRANSLATION_Y);
+        if (yAnimator == null) {
+            return view.getTranslationY();
+        } else {
+            return getChildTag(view, TAG_END_TRANSLATION_Y);
+        }
+    }
+
+    /**
+     * Get the end value of the zTranslation animation running on a view or the zTranslation
+     * if no animation is running.
+     */
+    public static float getFinalTranslationZ(View view) {
+        if (view == null) {
+            return 0;
+        }
+        ValueAnimator zAnimator = getChildTag(view, TAG_ANIMATOR_TRANSLATION_Z);
+        if (zAnimator == null) {
+            return view.getTranslationZ();
+        } else {
+            return getChildTag(view, TAG_END_TRANSLATION_Z);
+        }
+    }
+
+    public static boolean isAnimatingY(View child) {
+        return getChildTag(child, TAG_ANIMATOR_TRANSLATION_Y) != null;
+    }
+
     public void copyFrom(ViewState viewState) {
         alpha = viewState.alpha;
         xTranslation = viewState.xTranslation;
@@ -154,7 +231,7 @@ public class ViewState {
         boolean animatingX = isAnimating(view, TAG_ANIMATOR_TRANSLATION_X);
         if (animatingX) {
             updateAnimationX(view);
-        } else if (view.getTranslationX() != this.xTranslation){
+        } else if (view.getTranslationX() != this.xTranslation) {
             view.setTranslationX(this.xTranslation);
         }
 
@@ -245,17 +322,10 @@ public class ViewState {
         return false;
     }
 
-    private static boolean isAnimating(View view, int tag) {
-        return getChildTag(view, tag) != null;
-    }
-
-    public static boolean isAnimating(View view, PropertyAnimator.AnimatableProperty property) {
-        return getChildTag(view, property.getAnimatorTag()) != null;
-    }
-
     /**
      * Start an animation to this viewstate
-     * @param child the view to animate
+     *
+     * @param child               the view to animate
      * @param animationProperties the properties of the animation
      */
     public void animateTo(View child, AnimationProperties animationProperties) {
@@ -310,7 +380,7 @@ public class ViewState {
         // start alpha animation
         if (alphaChanging) {
             startAlphaAnimation(child, animationProperties);
-        }  else {
+        } else {
             abortAnimation(child, TAG_ANIMATOR_ALPHA);
         }
     }
@@ -320,8 +390,8 @@ public class ViewState {
     }
 
     private void startAlphaAnimation(final View child, AnimationProperties properties) {
-        Float previousStartValue = getChildTag(child,TAG_START_ALPHA);
-        Float previousEndValue = getChildTag(child,TAG_END_ALPHA);
+        Float previousStartValue = getChildTag(child, TAG_START_ALPHA);
+        Float previousEndValue = getChildTag(child, TAG_END_ALPHA);
         final float newEndValue = this.alpha;
         if (previousEndValue != null && previousEndValue == newEndValue) {
             return;
@@ -402,13 +472,13 @@ public class ViewState {
     }
 
     private void updateAnimation(View view, PropertyAnimator.AnimatableProperty property,
-            float endValue) {
+                                 float endValue) {
         PropertyAnimator.startAnimation(view, property, endValue, NO_NEW_ANIMATIONS);
     }
 
     private void startZTranslationAnimation(final View child, AnimationProperties properties) {
-        Float previousStartValue = getChildTag(child,TAG_START_TRANSLATION_Z);
-        Float previousEndValue = getChildTag(child,TAG_END_TRANSLATION_Z);
+        Float previousStartValue = getChildTag(child, TAG_START_TRANSLATION_Z);
+        Float previousEndValue = getChildTag(child, TAG_END_TRANSLATION_Z);
         float newEndValue = this.zTranslation;
         if (previousEndValue != null && previousEndValue == newEndValue) {
             return;
@@ -467,8 +537,8 @@ public class ViewState {
     }
 
     private void startXTranslationAnimation(final View child, AnimationProperties properties) {
-        Float previousStartValue = getChildTag(child,TAG_START_TRANSLATION_X);
-        Float previousEndValue = getChildTag(child,TAG_END_TRANSLATION_X);
+        Float previousStartValue = getChildTag(child, TAG_START_TRANSLATION_X);
+        Float previousEndValue = getChildTag(child, TAG_END_TRANSLATION_X);
         float newEndValue = this.xTranslation;
         if (previousEndValue != null && previousEndValue == newEndValue) {
             return;
@@ -499,7 +569,7 @@ public class ViewState {
                 child.getTranslationX(), newEndValue);
         Interpolator customInterpolator = properties.getCustomInterpolator(child,
                 View.TRANSLATION_X);
-        Interpolator interpolator =  customInterpolator != null ? customInterpolator
+        Interpolator interpolator = customInterpolator != null ? customInterpolator
                 : Interpolators.FAST_OUT_SLOW_IN;
         animator.setInterpolator(interpolator);
         long newDuration = cancelAnimatorAndGetNewDuration(properties.duration, previousAnimator);
@@ -532,8 +602,8 @@ public class ViewState {
     }
 
     private void startYTranslationAnimation(final View child, AnimationProperties properties) {
-        Float previousStartValue = getChildTag(child,TAG_START_TRANSLATION_Y);
-        Float previousEndValue = getChildTag(child,TAG_END_TRANSLATION_Y);
+        Float previousStartValue = getChildTag(child, TAG_START_TRANSLATION_Y);
+        Float previousEndValue = getChildTag(child, TAG_END_TRANSLATION_Y);
         float newEndValue = this.yTranslation;
         if (previousEndValue != null && previousEndValue == newEndValue) {
             return;
@@ -564,7 +634,7 @@ public class ViewState {
                 child.getTranslationY(), newEndValue);
         Interpolator customInterpolator = properties.getCustomInterpolator(child,
                 View.TRANSLATION_Y);
-        Interpolator interpolator =  customInterpolator != null ? customInterpolator
+        Interpolator interpolator = customInterpolator != null ? customInterpolator
                 : Interpolators.FAST_OUT_SLOW_IN;
         animator.setInterpolator(interpolator);
         long newDuration = cancelAnimatorAndGetNewDuration(properties.duration, previousAnimator);
@@ -600,79 +670,11 @@ public class ViewState {
         }
     }
 
-    public static void startAnimator(Animator animator, AnimatorListenerAdapter listener) {
-        if (listener != null) {
-            // Even if there's a delay we'd want to notify it of the start immediately.
-            listener.onAnimationStart(animator);
-        }
-        animator.start();
-    }
-
-    public static <T> T getChildTag(View child, int tag) {
-        return (T) child.getTag(tag);
-    }
-
     protected void abortAnimation(View child, int animatorTag) {
         Animator previousAnimator = getChildTag(child, animatorTag);
         if (previousAnimator != null) {
             previousAnimator.cancel();
         }
-    }
-
-    /**
-     * Cancel the previous animator and get the duration of the new animation.
-     *
-     * @param duration the new duration
-     * @param previousAnimator the animator which was running before
-     * @return the new duration
-     */
-    public static long cancelAnimatorAndGetNewDuration(long duration,
-            ValueAnimator previousAnimator) {
-        long newDuration = duration;
-        if (previousAnimator != null) {
-            // We take either the desired length of the new animation or the remaining time of
-            // the previous animator, whichever is longer.
-            newDuration = Math.max(previousAnimator.getDuration()
-                    - previousAnimator.getCurrentPlayTime(), newDuration);
-            previousAnimator.cancel();
-        }
-        return newDuration;
-    }
-
-    /**
-     * Get the end value of the yTranslation animation running on a view or the yTranslation
-     * if no animation is running.
-     */
-    public static float getFinalTranslationY(View view) {
-        if (view == null) {
-            return 0;
-        }
-        ValueAnimator yAnimator = getChildTag(view, TAG_ANIMATOR_TRANSLATION_Y);
-        if (yAnimator == null) {
-            return view.getTranslationY();
-        } else {
-            return getChildTag(view, TAG_END_TRANSLATION_Y);
-        }
-    }
-
-    /**
-     * Get the end value of the zTranslation animation running on a view or the zTranslation
-     * if no animation is running.
-     */
-    public static float getFinalTranslationZ(View view) {
-        if (view == null) {
-            return 0;
-        }
-        ValueAnimator zAnimator = getChildTag(view, TAG_ANIMATOR_TRANSLATION_Z);
-        if (zAnimator == null) {
-            return view.getTranslationZ();
-        } else {
-            return getChildTag(view, TAG_END_TRANSLATION_Z);
-        }
-    }
-
-    public static boolean isAnimatingY(View child) {
-        return getChildTag(child, TAG_ANIMATOR_TRANSLATION_Y) != null;
     }
 
     public void cancelAnimations(View view) {

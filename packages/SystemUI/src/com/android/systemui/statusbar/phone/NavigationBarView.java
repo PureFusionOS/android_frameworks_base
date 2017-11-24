@@ -72,21 +72,31 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     final static boolean SLIPPERY_WHEN_DISABLED = true;
 
     final static boolean ALTERNATE_CAR_MODE_UI = false;
-
+    // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
+    final static boolean WORKAROUND_INVALID_LAYOUT = true;
+    final static int MSG_CHECK_INVALID_LAYOUT = 8686;
     final Display mDisplay;
+    private final NavigationBarTransitions mBarTransitions;
+    // performs manual animation in sync with layout transitions
+    private final NavTransitionListener mTransitionListener = new NavTransitionListener();
+    private final SparseArray<ButtonDispatcher> mButtonDispatchers = new SparseArray<>();
+    private final OnClickListener mImeSwitcherClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mContext.getSystemService(InputMethodManager.class)
+                    .showInputMethodPicker(true /* showAuxiliarySubtypes */);
+        }
+    };
     View mCurrentView = null;
     View[] mRotatedViews = new View[4];
-
     boolean mVertical;
     boolean mScreenOn;
-    private int mCurrentRotation = -1;
-
     boolean mShowMenu;
     boolean mShowAccessibilityButton;
     boolean mLongClickableAccessibilityButton;
     int mDisabledFlags = 0;
     int mNavigationIconHints = 0;
-
+    private int mCurrentRotation = -1;
     private KeyButtonDrawable mBackIcon, mBackLandIcon, mBackAltIcon, mBackAltLandIcon;
     private KeyButtonDrawable mBackCarModeIcon, mBackLandCarModeIcon;
     private KeyButtonDrawable mBackAltCarModeIcon, mBackAltLandCarModeIcon;
@@ -96,116 +106,23 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     private KeyButtonDrawable mImeIcon;
     private KeyButtonDrawable mMenuIcon;
     private KeyButtonDrawable mAccessibilityIcon;
-
     private GestureHelper mGestureHelper;
     private DeadZone mDeadZone;
-    private final NavigationBarTransitions mBarTransitions;
-
     // Swap navigaton keys
     private boolean mSwapKeys;
-
-    // workaround for LayoutTransitions leaving the nav buttons in a weird state (bug 5549288)
-    final static boolean WORKAROUND_INVALID_LAYOUT = true;
-    final static int MSG_CHECK_INVALID_LAYOUT = 8686;
-
     private boolean mShowDpadArrowKeys;
-
     private SettingsObserver mSettingsObserver;
-
-    // performs manual animation in sync with layout transitions
-    private final NavTransitionListener mTransitionListener = new NavTransitionListener();
-
     private OnVerticalChangedListener mOnVerticalChangedListener;
     private boolean mLayoutTransitionsEnabled = true;
     private boolean mWakeAndUnlocking;
     private boolean mUseCarModeUi = false;
     private boolean mInCarMode = false;
     private boolean mDockedStackExists;
-
-    private final SparseArray<ButtonDispatcher> mButtonDispatchers = new SparseArray<>();
     private Configuration mConfiguration;
-
     private NavigationBarInflaterView mNavigationInflaterView;
     private RecentsComponent mRecentsComponent;
     private Divider mDivider;
-
-    private class NavTransitionListener implements TransitionListener {
-        private boolean mBackTransitioning;
-        private boolean mHomeAppearing;
-        private long mStartDelay;
-        private long mDuration;
-        private TimeInterpolator mInterpolator;
-
-        @Override
-        public void startTransition(LayoutTransition transition, ViewGroup container,
-                View view, int transitionType) {
-            if (view.getId() == R.id.back) {
-                mBackTransitioning = true;
-            } else if (view.getId() == R.id.home && transitionType == LayoutTransition.APPEARING) {
-                mHomeAppearing = true;
-                mStartDelay = transition.getStartDelay(transitionType);
-                mDuration = transition.getDuration(transitionType);
-                mInterpolator = transition.getInterpolator(transitionType);
-            }
-        }
-
-        @Override
-        public void endTransition(LayoutTransition transition, ViewGroup container,
-                View view, int transitionType) {
-            if (view.getId() == R.id.back) {
-                mBackTransitioning = false;
-            } else if (view.getId() == R.id.home && transitionType == LayoutTransition.APPEARING) {
-                mHomeAppearing = false;
-            }
-        }
-
-        public void onBackAltCleared() {
-            ButtonDispatcher backButton = getBackButton();
-
-            // When dismissing ime during unlock, force the back button to run the same appearance
-            // animation as home (if we catch this condition early enough).
-            if (!mBackTransitioning && backButton.getVisibility() == VISIBLE
-                    && mHomeAppearing && getHomeButton().getAlpha() == 0) {
-                getBackButton().setAlpha(0);
-                ValueAnimator a = ObjectAnimator.ofFloat(backButton, "alpha", 0, 1);
-                a.setStartDelay(mStartDelay);
-                a.setDuration(mDuration);
-                a.setInterpolator(mInterpolator);
-                a.start();
-            }
-        }
-    }
-
-    private final OnClickListener mImeSwitcherClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            mContext.getSystemService(InputMethodManager.class)
-                    .showInputMethodPicker(true /* showAuxiliarySubtypes */);
-        }
-    };
-
-    private class H extends Handler {
-        public void handleMessage(Message m) {
-            switch (m.what) {
-                case MSG_CHECK_INVALID_LAYOUT:
-                    final String how = "" + m.obj;
-                    final int w = getWidth();
-                    final int h = getHeight();
-                    final int vw = getCurrentView().getWidth();
-                    final int vh = getCurrentView().getHeight();
-
-                    if (h != vh || w != vw) {
-                        Log.w(TAG, String.format(
-                            "*** Invalid layout in navigation bar (%s this=%dx%d cur=%dx%d)",
-                            how, w, h, vw, vh));
-                        if (WORKAROUND_INVALID_LAYOUT) {
-                            requestLayout();
-                        }
-                    }
-                    break;
-            }
-        }
-    }
+    private H mHandler = new H();
 
     public NavigationBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -234,6 +151,29 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
                 new ButtonDispatcher(R.id.accessibility_button));
 
         mSettingsObserver = new SettingsObserver(new Handler());
+    }
+
+    private static String visibilityToString(int vis) {
+        switch (vis) {
+            case View.INVISIBLE:
+                return "INVISIBLE";
+            case View.GONE:
+                return "GONE";
+            default:
+                return "VISIBLE";
+        }
+    }
+
+    private static void dumpButton(PrintWriter pw, String caption, ButtonDispatcher button) {
+        pw.print("      " + caption + ": ");
+        if (button == null) {
+            pw.print("null");
+        } else {
+            pw.print(visibilityToString(button.getVisibility())
+                    + " alpha=" + button.getAlpha()
+            );
+        }
+        pw.println();
     }
 
     public BarTransitions getBarTransitions() {
@@ -281,8 +221,6 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         getHomeButton().abortCurrentGesture();
     }
 
-    private H mHandler = new H();
-
     public View getCurrentView() {
         return mCurrentView;
     }
@@ -319,7 +257,9 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         return mButtonDispatchers;
     }
 
-    public ViewGroup getDpadView() { return (ViewGroup) getCurrentView().findViewById(R.id.dpad_group); }
+    public ViewGroup getDpadView() {
+        return (ViewGroup) getCurrentView().findViewById(R.id.dpad_group);
+    }
 
     private void updateCarModeIcons(Context ctx) {
         mBackCarModeIcon = getDrawable(ctx,
@@ -367,12 +307,12 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     }
 
     private KeyButtonDrawable getDrawable(Context ctx, @DrawableRes int lightIcon,
-            @DrawableRes int darkIcon) {
+                                          @DrawableRes int darkIcon) {
         return getDrawable(ctx, ctx, lightIcon, darkIcon);
     }
 
     private KeyButtonDrawable getDrawable(Context darkContext, Context lightContext,
-            @DrawableRes int lightIcon, @DrawableRes int darkIcon) {
+                                          @DrawableRes int lightIcon, @DrawableRes int darkIcon) {
         return KeyButtonDrawable.create(lightContext.getDrawable(lightIcon),
                 darkContext.getDrawable(darkIcon));
     }
@@ -414,8 +354,8 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         }
         if (DEBUG) {
             android.widget.Toast.makeText(getContext(),
-                "Navigation icon hints = " + hints,
-                500).show();
+                    "Navigation icon hints = " + hints,
+                    500).show();
         }
 
         mNavigationIconHints = hints;
@@ -471,7 +411,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
         // Always disable recents when alternate car mode UI is active.
         boolean disableRecent = mUseCarModeUi
-                        || ((disabledFlags & View.STATUS_BAR_DISABLE_RECENT) != 0);
+                || ((disabledFlags & View.STATUS_BAR_DISABLE_RECENT) != 0);
         final boolean disableBack = ((disabledFlags & View.STATUS_BAR_DISABLE_BACK) != 0)
                 && ((mNavigationIconHints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) == 0);
 
@@ -490,8 +430,8 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
             disableRecent = false;
         }
 
-        getBackButton().setVisibility(disableBack      ? View.INVISIBLE : View.VISIBLE);
-        getHomeButton().setVisibility(disableHome      ? View.INVISIBLE : View.VISIBLE);
+        getBackButton().setVisibility(disableBack ? View.INVISIBLE : View.VISIBLE);
+        getHomeButton().setVisibility(disableHome ? View.INVISIBLE : View.VISIBLE);
         getRecentsButton().setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
     }
 
@@ -545,7 +485,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
             } else {
                 return;
             }
-            WindowManager wm = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
+            WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             wm.updateViewLayout((View) getParent(), lp);
         }
     }
@@ -609,7 +549,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
     private void updateCurrentView() {
         final int rot = mDisplay.getRotation();
-        for (int i=0; i<4; i++) {
+        for (int i = 0; i < 4; i++) {
             mRotatedViews[i].setVisibility(View.GONE);
         }
         mCurrentView = mRotatedViews[rot];
@@ -666,7 +606,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         if (DEBUG) Log.d(TAG, String.format(
-                    "onSizeChanged: (%dx%d) old: (%dx%d)", w, h, oldw, oldh));
+                "onSizeChanged: (%dx%d) old: (%dx%d)", w, h, oldw, oldh));
 
         final boolean newVertical = w > 0 && h > w;
         if (newVertical != mVertical) {
@@ -764,17 +704,6 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         mHandler.obtainMessage(MSG_CHECK_INVALID_LAYOUT, 0, 0, how).sendToTarget();
     }
 
-    private static String visibilityToString(int vis) {
-        switch (vis) {
-            case View.INVISIBLE:
-                return "INVISIBLE";
-            case View.GONE:
-                return "GONE";
-            default:
-                return "VISIBLE";
-        }
-    }
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -818,7 +747,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         mDisplay.getRealSize(size);
 
         pw.println(String.format("      this: " + StatusBar.viewInfo(this)
-                        + " " + visibilityToString(getVisibility())));
+                + " " + visibilityToString(getVisibility())));
 
         getWindowVisibleDisplayFrame(r);
         final boolean offscreen = r.right > size.x || r.bottom > size.y;
@@ -828,14 +757,14 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
                 + (offscreen ? " OFFSCREEN!" : ""));
 
         pw.println(String.format("      mCurrentView: id=%s (%dx%d) %s",
-                        getResourceName(getCurrentView().getId()),
-                        getCurrentView().getWidth(), getCurrentView().getHeight(),
-                        visibilityToString(getCurrentView().getVisibility())));
+                getResourceName(getCurrentView().getId()),
+                getCurrentView().getWidth(), getCurrentView().getHeight(),
+                visibilityToString(getCurrentView().getVisibility())));
 
         pw.println(String.format("      disabled=0x%08x vertical=%s menu=%s",
-                        mDisabledFlags,
-                        mVertical ? "true" : "false",
-                        mShowMenu ? "true" : "false"));
+                mDisabledFlags,
+                mVertical ? "true" : "false",
+                mShowMenu ? "true" : "false"));
 
         dumpButton(pw, "back", getBackButton());
         dumpButton(pw, "home", getHomeButton());
@@ -844,22 +773,6 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         dumpButton(pw, "a11y", getAccessibilityButton());
 
         pw.println("    }");
-    }
-
-    private static void dumpButton(PrintWriter pw, String caption, ButtonDispatcher button) {
-        pw.print("      " + caption + ": ");
-        if (button == null) {
-            pw.print("null");
-        } else {
-            pw.print(visibilityToString(button.getVisibility())
-                    + " alpha=" + button.getAlpha()
-                    );
-        }
-        pw.println();
-    }
-
-    public interface OnVerticalChangedListener {
-        void onVerticalChanged(boolean isVertical);
     }
 
     public void updateDpadKeys() {
@@ -872,6 +785,86 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
         }
     }
 
+    public void setDoubleTapToSleep() {
+        boolean isDoubleTapEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.DOUBLE_TAP_SLEEP_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
+        ((NavigationBarFrame) getRootView()).setDoubleTapToSleep(isDoubleTapEnabled);
+    }
+
+    public interface OnVerticalChangedListener {
+        void onVerticalChanged(boolean isVertical);
+    }
+
+    private class NavTransitionListener implements TransitionListener {
+        private boolean mBackTransitioning;
+        private boolean mHomeAppearing;
+        private long mStartDelay;
+        private long mDuration;
+        private TimeInterpolator mInterpolator;
+
+        @Override
+        public void startTransition(LayoutTransition transition, ViewGroup container,
+                                    View view, int transitionType) {
+            if (view.getId() == R.id.back) {
+                mBackTransitioning = true;
+            } else if (view.getId() == R.id.home && transitionType == LayoutTransition.APPEARING) {
+                mHomeAppearing = true;
+                mStartDelay = transition.getStartDelay(transitionType);
+                mDuration = transition.getDuration(transitionType);
+                mInterpolator = transition.getInterpolator(transitionType);
+            }
+        }
+
+        @Override
+        public void endTransition(LayoutTransition transition, ViewGroup container,
+                                  View view, int transitionType) {
+            if (view.getId() == R.id.back) {
+                mBackTransitioning = false;
+            } else if (view.getId() == R.id.home && transitionType == LayoutTransition.APPEARING) {
+                mHomeAppearing = false;
+            }
+        }
+
+        public void onBackAltCleared() {
+            ButtonDispatcher backButton = getBackButton();
+
+            // When dismissing ime during unlock, force the back button to run the same appearance
+            // animation as home (if we catch this condition early enough).
+            if (!mBackTransitioning && backButton.getVisibility() == VISIBLE
+                    && mHomeAppearing && getHomeButton().getAlpha() == 0) {
+                getBackButton().setAlpha(0);
+                ValueAnimator a = ObjectAnimator.ofFloat(backButton, "alpha", 0, 1);
+                a.setStartDelay(mStartDelay);
+                a.setDuration(mDuration);
+                a.setInterpolator(mInterpolator);
+                a.start();
+            }
+        }
+    }
+
+    private class H extends Handler {
+        public void handleMessage(Message m) {
+            switch (m.what) {
+                case MSG_CHECK_INVALID_LAYOUT:
+                    final String how = "" + m.obj;
+                    final int w = getWidth();
+                    final int h = getHeight();
+                    final int vw = getCurrentView().getWidth();
+                    final int vh = getCurrentView().getHeight();
+
+                    if (h != vh || w != vw) {
+                        Log.w(TAG, String.format(
+                                "*** Invalid layout in navigation bar (%s this=%dx%d cur=%dx%d)",
+                                how, w, h, vw, vh));
+                        if (WORKAROUND_INVALID_LAYOUT) {
+                            requestLayout();
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -879,8 +872,8 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
         void observe() {
             mContext.getContentResolver().registerContentObserver(
-                  Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS),
-                  false, this, UserHandle.USER_ALL);
+                    Settings.System.getUriFor(Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS),
+                    false, this, UserHandle.USER_ALL);
             update();
         }
 
@@ -898,11 +891,5 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
                     Settings.System.NAVIGATION_BAR_MENU_ARROW_KEYS, 0, UserHandle.USER_CURRENT) == 1;
             setNavigationIconHints(mNavigationIconHints, true);
         }
-    }
-
-    public void setDoubleTapToSleep() {
-        boolean isDoubleTapEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.DOUBLE_TAP_SLEEP_NAVBAR, 0, UserHandle.USER_CURRENT) == 1;
-        ((NavigationBarFrame) getRootView()).setDoubleTapToSleep(isDoubleTapEnabled);
     }
 }

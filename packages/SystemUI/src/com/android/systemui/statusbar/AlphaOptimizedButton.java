@@ -37,7 +37,7 @@ public class AlphaOptimizedButton extends Button {
     }
 
     public AlphaOptimizedButton(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                                int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

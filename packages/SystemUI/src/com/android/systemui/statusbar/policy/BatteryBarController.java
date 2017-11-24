@@ -19,48 +19,32 @@ import android.widget.LinearLayout;
 
 public class BatteryBarController extends LinearLayout {
 
-    private static final String TAG = "BatteryBarController";
-
-    BatteryBar mainBar;
-    BatteryBar alternateStyleBar;
-
     public static final int STYLE_REGULAR = 0;
     public static final int STYLE_SYMMETRIC = 1;
     public static final int STYLE_REVERSE = 2;
-
+    protected final static int CURRENT_LOC = 1;
+    private static final String TAG = "BatteryBarController";
+    BatteryBar mainBar;
+    BatteryBar alternateStyleBar;
     int mStyle = STYLE_REGULAR;
     int mLocation = 0;
-
-    protected final static int CURRENT_LOC = 1;
     int mLocationToLookFor = 0;
-
-    private int mBatteryLevel = 0;
-    private boolean mBatteryCharging = false;
-
     boolean isAttached = false;
     boolean isVertical = false;
-
-    class SettingsObserver extends ContentObserver {
-
-        public SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observer() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_LOCATION), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_STYLE), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_THICKNESS),false, this, UserHandle.USER_ALL);
-        }
-
+    private int mBatteryLevel = 0;
+    private boolean mBatteryCharging = false;
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
+                mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                mBatteryCharging = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0) == BatteryManager.BATTERY_STATUS_CHARGING;
+                Prefs.setLastBatteryLevel(context, mBatteryLevel);
+            }
         }
-    }
+    };
 
     public BatteryBarController(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -87,19 +71,6 @@ public class BatteryBarController extends LinearLayout {
             updateSettings();
         }
     }
-
-    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
-                mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-                mBatteryCharging = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0) == BatteryManager.BATTERY_STATUS_CHARGING;
-                Prefs.setLastBatteryLevel(context, mBatteryLevel);
-            }
-        }
-    };
 
     @Override
     protected void onDetachedFromWindow() {
@@ -171,7 +142,7 @@ public class BatteryBarController extends LinearLayout {
             BatteryBar bar = new BatteryBar(mContext, mBatteryCharging, mBatteryLevel, isVertical);
             bar.setRotation(180);
             addView(bar, new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                        LayoutParams.MATCH_PARENT, 1));
+                    LayoutParams.MATCH_PARENT, 1));
         }
     }
 
@@ -197,5 +168,27 @@ public class BatteryBarController extends LinearLayout {
 
     protected boolean isLocationValid(int location) {
         return mLocationToLookFor == location;
+    }
+
+    class SettingsObserver extends ContentObserver {
+
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observer() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_LOCATION), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_STYLE), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_THICKNESS), false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
     }
 }

@@ -31,15 +31,15 @@ public class AnimateableViewBounds extends ViewOutlineProvider {
     private static final float MAX_ALPHA = 0.8f;
 
     protected View mSourceView;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     protected Rect mClipRect = new Rect();
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     protected Rect mClipBounds = new Rect();
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     protected Rect mLastClipBounds = new Rect();
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     protected int mCornerRadius;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     protected float mAlpha = 1f;
 
     public AnimateableViewBounds(View source, int cornerRadius) {
@@ -71,6 +71,13 @@ public class AnimateableViewBounds extends ViewOutlineProvider {
     }
 
     /**
+     * @return the outline alpha.
+     */
+    public float getAlpha() {
+        return mAlpha;
+    }
+
+    /**
      * Sets the view outline alpha.
      */
     void setAlpha(float alpha) {
@@ -82,32 +89,33 @@ public class AnimateableViewBounds extends ViewOutlineProvider {
     }
 
     /**
-     * @return the outline alpha.
+     * Returns the top clip.
      */
-    public float getAlpha() {
-        return mAlpha;
+    public int getClipTop() {
+        return mClipRect.top;
     }
 
-    /** Sets the top clip. */
+    /**
+     * Sets the top clip.
+     */
     public void setClipTop(int top) {
         mClipRect.top = top;
         updateClipBounds();
     }
 
-    /** Returns the top clip. */
-    public int getClipTop() {
-        return mClipRect.top;
+    /**
+     * Returns the bottom clip.
+     */
+    public int getClipBottom() {
+        return mClipRect.bottom;
     }
 
-    /** Sets the bottom clip. */
+    /**
+     * Sets the bottom clip.
+     */
     public void setClipBottom(int bottom) {
         mClipRect.bottom = bottom;
         updateClipBounds();
-    }
-
-    /** Returns the bottom clip. */
-    public int getClipBottom() {
-        return mClipRect.bottom;
     }
 
     protected void updateClipBounds() {

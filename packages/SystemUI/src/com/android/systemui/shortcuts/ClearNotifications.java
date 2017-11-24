@@ -25,7 +25,7 @@ import android.os.ServiceManager;
 
 import com.android.internal.statusbar.IStatusBarService;
 
-public class ClearNotifications extends Activity  {
+public class ClearNotifications extends Activity {
 
     protected IStatusBarService mBarService;
     protected int mCurrentUserId = 0;
@@ -43,7 +43,8 @@ public class ClearNotifications extends Activity  {
         super.onResume();
         try {
             mBarService.onClearAllNotifications(mCurrentUserId);
-        } catch (Exception ex) { }
+        } catch (Exception ex) {
+        }
         this.finish();
     }
 }

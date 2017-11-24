@@ -67,7 +67,8 @@ public class SignalDrawable extends Drawable {
     private static final int STATE_AIRPLANE = 4;
 
     private static final long DOT_DELAY = 1000;
-
+    private static final float INV_TAN = 1f / (float) Math.tan(Math.PI / 8f);
+    private static final float CUT_WIDTH_DP = 1f / 12f;
     private static float[][] X_PATH = new float[][]{
             {21.9f / VIEWPORT, 17.0f / VIEWPORT},
             {-1.1f / VIEWPORT, -1.1f / VIEWPORT},
@@ -82,10 +83,6 @@ public class SignalDrawable extends Drawable {
             {1.1f / VIEWPORT, -1.1f / VIEWPORT},
             {-1.9f / VIEWPORT, -1.9f / VIEWPORT},
     };
-
-    private static final float INV_TAN = 1f / (float) Math.tan(Math.PI / 8f);
-    private static final float CUT_WIDTH_DP = 1f / 12f;
-
     private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mForegroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final int mDarkModeBackgroundColor;
@@ -108,6 +105,16 @@ public class SignalDrawable extends Drawable {
     private boolean mVisible;
     private boolean mAnimating;
     private int mCurrentDot;
+    private final Runnable mChangeDot = new Runnable() {
+        @Override
+        public void run() {
+            if (++mCurrentDot == NUM_DOTS) {
+                mCurrentDot = 0;
+            }
+            invalidateSelf();
+            mHandler.postDelayed(mChangeDot, DOT_DELAY);
+        }
+    };
 
     public SignalDrawable(Context context) {
         mDarkModeBackgroundColor =
@@ -122,6 +129,36 @@ public class SignalDrawable extends Drawable {
 
         mHandler = new Handler();
         setDarkIntensity(0);
+    }
+
+    public static int getLevel(int fullState) {
+        return fullState & LEVEL_MASK;
+    }
+
+    public static int getState(int fullState) {
+        return (fullState & STATE_MASK) >> STATE_SHIFT;
+    }
+
+    public static int getNumLevels(int fullState) {
+        return (fullState & NUM_LEVEL_MASK) >> NUM_LEVEL_SHIFT;
+    }
+
+    public static int getState(int level, int numLevels, boolean cutOut) {
+        return ((cutOut ? STATE_CUT : 0) << STATE_SHIFT)
+                | (numLevels << NUM_LEVEL_SHIFT)
+                | level;
+    }
+
+    public static int getCarrierChangeState(int numLevels) {
+        return (STATE_CARRIER_CHANGE << STATE_SHIFT) | (numLevels << NUM_LEVEL_SHIFT);
+    }
+
+    public static int getEmptyState(int numLevels) {
+        return (STATE_EMPTY << STATE_SHIFT) | (numLevels << NUM_LEVEL_SHIFT);
+    }
+
+    public static int getAirplaneModeState(int numLevels) {
+        return (STATE_AIRPLANE << STATE_SHIFT) | (numLevels << NUM_LEVEL_SHIFT);
     }
 
     public void setIntrinsicSize(int size) {
@@ -296,7 +333,7 @@ public class SignalDrawable extends Drawable {
     }
 
     private void drawDot(Path fullPath, Path foregroundPath, float x, float y, float dotSize,
-            int i) {
+                         int i) {
         Path p = (i == mCurrentDot) ? foregroundPath : fullPath;
         p.addRect(x, y, x + dotSize, y + dotSize, Direction.CW);
     }
@@ -344,47 +381,6 @@ public class SignalDrawable extends Drawable {
         mVisible = visible;
         updateAnimation();
         return super.setVisible(visible, restart);
-    }
-
-    private final Runnable mChangeDot = new Runnable() {
-        @Override
-        public void run() {
-            if (++mCurrentDot == NUM_DOTS) {
-                mCurrentDot = 0;
-            }
-            invalidateSelf();
-            mHandler.postDelayed(mChangeDot, DOT_DELAY);
-        }
-    };
-
-    public static int getLevel(int fullState) {
-        return fullState & LEVEL_MASK;
-    }
-
-    public static int getState(int fullState) {
-        return (fullState & STATE_MASK) >> STATE_SHIFT;
-    }
-
-    public static int getNumLevels(int fullState) {
-        return (fullState & NUM_LEVEL_MASK) >> NUM_LEVEL_SHIFT;
-    }
-
-    public static int getState(int level, int numLevels, boolean cutOut) {
-        return ((cutOut ? STATE_CUT : 0) << STATE_SHIFT)
-                | (numLevels << NUM_LEVEL_SHIFT)
-                | level;
-    }
-
-    public static int getCarrierChangeState(int numLevels) {
-        return (STATE_CARRIER_CHANGE << STATE_SHIFT) | (numLevels << NUM_LEVEL_SHIFT);
-    }
-
-    public static int getEmptyState(int numLevels) {
-        return (STATE_EMPTY << STATE_SHIFT) | (numLevels << NUM_LEVEL_SHIFT);
-    }
-
-    public static int getAirplaneModeState(int numLevels) {
-        return (STATE_AIRPLANE << STATE_SHIFT) | (numLevels << NUM_LEVEL_SHIFT);
     }
 
     private final class SlashArtist {

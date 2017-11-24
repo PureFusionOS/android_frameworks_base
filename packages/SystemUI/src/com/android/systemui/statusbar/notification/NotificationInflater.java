@@ -51,12 +51,12 @@ public class NotificationInflater {
     public static final String TAG = "NotificationInflater";
     @VisibleForTesting
     static final int FLAG_REINFLATE_ALL = ~0;
-    private static final int FLAG_REINFLATE_CONTENT_VIEW = 1<<0;
     @VisibleForTesting
-    static final int FLAG_REINFLATE_EXPANDED_VIEW = 1<<1;
-    private static final int FLAG_REINFLATE_HEADS_UP_VIEW = 1<<2;
-    private static final int FLAG_REINFLATE_PUBLIC_VIEW = 1<<3;
-    private static final int FLAG_REINFLATE_AMBIENT_VIEW = 1<<4;
+    static final int FLAG_REINFLATE_EXPANDED_VIEW = 1 << 1;
+    private static final int FLAG_REINFLATE_CONTENT_VIEW = 1 << 0;
+    private static final int FLAG_REINFLATE_HEADS_UP_VIEW = 1 << 2;
+    private static final int FLAG_REINFLATE_PUBLIC_VIEW = 1 << 3;
+    private static final int FLAG_REINFLATE_AMBIENT_VIEW = 1 << 4;
     private static final InflationExecutor EXECUTOR = new InflationExecutor();
 
     private final ExpandableNotificationRow mRow;
@@ -72,90 +72,10 @@ public class NotificationInflater {
         mRow = row;
     }
 
-    public void setIsLowPriority(boolean isLowPriority) {
-        mIsLowPriority = isLowPriority;
-    }
-
-    /**
-     * Set whether the notification is a child in a group
-     *
-     * @return whether the view was re-inflated
-     */
-    public void setIsChildInGroup(boolean childInGroup) {
-        if (childInGroup != mIsChildInGroup) {
-            mIsChildInGroup = childInGroup;
-            if (mIsLowPriority) {
-                int flags = FLAG_REINFLATE_CONTENT_VIEW | FLAG_REINFLATE_EXPANDED_VIEW;
-                inflateNotificationViews(flags);
-            }
-        } ;
-    }
-
-    public void setUsesIncreasedHeight(boolean usesIncreasedHeight) {
-        mUsesIncreasedHeight = usesIncreasedHeight;
-    }
-
-    public void setUsesIncreasedHeadsUpHeight(boolean usesIncreasedHeight) {
-        mUsesIncreasedHeadsUpHeight = usesIncreasedHeight;
-    }
-
-    public void setRemoteViewClickHandler(RemoteViews.OnClickHandler remoteViewClickHandler) {
-        mRemoteViewClickHandler = remoteViewClickHandler;
-    }
-
-    public void setRedactAmbient(boolean redactAmbient) {
-        if (mRedactAmbient != redactAmbient) {
-            mRedactAmbient = redactAmbient;
-            if (mRow.getEntry() == null) {
-                return;
-            }
-            inflateNotificationViews(FLAG_REINFLATE_AMBIENT_VIEW);
-        }
-    }
-
-    /**
-     * Inflate all views of this notification on a background thread. This is asynchronous and will
-     * notify the callback once it's finished.
-     */
-    public void inflateNotificationViews() {
-        inflateNotificationViews(FLAG_REINFLATE_ALL);
-    }
-
-    /**
-     * Reinflate all views for the specified flags on a background thread. This is asynchronous and
-     * will notify the callback once it's finished.
-     *
-     * @param reInflateFlags flags which views should be reinflated. Use {@link #FLAG_REINFLATE_ALL}
-     *                       to reinflate all of views.
-     */
-    @VisibleForTesting
-    void inflateNotificationViews(int reInflateFlags) {
-        if (mRow.isRemoved()) {
-            // We don't want to reinflate anything for removed notifications. Otherwise views might
-            // be readded to the stack, leading to leaks. This may happen with low-priority groups
-            // where the removal of already removed children can lead to a reinflation.
-            return;
-        }
-        StatusBarNotification sbn = mRow.getEntry().notification;
-        new AsyncInflationTask(sbn, reInflateFlags, mRow, mIsLowPriority,
-                mIsChildInGroup, mUsesIncreasedHeight, mUsesIncreasedHeadsUpHeight, mRedactAmbient,
-                mCallback, mRemoteViewClickHandler).execute();
-    }
-
-    @VisibleForTesting
-    InflationProgress inflateNotificationViews(int reInflateFlags,
-            Notification.Builder builder, Context packageContext) {
-        InflationProgress result = createRemoteViews(reInflateFlags, builder, mIsLowPriority,
-                mIsChildInGroup, mUsesIncreasedHeight, mUsesIncreasedHeadsUpHeight,
-                mRedactAmbient, packageContext);
-        apply(result, reInflateFlags, mRow, mRedactAmbient, mRemoteViewClickHandler, null);
-        return result;
-    }
-
     private static InflationProgress createRemoteViews(int reInflateFlags,
-            Notification.Builder builder, boolean isLowPriority, boolean isChildInGroup,
-            boolean usesIncreasedHeight, boolean usesIncreasedHeadsUpHeight, boolean redactAmbient,
-            Context packageContext) {
+                                                       Notification.Builder builder, boolean isLowPriority, boolean isChildInGroup,
+                                                       boolean usesIncreasedHeight, boolean usesIncreasedHeadsUpHeight, boolean redactAmbient,
+                                                       Context packageContext) {
         InflationProgress result = new InflationProgress();
         isLowPriority = isLowPriority && !isChildInGroup;
         if ((reInflateFlags & FLAG_REINFLATE_CONTENT_VIEW) != 0) {
@@ -183,9 +103,9 @@ public class NotificationInflater {
     }
 
     public static CancellationSignal apply(InflationProgress result, int reInflateFlags,
-            ExpandableNotificationRow row, boolean redactAmbient,
-            RemoteViews.OnClickHandler remoteViewClickHandler,
-            @Nullable InflationCallback callback) {
+                                           ExpandableNotificationRow row, boolean redactAmbient,
+                                           RemoteViews.OnClickHandler remoteViewClickHandler,
+                                           @Nullable InflationCallback callback) {
         NotificationData.Entry entry = row.getEntry();
         NotificationContentView privateLayout = row.getPrivateLayout();
         NotificationContentView publicLayout = row.getPublicLayout();
@@ -318,15 +238,15 @@ public class NotificationInflater {
 
     @VisibleForTesting
     static void applyRemoteView(final InflationProgress result,
-            final int reInflateFlags, int inflationId,
-            final ExpandableNotificationRow row,
-            final boolean redactAmbient, boolean isNewView,
-            RemoteViews.OnClickHandler remoteViewClickHandler,
-            @Nullable final InflationCallback callback, NotificationData.Entry entry,
-            NotificationContentView parentLayout, View existingView,
-            NotificationViewWrapper existingWrapper,
-            final HashMap<Integer, CancellationSignal> runningInflations,
-            ApplyCallback applyCallback) {
+                                final int reInflateFlags, int inflationId,
+                                final ExpandableNotificationRow row,
+                                final boolean redactAmbient, boolean isNewView,
+                                RemoteViews.OnClickHandler remoteViewClickHandler,
+                                @Nullable final InflationCallback callback, NotificationData.Entry entry,
+                                NotificationContentView parentLayout, View existingView,
+                                NotificationViewWrapper existingWrapper,
+                                final HashMap<Integer, CancellationSignal> runningInflations,
+                                ApplyCallback applyCallback) {
         RemoteViews newContentView = applyCallback.getRemoteView();
         RemoteViews.OnViewAppliedListener listener
                 = new RemoteViews.OnViewAppliedListener() {
@@ -390,7 +310,7 @@ public class NotificationInflater {
     }
 
     private static void handleInflationError(HashMap<Integer, CancellationSignal> runningInflations,
-            Exception e, StatusBarNotification notification, @Nullable InflationCallback callback) {
+                                             Exception e, StatusBarNotification notification, @Nullable InflationCallback callback) {
         Assert.isMainThread();
         runningInflations.values().forEach(CancellationSignal::cancel);
         if (callback != null) {
@@ -404,9 +324,9 @@ public class NotificationInflater {
      * @return true if the inflation was finished
      */
     private static boolean finishIfDone(InflationProgress result, int reInflateFlags,
-            HashMap<Integer, CancellationSignal> runningInflations,
-            @Nullable InflationCallback endListener, ExpandableNotificationRow row,
-            boolean redactAmbient) {
+                                        HashMap<Integer, CancellationSignal> runningInflations,
+                                        @Nullable InflationCallback endListener, ExpandableNotificationRow row,
+                                        boolean redactAmbient) {
         Assert.isMainThread();
         NotificationData.Entry entry = row.getEntry();
         NotificationContentView privateLayout = row.getPrivateLayout();
@@ -465,7 +385,7 @@ public class NotificationInflater {
     }
 
     private static RemoteViews createExpandedView(Notification.Builder builder,
-            boolean isLowPriority) {
+                                                  boolean isLowPriority) {
         RemoteViews bigContentView = builder.createBigContentView();
         if (bigContentView != null) {
             return bigContentView;
@@ -479,7 +399,7 @@ public class NotificationInflater {
     }
 
     private static RemoteViews createContentView(Notification.Builder builder,
-            boolean isLowPriority, boolean useLarge) {
+                                                 boolean isLowPriority, boolean useLarge) {
         if (isLowPriority) {
             return builder.makeLowPriorityContentView(false /* useRegularSubtext */);
         }
@@ -496,13 +416,96 @@ public class NotificationInflater {
                         && a.getLayoutId() == b.getLayoutId());
     }
 
-    public void setInflationCallback(InflationCallback callback) {
-        mCallback = callback;
+    private static boolean canReapplyAmbient(ExpandableNotificationRow row, boolean redactAmbient) {
+        NotificationContentView ambientView = redactAmbient ? row.getPublicLayout()
+                : row.getPrivateLayout();
+        ;
+        return ambientView.getAmbientChild() != null;
     }
 
-    public interface InflationCallback {
-        void handleInflationException(StatusBarNotification notification, Exception e);
-        void onAsyncInflationFinished(NotificationData.Entry entry);
+    public void setIsLowPriority(boolean isLowPriority) {
+        mIsLowPriority = isLowPriority;
+    }
+
+    /**
+     * Set whether the notification is a child in a group
+     *
+     * @return whether the view was re-inflated
+     */
+    public void setIsChildInGroup(boolean childInGroup) {
+        if (childInGroup != mIsChildInGroup) {
+            mIsChildInGroup = childInGroup;
+            if (mIsLowPriority) {
+                int flags = FLAG_REINFLATE_CONTENT_VIEW | FLAG_REINFLATE_EXPANDED_VIEW;
+                inflateNotificationViews(flags);
+            }
+        }
+        ;
+    }
+
+    public void setUsesIncreasedHeight(boolean usesIncreasedHeight) {
+        mUsesIncreasedHeight = usesIncreasedHeight;
+    }
+
+    public void setUsesIncreasedHeadsUpHeight(boolean usesIncreasedHeight) {
+        mUsesIncreasedHeadsUpHeight = usesIncreasedHeight;
+    }
+
+    public void setRemoteViewClickHandler(RemoteViews.OnClickHandler remoteViewClickHandler) {
+        mRemoteViewClickHandler = remoteViewClickHandler;
+    }
+
+    public void setRedactAmbient(boolean redactAmbient) {
+        if (mRedactAmbient != redactAmbient) {
+            mRedactAmbient = redactAmbient;
+            if (mRow.getEntry() == null) {
+                return;
+            }
+            inflateNotificationViews(FLAG_REINFLATE_AMBIENT_VIEW);
+        }
+    }
+
+    /**
+     * Inflate all views of this notification on a background thread. This is asynchronous and will
+     * notify the callback once it's finished.
+     */
+    public void inflateNotificationViews() {
+        inflateNotificationViews(FLAG_REINFLATE_ALL);
+    }
+
+    /**
+     * Reinflate all views for the specified flags on a background thread. This is asynchronous and
+     * will notify the callback once it's finished.
+     *
+     * @param reInflateFlags flags which views should be reinflated. Use {@link #FLAG_REINFLATE_ALL}
+     *                       to reinflate all of views.
+     */
+    @VisibleForTesting
+    void inflateNotificationViews(int reInflateFlags) {
+        if (mRow.isRemoved()) {
+            // We don't want to reinflate anything for removed notifications. Otherwise views might
+            // be readded to the stack, leading to leaks. This may happen with low-priority groups
+            // where the removal of already removed children can lead to a reinflation.
+            return;
+        }
+        StatusBarNotification sbn = mRow.getEntry().notification;
+        new AsyncInflationTask(sbn, reInflateFlags, mRow, mIsLowPriority,
+                mIsChildInGroup, mUsesIncreasedHeight, mUsesIncreasedHeadsUpHeight, mRedactAmbient,
+                mCallback, mRemoteViewClickHandler).execute();
+    }
+
+    @VisibleForTesting
+    InflationProgress inflateNotificationViews(int reInflateFlags,
+                                               Notification.Builder builder, Context packageContext) {
+        InflationProgress result = createRemoteViews(reInflateFlags, builder, mIsLowPriority,
+                mIsChildInGroup, mUsesIncreasedHeight, mUsesIncreasedHeadsUpHeight,
+                mRedactAmbient, packageContext);
+        apply(result, reInflateFlags, mRow, mRedactAmbient, mRemoteViewClickHandler, null);
+        return result;
+    }
+
+    public void setInflationCallback(InflationCallback callback) {
+        mCallback = callback;
     }
 
     public void onDensityOrFontScaleChanged() {
@@ -515,10 +518,10 @@ public class NotificationInflater {
         inflateNotificationViews();
     }
 
-    private static boolean canReapplyAmbient(ExpandableNotificationRow row, boolean redactAmbient) {
-        NotificationContentView ambientView = redactAmbient ? row.getPublicLayout()
-                : row.getPrivateLayout();            ;
-        return ambientView.getAmbientChild() != null;
+    public interface InflationCallback {
+        void handleInflationException(StatusBarNotification notification, Exception e);
+
+        void onAsyncInflationFinished(NotificationData.Entry entry);
     }
 
     public static class AsyncInflationTask extends AsyncTask<Void, Void, InflationProgress>
@@ -539,11 +542,11 @@ public class NotificationInflater {
         private CancellationSignal mCancellationSignal;
 
         private AsyncInflationTask(StatusBarNotification notification,
-                int reInflateFlags, ExpandableNotificationRow row, boolean isLowPriority,
-                boolean isChildInGroup, boolean usesIncreasedHeight,
-                boolean usesIncreasedHeadsUpHeight, boolean redactAmbient,
-                InflationCallback callback,
-                RemoteViews.OnClickHandler remoteViewClickHandler) {
+                                   int reInflateFlags, ExpandableNotificationRow row, boolean isLowPriority,
+                                   boolean isChildInGroup, boolean usesIncreasedHeight,
+                                   boolean usesIncreasedHeadsUpHeight, boolean redactAmbient,
+                                   InflationCallback callback,
+                                   RemoteViews.OnClickHandler remoteViewClickHandler) {
             mRow = row;
             mSbn = notification;
             mReInflateFlags = reInflateFlags;
@@ -644,15 +647,13 @@ public class NotificationInflater {
 
     @VisibleForTesting
     static class InflationProgress {
+        @VisibleForTesting
+        Context packageContext;
         private RemoteViews newContentView;
         private RemoteViews newHeadsUpView;
         private RemoteViews newExpandedView;
         private RemoteViews newAmbientView;
         private RemoteViews newPublicView;
-
-        @VisibleForTesting
-        Context packageContext;
-
         private View inflatedContentView;
         private View inflatedHeadsUpView;
         private View inflatedExpandedView;
@@ -663,13 +664,14 @@ public class NotificationInflater {
     @VisibleForTesting
     abstract static class ApplyCallback {
         public abstract void setResultView(View v);
+
         public abstract RemoteViews getRemoteView();
     }
 
     /**
      * A custom executor that allows more tasks to be queued. Default values are copied from
      * AsyncTask
-      */
+     */
     private static class InflationExecutor implements Executor {
         private static final int CPU_COUNT = Runtime.getRuntime().availableProcessors();
         // We want at least 2 threads and at most 4 threads in the core pool,

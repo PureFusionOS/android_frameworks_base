@@ -46,7 +46,7 @@ import java.io.PrintWriter;
  * Implementation of VolumeComponent backed by the new volume dialog.
  */
 public class VolumeDialogComponent implements VolumeComponent, TunerService.Tunable,
-        VolumeDialogControllerImpl.UserActivityListener{
+        VolumeDialogControllerImpl.UserActivityListener {
 
     public static final String VOLUME_DOWN_SILENT = "sysui_volume_down_silent";
     public static final String VOLUME_UP_SILENT = "sysui_volume_up_silent";
@@ -61,8 +61,19 @@ public class VolumeDialogComponent implements VolumeComponent, TunerService.Tuna
     private final VolumeDialogControllerImpl mController;
     private final InterestingConfigChanges mConfigChanges = new InterestingConfigChanges(
             ActivityInfo.CONFIG_FONT_SCALE | ActivityInfo.CONFIG_LOCALE
-            | ActivityInfo.CONFIG_ASSETS_PATHS);
+                    | ActivityInfo.CONFIG_ASSETS_PATHS);
     private final Extension mExtension;
+    private final VolumeDialogImpl.Callback mVolumeDialogCallback = new VolumeDialogImpl.Callback() {
+        @Override
+        public void onZenSettingsClicked() {
+            startSettings(ZenModePanel.ZEN_SETTINGS);
+        }
+
+        @Override
+        public void onZenPrioritySettingsClicked() {
+            startSettings(ZenModePanel.ZEN_PRIORITY_SETTINGS);
+        }
+    };
     private VolumeDialog mDialog;
     private VolumePolicy mVolumePolicy = new VolumePolicy(
             DEFAULT_VOLUME_DOWN_TO_ENTER_SILENT,  // volumeDownToEnterSilent
@@ -130,7 +141,7 @@ public class VolumeDialogComponent implements VolumeComponent, TunerService.Tuna
     }
 
     private void setVolumePolicy(boolean volumeDownToEnterSilent, boolean volumeUpToExitSilent,
-            boolean doNotDisturbWhenSilent, int vibrateToSilentDebounce) {
+                                 boolean doNotDisturbWhenSilent, int vibrateToSilentDebounce) {
         mVolumePolicy = new VolumePolicy(volumeDownToEnterSilent, volumeUpToExitSilent,
                 doNotDisturbWhenSilent, vibrateToSilentDebounce);
         mController.setVolumePolicy(mVolumePolicy);
@@ -180,17 +191,5 @@ public class VolumeDialogComponent implements VolumeComponent, TunerService.Tuna
         Dependency.get(ActivityStarter.class).startActivity(intent,
                 true /* onlyProvisioned */, true /* dismissShade */);
     }
-
-    private final VolumeDialogImpl.Callback mVolumeDialogCallback = new VolumeDialogImpl.Callback() {
-        @Override
-        public void onZenSettingsClicked() {
-            startSettings(ZenModePanel.ZEN_SETTINGS);
-        }
-
-        @Override
-        public void onZenPrioritySettingsClicked() {
-            startSettings(ZenModePanel.ZEN_PRIORITY_SETTINGS);
-        }
-    };
 
 }

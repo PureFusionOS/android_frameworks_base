@@ -32,7 +32,9 @@ import com.android.systemui.recents.events.ui.dragndrop.DragEndCancelledEvent;
 import com.android.systemui.recents.events.ui.dragndrop.DragEndEvent;
 import com.android.systemui.recents.model.TaskStack;
 
-/** Manages the scrims for the various system bars. */
+/**
+ * Manages the scrims for the various system bars.
+ */
 public class SystemBarScrimViews {
 
     private static final int DEFAULT_ANIMATION_DURATION = 150;
@@ -61,7 +63,7 @@ public class SystemBarScrimViews {
      * Updates the nav bar scrim.
      */
     public void updateNavBarScrim(boolean animateNavBarScrim, boolean hasStackTasks,
-            AnimationProps animation) {
+                                  AnimationProps animation) {
         prepareEnterRecentsAnimation(isNavBarScrimRequired(hasStackTasks), animateNavBarScrim);
         if (animateNavBarScrim && animation != null) {
             animateNavBarScrimVisibility(true, animation);
@@ -118,8 +120,8 @@ public class SystemBarScrimViews {
         if (mHasNavBarScrim) {
             AnimationProps animation = mShouldAnimateNavBarScrim
                     ? new AnimationProps()
-                            .setDuration(AnimationProps.BOUNDS, mNavBarScrimEnterDuration)
-                            .setInterpolator(AnimationProps.BOUNDS, Interpolators.DECELERATE_QUINT)
+                    .setDuration(AnimationProps.BOUNDS, mNavBarScrimEnterDuration)
+                    .setInterpolator(AnimationProps.BOUNDS, Interpolators.DECELERATE_QUINT)
                     : AnimationProps.IMMEDIATE;
             animateNavBarScrimVisibility(true, animation);
         }

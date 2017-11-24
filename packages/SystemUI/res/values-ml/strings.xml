@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /**
  * Copyright (c) 2009, The Android Open Source Project
  *
@@ -25,8 +24,8 @@
     <string name="status_bar_no_recent_apps" msgid="7374907845131203189">"നിങ്ങളുടെ പുതിയ സ്ക്രീനുകൾ ഇവിടെ ദൃശ്യമാകുന്നു"</string>
     <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"സമീപകാല അപ്ലിക്കേഷനുകൾ നിരസിക്കുക"</string>
     <plurals name="status_bar_accessibility_recent_apps" formatted="false" msgid="9138535907802238759">
-      <item quantity="other">ചുരുക്കവിവരണത്തിലെ %d സ്‌ക്രീനുകൾ</item>
-      <item quantity="one">ചുരുക്കവിവരണത്തിലെ ഒരു സ്‌ക്രീൻ</item>
+        <item quantity="other">ചുരുക്കവിവരണത്തിലെ %d സ്‌ക്രീനുകൾ</item>
+        <item quantity="one">ചുരുക്കവിവരണത്തിലെ ഒരു സ്‌ക്രീൻ</item>
     </plurals>
     <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"അറിയിപ്പുകൾ ഒന്നുമില്ല"</string>
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"നടന്നുകൊണ്ടിരിക്കുന്നവ"</string>
@@ -251,8 +250,8 @@
     <string name="accessibility_clear_all" msgid="5235938559247164925">"എല്ലാ വിവരങ്ങളും മായ്‌ക്കുക."</string>
     <string name="notification_group_overflow_indicator" msgid="1863231301642314183">"+ <xliff:g id="NUMBER">%s</xliff:g>"</string>
     <plurals name="notification_group_overflow_description" formatted="false" msgid="4579313201268495404">
-      <item quantity="other">ഉള്ളിൽ <xliff:g id="NUMBER_1">%s</xliff:g> അറിയിപ്പുകൾ കൂടിയുണ്ട്.</item>
-      <item quantity="one">ഉള്ളിൽ <xliff:g id="NUMBER_0">%s</xliff:g> അറിയിപ്പ് കൂടിയുണ്ട്.</item>
+        <item quantity="other">ഉള്ളിൽ <xliff:g id="NUMBER_1">%s</xliff:g> അറിയിപ്പുകൾ കൂടിയുണ്ട്.</item>
+        <item quantity="one">ഉള്ളിൽ <xliff:g id="NUMBER_0">%s</xliff:g> അറിയിപ്പ് കൂടിയുണ്ട്.</item>
     </plurals>
     <string name="status_bar_notification_inspect_item_title" msgid="5668348142410115323">"അറിയിപ്പ് ക്രമീകരണങ്ങൾ"</string>
     <string name="status_bar_notification_app_settings_title" msgid="5525260160341558869">"<xliff:g id="APP_NAME">%s</xliff:g> ക്രമീകരണം"</string>
@@ -341,8 +340,7 @@
     <string name="recents_accessibility_split_screen_top" msgid="9056056469282256287">"സ്ക്രീൻ മുകളിലേക്ക് സ്പ്ലിറ്റ് ചെയ്യുക"</string>
     <string name="recents_accessibility_split_screen_left" msgid="8987144699630620019">"സ്ക്രീൻ ഇടതുവശത്തേക്ക് സ്പ്ലിറ്റ് ചെയ്യുക"</string>
     <string name="recents_accessibility_split_screen_right" msgid="275069779299592867">"സ്ക്രീൻ വലതുവശത്തേക്ക് പിളർത്തുക"</string>
-  <string-array name="recents_blacklist_array">
-  </string-array>
+    <string-array name="recents_blacklist_array"></string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"ചാർജായി"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"ചാർജ്ജുചെയ്യുന്നു"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"ഫുൾ ചാർജാകാൻ, <xliff:g id="CHARGING_TIME">%s</xliff:g>"</string>
@@ -551,13 +549,13 @@
     <string name="notification_num_channels" msgid="2048144408999179471">"<xliff:g id="NUMBER">%d</xliff:g> അറിയിപ്പ് വിഭാഗങ്ങൾ"</string>
     <string name="notification_default_channel_desc" msgid="2506053815870808359">"ഈ ആപ്പിന് അറിയിപ്പ് വിഭാഗങ്ങളില്ല"</string>
     <plurals name="notification_num_channels_desc" formatted="false" msgid="5492793452274077663">
-      <item quantity="other">ഈ ആപ്പിൽ നിന്ന് 1 / <xliff:g id="NUMBER_1">%d</xliff:g> അറിയിപ്പ് വിഭാഗങ്ങൾ</item>
-      <item quantity="one">ഈ ആപ്പിൽ നിന്ന് 1 / <xliff:g id="NUMBER_0">%d</xliff:g> അറിയിപ്പ് വിഭാഗം</item>
+        <item quantity="other">ഈ ആപ്പിൽ നിന്ന് 1 / <xliff:g id="NUMBER_1">%d</xliff:g> അറിയിപ്പ് വിഭാഗങ്ങൾ</item>
+        <item quantity="one">ഈ ആപ്പിൽ നിന്ന് 1 / <xliff:g id="NUMBER_0">%d</xliff:g> അറിയിപ്പ് വിഭാഗം</item>
     </plurals>
     <string name="notification_channels_list_desc_2" msgid="6214732715833946441">"<xliff:g id="CHANNEL_NAME_1">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2">%2$s</xliff:g>"</string>
     <plurals name="notification_channels_list_desc_2_and_others" formatted="false" msgid="2747813553355336157">
-      <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> എന്നിവയും മറ്റ് <xliff:g id="NUMBER_5">%3$d</xliff:g> എണ്ണവും</item>
-      <item quantity="one"><xliff:g id="CHANNEL_NAME_1_0">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_1">%2$s</xliff:g> എന്നിവയും മറ്റ് <xliff:g id="NUMBER_2">%3$d</xliff:g> എണ്ണവും</item>
+        <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> എന്നിവയും മറ്റ് <xliff:g id="NUMBER_5">%3$d</xliff:g> എണ്ണവും</item>
+        <item quantity="one"><xliff:g id="CHANNEL_NAME_1_0">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_1">%2$s</xliff:g> എന്നിവയും മറ്റ് <xliff:g id="NUMBER_2">%3$d</xliff:g> എണ്ണവും</item>
     </plurals>
     <string name="notification_channel_controls_opened_accessibility" msgid="6553950422055908113">"<xliff:g id="APP_NAME">%1$s</xliff:g> ആപ്പിന്റെ അറിയിപ്പ് നിയന്ത്രണങ്ങൾ തുറന്നു"</string>
     <string name="notification_channel_controls_closed_accessibility" msgid="7521619812603693144">"<xliff:g id="APP_NAME">%1$s</xliff:g> ആപ്പിന്റെ അറിയിപ്പ് നിയന്ത്രണങ്ങൾ അടച്ചു"</string>
@@ -640,18 +638,18 @@
     <string name="left_nav_bar_button_type" msgid="8555981238887546528">"അധിക ഇടത് ബട്ടൺ തരം"</string>
     <string name="right_nav_bar_button_type" msgid="2481056627065649656">"അധിക വലത് ബട്ടൺ തരം"</string>
     <string name="nav_bar_default" msgid="8587114043070993007">"(ഡിഫോൾട്ട്)"</string>
-  <string-array name="nav_bar_buttons">
-    <item msgid="1545641631806817203">"ക്ലിപ്പ്ബോർഡ്"</item>
-    <item msgid="5742013440802239414">"കീകോഡ്"</item>
-    <item msgid="8802889973626281575">"കീബോർഡ് സ്വിച്ചർ"</item>
-    <item msgid="8175437057325747277">"ഒന്നുമില്ല"</item>
-  </string-array>
-  <string-array name="nav_bar_layouts">
-    <item msgid="8077901629964902399">"സാധാരണ വേഗത്തിൽ"</item>
-    <item msgid="8256205964297588988">"ഒതുക്കമുള്ളത്"</item>
-    <item msgid="8719936228094005878">"ഇടത്തേക്ക് ചാഞ്ഞിരിക്കുന്നത്"</item>
-    <item msgid="586019486955594690">"വലത്തേക്ക് ചാഞ്ഞിരിക്കുന്നത്"</item>
-  </string-array>
+    <string-array name="nav_bar_buttons">
+        <item msgid="1545641631806817203">"ക്ലിപ്പ്ബോർഡ്"</item>
+        <item msgid="5742013440802239414">"കീകോഡ്"</item>
+        <item msgid="8802889973626281575">"കീബോർഡ് സ്വിച്ചർ"</item>
+        <item msgid="8175437057325747277">"ഒന്നുമില്ല"</item>
+    </string-array>
+    <string-array name="nav_bar_layouts">
+        <item msgid="8077901629964902399">"സാധാരണ വേഗത്തിൽ"</item>
+        <item msgid="8256205964297588988">"ഒതുക്കമുള്ളത്"</item>
+        <item msgid="8719936228094005878">"ഇടത്തേക്ക് ചാഞ്ഞിരിക്കുന്നത്"</item>
+        <item msgid="586019486955594690">"വലത്തേക്ക് ചാഞ്ഞിരിക്കുന്നത്"</item>
+    </string-array>
     <string name="menu_ime" msgid="4998010205321292416">"കീബോർഡ് സ്വിച്ചർ"</string>
     <string name="save" msgid="2311877285724540644">"സംരക്ഷിക്കുക"</string>
     <string name="reset" msgid="2448168080964209908">"പുനഃസജ്ജമാക്കുക"</string>
@@ -666,16 +664,16 @@
     <string name="drag_to_remove_tiles" msgid="3361212377437088062">"നീക്കംചെയ്യുന്നതിന് ഇവിടെ വലിച്ചിടുക"</string>
     <string name="qs_edit" msgid="2232596095725105230">"എഡിറ്റുചെയ്യുക"</string>
     <string name="tuner_time" msgid="6572217313285536011">"സമയം"</string>
-  <string-array name="clock_options">
-    <item msgid="5965318737560463480">"മണിക്കൂറും മിനിറ്റും സെക്കൻഡും കാണിക്കുക"</item>
-    <item msgid="1427801730816895300">"മണിക്കൂറും മിനിറ്റും കാണിക്കുക (ഡിഫോൾട്ട്)"</item>
-    <item msgid="3830170141562534721">"ഈ ഐക്കൺ കാണിക്കരുത്"</item>
-  </string-array>
-  <string-array name="battery_options">
-    <item msgid="3160236755818672034">"എല്ലായ്പ്പോഴും ശതമാനം കാണിക്കുക"</item>
-    <item msgid="2139628951880142927">"ചാർജ്ജുചെയ്യുമ്പോൾ ശതമാനം കാണിക്കുക (ഡിഫോൾട്ട്)"</item>
-    <item msgid="3327323682209964956">"ഈ ഐക്കൺ കാണിക്കരുത്"</item>
-  </string-array>
+    <string-array name="clock_options">
+        <item msgid="5965318737560463480">"മണിക്കൂറും മിനിറ്റും സെക്കൻഡും കാണിക്കുക"</item>
+        <item msgid="1427801730816895300">"മണിക്കൂറും മിനിറ്റും കാണിക്കുക (ഡിഫോൾട്ട്)"</item>
+        <item msgid="3830170141562534721">"ഈ ഐക്കൺ കാണിക്കരുത്"</item>
+    </string-array>
+    <string-array name="battery_options">
+        <item msgid="3160236755818672034">"എല്ലായ്പ്പോഴും ശതമാനം കാണിക്കുക"</item>
+        <item msgid="2139628951880142927">"ചാർജ്ജുചെയ്യുമ്പോൾ ശതമാനം കാണിക്കുക (ഡിഫോൾട്ട്)"</item>
+        <item msgid="3327323682209964956">"ഈ ഐക്കൺ കാണിക്കരുത്"</item>
+    </string-array>
     <string name="other" msgid="4060683095962566764">"മറ്റുള്ളവ"</string>
     <string name="accessibility_divider" msgid="5903423481953635044">"സ്പ്ലിറ്റ്-സ്ക്രീൻ ഡിവൈഡർ"</string>
     <string name="accessibility_action_divider_left_full" msgid="2801570521881574972">"ഇടത് പൂർണ്ണ സ്ക്രീൻ"</string>

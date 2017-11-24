@@ -58,9 +58,9 @@ public class FlingAnimationUtils {
 
     /**
      * @param maxLengthSeconds the longest duration an animation can become in seconds
-     * @param speedUpFactor a factor from 0 to 1 how much the slow down should be shifted towards
-     *                      the end of the animation. 0 means it's at the beginning and no
-     *                      acceleration will take place.
+     * @param speedUpFactor    a factor from 0 to 1 how much the slow down should be shifted towards
+     *                         the end of the animation. 0 means it's at the beginning and no
+     *                         acceleration will take place.
      */
     public FlingAnimationUtils(Context ctx, float maxLengthSeconds, float speedUpFactor) {
         this(ctx, maxLengthSeconds, speedUpFactor, -1.0f, 1.0f);
@@ -68,15 +68,15 @@ public class FlingAnimationUtils {
 
     /**
      * @param maxLengthSeconds the longest duration an animation can become in seconds
-     * @param speedUpFactor a factor from 0 to 1 how much the slow down should be shifted towards
-     *                      the end of the animation. 0 means it's at the beginning and no
-     *                      acceleration will take place.
-     * @param x2 the x value to take for the second point of the bezier spline. If a value below 0
-     *           is provided, the value is automatically calculated.
-     * @param y2 the y value to take for the second point of the bezier spline
+     * @param speedUpFactor    a factor from 0 to 1 how much the slow down should be shifted towards
+     *                         the end of the animation. 0 means it's at the beginning and no
+     *                         acceleration will take place.
+     * @param x2               the x value to take for the second point of the bezier spline. If a value below 0
+     *                         is provided, the value is automatically calculated.
+     * @param y2               the y value to take for the second point of the bezier spline
      */
     public FlingAnimationUtils(Context ctx, float maxLengthSeconds, float speedUpFactor, float x2,
-            float y2) {
+                               float y2) {
         mMaxLengthSeconds = maxLengthSeconds;
         mSpeedUpFactor = speedUpFactor;
         if (x2 < 0) {
@@ -98,10 +98,10 @@ public class FlingAnimationUtils {
      * Applies the interpolator and length to the animator, such that the fling animation is
      * consistent with the finger motion.
      *
-     * @param animator the animator to apply
+     * @param animator  the animator to apply
      * @param currValue the current value
-     * @param endValue the end value of the animator
-     * @param velocity the current velocity of the motion
+     * @param endValue  the end value of the animator
+     * @param velocity  the current velocity of the motion
      */
     public void apply(Animator animator, float currValue, float endValue, float velocity) {
         apply(animator, currValue, endValue, velocity, Math.abs(endValue - currValue));
@@ -111,13 +111,13 @@ public class FlingAnimationUtils {
      * Applies the interpolator and length to the animator, such that the fling animation is
      * consistent with the finger motion.
      *
-     * @param animator the animator to apply
+     * @param animator  the animator to apply
      * @param currValue the current value
-     * @param endValue the end value of the animator
-     * @param velocity the current velocity of the motion
+     * @param endValue  the end value of the animator
+     * @param velocity  the current velocity of the motion
      */
     public void apply(ViewPropertyAnimator animator, float currValue, float endValue,
-            float velocity) {
+                      float velocity) {
         apply(animator, currValue, endValue, velocity, Math.abs(endValue - currValue));
     }
 
@@ -125,15 +125,15 @@ public class FlingAnimationUtils {
      * Applies the interpolator and length to the animator, such that the fling animation is
      * consistent with the finger motion.
      *
-     * @param animator the animator to apply
-     * @param currValue the current value
-     * @param endValue the end value of the animator
-     * @param velocity the current velocity of the motion
+     * @param animator    the animator to apply
+     * @param currValue   the current value
+     * @param endValue    the end value of the animator
+     * @param velocity    the current velocity of the motion
      * @param maxDistance the maximum distance for this interaction; the maximum animation length
      *                    gets multiplied by the ratio between the actual distance and this value
      */
     public void apply(Animator animator, float currValue, float endValue, float velocity,
-            float maxDistance) {
+                      float maxDistance) {
         AnimatorProperties properties = getProperties(currValue, endValue, velocity,
                 maxDistance);
         animator.setDuration(properties.duration);
@@ -144,15 +144,15 @@ public class FlingAnimationUtils {
      * Applies the interpolator and length to the animator, such that the fling animation is
      * consistent with the finger motion.
      *
-     * @param animator the animator to apply
-     * @param currValue the current value
-     * @param endValue the end value of the animator
-     * @param velocity the current velocity of the motion
+     * @param animator    the animator to apply
+     * @param currValue   the current value
+     * @param endValue    the end value of the animator
+     * @param velocity    the current velocity of the motion
      * @param maxDistance the maximum distance for this interaction; the maximum animation length
      *                    gets multiplied by the ratio between the actual distance and this value
      */
     public void apply(ViewPropertyAnimator animator, float currValue, float endValue,
-            float velocity, float maxDistance) {
+                      float velocity, float maxDistance) {
         AnimatorProperties properties = getProperties(currValue, endValue, velocity,
                 maxDistance);
         animator.setDuration(properties.duration);
@@ -160,7 +160,7 @@ public class FlingAnimationUtils {
     }
 
     private AnimatorProperties getProperties(float currValue,
-            float endValue, float velocity, float maxDistance) {
+                                             float endValue, float velocity, float maxDistance) {
         float maxLengthSeconds = (float) (mMaxLengthSeconds
                 * Math.sqrt(Math.abs(endValue - currValue) / maxDistance));
         float diff = Math.abs(endValue - currValue);
@@ -210,15 +210,15 @@ public class FlingAnimationUtils {
      * consistent with the finger motion for the case when the animation is making something
      * disappear.
      *
-     * @param animator the animator to apply
-     * @param currValue the current value
-     * @param endValue the end value of the animator
-     * @param velocity the current velocity of the motion
+     * @param animator    the animator to apply
+     * @param currValue   the current value
+     * @param endValue    the end value of the animator
+     * @param velocity    the current velocity of the motion
      * @param maxDistance the maximum distance for this interaction; the maximum animation length
      *                    gets multiplied by the ratio between the actual distance and this value
      */
     public void applyDismissing(Animator animator, float currValue, float endValue,
-            float velocity, float maxDistance) {
+                                float velocity, float maxDistance) {
         AnimatorProperties properties = getDismissingProperties(currValue, endValue, velocity,
                 maxDistance);
         animator.setDuration(properties.duration);
@@ -230,15 +230,15 @@ public class FlingAnimationUtils {
      * consistent with the finger motion for the case when the animation is making something
      * disappear.
      *
-     * @param animator the animator to apply
-     * @param currValue the current value
-     * @param endValue the end value of the animator
-     * @param velocity the current velocity of the motion
+     * @param animator    the animator to apply
+     * @param currValue   the current value
+     * @param endValue    the end value of the animator
+     * @param velocity    the current velocity of the motion
      * @param maxDistance the maximum distance for this interaction; the maximum animation length
      *                    gets multiplied by the ratio between the actual distance and this value
      */
     public void applyDismissing(ViewPropertyAnimator animator, float currValue, float endValue,
-            float velocity, float maxDistance) {
+                                float velocity, float maxDistance) {
         AnimatorProperties properties = getDismissingProperties(currValue, endValue, velocity,
                 maxDistance);
         animator.setDuration(properties.duration);
@@ -246,7 +246,7 @@ public class FlingAnimationUtils {
     }
 
     private AnimatorProperties getDismissingProperties(float currValue, float endValue,
-            float velocity, float maxDistance) {
+                                                       float velocity, float maxDistance) {
         float maxLengthSeconds = (float) (mMaxLengthSeconds
                 * Math.pow(Math.abs(endValue - currValue) / maxDistance, 0.5f));
         float diff = Math.abs(endValue - currValue);
@@ -309,7 +309,7 @@ public class FlingAnimationUtils {
         private Interpolator mCrossfader;
 
         InterpolatorInterpolator(Interpolator interpolator1, Interpolator interpolator2,
-                Interpolator crossfader) {
+                                 Interpolator crossfader) {
             mInterpolator1 = interpolator1;
             mInterpolator2 = interpolator2;
             mCrossfader = crossfader;

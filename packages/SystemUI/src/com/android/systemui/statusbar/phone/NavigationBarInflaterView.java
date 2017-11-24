@@ -46,12 +46,9 @@ import java.util.Objects;
 public class NavigationBarInflaterView extends FrameLayout
         implements Tunable, PluginListener<NavBarButtonProvider> {
 
-    private static final String TAG = "NavBarInflater";
-
     public static final String NAV_BAR_VIEWS = "sysui_nav_bar";
     public static final String NAV_BAR_LEFT = "sysui_nav_bar_left";
     public static final String NAV_BAR_RIGHT = "sysui_nav_bar_right";
-
     public static final String MENU_IME = "menu_ime";
     public static final String BACK = "back";
     public static final String HOME = "home";
@@ -61,17 +58,14 @@ public class NavigationBarInflaterView extends FrameLayout
     public static final String KEY = "key";
     public static final String LEFT = "left";
     public static final String RIGHT = "right";
-
     public static final String GRAVITY_SEPARATOR = ";";
     public static final String BUTTON_SEPARATOR = ",";
-
     public static final String SIZE_MOD_START = "[";
     public static final String SIZE_MOD_END = "]";
-
     public static final String KEY_CODE_START = "(";
     public static final String KEY_IMAGE_DELIM = ":";
     public static final String KEY_CODE_END = ")";
-
+    private static final String TAG = "NavBarInflater";
     private final List<NavBarButtonProvider> mPlugins = new ArrayList<>();
 
     protected LayoutInflater mLayoutInflater;
@@ -97,6 +91,40 @@ public class NavigationBarInflaterView extends FrameLayout
                 context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Mode displayMode = display.getMode();
         isRot0Landscape = displayMode.getPhysicalWidth() > displayMode.getPhysicalHeight();
+    }
+
+    public static String extractImage(String buttonSpec) {
+        if (!buttonSpec.contains(KEY_IMAGE_DELIM)) {
+            return null;
+        }
+        final int start = buttonSpec.indexOf(KEY_IMAGE_DELIM);
+        String subStr = buttonSpec.substring(start + 1, buttonSpec.indexOf(KEY_CODE_END));
+        return subStr;
+    }
+
+    public static int extractKeycode(String buttonSpec) {
+        if (!buttonSpec.contains(KEY_CODE_START)) {
+            return 1;
+        }
+        final int start = buttonSpec.indexOf(KEY_CODE_START);
+        String subStr = buttonSpec.substring(start + 1, buttonSpec.indexOf(KEY_IMAGE_DELIM));
+        return Integer.parseInt(subStr);
+    }
+
+    public static float extractSize(String buttonSpec) {
+        if (!buttonSpec.contains(SIZE_MOD_START)) {
+            return 1;
+        }
+        final int sizeStart = buttonSpec.indexOf(SIZE_MOD_START);
+        String sizeStr = buttonSpec.substring(sizeStart + 1, buttonSpec.indexOf(SIZE_MOD_END));
+        return Float.parseFloat(sizeStr);
+    }
+
+    public static String extractButton(String buttonSpec) {
+        if (!buttonSpec.contains(SIZE_MOD_START)) {
+            return buttonSpec;
+        }
+        return buttonSpec.substring(0, buttonSpec.indexOf(SIZE_MOD_START));
     }
 
     private void createInflaters() {
@@ -291,7 +319,7 @@ public class NavigationBarInflaterView extends FrameLayout
     }
 
     private View createView(String buttonSpec, ViewGroup parent, LayoutInflater inflater,
-            boolean landscape) {
+                            boolean landscape) {
         View v = null;
         String button = extractButton(buttonSpec);
         if (LEFT.equals(button)) {
@@ -337,47 +365,13 @@ public class NavigationBarInflaterView extends FrameLayout
         return v;
     }
 
-    public static String extractImage(String buttonSpec) {
-        if (!buttonSpec.contains(KEY_IMAGE_DELIM)) {
-            return null;
-        }
-        final int start = buttonSpec.indexOf(KEY_IMAGE_DELIM);
-        String subStr = buttonSpec.substring(start + 1, buttonSpec.indexOf(KEY_CODE_END));
-        return subStr;
-    }
-
-    public static int extractKeycode(String buttonSpec) {
-        if (!buttonSpec.contains(KEY_CODE_START)) {
-            return 1;
-        }
-        final int start = buttonSpec.indexOf(KEY_CODE_START);
-        String subStr = buttonSpec.substring(start + 1, buttonSpec.indexOf(KEY_IMAGE_DELIM));
-        return Integer.parseInt(subStr);
-    }
-
-    public static float extractSize(String buttonSpec) {
-        if (!buttonSpec.contains(SIZE_MOD_START)) {
-            return 1;
-        }
-        final int sizeStart = buttonSpec.indexOf(SIZE_MOD_START);
-        String sizeStr = buttonSpec.substring(sizeStart + 1, buttonSpec.indexOf(SIZE_MOD_END));
-        return Float.parseFloat(sizeStr);
-    }
-
-    public static String extractButton(String buttonSpec) {
-        if (!buttonSpec.contains(SIZE_MOD_START)) {
-            return buttonSpec;
-        }
-        return buttonSpec.substring(0, buttonSpec.indexOf(SIZE_MOD_START));
-    }
-
     private void addToDispatchers(View v) {
         if (mButtonDispatchers != null) {
             final int indexOfKey = mButtonDispatchers.indexOfKey(v.getId());
             if (indexOfKey >= 0) {
                 mButtonDispatchers.valueAt(indexOfKey).addView(v);
             } else if (v instanceof ViewGroup) {
-                final ViewGroup viewGroup = (ViewGroup)v;
+                final ViewGroup viewGroup = (ViewGroup) v;
                 final int N = viewGroup.getChildCount();
                 for (int i = 0; i < N; i++) {
                     addToDispatchers(viewGroup.getChildAt(i));
@@ -385,7 +379,6 @@ public class NavigationBarInflaterView extends FrameLayout
             }
         }
     }
-
 
 
     private void clearViews() {

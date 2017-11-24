@@ -21,9 +21,12 @@ import android.content.res.Configuration;
 
 import java.io.PrintWriter;
 
-public interface  BasePipManager {
+public interface BasePipManager {
     void initialize(Context context);
+
     void showPictureInPictureMenu();
+
     void onConfigurationChanged(Configuration newConfig);
+
     void dump(PrintWriter pw);
 }

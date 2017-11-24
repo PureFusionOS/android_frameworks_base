@@ -28,14 +28,14 @@ public class RecentsEntrancePathInterpolator extends PathInterpolator {
      * Create an interpolator for a cubic Bezier curve with an offset play time. The end points
      * <code>(0, 0)</code> and <code>(1, 1)</code> are assumed.
      *
-     * @param controlX1 The x coordinate of the first control point of the cubic Bezier.
-     * @param controlY1 The y coordinate of the first control point of the cubic Bezier.
-     * @param controlX2 The x coordinate of the second control point of the cubic Bezier.
-     * @param controlY2 The y coordinate of the second control point of the cubic Bezier.
+     * @param controlX1           The x coordinate of the first control point of the cubic Bezier.
+     * @param controlY1           The y coordinate of the first control point of the cubic Bezier.
+     * @param controlX2           The x coordinate of the second control point of the cubic Bezier.
+     * @param controlY2           The y coordinate of the second control point of the cubic Bezier.
      * @param startOffsetFraction The fraction from 0 to 1 to start the animation from
      */
     public RecentsEntrancePathInterpolator(float controlX1, float controlY1, float controlX2,
-            float controlY2, float startOffsetFraction) {
+                                           float controlY2, float startOffsetFraction) {
         super(controlX1, controlY1, controlX2, controlY2);
         mStartOffsetFraction = startOffsetFraction;
     }

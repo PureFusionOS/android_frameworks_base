@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 Copyright (C) 2015 The Android Open Source Project
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,53 +13,50 @@ Copyright (C) 2015 The Android Open Source Project
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<set
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="600"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="strokeColor"
         android:valueFrom="#FFFFFFFF"
-        android:valueTo="#FFF3511E"
-        android:interpolator="@android:interpolator/fast_out_slow_in" />
+        android:valueTo="#FFF3511E" />
     <objectAnimator
         android:duration="600"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="strokeAlpha"
         android:valueFrom="0.5"
         android:valueTo="1.0"
-        android:valueType="floatType"
-        android:interpolator="@android:interpolator/fast_out_slow_in" />
-    <set
-        android:ordering="sequentially" >
+        android:valueType="floatType" />
+    <set android:ordering="sequentially">
         <objectAnimator
             android:duration="166"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="trimPathOffset"
             android:valueFrom="1.0"
             android:valueTo="1.0"
-            android:valueType="floatType"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueType="floatType" />
         <objectAnimator
             android:duration="433"
+            android:interpolator="@interpolator/trusted_state_to_error_animation_interpolator_2"
             android:propertyName="trimPathOffset"
             android:valueFrom="1.0"
             android:valueTo="0.5"
-            android:valueType="floatType"
-            android:interpolator="@interpolator/trusted_state_to_error_animation_interpolator_2" />
+            android:valueType="floatType" />
     </set>
-    <set
-        android:ordering="sequentially" >
+    <set android:ordering="sequentially">
         <objectAnimator
             android:duration="166"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="trimPathStart"
             android:valueFrom="1.0"
             android:valueTo="1.0"
-            android:valueType="floatType"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueType="floatType" />
         <objectAnimator
             android:duration="433"
+            android:interpolator="@interpolator/trusted_state_to_error_animation_interpolator_0"
             android:propertyName="trimPathStart"
             android:valueFrom="1.0"
             android:valueTo="0.0"
-            android:valueType="floatType"
-            android:interpolator="@interpolator/trusted_state_to_error_animation_interpolator_0" />
+            android:valueType="floatType" />
     </set>
 </set>

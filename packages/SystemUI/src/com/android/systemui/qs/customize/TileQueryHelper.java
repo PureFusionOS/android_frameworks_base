@@ -53,7 +53,7 @@ public class TileQueryHelper {
     private final Runnable mCompletion;
 
     public TileQueryHelper(Context context, QSTileHost host,
-            TileStateListener listener, Runnable completion) {
+                           TileStateListener listener, Runnable completion) {
         mContext = context;
         mListener = listener;
         mHost = host;
@@ -176,7 +176,7 @@ public class TileQueryHelper {
     }
 
     private void addTile(String spec, Drawable drawable, CharSequence label, CharSequence appLabel,
-            Context context) {
+                         Context context) {
         QSTile.State state = new QSTile.State();
         state.label = label;
         state.contentDescription = label;
@@ -184,14 +184,14 @@ public class TileQueryHelper {
         addTile(spec, appLabel, state, false);
     }
 
+    public interface TileStateListener {
+        void onTilesChanged(List<TileInfo> tiles);
+    }
+
     public static class TileInfo {
         public String spec;
         public CharSequence appLabel;
         public QSTile.State state;
         public boolean isSystem;
-    }
-
-    public interface TileStateListener {
-        void onTilesChanged(List<TileInfo> tiles);
     }
 }

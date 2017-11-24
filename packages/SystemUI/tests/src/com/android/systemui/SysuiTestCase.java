@@ -40,13 +40,28 @@ import static org.mockito.Mockito.when;
 public abstract class SysuiTestCase {
 
     private static final String TAG = "SysuiTestCase";
-
-    private Handler mHandler;
     @Rule
     public SysuiTestableContext mContext = new SysuiTestableContext(
             InstrumentationRegistry.getContext(), getLeakCheck());
     public TestableDependency mDependency = new TestableDependency(mContext);
+    private Handler mHandler;
     private Instrumentation mRealInstrumentation;
+
+    public static void waitForIdleSync(Handler h) {
+        validateThread(h.getLooper());
+        Idler idler = new Idler(null);
+        h.getLooper().getQueue().addIdleHandler(idler);
+        // Ensure we are non-idle, so the idle handler can run.
+        h.post(new EmptyRunnable());
+        idler.waitForIdle();
+    }
+
+    private static final void validateThread(Looper l) {
+        if (Looper.myLooper() == l) {
+            throw new RuntimeException(
+                    "This method can not be called from the looper being synced");
+        }
+    }
 
     @Before
     public void SysuiSetup() throws Exception {
@@ -84,27 +99,12 @@ public abstract class SysuiTestCase {
     }
 
     protected void waitForUiOffloadThread() {
-        Future<?> future = Dependency.get(UiOffloadThread.class).submit(() -> {});
+        Future<?> future = Dependency.get(UiOffloadThread.class).submit(() -> {
+        });
         try {
             future.get();
         } catch (InterruptedException | ExecutionException e) {
             Log.e(TAG, "Failed to wait for ui offload thread.", e);
-        }
-    }
-
-    public static void waitForIdleSync(Handler h) {
-        validateThread(h.getLooper());
-        Idler idler = new Idler(null);
-        h.getLooper().getQueue().addIdleHandler(idler);
-        // Ensure we are non-idle, so the idle handler can run.
-        h.post(new EmptyRunnable());
-        idler.waitForIdle();
-    }
-
-    private static final void validateThread(Looper l) {
-        if (Looper.myLooper() == l) {
-            throw new RuntimeException(
-                "This method can not be called from the looper being synced");
         }
     }
 

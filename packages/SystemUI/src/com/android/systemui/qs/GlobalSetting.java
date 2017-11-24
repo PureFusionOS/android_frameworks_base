@@ -23,18 +23,20 @@ import android.provider.Settings.Global;
 
 import com.android.systemui.statusbar.policy.Listenable;
 
-/** Helper for managing a global setting. **/
+/**
+ * Helper for managing a global setting.
+ **/
 public abstract class GlobalSetting extends ContentObserver implements Listenable {
     private final Context mContext;
     private final String mSettingName;
-
-    protected abstract void handleValueChanged(int value);
 
     public GlobalSetting(Context context, Handler handler, String settingName) {
         super(handler);
         mContext = context;
         mSettingName = settingName;
     }
+
+    protected abstract void handleValueChanged(int value);
 
     public int getValue() {
         return Global.getInt(mContext.getContentResolver(), mSettingName, 0);

@@ -41,80 +41,6 @@ public class RecentsImplProxy extends IRecentsNonSystemUserCallbacks.Stub {
     private static final int MSG_SHOW_USER_TOAST = 10;
 
     private RecentsImpl mImpl;
-
-    public RecentsImplProxy(RecentsImpl recentsImpl) {
-        mImpl = recentsImpl;
-    }
-
-    @Override
-    public void preloadRecents() throws RemoteException {
-        mHandler.sendEmptyMessage(MSG_PRELOAD_RECENTS);
-    }
-
-    @Override
-    public void cancelPreloadingRecents() throws RemoteException {
-        mHandler.sendEmptyMessage(MSG_CANCEL_PRELOADING_RECENTS);
-    }
-
-    @Override
-    public void showRecents(boolean triggeredFromAltTab, boolean draggingInRecents, boolean animate,
-            boolean reloadTasks, boolean fromHome, int growTarget)
-            throws RemoteException {
-        SomeArgs args = SomeArgs.obtain();
-        args.argi1 = triggeredFromAltTab ? 1 : 0;
-        args.argi2 = draggingInRecents ? 1 : 0;
-        args.argi3 = animate ? 1 : 0;
-        args.argi4 = reloadTasks ? 1 : 0;
-        args.argi5 = fromHome ? 1 : 0;
-        args.argi6 = growTarget;
-        mHandler.sendMessage(mHandler.obtainMessage(MSG_SHOW_RECENTS, args));
-    }
-
-    @Override
-    public void hideRecents(boolean triggeredFromAltTab, boolean triggeredFromHomeKey)
-            throws RemoteException {
-        mHandler.sendMessage(mHandler.obtainMessage(MSG_HIDE_RECENTS, triggeredFromAltTab ? 1 :0,
-                triggeredFromHomeKey ? 1 : 0));
-    }
-
-    @Override
-    public void toggleRecents(int growTarget) throws RemoteException {
-        SomeArgs args = SomeArgs.obtain();
-        args.argi1 = growTarget;
-        mHandler.sendMessage(mHandler.obtainMessage(MSG_TOGGLE_RECENTS, args));
-    }
-
-    @Override
-    public void onConfigurationChanged() throws RemoteException {
-        mHandler.sendEmptyMessage(MSG_ON_CONFIGURATION_CHANGED);
-    }
-
-    @Override
-    public void dockTopTask(int topTaskId, int dragMode, int stackCreateMode,
-            Rect initialBounds) throws RemoteException {
-        SomeArgs args = SomeArgs.obtain();
-        args.argi1 = topTaskId;
-        args.argi2 = dragMode;
-        args.argi3 = stackCreateMode;
-        args.arg1 = initialBounds;
-        mHandler.sendMessage(mHandler.obtainMessage(MSG_DOCK_TOP_TASK, args));
-    }
-
-    @Override
-    public void onDraggingInRecents(float distanceFromTop) throws RemoteException {
-        mHandler.sendMessage(mHandler.obtainMessage(MSG_ON_DRAGGING_IN_RECENTS, distanceFromTop));
-    }
-
-    @Override
-    public void onDraggingInRecentsEnded(float velocity) throws RemoteException {
-        mHandler.sendMessage(mHandler.obtainMessage(MSG_ON_DRAGGING_IN_RECENTS_ENDED, velocity));
-    }
-
-    @Override
-    public void showCurrentUserToast(int msgResId, int msgLength) {
-        mHandler.sendMessage(mHandler.obtainMessage(MSG_SHOW_USER_TOAST, msgResId, msgLength));
-    }
-
     private final Handler mHandler = new Handler() {
 
         @Override
@@ -162,4 +88,77 @@ public class RecentsImplProxy extends IRecentsNonSystemUserCallbacks.Stub {
             super.handleMessage(msg);
         }
     };
+
+    public RecentsImplProxy(RecentsImpl recentsImpl) {
+        mImpl = recentsImpl;
+    }
+
+    @Override
+    public void preloadRecents() throws RemoteException {
+        mHandler.sendEmptyMessage(MSG_PRELOAD_RECENTS);
+    }
+
+    @Override
+    public void cancelPreloadingRecents() throws RemoteException {
+        mHandler.sendEmptyMessage(MSG_CANCEL_PRELOADING_RECENTS);
+    }
+
+    @Override
+    public void showRecents(boolean triggeredFromAltTab, boolean draggingInRecents, boolean animate,
+                            boolean reloadTasks, boolean fromHome, int growTarget)
+            throws RemoteException {
+        SomeArgs args = SomeArgs.obtain();
+        args.argi1 = triggeredFromAltTab ? 1 : 0;
+        args.argi2 = draggingInRecents ? 1 : 0;
+        args.argi3 = animate ? 1 : 0;
+        args.argi4 = reloadTasks ? 1 : 0;
+        args.argi5 = fromHome ? 1 : 0;
+        args.argi6 = growTarget;
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_SHOW_RECENTS, args));
+    }
+
+    @Override
+    public void hideRecents(boolean triggeredFromAltTab, boolean triggeredFromHomeKey)
+            throws RemoteException {
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_HIDE_RECENTS, triggeredFromAltTab ? 1 : 0,
+                triggeredFromHomeKey ? 1 : 0));
+    }
+
+    @Override
+    public void toggleRecents(int growTarget) throws RemoteException {
+        SomeArgs args = SomeArgs.obtain();
+        args.argi1 = growTarget;
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_TOGGLE_RECENTS, args));
+    }
+
+    @Override
+    public void onConfigurationChanged() throws RemoteException {
+        mHandler.sendEmptyMessage(MSG_ON_CONFIGURATION_CHANGED);
+    }
+
+    @Override
+    public void dockTopTask(int topTaskId, int dragMode, int stackCreateMode,
+                            Rect initialBounds) throws RemoteException {
+        SomeArgs args = SomeArgs.obtain();
+        args.argi1 = topTaskId;
+        args.argi2 = dragMode;
+        args.argi3 = stackCreateMode;
+        args.arg1 = initialBounds;
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_DOCK_TOP_TASK, args));
+    }
+
+    @Override
+    public void onDraggingInRecents(float distanceFromTop) throws RemoteException {
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_ON_DRAGGING_IN_RECENTS, distanceFromTop));
+    }
+
+    @Override
+    public void onDraggingInRecentsEnded(float velocity) throws RemoteException {
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_ON_DRAGGING_IN_RECENTS_ENDED, velocity));
+    }
+
+    @Override
+    public void showCurrentUserToast(int msgResId, int msgLength) {
+        mHandler.sendMessage(mHandler.obtainMessage(MSG_SHOW_USER_TOAST, msgResId, msgLength));
+    }
 }

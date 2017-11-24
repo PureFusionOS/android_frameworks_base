@@ -45,7 +45,7 @@ public class GridTaskViewThumbnail extends TaskViewThumbnail {
     }
 
     public GridTaskViewThumbnail(Context context, AttributeSet attrs, int defStyleAttr,
-        int defStyleRes) {
+                                 int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         mCornerRadius = getResources().getDimensionPixelSize(
                 R.dimen.recents_grid_task_view_rounded_corners_radius);
@@ -70,13 +70,13 @@ public class GridTaskViewThumbnail extends TaskViewThumbnail {
 
     private void updateThumbnailOutline() {
         final int titleHeight = getResources().getDimensionPixelSize(
-            R.dimen.recents_grid_task_view_header_height);
+                R.dimen.recents_grid_task_view_header_height);
         final int viewWidth = mTaskViewRect.width();
         final int viewHeight = mTaskViewRect.height() - titleHeight;
         final int thumbnailWidth = Math.min(viewWidth,
-            (int) (mThumbnailRect.width() * mThumbnailScale));
+                (int) (mThumbnailRect.width() * mThumbnailScale));
         final int thumbnailHeight = Math.min(viewHeight,
-            (int) (mThumbnailRect.height() * mThumbnailScale));
+                (int) (mThumbnailRect.height() * mThumbnailScale));
         // Draw the thumbnail, we only round the bottom corners:
         //
         // outerLeft                outerRight
@@ -103,7 +103,7 @@ public class GridTaskViewThumbnail extends TaskViewThumbnail {
         mThumbnailOutline.moveTo(outerLeft, outerTop);
         mThumbnailOutline.lineTo(outerRight, outerTop);
         mThumbnailOutline.lineTo(outerRight, outerBottom - mCornerRadius);
-        mThumbnailOutline.arcTo(outerRight -  2 * mCornerRadius, outerBottom - 2 * mCornerRadius,
+        mThumbnailOutline.arcTo(outerRight - 2 * mCornerRadius, outerBottom - 2 * mCornerRadius,
                 outerRight, outerBottom, 0, 90, false);
         mThumbnailOutline.lineTo(outerLeft + mCornerRadius, outerBottom);
         mThumbnailOutline.arcTo(outerLeft, outerBottom - 2 * mCornerRadius,
@@ -121,7 +121,7 @@ public class GridTaskViewThumbnail extends TaskViewThumbnail {
                 mRestBackgroundOutline.moveTo(l, t); // A
                 mRestBackgroundOutline.lineTo(r, t); // B
                 mRestBackgroundOutline.lineTo(r, b - mCornerRadius); // C
-                mRestBackgroundOutline.arcTo(r -  2 * mCornerRadius, b - 2 * mCornerRadius, r, b,
+                mRestBackgroundOutline.arcTo(r - 2 * mCornerRadius, b - 2 * mCornerRadius, r, b,
                         0, 90, false); // D
                 mRestBackgroundOutline.lineTo(l, b); // E
                 mRestBackgroundOutline.lineTo(l, t); // A
@@ -137,7 +137,7 @@ public class GridTaskViewThumbnail extends TaskViewThumbnail {
                 mRestBackgroundOutline.moveTo(l, t); // A
                 mRestBackgroundOutline.lineTo(r, t); // B
                 mRestBackgroundOutline.lineTo(r, b - mCornerRadius); // C
-                mRestBackgroundOutline.arcTo(r -  2 * mCornerRadius, b - 2 * mCornerRadius, r, b,
+                mRestBackgroundOutline.arcTo(r - 2 * mCornerRadius, b - 2 * mCornerRadius, r, b,
                         0, 90, false); // D
                 mRestBackgroundOutline.lineTo(l + mCornerRadius, b); // E
                 mRestBackgroundOutline.arcTo(l, b - 2 * mCornerRadius, l + 2 * mCornerRadius, b,
@@ -151,13 +151,13 @@ public class GridTaskViewThumbnail extends TaskViewThumbnail {
     @Override
     protected void onDraw(Canvas canvas) {
         final int titleHeight = getResources().getDimensionPixelSize(
-            R.dimen.recents_grid_task_view_header_height);
+                R.dimen.recents_grid_task_view_header_height);
         final int viewWidth = mTaskViewRect.width();
         final int viewHeight = mTaskViewRect.height() - titleHeight;
         final int thumbnailWidth = Math.min(viewWidth,
-            (int) (mThumbnailRect.width() * mThumbnailScale));
+                (int) (mThumbnailRect.width() * mThumbnailScale));
         final int thumbnailHeight = Math.min(viewHeight,
-            (int) (mThumbnailRect.height() * mThumbnailScale));
+                (int) (mThumbnailRect.height() * mThumbnailScale));
 
         if (mUpdateThumbnailOutline) {
             updateThumbnailOutline();

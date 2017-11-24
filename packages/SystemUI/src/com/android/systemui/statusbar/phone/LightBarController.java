@@ -39,8 +39,9 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
 
     private final DarkIconDispatcher mStatusBarIconController;
     private final BatteryController mBatteryController;
+    private final Rect mLastFullscreenBounds = new Rect();
+    private final Rect mLastDockedBounds = new Rect();
     private FingerprintUnlockController mFingerprintUnlockController;
-
     private LightBarTransitionsController mNavigationBarController;
     private int mSystemUiVisibility;
     private int mFullscreenStackVisibility;
@@ -49,12 +50,10 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
     private boolean mDockedLight;
     private int mLastStatusBarMode;
     private int mLastNavigationBarMode;
-
     /**
      * Whether the navigation bar should be light factoring in already how much alpha the scrim has
      */
     private boolean mNavigationLight;
-
     /**
      * Whether the flags indicate that a light status bar is requested. This doesn't factor in the
      * scrim alpha yet.
@@ -62,9 +61,6 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
     private boolean mHasLightNavigationBar;
     private boolean mScrimAlphaBelowThreshold;
     private float mScrimAlpha;
-
-    private final Rect mLastFullscreenBounds = new Rect();
-    private final Rect mLastDockedBounds = new Rect();
 
     public LightBarController() {
         mStatusBarIconController = Dependency.get(DarkIconDispatcher.class);
@@ -82,8 +78,8 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
     }
 
     public void onSystemUiVisibilityChanged(int fullscreenStackVis, int dockedStackVis,
-            int mask, Rect fullscreenStackBounds, Rect dockedStackBounds, boolean sbModeChanged,
-            int statusBarMode) {
+                                            int mask, Rect fullscreenStackBounds, Rect dockedStackBounds, boolean sbModeChanged,
+                                            int statusBarMode) {
         int oldFullscreen = mFullscreenStackVisibility;
         int newFullscreen = (oldFullscreen & ~mask) | (fullscreenStackVis & mask);
         int diffFullscreen = newFullscreen ^ oldFullscreen;
@@ -110,7 +106,7 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
     }
 
     public void onNavigationVisibilityChanged(int vis, int mask, boolean nbModeChanged,
-            int navigationBarMode) {
+                                              int navigationBarMode) {
         int oldVis = mSystemUiVisibility;
         int newVis = (oldVis & ~mask) | (vis & mask);
         int diffVis = newVis ^ oldVis;
@@ -212,27 +208,40 @@ public class LightBarController implements BatteryController.BatteryStateChangeC
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("LightBarController: ");
-        pw.print(" mSystemUiVisibility=0x"); pw.print(
+        pw.print(" mSystemUiVisibility=0x");
+        pw.print(
                 Integer.toHexString(mSystemUiVisibility));
-        pw.print(" mFullscreenStackVisibility=0x"); pw.print(
+        pw.print(" mFullscreenStackVisibility=0x");
+        pw.print(
                 Integer.toHexString(mFullscreenStackVisibility));
-        pw.print(" mDockedStackVisibility=0x"); pw.println(
+        pw.print(" mDockedStackVisibility=0x");
+        pw.println(
                 Integer.toHexString(mDockedStackVisibility));
 
-        pw.print(" mFullscreenLight="); pw.print(mFullscreenLight);
-        pw.print(" mDockedLight="); pw.println(mDockedLight);
+        pw.print(" mFullscreenLight=");
+        pw.print(mFullscreenLight);
+        pw.print(" mDockedLight=");
+        pw.println(mDockedLight);
 
-        pw.print(" mLastFullscreenBounds="); pw.print(mLastFullscreenBounds);
-        pw.print(" mLastDockedBounds="); pw.println(mLastDockedBounds);
+        pw.print(" mLastFullscreenBounds=");
+        pw.print(mLastFullscreenBounds);
+        pw.print(" mLastDockedBounds=");
+        pw.println(mLastDockedBounds);
 
-        pw.print(" mNavigationLight="); pw.print(mNavigationLight);
-        pw.print(" mHasLightNavigationBar="); pw.println(mHasLightNavigationBar);
+        pw.print(" mNavigationLight=");
+        pw.print(mNavigationLight);
+        pw.print(" mHasLightNavigationBar=");
+        pw.println(mHasLightNavigationBar);
 
-        pw.print(" mLastStatusBarMode="); pw.print(mLastStatusBarMode);
-        pw.print(" mLastNavigationBarMode="); pw.println(mLastNavigationBarMode);
+        pw.print(" mLastStatusBarMode=");
+        pw.print(mLastStatusBarMode);
+        pw.print(" mLastNavigationBarMode=");
+        pw.println(mLastNavigationBarMode);
 
-        pw.print(" mScrimAlpha="); pw.print(mScrimAlpha);
-        pw.print(" mScrimAlphaBelowThreshold="); pw.println(mScrimAlphaBelowThreshold);
+        pw.print(" mScrimAlpha=");
+        pw.print(mScrimAlpha);
+        pw.print(" mScrimAlphaBelowThreshold=");
+        pw.println(mScrimAlphaBelowThreshold);
         pw.println();
         pw.println(" StatusBarTransitionsController:");
         mStatusBarIconController.getTransitionsController().dump(fd, pw, args);

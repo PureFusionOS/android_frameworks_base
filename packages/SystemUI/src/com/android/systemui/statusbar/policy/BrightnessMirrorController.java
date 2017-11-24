@@ -37,15 +37,14 @@ import com.android.systemui.statusbar.stack.NotificationStackScrollLayout;
 public class BrightnessMirrorController {
 
     private final NotificationStackScrollLayout mStackScroller;
-    public long TRANSITION_DURATION_OUT = 150;
-    public long TRANSITION_DURATION_IN = 200;
-
     private final StatusBarWindowView mStatusBarWindow;
     private final ScrimView mScrimBehind;
     private final View mNotificationPanel;
     private final int[] mInt2Cache = new int[2];
-    private View mBrightnessMirror;
     private final ImageView mIcon;
+    public long TRANSITION_DURATION_OUT = 150;
+    public long TRANSITION_DURATION_IN = 200;
+    private View mBrightnessMirror;
     private Context mContext;
 
     public BrightnessMirrorController(Context context, StatusBarWindowView statusBarWindow) {
@@ -89,6 +88,7 @@ public class BrightnessMirrorController {
                 .setInterpolator(Interpolators.ALPHA_OUT)
                 .withEndAction(null);
     }
+
     private ViewPropertyAnimator inAnimation(ViewPropertyAnimator a) {
         return a.alpha(1.0f)
                 .setDuration(TRANSITION_DURATION_IN)
