@@ -16,13 +16,8 @@
 
 package com.android.systemui.chaos.lab.gestureanywhere;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.util.List;
-
 import android.annotation.ChaosLab;
 import android.annotation.ChaosLab.Classification;
-import android.app.StatusBarManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -50,9 +45,14 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
+
 import com.android.systemui.R;
 import com.android.systemui.chaos.TriggerOverlayView;
 import com.android.systemui.statusbar.phone.StatusBar;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.List;
 
 import static android.view.KeyEvent.ACTION_DOWN;
 import static android.view.KeyEvent.KEYCODE_BACK;

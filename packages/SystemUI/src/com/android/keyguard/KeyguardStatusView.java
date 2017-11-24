@@ -20,18 +20,14 @@ import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.Typeface;
 import android.os.UserHandle;
-import android.provider.AlarmClock;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -52,8 +48,6 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.systemui.ChargingView;
 import com.android.systemui.statusbar.policy.DateView;
 
-import java.util.Date;
-import java.text.NumberFormat;
 import java.util.Locale;
 
 public class KeyguardStatusView extends GridLayout implements

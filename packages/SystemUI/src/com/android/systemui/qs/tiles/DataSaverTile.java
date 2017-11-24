@@ -19,13 +19,12 @@ import android.content.Intent;
 import android.service.quicksettings.Tile;
 import android.widget.Switch;
 
-import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.systemui.Dependency;
 import com.android.systemui.Prefs;
 import com.android.systemui.R;
-import com.android.systemui.qs.QSHost;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.DataSaverController;

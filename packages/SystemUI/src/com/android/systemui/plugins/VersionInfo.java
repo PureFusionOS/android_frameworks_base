@@ -14,13 +14,13 @@
 
 package com.android.systemui.plugins;
 
+import android.util.ArrayMap;
+
 import com.android.systemui.plugins.annotations.Dependencies;
 import com.android.systemui.plugins.annotations.DependsOn;
 import com.android.systemui.plugins.annotations.ProvidesInterface;
 import com.android.systemui.plugins.annotations.Requirements;
 import com.android.systemui.plugins.annotations.Requires;
-
-import android.util.ArrayMap;
 
 public class VersionInfo {
 

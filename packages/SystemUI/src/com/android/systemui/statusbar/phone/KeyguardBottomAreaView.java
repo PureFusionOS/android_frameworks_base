@@ -16,14 +16,6 @@
 
 package com.android.systemui.statusbar.phone;
 
-import static android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK;
-import static android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
-
-import static com.android.systemui.tuner.LockscreenFragment.LOCKSCREEN_LEFT_BUTTON;
-import static com.android.systemui.tuner.LockscreenFragment.LOCKSCREEN_LEFT_UNLOCK;
-import static com.android.systemui.tuner.LockscreenFragment.LOCKSCREEN_RIGHT_BUTTON;
-import static com.android.systemui.tuner.LockscreenFragment.LOCKSCREEN_RIGHT_UNLOCK;
-
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.admin.DevicePolicyManager;
@@ -63,17 +55,14 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
-import com.android.systemui.EventLogTags;
 import com.android.systemui.Dependency;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.assist.AssistManager;
+import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.IntentButtonProvider;
 import com.android.systemui.plugins.IntentButtonProvider.IntentButton;
 import com.android.systemui.plugins.IntentButtonProvider.IntentButton.IconState;
-import com.android.systemui.plugins.PluginListener;
-import com.android.systemui.plugins.PluginManager;
-import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.KeyguardAffordanceView;
 import com.android.systemui.statusbar.KeyguardIndicationController;
@@ -82,10 +71,15 @@ import com.android.systemui.statusbar.policy.ExtensionController;
 import com.android.systemui.statusbar.policy.ExtensionController.Extension;
 import com.android.systemui.statusbar.policy.FlashlightController;
 import com.android.systemui.statusbar.policy.PreviewInflater;
-import com.android.systemui.tuner.LockscreenFragment;
 import com.android.systemui.tuner.LockscreenFragment.LockButtonFactory;
 import com.android.systemui.tuner.TunerService;
-import com.android.systemui.tuner.TunerService.Tunable;
+
+import static android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK;
+import static android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
+import static com.android.systemui.tuner.LockscreenFragment.LOCKSCREEN_LEFT_BUTTON;
+import static com.android.systemui.tuner.LockscreenFragment.LOCKSCREEN_LEFT_UNLOCK;
+import static com.android.systemui.tuner.LockscreenFragment.LOCKSCREEN_RIGHT_BUTTON;
+import static com.android.systemui.tuner.LockscreenFragment.LOCKSCREEN_RIGHT_UNLOCK;
 
 /**
  * Implementation for the bottom area of the Keyguard, including camera/phone affordance and status

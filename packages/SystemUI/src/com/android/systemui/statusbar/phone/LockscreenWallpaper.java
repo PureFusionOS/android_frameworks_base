@@ -40,9 +40,9 @@ import android.util.Log;
 
 import com.android.keyguard.KeyguardUpdateMonitor;
 
-import libcore.io.IoUtils;
-
 import java.util.Objects;
+
+import libcore.io.IoUtils;
 
 /**
  * Manages the lockscreen wallpaper.

@@ -16,14 +16,6 @@
 
 package com.android.systemui.keyguard;
 
-import static android.app.ActivityManager.TaskDescription;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.when;
-
-import android.support.test.filters.SmallTest;
-import android.support.test.runner.AndroidJUnit4;
-
 import android.annotation.ColorInt;
 import android.annotation.UserIdInt;
 import android.app.KeyguardManager;
@@ -32,15 +24,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Looper;
+import android.support.test.filters.SmallTest;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.android.systemui.SysuiTestCase;
-import com.android.systemui.keyguard.WorkLockActivity;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static android.app.ActivityManager.TaskDescription;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.when;
 
 /**
  * runtest systemui -c com.android.systemui.keyguard.WorkLockActivityTest

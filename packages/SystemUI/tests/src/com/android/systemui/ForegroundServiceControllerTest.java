@@ -24,6 +24,7 @@ import android.os.UserHandle;
 import android.service.notification.StatusBarNotification;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
+
 import com.android.internal.messages.nano.SystemMessageProto;
 
 import org.junit.Before;

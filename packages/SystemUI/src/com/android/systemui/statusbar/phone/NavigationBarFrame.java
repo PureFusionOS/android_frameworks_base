@@ -14,19 +14,19 @@
 
 package com.android.systemui.statusbar.phone;
 
-import static android.view.MotionEvent.ACTION_OUTSIDE;
-
 import android.annotation.AttrRes;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 import com.android.internal.util.fusion.PureFusionUtils;
 import com.android.systemui.statusbar.policy.DeadZone;
+
+import static android.view.MotionEvent.ACTION_OUTSIDE;
 
 public class NavigationBarFrame extends FrameLayout {
 

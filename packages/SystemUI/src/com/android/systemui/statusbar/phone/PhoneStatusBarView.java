@@ -24,8 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.android.systemui.BatteryMeterView;
-import com.android.systemui.DejankUtils;
 import com.android.systemui.Dependency;
 import com.android.systemui.EventLogTags;
 import com.android.systemui.R;

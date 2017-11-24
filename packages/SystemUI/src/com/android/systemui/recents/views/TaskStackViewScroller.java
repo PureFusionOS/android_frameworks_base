@@ -22,7 +22,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.FloatProperty;
 import android.util.Log;
-import android.util.MutableFloat;
 import android.util.Property;
 import android.view.ViewDebug;
 import android.widget.OverScroller;

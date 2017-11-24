@@ -16,18 +16,6 @@
 
 package com.android.systemui.pip.phone;
 
-import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_ACTIONS;
-import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_ALLOW_TIMEOUT;
-import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_CONTROLLER_MESSENGER;
-import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_DISMISS_FRACTION;
-import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_MOVEMENT_BOUNDS;
-import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_MENU_STATE;
-import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_STACK_BOUNDS;
-
-import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_NONE;
-import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_CLOSE;
-import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_FULL;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -69,6 +57,17 @@ import com.android.systemui.recents.events.component.HidePipMenuEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_ACTIONS;
+import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_ALLOW_TIMEOUT;
+import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_CONTROLLER_MESSENGER;
+import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_DISMISS_FRACTION;
+import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_MENU_STATE;
+import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_MOVEMENT_BOUNDS;
+import static com.android.systemui.pip.phone.PipMenuActivityController.EXTRA_STACK_BOUNDS;
+import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_CLOSE;
+import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_FULL;
+import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_NONE;
 
 /**
  * Translucent activity that gets started on top of a task in PIP to allow the user to control it.

@@ -16,21 +16,19 @@
 
 package com.android.systemui.pip.phone;
 
-import static android.view.WindowManager.INPUT_CONSUMER_PIP;
-
 import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.BatchedInputEventReceiver;
 import android.view.Choreographer;
+import android.view.IWindowManager;
 import android.view.InputChannel;
 import android.view.InputEvent;
-import android.view.IWindowManager;
 import android.view.MotionEvent;
 
-import com.android.systemui.recents.misc.Utilities;
-
 import java.io.PrintWriter;
+
+import static android.view.WindowManager.INPUT_CONSUMER_PIP;
 
 /**
  * Manages the input consumer that allows the SystemUI to control the PiP.

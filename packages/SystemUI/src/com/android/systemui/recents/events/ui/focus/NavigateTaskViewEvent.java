@@ -17,6 +17,7 @@
 package com.android.systemui.recents.events.ui.focus;
 
 import android.view.KeyEvent;
+
 import com.android.systemui.recents.events.EventBus;
 
 /**

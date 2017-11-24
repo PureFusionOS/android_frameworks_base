@@ -16,10 +16,10 @@
 
 package com.android.systemui;
 
-import com.android.systemui.util.Assert;
-
 import android.os.Handler;
 import android.view.Choreographer;
+
+import com.android.systemui.util.Assert;
 
 import java.util.ArrayList;
 

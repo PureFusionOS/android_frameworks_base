@@ -14,7 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
 
     <!-- Should we listen for fingerprints when the screen is off?  Devices
          with a rear-mounted sensor want this, but certain devices have

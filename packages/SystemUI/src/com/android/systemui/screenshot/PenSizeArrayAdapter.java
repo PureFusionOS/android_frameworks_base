@@ -19,22 +19,18 @@
 package com.android.systemui.screenshot;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.drawable.BitmapDrawable;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import android.widget.TextView;
 
 import com.android.systemui.R;
 

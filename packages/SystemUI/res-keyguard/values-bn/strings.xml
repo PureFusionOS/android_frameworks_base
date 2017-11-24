@@ -18,8 +18,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name" msgid="3171996292755059205">"কীগার্ড"</string>
     <string name="keyguard_password_enter_pin_code" msgid="3420548423949593123">"পিন কোড লিখুন"</string>
     <string name="keyguard_password_enter_puk_code" msgid="670683628782925409">"সিম PUK এবং নতুন পিন কোড লিখুন"</string>

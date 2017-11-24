@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="mock_android">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/tools/layoutlib/create/tests/data/mock_android.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

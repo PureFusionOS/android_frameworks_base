@@ -17,8 +17,6 @@
 package com.android.systemui;
 
 import android.graphics.Rect;
-import android.view.Display;
-import android.view.View;
 
 public interface RecentsComponent {
     void showRecentApps(boolean triggeredFromAltTab, boolean fromHome);

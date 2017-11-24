@@ -23,11 +23,10 @@ import android.service.quicksettings.Tile;
 import android.widget.Switch;
 
 import com.android.internal.app.NightDisplayController;
-import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.systemui.R;
-import com.android.systemui.qs.QSHost;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 public class NightDisplayTile extends QSTileImpl<BooleanState>

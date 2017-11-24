@@ -13,9 +13,9 @@
  */
 package com.android.systemui.plugins;
 
-import com.android.systemui.plugins.annotations.ProvidesInterface;
-
 import android.view.View;
+
+import com.android.systemui.plugins.annotations.ProvidesInterface;
 
 @ProvidesInterface(action = OverlayPlugin.ACTION, version = OverlayPlugin.VERSION)
 public interface OverlayPlugin extends Plugin {

@@ -15,9 +15,6 @@
  */
 package com.android.keyguard;
 
-import static com.android.keyguard.LatencyTracker.ACTION_CHECK_CREDENTIAL;
-import static com.android.keyguard.LatencyTracker.ACTION_CHECK_CREDENTIAL_UNLOCKED;
-
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -41,6 +38,9 @@ import com.android.settingslib.animation.AppearAnimationUtils;
 import com.android.settingslib.animation.DisappearAnimationUtils;
 
 import java.util.List;
+
+import static com.android.keyguard.LatencyTracker.ACTION_CHECK_CREDENTIAL;
+import static com.android.keyguard.LatencyTracker.ACTION_CHECK_CREDENTIAL_UNLOCKED;
 
 public class KeyguardPatternView extends LinearLayout implements KeyguardSecurityView,
         AppearAnimationCreator<LockPatternView.CellState>,

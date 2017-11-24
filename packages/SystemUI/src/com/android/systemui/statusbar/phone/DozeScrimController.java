@@ -23,14 +23,11 @@ import android.annotation.NonNull;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.view.animation.Interpolator;
 
-import com.android.keyguard.KeyguardStatusView;
 import com.android.systemui.Interpolators;
 import com.android.systemui.doze.DozeHost;
 import com.android.systemui.doze.DozeLog;
-import com.android.systemui.doze.DozeTriggers;
 
 /**
  * Controller which handles all the doze animations of the scrims.

@@ -20,7 +20,6 @@ import android.support.v14.preference.PreferenceFragment;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
-import com.android.systemui.tuner.TunerActivity;
 
 public class LockscreenTunerActivity extends TunerActivity {
 

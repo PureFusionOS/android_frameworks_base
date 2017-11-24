@@ -16,13 +16,6 @@
 
 package com.android.systemui.util.leak;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 import android.app.NotificationManager;
 import android.support.test.filters.MediumTest;
 import android.support.test.runner.AndroidJUnit4;
@@ -37,6 +30,13 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.PrintWriter;
+
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidJUnit4.class)
 @MediumTest

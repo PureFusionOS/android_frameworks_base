@@ -38,7 +38,6 @@ import com.android.systemui.plugins.PluginInstanceManager;
 import com.android.systemui.plugins.PluginManager;
 import com.android.systemui.plugins.PluginPrefs;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 

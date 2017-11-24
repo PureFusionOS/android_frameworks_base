@@ -16,11 +16,6 @@
 
 package com.android.systemui.recents;
 
-import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
-import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
-import static android.app.ActivityManager.StackId.isHomeOrRecentsStack;
-import static android.view.View.MeasureSpec;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.TaskSnapshot;
 import android.app.ActivityOptions;
@@ -28,8 +23,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.GraphicBuffer;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -43,10 +36,7 @@ import android.view.AppTransitionAnimationSpec;
 import android.view.LayoutInflater;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
-
 import android.widget.Toast;
-
-import com.google.android.collect.Lists;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.policy.DockedDividerUtils;
@@ -91,8 +81,14 @@ import com.android.systemui.recents.views.grid.TaskGridLayoutAlgorithm;
 import com.android.systemui.stackdivider.DividerView;
 import com.android.systemui.statusbar.phone.NavigationBarGestureHelper;
 import com.android.systemui.statusbar.phone.StatusBar;
+import com.google.android.collect.Lists;
 
 import java.util.ArrayList;
+
+import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
+import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
+import static android.app.ActivityManager.StackId.isHomeOrRecentsStack;
+import static android.view.View.MeasureSpec;
 
 /**
  * An implementation of the Recents component for the current user.  For secondary users, this can

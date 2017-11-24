@@ -34,15 +34,16 @@ import android.service.quicksettings.TileService;
 import android.util.Log;
 import android.view.IWindowManager;
 import android.view.WindowManagerGlobal;
-import com.android.internal.logging.MetricsLogger;
+
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.systemui.Dependency;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTile.State;
-import com.android.systemui.qs.tileimpl.QSTileImpl;
-import com.android.systemui.qs.external.TileLifecycleManager.TileChangeListener;
 import com.android.systemui.qs.QSTileHost;
+import com.android.systemui.qs.external.TileLifecycleManager.TileChangeListener;
+import com.android.systemui.qs.tileimpl.QSTileImpl;
+
 import libcore.util.Objects;
 
 import static android.view.Display.DEFAULT_DISPLAY;

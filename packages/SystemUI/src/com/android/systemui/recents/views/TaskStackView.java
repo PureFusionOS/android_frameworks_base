@@ -16,10 +16,6 @@
 
 package com.android.systemui.recents.views;
 
-import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
-import static android.app.ActivityManager.StackId.FULLSCREEN_WORKSPACE_STACK_ID;
-import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -110,6 +106,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
+import static android.app.ActivityManager.StackId.FULLSCREEN_WORKSPACE_STACK_ID;
+import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
 
 
 /* The visual representation of a task stack view */

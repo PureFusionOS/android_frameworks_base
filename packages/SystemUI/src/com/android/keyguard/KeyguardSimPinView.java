@@ -16,19 +16,14 @@
 
 package com.android.keyguard;
 
-import com.android.internal.telephony.ITelephony;
-import com.android.internal.telephony.IccCardConstants;
-import com.android.internal.telephony.IccCardConstants.State;
-import com.android.internal.telephony.PhoneConstants;
-
-import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -39,6 +34,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
+
+import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.IccCardConstants;
+import com.android.internal.telephony.IccCardConstants.State;
+import com.android.internal.telephony.PhoneConstants;
 
 /**
  * Displays a PIN pad for unlocking.

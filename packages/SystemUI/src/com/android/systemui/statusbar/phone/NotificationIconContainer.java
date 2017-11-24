@@ -23,7 +23,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Icon;
 import android.support.v4.util.ArrayMap;
-import android.support.v4.util.ArraySet;
 import android.util.AttributeSet;
 import android.view.View;
 

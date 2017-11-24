@@ -14,7 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
 
     <!-- those are dpi values! -->
     <string-array name="crop_pen_size_entries" translatable="false">

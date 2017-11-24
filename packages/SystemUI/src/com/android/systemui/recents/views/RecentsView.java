@@ -16,16 +16,13 @@
 
 package com.android.systemui.recents.views;
 
-import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
-
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.app.ActivityOptions.OnAnimationStartedListener;
-import android.content.Context;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.graphics.Canvas;
@@ -34,25 +31,23 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.UserHandle;
 import android.os.Handler;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.ArraySet;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.AppTransitionAnimationSpec;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewDebug;
 import android.view.ViewPropertyAnimator;
 import android.view.WindowInsets;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ImageButton;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
@@ -91,15 +86,11 @@ import com.android.systemui.recents.views.RecentsTransitionHelper.AppTransitionA
 import com.android.systemui.stackdivider.WindowManagerProxy;
 import com.android.systemui.statusbar.FlingAnimationUtils;
 
-import java.io.BufferedReader;
-import java.io.FileDescriptor;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
 
 /**
  * This view is the the top level layout that contains TaskStacks (which are laid out according

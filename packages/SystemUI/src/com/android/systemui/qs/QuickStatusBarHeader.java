@@ -23,7 +23,6 @@ import android.support.annotation.VisibleForTesting;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextClock;
 
 import com.android.settingslib.Utils;
 import com.android.systemui.BatteryMeterView;
@@ -32,7 +31,6 @@ import com.android.systemui.R;
 import com.android.systemui.R.id;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.qs.QSDetail.Callback;
-import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.policy.DarkIconDispatcher.DarkReceiver;
 
 

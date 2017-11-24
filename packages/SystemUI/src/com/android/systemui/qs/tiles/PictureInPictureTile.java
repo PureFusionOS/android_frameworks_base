@@ -15,18 +15,14 @@
 
 package com.android.systemui.qs.tiles;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.UserHandle;
-import android.provider.Settings;
-import android.service.quicksettings.Tile;
 
-import com.android.internal.util.fusion.DeviceUtils;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
-import com.android.systemui.qs.QSHost;
-import com.android.systemui.plugins.qs.QSTile.BooleanState;
-import com.android.systemui.qs.tileimpl.QSTileImpl;
+import com.android.internal.util.fusion.DeviceUtils;
 import com.android.systemui.R;
+import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.qs.QSHost;
+import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 /** Quick settings tile: PictureInPictureTile **/
 public class PictureInPictureTile extends QSTileImpl<BooleanState> {

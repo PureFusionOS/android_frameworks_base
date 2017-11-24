@@ -13,21 +13,12 @@
  */
 package com.android.systemui.plugins;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.test.annotation.UiThreadTest;
-import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
@@ -36,11 +27,10 @@ import android.testing.TestableLooper.RunWithLooper;
 import com.android.internal.messages.nano.SystemMessageProto.SystemMessage;
 import com.android.systemui.Dependency;
 import com.android.systemui.SysuiTestCase;
-import com.android.systemui.plugins.annotations.ProvidesInterface;
 import com.android.systemui.plugins.PluginInstanceManager.PluginInfo;
 import com.android.systemui.plugins.PluginManagerImpl.PluginInstanceManagerFactory;
+import com.android.systemui.plugins.annotations.ProvidesInterface;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +38,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.lang.Thread.UncaughtExceptionHandler;
+
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SmallTest
 @RunWith(AndroidTestingRunner.class)

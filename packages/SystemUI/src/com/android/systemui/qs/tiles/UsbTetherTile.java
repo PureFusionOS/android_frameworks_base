@@ -22,16 +22,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.hardware.usb.UsbManager;
-import android.provider.Settings;
 import android.net.ConnectivityManager;
+import android.provider.Settings;
 import android.service.quicksettings.Tile;
 
+import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.systemui.R;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
-import com.android.systemui.R;
-
-import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 
 /**
  * USB Tether quick settings tile

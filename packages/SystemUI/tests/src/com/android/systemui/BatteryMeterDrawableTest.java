@@ -16,7 +16,16 @@
 
 package com.android.systemui;
 
+import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.support.test.runner.AndroidJUnit4;
+import android.test.suitebuilder.annotation.SmallTest;
+
 import com.android.settingslib.graph.BatteryMeterDrawableBase;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyFloat;
@@ -27,15 +36,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-
-import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.SmallTest;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)

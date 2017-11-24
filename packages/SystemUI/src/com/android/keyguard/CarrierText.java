@@ -16,10 +16,6 @@
 
 package com.android.keyguard;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -39,6 +35,10 @@ import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.settingslib.WirelessUtils;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 public class CarrierText extends TextView {
     private static final boolean DEBUG = KeyguardConstants.DEBUG;

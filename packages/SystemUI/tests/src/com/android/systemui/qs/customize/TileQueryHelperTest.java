@@ -14,27 +14,27 @@
 
 package com.android.systemui.qs.customize;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import android.os.Message;
+import android.test.suitebuilder.annotation.SmallTest;
+import android.testing.AndroidTestingRunner;
+import android.testing.TestableLooper;
+import android.testing.TestableLooper.RunWithLooper;
 
 import com.android.systemui.Dependency;
-import android.testing.AndroidTestingRunner;
 import com.android.systemui.SysuiTestCase;
 import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTile.State;
 import com.android.systemui.qs.QSTileHost;
-import android.testing.TestableLooper;
-import android.testing.TestableLooper.RunWithLooper;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import android.os.Message;
-import android.test.suitebuilder.annotation.SmallTest;
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SmallTest
 @RunWith(AndroidTestingRunner.class)

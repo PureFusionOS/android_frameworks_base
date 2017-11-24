@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
-import android.os.Handler;
 import android.os.UserManager;
 import android.util.Log;
 

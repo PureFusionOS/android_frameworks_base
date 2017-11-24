@@ -18,7 +18,6 @@
 package com.android.systemui.omni;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -31,21 +30,16 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.text.format.DateFormat;
-import android.util.ArraySet;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.systemui.R;
 import com.android.internal.util.fusion.OmniJawsClient;
+import com.android.systemui.R;
 import com.android.systemui.plugins.ActivityStarter;
 
 import java.text.SimpleDateFormat;

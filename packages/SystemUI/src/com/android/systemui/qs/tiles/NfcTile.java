@@ -27,11 +27,10 @@ import android.nfc.NfcAdapter;
 import android.provider.Settings;
 import android.widget.Switch;
 
-import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.systemui.R;
-import com.android.systemui.qs.QSHost;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 /** Quick settings tile: Enable/Disable NFC **/

@@ -34,7 +34,6 @@ import android.view.accessibility.AccessibilityManager;
 import com.android.systemui.Dependency;
 import com.android.systemui.UiOffloadThread;
 import com.android.systemui.analytics.DataCollector;
-import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.statusbar.StatusBarState;
 import com.android.systemui.util.AsyncSensorManager;
 

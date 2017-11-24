@@ -23,6 +23,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
 import com.android.systemui.R;
 
 public abstract class TriggerOverlayView extends FrameLayout {

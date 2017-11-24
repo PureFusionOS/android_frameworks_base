@@ -17,8 +17,7 @@
  */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <string name="car_lockscreen_disclaimer_title" msgid="7997539137376896441">"Hati-hati saat berkendara"</string>
     <string name="car_lockscreen_disclaimer_text" msgid="3061224684092952864">"Tetap perhatikan keadaan saat mengemudi dan selalu patuhi peraturan yang berlaku. Petunjuk arah mungkin tidak akurat, tidak lengkap, berbahaya, tidak cocok, terlarang, atau dapat melewati wilayah administratif. Informasi bisnis juga mungkin tidak akurat atau tidak lengkap. Data tidak dalam waktu nyata dan keakuratan lokasi tidak dijamin. Jangan menggunakan perangkat seluler atau aplikasi yang tidak berkaitan dengan Android Auto saat mengemudi."</string>
 </resources>

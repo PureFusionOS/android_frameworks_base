@@ -17,8 +17,6 @@
 package com.android.systemui.recents.model;
 
 import android.util.ArrayMap;
-import android.util.Log;
-import android.util.SparseArray;
 
 import com.android.systemui.recents.model.Task.TaskKey;
 

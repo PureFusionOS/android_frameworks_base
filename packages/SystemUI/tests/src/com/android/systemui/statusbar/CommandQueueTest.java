@@ -14,11 +14,6 @@
 
 package com.android.systemui.statusbar;
 
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-
 import android.content.ComponentName;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -31,6 +26,11 @@ import com.android.systemui.statusbar.CommandQueue.Callbacks;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @SmallTest
 public class CommandQueueTest extends SysuiTestCase {

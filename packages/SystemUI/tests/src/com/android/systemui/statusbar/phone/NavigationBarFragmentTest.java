@@ -14,31 +14,29 @@
 
 package com.android.systemui.statusbar.phone;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import android.content.Context;
 import android.os.Looper;
 import android.support.test.filters.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.LeakCheck.Tracker;
+import android.testing.TestableLooper.RunWithLooper;
 import android.view.Display;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityManager.AccessibilityServicesStateChangeListener;
 
 import com.android.systemui.Dependency;
-
 import com.android.systemui.SysuiBaseFragmentTest;
 import com.android.systemui.recents.Recents;
 import com.android.systemui.stackdivider.Divider;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.policy.AccessibilityManagerWrapper;
 
-import android.testing.TestableLooper.RunWithLooper;
-import android.view.accessibility.AccessibilityManager.AccessibilityServicesStateChangeListener;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(AndroidTestingRunner.class)
 @RunWithLooper(setAsMainLooper = true)

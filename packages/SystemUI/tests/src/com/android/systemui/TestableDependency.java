@@ -14,10 +14,10 @@
 
 package com.android.systemui;
 
-import static org.mockito.Mockito.mock;
-
 import android.content.Context;
 import android.util.ArrayMap;
+
+import static org.mockito.Mockito.mock;
 
 public class TestableDependency extends Dependency {
     private final ArrayMap<Object, Object> mObjs = new ArrayMap<>();

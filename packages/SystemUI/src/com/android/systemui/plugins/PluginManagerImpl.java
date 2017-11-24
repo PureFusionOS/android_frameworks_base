@@ -45,10 +45,10 @@ import com.android.systemui.plugins.PluginInstanceManager.PluginContextWrapper;
 import com.android.systemui.plugins.PluginInstanceManager.PluginInfo;
 import com.android.systemui.plugins.annotations.ProvidesInterface;
 
-import dalvik.system.PathClassLoader;
-
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Map;
+
+import dalvik.system.PathClassLoader;
 
 /**
  * @see Plugin

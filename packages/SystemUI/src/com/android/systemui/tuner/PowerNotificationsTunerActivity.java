@@ -20,7 +20,6 @@ import android.os.Bundle;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
-import com.android.systemui.tuner.TunerActivity;
 
 public class PowerNotificationsTunerActivity extends TunerActivity {
 

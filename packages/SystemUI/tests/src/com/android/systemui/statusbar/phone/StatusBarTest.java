@@ -16,27 +16,6 @@
 
 package com.android.systemui.statusbar.phone;
 
-import static android.app.NotificationManager.IMPORTANCE_HIGH;
-
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.fail;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-
 import android.app.Notification;
 import android.metrics.LogMaker;
 import android.os.Handler;
@@ -49,7 +28,6 @@ import android.os.UserHandle;
 import android.service.notification.StatusBarNotification;
 import android.support.test.filters.SmallTest;
 import android.support.test.metricshelper.MetricsAsserts;
-import android.support.test.runner.AndroidJUnit4;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
 import android.testing.TestableLooper.MessageHandler;
@@ -76,6 +54,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+
+import static android.app.NotificationManager.IMPORTANCE_HIGH;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.TestCase.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SmallTest
 @RunWith(AndroidTestingRunner.class)

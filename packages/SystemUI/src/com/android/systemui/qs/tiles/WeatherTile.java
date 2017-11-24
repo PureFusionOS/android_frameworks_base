@@ -19,40 +19,25 @@ package com.android.systemui.qs.tiles;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.internal.util.fusion.OmniJawsClient;
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
-import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.omni.DetailedWeatherView;
-import com.android.internal.util.fusion.OmniJawsClient;
+import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.qs.DetailAdapter;
 import com.android.systemui.plugins.qs.QSTile.BooleanState;
-import com.android.systemui.qs.QSDetailItems;
-import com.android.systemui.qs.QSDetailItems.Item;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsClient.OmniJawsObserver {
     private static final String TAG = "WeatherTile";

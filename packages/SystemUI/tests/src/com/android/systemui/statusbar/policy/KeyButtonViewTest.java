@@ -14,12 +14,6 @@
 
 package com.android.systemui.statusbar.policy;
 
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_NAV_BUTTON_EVENT;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_FLAGS;
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_NAV_ACTION;
-
-import static org.mockito.ArgumentMatchers.argThat;
-
 import android.metrics.LogMaker;
 import android.support.test.filters.SmallTest;
 import android.testing.AndroidTestingRunner;
@@ -38,6 +32,11 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 
 import java.util.Objects;
+
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_NAV_BUTTON_EVENT;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_FLAGS;
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.FIELD_NAV_ACTION;
+import static org.mockito.ArgumentMatchers.argThat;
 
 @RunWith(AndroidTestingRunner.class)
 @RunWithLooper

@@ -9,13 +9,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.telephony.SignalStrength;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.ScalingDrawableWrapper;

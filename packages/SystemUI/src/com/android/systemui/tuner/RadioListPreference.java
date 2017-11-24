@@ -17,21 +17,18 @@ package com.android.systemui.tuner;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.support.v14.preference.PreferenceFragment;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceScreen;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toolbar;
 
 import com.android.settingslib.Utils;
-import com.android.systemui.fragments.FragmentHostManager;
 import com.android.systemui.R;
+import com.android.systemui.fragments.FragmentHostManager;
 
 import libcore.util.Objects;
 

@@ -16,8 +16,6 @@
 
 package com.android.systemui.qs;
 
-import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_DATE;
-
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -37,9 +35,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto;
@@ -52,7 +48,6 @@ import com.android.systemui.R.dimen;
 import com.android.systemui.R.id;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.qs.TouchAnimator.Builder;
-import com.android.systemui.qs.TouchAnimator.Listener;
 import com.android.systemui.qs.TouchAnimator.ListenerAdapter;
 import com.android.systemui.statusbar.phone.ExpandableIndicator;
 import com.android.systemui.statusbar.phone.MultiUserSwitch;
@@ -64,6 +59,8 @@ import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.NextAlarmController.NextAlarmChangeCallback;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener;
+
+import static com.android.internal.logging.nano.MetricsProto.MetricsEvent.ACTION_QS_DATE;
 
 public class QSFooter extends FrameLayout implements
         NextAlarmChangeCallback, OnClickListener, OnUserInfoChangedListener, EmergencyListener,

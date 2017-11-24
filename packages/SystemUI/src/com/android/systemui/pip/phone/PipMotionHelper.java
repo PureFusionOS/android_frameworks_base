@@ -16,12 +16,6 @@
 
 package com.android.systemui.pip.phone;
 
-import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
-
-import static com.android.systemui.Interpolators.FAST_OUT_LINEAR_IN;
-import static com.android.systemui.Interpolators.FAST_OUT_SLOW_IN;
-import static com.android.systemui.Interpolators.LINEAR_OUT_SLOW_IN;
-
 import android.animation.AnimationHandler;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
@@ -50,6 +44,11 @@ import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.statusbar.FlingAnimationUtils;
 
 import java.io.PrintWriter;
+
+import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
+import static com.android.systemui.Interpolators.FAST_OUT_LINEAR_IN;
+import static com.android.systemui.Interpolators.FAST_OUT_SLOW_IN;
+import static com.android.systemui.Interpolators.LINEAR_OUT_SLOW_IN;
 
 /**
  * A helper to animate and manipulate the PiP.

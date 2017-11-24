@@ -16,8 +16,6 @@
 
 package com.android.systemui.statusbar;
 
-import static android.app.NotificationManager.IMPORTANCE_NONE;
-
 import android.app.INotificationManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -46,9 +44,10 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.settingslib.Utils;
 import com.android.systemui.R;
 
-import java.lang.IllegalArgumentException;
 import java.util.List;
 import java.util.Set;
+
+import static android.app.NotificationManager.IMPORTANCE_NONE;
 
 /**
  * The guts of a notification revealed when performing a long press.

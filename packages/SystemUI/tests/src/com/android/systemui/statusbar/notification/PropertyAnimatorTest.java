@@ -16,12 +16,6 @@
 
 package com.android.systemui.statusbar.notification;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -35,7 +29,6 @@ import android.view.animation.Interpolator;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.SysuiTestCase;
-import com.android.systemui.statusbar.notification.PropertyAnimator;
 import com.android.systemui.statusbar.stack.AnimationFilter;
 import com.android.systemui.statusbar.stack.AnimationProperties;
 import com.android.systemui.statusbar.stack.ViewState;
@@ -43,6 +36,12 @@ import com.android.systemui.statusbar.stack.ViewState;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 @SmallTest
 @RunWith(AndroidTestingRunner.class)
