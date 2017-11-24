@@ -16,15 +16,12 @@
 
 package com.android.systemui.statusbar.phone;
 
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import android.support.test.filters.SmallTest;
+import android.testing.AndroidTestingRunner;
 
 import com.android.internal.app.NightDisplayController;
 import com.android.systemui.Prefs;
 import com.android.systemui.Prefs.Key;
-
-import android.support.test.filters.SmallTest;
-import android.testing.AndroidTestingRunner;
 import com.android.systemui.SysuiTestCase;
 import com.android.systemui.qs.QSTileHost;
 
@@ -33,6 +30,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidTestingRunner.class)
 @SmallTest

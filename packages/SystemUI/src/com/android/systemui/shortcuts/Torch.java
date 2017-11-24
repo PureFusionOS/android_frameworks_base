@@ -17,12 +17,10 @@
 package com.android.systemui.shortcuts;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.UserHandle;
 
-import com.android.internal.util.fusion.ActionConstants;
 import com.android.internal.util.fusion.Action;
+import com.android.internal.util.fusion.ActionConstants;
 
 public class Torch extends Activity  {
 

@@ -42,12 +42,12 @@ import android.widget.TextView;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto;
 import com.android.systemui.R;
-import com.android.systemui.qs.tileimpl.QSIconViewImpl;
+import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.qs.customize.TileAdapter.Holder;
 import com.android.systemui.qs.customize.TileQueryHelper.TileInfo;
 import com.android.systemui.qs.customize.TileQueryHelper.TileStateListener;
 import com.android.systemui.qs.external.CustomTile;
-import com.android.systemui.qs.QSTileHost;
+import com.android.systemui.qs.tileimpl.QSIconViewImpl;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 
 import java.util.ArrayList;

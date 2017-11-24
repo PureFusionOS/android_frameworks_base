@@ -20,7 +20,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.UserManager;
-
 import android.provider.Settings.Global;
 import android.service.quicksettings.Tile;
 import android.widget.Switch;
@@ -28,9 +27,9 @@ import android.widget.Switch;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
+import com.android.systemui.plugins.qs.QSTile.AirplaneBooleanState;
 import com.android.systemui.qs.GlobalSetting;
 import com.android.systemui.qs.QSHost;
-import com.android.systemui.plugins.qs.QSTile.AirplaneBooleanState;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.policy.HotspotController;
 

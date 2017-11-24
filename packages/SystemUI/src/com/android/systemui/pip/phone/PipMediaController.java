@@ -16,8 +16,6 @@
 
 package com.android.systemui.pip.phone;
 
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
-
 import android.app.IActivityManager;
 import android.app.PendingIntent;
 import android.app.RemoteAction;
@@ -31,13 +29,14 @@ import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
-import android.os.UserHandle;
 
 import com.android.systemui.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
 /**
  * Interfaces with the {@link MediaSessionManager} to compose the right set of actions to show (only

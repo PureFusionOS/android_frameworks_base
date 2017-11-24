@@ -15,22 +15,17 @@
  */
 package com.android.systemui.qs.external;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-
-import static org.mockito.Mockito.mock;
-
 import android.content.ComponentName;
 import android.os.Looper;
 import android.service.quicksettings.Tile;
 import android.test.suitebuilder.annotation.SmallTest;
-
 import android.testing.AndroidTestingRunner;
+import android.testing.TestableLooper;
+import android.testing.TestableLooper.RunWithLooper;
+
 import com.android.systemui.SysuiTestCase;
 import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
-import android.testing.TestableLooper;
-import android.testing.TestableLooper.RunWithLooper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,6 +35,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 @SmallTest
 @RunWith(AndroidTestingRunner.class)

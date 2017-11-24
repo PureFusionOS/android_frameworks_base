@@ -16,13 +16,6 @@
 
 package com.android.systemui.pip.phone;
 
-import static android.app.AppOpsManager.MODE_ALLOWED;
-import static android.app.AppOpsManager.OP_PICTURE_IN_PICTURE;
-import static android.app.PendingIntent.FLAG_CANCEL_CURRENT;
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static android.provider.Settings.ACTION_PICTURE_IN_PICTURE_SETTINGS;
-
 import android.app.AppOpsManager;
 import android.app.AppOpsManager.OnOpChangedListener;
 import android.app.IActivityManager;
@@ -43,6 +36,13 @@ import android.util.Log;
 import com.android.systemui.R;
 import com.android.systemui.SystemUI;
 import com.android.systemui.util.NotificationChannels;
+
+import static android.app.AppOpsManager.MODE_ALLOWED;
+import static android.app.AppOpsManager.OP_PICTURE_IN_PICTURE;
+import static android.app.PendingIntent.FLAG_CANCEL_CURRENT;
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.provider.Settings.ACTION_PICTURE_IN_PICTURE_SETTINGS;
 
 /**
  * Manages the BTW notification that shows whenever an activity enters or leaves picture-in-picture.

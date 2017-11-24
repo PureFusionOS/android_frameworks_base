@@ -16,16 +16,16 @@
 
 package com.android.systemui.doze;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.withSettings;
-
 import com.android.internal.hardware.AmbientDisplayConfiguration;
 import com.android.systemui.statusbar.phone.DozeParameters;
 
 import org.mockito.Answers;
 import org.mockito.MockSettings;
+
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 public class DozeConfigurationUtil {
     public static DozeParameters createMockParameters() {

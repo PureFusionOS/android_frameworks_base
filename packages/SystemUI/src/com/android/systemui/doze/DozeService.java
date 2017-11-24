@@ -21,10 +21,6 @@ import android.os.SystemClock;
 import android.service.dreams.DreamService;
 import android.util.Log;
 
-import com.android.systemui.Dependency;
-import com.android.systemui.plugins.Plugin;
-import com.android.systemui.plugins.PluginManager;
-
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 

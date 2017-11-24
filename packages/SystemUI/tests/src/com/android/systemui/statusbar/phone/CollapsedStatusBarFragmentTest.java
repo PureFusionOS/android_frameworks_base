@@ -14,29 +14,28 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.app.StatusBarManager;
+import android.support.test.filters.SmallTest;
+import android.testing.AndroidTestingRunner;
+import android.testing.TestableLooper.RunWithLooper;
+import android.view.View;
+import android.view.ViewPropertyAnimator;
+
+import com.android.systemui.R;
+import com.android.systemui.SysuiBaseFragmentTest;
+import com.android.systemui.statusbar.CommandQueue;
+import com.android.systemui.tuner.TunerService;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import android.app.StatusBarManager;
-import android.support.test.filters.SmallTest;
-import android.view.View;
-import android.view.ViewPropertyAnimator;
-
-import com.android.systemui.R;
-import android.testing.AndroidTestingRunner;
-
-import com.android.systemui.SysuiBaseFragmentTest;
-import com.android.systemui.statusbar.CommandQueue;
-import com.android.systemui.tuner.TunerService;
-import android.testing.TestableLooper.RunWithLooper;
-
-import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.junit.Test;
-import org.mockito.Mockito;
 
 @RunWith(AndroidTestingRunner.class)
 @RunWithLooper(setAsMainLooper = true)

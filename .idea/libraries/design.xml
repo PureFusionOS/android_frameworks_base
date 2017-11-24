@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="design">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/docs/downloads/design/Android_Design_Holo_Widgets_20120814.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/design/Android_Design_Downloads_20120814.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/design/Android_Design_Downloads_20130814.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/design/Android_Design_Icons_20120814.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/design/roboto-1.100141.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/design/Android_Design_Color_Swatches_20120229.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/design/Android_Design_Downloads_20120823.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/design/Android_Navigation_Drawer_Icon_20130516.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/design/Roboto_Hinted_20111129.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/design/Roboto_Hinted_20120823.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

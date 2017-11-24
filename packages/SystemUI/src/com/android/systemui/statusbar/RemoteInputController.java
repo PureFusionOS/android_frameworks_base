@@ -16,15 +16,14 @@
 
 package com.android.systemui.statusbar;
 
+import android.util.ArrayMap;
+import android.util.Pair;
+
 import com.android.internal.util.Preconditions;
 import com.android.systemui.Dependency;
 import com.android.systemui.statusbar.phone.StatusBarWindowManager;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.RemoteInputView;
-
-import android.util.ArrayMap;
-import android.util.ArraySet;
-import android.util.Pair;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

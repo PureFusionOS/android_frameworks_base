@@ -37,13 +37,12 @@ import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.AsyncChannel;
 import com.android.settingslib.Utils;
 import com.android.settingslib.wifi.WifiStatusTracker;
+import com.android.systemui.R;
 import com.android.systemui.statusbar.policy.NetworkController.IconState;
 import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
 
-import com.android.systemui.R;
-
-import java.util.Objects;
 import java.util.List;
+import java.util.Objects;
 
 
 public class WifiSignalController extends

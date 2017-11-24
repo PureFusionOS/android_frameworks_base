@@ -33,7 +33,6 @@ import android.os.UserManager;
 import android.provider.Settings;
 import android.support.annotation.VisibleForTesting;
 
-import com.android.systemui.R;
 import com.android.systemui.util.Utils;
 
 import java.util.ArrayList;

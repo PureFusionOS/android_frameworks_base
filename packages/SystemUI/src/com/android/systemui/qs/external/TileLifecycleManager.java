@@ -15,15 +15,14 @@
  */
 package com.android.systemui.qs.external;
 
-import android.app.AppGlobals;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
-import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
@@ -37,11 +36,10 @@ import android.service.quicksettings.TileService;
 import android.support.annotation.VisibleForTesting;
 import android.util.ArraySet;
 import android.util.Log;
-import com.android.systemui.qs.external.PackageManagerAdapter;
-
-import libcore.util.Objects;
 
 import java.util.Set;
+
+import libcore.util.Objects;
 
 /**
  * Manages the lifecycle of a TileService.

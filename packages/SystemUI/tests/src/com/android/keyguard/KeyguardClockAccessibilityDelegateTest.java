@@ -16,9 +16,6 @@
 
 package com.android.keyguard;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import android.support.test.filters.SmallTest;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
@@ -31,6 +28,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @SmallTest
 public class KeyguardClockAccessibilityDelegateTest extends SysuiTestCase {

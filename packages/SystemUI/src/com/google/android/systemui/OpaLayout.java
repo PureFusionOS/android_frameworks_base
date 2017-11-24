@@ -5,10 +5,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.graphics.Color;
 import android.database.ContentObserver;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -18,9 +18,9 @@ import android.provider.Settings;
 import android.util.ArraySet;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.RenderNodeAnimator;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.RenderNodeAnimator;
 import android.view.animation.Interpolator;
 import android.view.animation.PathInterpolator;
 import android.widget.FrameLayout;
@@ -30,7 +30,6 @@ import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.plugins.statusbar.phone.NavBarButtonProvider.ButtonInterface;
 import com.android.systemui.statusbar.policy.KeyButtonView;
-import com.android.settingslib.Utils;
 
 public class OpaLayout extends FrameLayout implements ButtonInterface{
 

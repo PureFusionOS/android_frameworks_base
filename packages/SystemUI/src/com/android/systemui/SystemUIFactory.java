@@ -26,6 +26,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.keyguard.ViewMediatorCallback;
 import com.android.systemui.Dependency.DependencyProvider;
 import com.android.systemui.keyguard.DismissCallbackRegistry;
+import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.statusbar.KeyguardIndicationController;
 import com.android.systemui.statusbar.ScrimView;
 import com.android.systemui.statusbar.phone.KeyguardBouncer;
@@ -33,12 +34,10 @@ import com.android.systemui.statusbar.phone.LightBarController;
 import com.android.systemui.statusbar.phone.LockIcon;
 import com.android.systemui.statusbar.phone.LockscreenWallpaper;
 import com.android.systemui.statusbar.phone.NotificationIconAreaController;
-import com.android.systemui.statusbar.phone.StatusBar;
-import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.statusbar.phone.ScrimController;
+import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.phone.StatusBarIconController;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
-import com.android.systemui.volume.VolumeDialogControllerImpl;
 
 /**
  * Class factory to provide customizable SystemUI components.

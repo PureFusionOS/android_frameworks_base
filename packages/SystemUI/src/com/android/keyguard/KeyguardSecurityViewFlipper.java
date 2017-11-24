@@ -33,8 +33,6 @@ import android.widget.ViewFlipper;
 
 import com.android.internal.widget.LockPatternUtils;
 
-import java.lang.Override;
-
 /**
  * Subclass of the current view flipper that allows us to overload dispatchTouchEvent() so
  * we can emulate {@link WindowManager.LayoutParams#FLAG_SLIPPERY} within a view hierarchy.

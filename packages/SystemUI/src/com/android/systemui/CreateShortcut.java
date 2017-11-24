@@ -15,34 +15,21 @@
 
 package com.android.systemui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.LauncherActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.systemui.R;
-
-import java.lang.Character;
-import java.lang.CharSequence;
-import java.lang.IllegalArgumentException;
-import java.lang.NumberFormatException;
 
 public class CreateShortcut extends LauncherActivity {
 

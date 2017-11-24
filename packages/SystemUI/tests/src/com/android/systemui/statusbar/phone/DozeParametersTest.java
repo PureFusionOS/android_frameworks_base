@@ -21,11 +21,12 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import com.android.systemui.SysuiTestCase;
 import com.android.systemui.statusbar.phone.DozeParameters.IntInOutMatcher;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
 @SmallTest

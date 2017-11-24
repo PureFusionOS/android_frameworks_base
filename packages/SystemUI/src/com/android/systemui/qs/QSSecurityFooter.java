@@ -30,8 +30,8 @@ import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,8 +42,6 @@ import com.android.systemui.R;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.SecurityController;
-
-import static android.provider.Settings.ACTION_VPN_SETTINGS;
 
 public class QSSecurityFooter implements OnClickListener, DialogInterface.OnClickListener {
     protected static final String TAG = "QSSecurityFooter";

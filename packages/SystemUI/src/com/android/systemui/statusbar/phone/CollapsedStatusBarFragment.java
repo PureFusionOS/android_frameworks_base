@@ -14,8 +14,6 @@
 
 package com.android.systemui.statusbar.phone;
 
-import static com.android.systemui.statusbar.phone.StatusBar.reinflateSignalCluster;
-
 import android.annotation.Nullable;
 import android.app.Fragment;
 import android.app.StatusBarManager;

@@ -16,16 +16,14 @@
 
 package com.android.systemui.statusbar.policy;
 
-import android.view.LayoutInflater;
-
-import android.content.ContentResolver;
 import android.content.Context;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
-import android.widget.ImageView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;

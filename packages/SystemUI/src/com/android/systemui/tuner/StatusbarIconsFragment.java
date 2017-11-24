@@ -15,32 +15,17 @@
  */
 package com.android.systemui.tuner;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
-import android.database.ContentObserver;
 import android.os.Bundle;
-import android.os.Handler;
-import android.net.Uri;
 import android.provider.Settings;
-import android.provider.Settings.System;
+import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceScreen;
-import android.support.v14.preference.PreferenceFragment;
-import android.support.v14.preference.SwitchPreference;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
-import com.android.internal.hardware.AmbientDisplayConfiguration;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.util.fusion.PureFusionUtils;
-
 import com.android.systemui.R;
-import com.android.systemui.plugins.PluginPrefs;
 
 public class StatusbarIconsFragment extends TunerFragment {
 

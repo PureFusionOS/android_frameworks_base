@@ -16,15 +16,6 @@
 
 package com.android.systemui.keyguard;
 
-import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
-
-import static com.android.internal.telephony.IccCardConstants.State.ABSENT;
-import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.SOME_AUTH_REQUIRED_AFTER_USER_REQUEST;
-import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.STRONG_AUTH_REQUIRED_AFTER_DPM_LOCK_NOW;
-import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.STRONG_AUTH_REQUIRED_AFTER_LOCKOUT;
-import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.STRONG_AUTH_REQUIRED_AFTER_TIMEOUT;
-
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -51,7 +42,6 @@ import android.os.Trace;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
-import android.provider.Settings.System;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.EventLog;
@@ -82,17 +72,21 @@ import com.android.systemui.SystemUI;
 import com.android.systemui.SystemUIFactory;
 import com.android.systemui.UiOffloadThread;
 import com.android.systemui.classifier.FalsingManager;
-import com.android.systemui.recents.Recents;
-import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.statusbar.phone.FingerprintUnlockController;
-import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.phone.ScrimController;
+import com.android.systemui.statusbar.phone.StatusBar;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
-import com.android.systemui.statusbar.phone.StatusBarWindowManager;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
+import static com.android.internal.telephony.IccCardConstants.State.ABSENT;
+import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.SOME_AUTH_REQUIRED_AFTER_USER_REQUEST;
+import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.STRONG_AUTH_REQUIRED_AFTER_DPM_LOCK_NOW;
+import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.STRONG_AUTH_REQUIRED_AFTER_LOCKOUT;
+import static com.android.internal.widget.LockPatternUtils.StrongAuthTracker.STRONG_AUTH_REQUIRED_AFTER_TIMEOUT;
 
 /**
  * Mediates requests related to the keyguard.  This includes queries about the

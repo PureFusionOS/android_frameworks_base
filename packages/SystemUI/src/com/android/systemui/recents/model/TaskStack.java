@@ -16,16 +16,6 @@
 
 package com.android.systemui.recents.model;
 
-import static android.app.ActivityManager.DOCKED_STACK_CREATE_MODE_BOTTOM_OR_RIGHT;
-import static android.app.ActivityManager.DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT;
-import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
-import static android.app.ActivityManager.StackId.FULLSCREEN_WORKSPACE_STACK_ID;
-import static android.view.WindowManager.DOCKED_BOTTOM;
-import static android.view.WindowManager.DOCKED_INVALID;
-import static android.view.WindowManager.DOCKED_LEFT;
-import static android.view.WindowManager.DOCKED_RIGHT;
-import static android.view.WindowManager.DOCKED_TOP;
-
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -68,6 +58,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+
+import static android.app.ActivityManager.DOCKED_STACK_CREATE_MODE_BOTTOM_OR_RIGHT;
+import static android.app.ActivityManager.DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT;
+import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
+import static android.app.ActivityManager.StackId.FULLSCREEN_WORKSPACE_STACK_ID;
+import static android.view.WindowManager.DOCKED_BOTTOM;
+import static android.view.WindowManager.DOCKED_INVALID;
+import static android.view.WindowManager.DOCKED_LEFT;
+import static android.view.WindowManager.DOCKED_RIGHT;
+import static android.view.WindowManager.DOCKED_TOP;
 
 
 /**

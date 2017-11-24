@@ -21,7 +21,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
-import android.app.Notification;
 import android.util.Property;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -29,7 +28,6 @@ import android.view.animation.Interpolator;
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.ExpandableView;
-import com.android.systemui.statusbar.NotificationShelf;
 import com.android.systemui.statusbar.notification.PropertyAnimator;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 

@@ -16,8 +16,6 @@
 
 package com.android.systemui.recents.model;
 
-import static android.os.Process.setThreadPriority;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -30,6 +28,8 @@ import com.android.systemui.recents.model.Task.TaskCallbacks;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+
+import static android.os.Process.setThreadPriority;
 
 /**
  * Loader class that loads full-resolution thumbnails when appropriate.

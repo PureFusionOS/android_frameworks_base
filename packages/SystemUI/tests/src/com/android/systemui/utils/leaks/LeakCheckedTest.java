@@ -14,8 +14,6 @@
 
 package com.android.systemui.utils.leaks;
 
-import static org.mockito.Matchers.any;
-
 import android.testing.LeakCheck;
 import android.util.ArrayMap;
 

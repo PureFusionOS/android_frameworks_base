@@ -20,11 +20,12 @@ import android.view.View.OnAttachStateChangeListener;
 import android.view.View.OnLayoutChangeListener;
 
 import com.android.systemui.Dependency;
-import com.android.systemui.plugins.qs.*;
+import com.android.systemui.plugins.qs.QS;
+import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTileView;
 import com.android.systemui.qs.PagedTileLayout.PageListener;
-import com.android.systemui.qs.QSPanel.QSTileLayout;
 import com.android.systemui.qs.QSHost.Callback;
+import com.android.systemui.qs.QSPanel.QSTileLayout;
 import com.android.systemui.qs.TouchAnimator.Builder;
 import com.android.systemui.qs.TouchAnimator.Listener;
 import com.android.systemui.tuner.TunerService;

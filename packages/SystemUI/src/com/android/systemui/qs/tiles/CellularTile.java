@@ -38,7 +38,6 @@ import com.android.systemui.plugins.qs.QSTile.SignalState;
 import com.android.systemui.qs.CellTileView;
 import com.android.systemui.qs.CellTileView.SignalIcon;
 import com.android.systemui.qs.QSHost;
-import com.android.systemui.qs.SignalTileView;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.IconState;

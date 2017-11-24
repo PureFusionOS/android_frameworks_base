@@ -1,7 +1,5 @@
 package com.android.systemui.statusbar.policy;
 
-import java.text.DecimalFormat;
-
 import android.animation.ArgbEvaluator;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -11,16 +9,16 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.TrafficStats;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.UserHandle;
 import android.os.Message;
 import android.os.SystemClock;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -28,6 +26,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.systemui.R;
+
+import java.text.DecimalFormat;
 
 /*
 *

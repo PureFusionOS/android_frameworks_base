@@ -17,11 +17,13 @@ package com.android.systemui.qs;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.view.View;
-import com.android.systemui.qs.TouchAnimator.Listener;
+
 import com.android.systemui.SysuiTestCase;
+import com.android.systemui.qs.TouchAnimator.Listener;
+
 import org.junit.Before;
-import org.junit.runner.RunWith;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import static junit.framework.Assert.assertEquals;

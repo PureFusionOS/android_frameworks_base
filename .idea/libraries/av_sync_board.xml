@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="av_sync_board">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/docs/downloads/partner/audio/av_sync_board.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

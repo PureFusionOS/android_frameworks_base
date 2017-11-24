@@ -16,21 +16,13 @@
 
 package com.android.systemui.statusbar.notification;
 
-import static com.android.systemui.statusbar.notification.NotificationInflater.FLAG_REINFLATE_ALL;
-
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import android.app.Notification;
 import android.content.Context;
 import android.os.CancellationSignal;
 import android.os.Handler;
 import android.os.Looper;
 import android.service.notification.StatusBarNotification;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.annotation.UiThreadTest;
-import android.support.test.filters.FlakyTest;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
@@ -40,19 +32,23 @@ import android.widget.RemoteViews;
 import com.android.systemui.R;
 import com.android.systemui.SysuiTestCase;
 import com.android.systemui.statusbar.ExpandableNotificationRow;
+import com.android.systemui.statusbar.InflationTask;
 import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.NotificationTestHelper;
-import com.android.systemui.statusbar.InflationTask;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
+
+import static com.android.systemui.statusbar.notification.NotificationInflater.FLAG_REINFLATE_ALL;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SmallTest
 @RunWith(AndroidJUnit4.class)

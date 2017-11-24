@@ -16,20 +16,11 @@
 
 package com.android.systemui.recents.views;
 
-import static android.app.ActivityManager.StackId.ASSISTANT_STACK_ID;
-import static android.app.ActivityManager.StackId.DOCKED_STACK_ID;
-import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
-import static android.app.ActivityManager.StackId.FULLSCREEN_WORKSPACE_STACK_ID;
-import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
-
 import android.annotation.Nullable;
 import android.app.ActivityManager.StackId;
 import android.app.ActivityOptions;
 import android.app.ActivityOptions.OnAnimationStartedListener;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.GraphicBuffer;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -62,6 +53,12 @@ import com.android.systemui.statusbar.phone.StatusBar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static android.app.ActivityManager.StackId.ASSISTANT_STACK_ID;
+import static android.app.ActivityManager.StackId.DOCKED_STACK_ID;
+import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
+import static android.app.ActivityManager.StackId.FULLSCREEN_WORKSPACE_STACK_ID;
+import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
 
 /**
  * A helper class to create transitions to/from Recents

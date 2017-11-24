@@ -16,9 +16,6 @@
 
 package com.android.systemui.pip.phone;
 
-import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
-import static android.view.Display.DEFAULT_DISPLAY;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.StackInfo;
 import android.app.IActivityManager;
@@ -40,9 +37,11 @@ import com.android.systemui.recents.events.EventBus;
 import com.android.systemui.recents.events.component.ExpandPipEvent;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.recents.misc.SystemServicesProxy.TaskStackListener;
-import com.android.systemui.statusbar.CommandQueue;
 
 import java.io.PrintWriter;
+
+import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
+import static android.view.Display.DEFAULT_DISPLAY;
 
 /**
  * Manages the picture-in-picture (PIP) UI and states for Phones.

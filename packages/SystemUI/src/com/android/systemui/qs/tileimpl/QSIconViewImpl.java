@@ -14,14 +14,11 @@
 
 package com.android.systemui.qs.tileimpl;
 
-import static com.android.systemui.qs.tileimpl.QSTileImpl.getColorForState;
-
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.Animatable2.AnimationCallback;
 import android.graphics.drawable.Drawable;
@@ -35,6 +32,8 @@ import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTile.State;
 
 import java.util.Objects;
+
+import static com.android.systemui.qs.tileimpl.QSTileImpl.getColorForState;
 
 public class QSIconViewImpl extends QSIconView {
 

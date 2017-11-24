@@ -16,8 +16,6 @@
 
 package com.android.systemui.statusbar.sidebar;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.text.InputType;
 import android.text.Selection;
@@ -43,6 +41,8 @@ import android.widget.TextView;
 
 import com.android.systemui.R;
 import com.android.systemui.statusbar.sidebar.FolderInfo.FolderListener;
+
+import java.util.ArrayList;
 
 public class Folder extends LinearLayout implements FolderListener,
         View.OnFocusChangeListener, TextView.OnEditorActionListener {

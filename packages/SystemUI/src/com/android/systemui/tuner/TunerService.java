@@ -15,22 +15,9 @@
 package com.android.systemui.tuner;
 
 import android.app.ActivityManager;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.UserHandle;
-import android.provider.Settings;
-
-import static android.provider.Settings.System.SHOW_BATTERY_PERCENT;
-import com.android.systemui.DemoMode;
-import com.android.systemui.Dependency;
-import com.android.systemui.R;
-import com.android.systemui.statusbar.phone.SystemUIDialog;
 
 public abstract class TunerService {
 

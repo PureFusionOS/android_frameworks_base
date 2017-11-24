@@ -32,7 +32,6 @@ import com.android.systemui.SysUiServiceProvider;
 import com.android.systemui.fragments.FragmentHostManager;
 import com.android.systemui.fragments.FragmentHostManager.FragmentListener;
 import com.android.systemui.plugins.qs.QS;
-import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.statusbar.NotificationData.Entry;
 import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.OnHeadsUpChangedListener;

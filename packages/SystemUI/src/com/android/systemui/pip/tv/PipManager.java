@@ -20,7 +20,6 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.app.ActivityManager.StackInfo;
 import android.app.IActivityManager;
-import android.app.RemoteAction;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;

@@ -16,7 +16,6 @@
 
 package com.android.systemui.statusbar;
 
-import android.app.ActivityManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;

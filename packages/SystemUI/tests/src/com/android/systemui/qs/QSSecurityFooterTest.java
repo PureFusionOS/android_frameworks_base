@@ -14,16 +14,13 @@
 
 package com.android.systemui.qs;
 
-import static junit.framework.Assert.assertEquals;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.testing.LayoutInflaterBuilder;
+import android.testing.TestableImageView;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +30,14 @@ import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.SysuiTestCase;
 import com.android.systemui.statusbar.policy.SecurityController;
-import android.testing.LayoutInflaterBuilder;
-import android.testing.TestableImageView;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /*
  * Compile and run the whole SystemUI test suite:

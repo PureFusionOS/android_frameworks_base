@@ -24,7 +24,6 @@ import android.util.ArraySet;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.messages.nano.SystemMessageProto;
 
 import java.util.Arrays;

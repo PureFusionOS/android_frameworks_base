@@ -23,7 +23,6 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
 import android.graphics.Path.FillType;
@@ -33,7 +32,6 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.LayoutDirection;
-import android.util.Log;
 
 import com.android.settingslib.R;
 import com.android.settingslib.Utils;

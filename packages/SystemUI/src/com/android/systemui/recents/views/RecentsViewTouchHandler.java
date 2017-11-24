@@ -17,7 +17,6 @@
 package com.android.systemui.recents.views;
 
 import android.app.ActivityManager;
-import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.InputDevice;

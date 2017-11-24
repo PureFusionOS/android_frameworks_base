@@ -42,9 +42,9 @@ import android.view.WindowManager.LayoutParams;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.keyguard.LatencyTracker;
 import com.android.systemui.DejankUtils;
 import com.android.systemui.Interpolators;
-import com.android.keyguard.LatencyTracker;
 import com.android.systemui.R;
 import com.android.systemui.recents.events.EventBus;
 import com.android.systemui.recents.events.activity.CancelEnterRecentsWindowAnimationEvent;

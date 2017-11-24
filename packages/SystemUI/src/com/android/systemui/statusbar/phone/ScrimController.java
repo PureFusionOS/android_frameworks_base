@@ -23,13 +23,13 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.v4.graphics.ColorUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.PathInterpolator;
+
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.ExpandableNotificationRow;

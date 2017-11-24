@@ -20,7 +20,9 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
+
 import com.android.systemui.SysuiTestCase;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

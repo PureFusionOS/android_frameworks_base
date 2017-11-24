@@ -16,18 +16,6 @@
 
 package com.android.keyguard;
 
-import static android.content.Intent.ACTION_USER_UNLOCKED;
-import static android.os.BatteryManager.BATTERY_HEALTH_UNKNOWN;
-import static android.os.BatteryManager.BATTERY_STATUS_FULL;
-import static android.os.BatteryManager.BATTERY_STATUS_UNKNOWN;
-import static android.os.BatteryManager.EXTRA_HEALTH;
-import static android.os.BatteryManager.EXTRA_LEVEL;
-import static android.os.BatteryManager.EXTRA_MAX_CHARGING_CURRENT;
-import static android.os.BatteryManager.EXTRA_MAX_CHARGING_VOLTAGE;
-import static android.os.BatteryManager.EXTRA_TEMPERATURE;
-import static android.os.BatteryManager.EXTRA_PLUGGED;
-import static android.os.BatteryManager.EXTRA_STATUS;
-
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -43,13 +31,13 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
-import android.hardware.fingerprint.FingerprintManager;
-import android.hardware.fingerprint.FingerprintManager.AuthenticationCallback;
-import android.hardware.fingerprint.FingerprintManager.AuthenticationResult;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.fingerprint.FingerprintManager;
+import android.hardware.fingerprint.FingerprintManager.AuthenticationCallback;
+import android.hardware.fingerprint.FingerprintManager.AuthenticationResult;
 import android.media.AudioManager;
 import android.os.BatteryManager;
 import android.os.CancellationSignal;
@@ -57,7 +45,6 @@ import android.os.Handler;
 import android.os.IRemoteCallback;
 import android.os.Message;
 import android.os.RemoteException;
-import android.os.SystemClock;
 import android.os.Trace;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -67,18 +54,16 @@ import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.SubscriptionManager.OnSubscriptionsChangedListener;
 import android.telephony.TelephonyManager;
-import android.util.ArraySet;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
-
-import com.google.android.collect.Lists;
 
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.widget.LockPatternUtils;
+import com.google.android.collect.Lists;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -87,6 +72,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+
+import static android.content.Intent.ACTION_USER_UNLOCKED;
+import static android.os.BatteryManager.BATTERY_HEALTH_UNKNOWN;
+import static android.os.BatteryManager.BATTERY_STATUS_FULL;
+import static android.os.BatteryManager.BATTERY_STATUS_UNKNOWN;
+import static android.os.BatteryManager.EXTRA_HEALTH;
+import static android.os.BatteryManager.EXTRA_LEVEL;
+import static android.os.BatteryManager.EXTRA_MAX_CHARGING_CURRENT;
+import static android.os.BatteryManager.EXTRA_MAX_CHARGING_VOLTAGE;
+import static android.os.BatteryManager.EXTRA_PLUGGED;
+import static android.os.BatteryManager.EXTRA_STATUS;
+import static android.os.BatteryManager.EXTRA_TEMPERATURE;
 
 /**
  * Watches for updates that may be interesting to the keyguard, and provides

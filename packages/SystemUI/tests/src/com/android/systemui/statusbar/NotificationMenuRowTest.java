@@ -14,20 +14,20 @@
 
 package com.android.systemui.statusbar;
 
-import static junit.framework.Assert.assertTrue;
-
 import android.support.test.filters.SmallTest;
 import android.testing.AndroidTestingRunner;
 import android.testing.TestableLooper;
 import android.testing.TestableLooper.RunWithLooper;
 import android.testing.ViewUtils;
-import android.testing.ViewUtils;
+
 import com.android.systemui.plugins.statusbar.NotificationMenuRowPlugin;
 import com.android.systemui.utils.leaks.LeakCheckedTest;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidTestingRunner.class)
 @RunWithLooper(setAsMainLooper = true)

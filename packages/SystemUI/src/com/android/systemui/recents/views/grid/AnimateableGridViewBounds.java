@@ -17,6 +17,7 @@
 package com.android.systemui.recents.views.grid;
 
 import android.view.View;
+
 import com.android.systemui.recents.views.AnimateableViewBounds;
 
 /* An outline provider for grid-based task views. */

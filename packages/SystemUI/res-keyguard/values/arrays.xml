@@ -17,7 +17,7 @@
 ** limitations under the License.
 */
 -->
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
 
     <!-- list of 3- or 4-letter mnemonics for a 10-key numeric keypad -->
     <string-array translatable="false" name="lockscreen_num_pad_klondike">

@@ -1,0 +1,22 @@
+<component name="libraryTable">
+  <library name="devbytes">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/Bouncer.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/KeyframeAnimation.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/LayoutTransChanging.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/PictureViewer.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/BitmapScaling.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/PropertyAnimations.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/ListViewAnimations.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/CrossFading.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/BitmapAllocation.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/WindowAnimations.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/RequestDuringLayout.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/ViewAnimations.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/ImmersiveMode.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/downloads/devbytes/ListViewDeletion.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

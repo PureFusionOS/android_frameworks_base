@@ -16,18 +16,15 @@
 
 package com.android.systemui.qs.tiles;
 
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SyncStatusObserver;
-import android.service.quicksettings.Tile;
 
-import com.android.systemui.R;
-import com.android.systemui.Dependency;
-import com.android.systemui.qs.QSHost;
-import com.android.systemui.plugins.qs.QSTile.BooleanState;
-import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
+import com.android.systemui.R;
+import com.android.systemui.plugins.qs.QSTile.BooleanState;
+import com.android.systemui.qs.QSHost;
+import com.android.systemui.qs.tileimpl.QSTileImpl;
 
 /** Quick settings tile: Sync **/
 public class SyncTile extends QSTileImpl<BooleanState> {

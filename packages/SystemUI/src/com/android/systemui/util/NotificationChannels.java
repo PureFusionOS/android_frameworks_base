@@ -16,9 +16,9 @@ package com.android.systemui.util;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-
 import android.content.Context;
 import android.content.pm.PackageManager;
+
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.systemui.R;
 import com.android.systemui.SystemUI;

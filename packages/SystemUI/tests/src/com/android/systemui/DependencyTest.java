@@ -14,12 +14,6 @@
 
 package com.android.systemui;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 import android.os.Looper;
 import android.support.test.filters.SmallTest;
 
@@ -30,6 +24,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.PrintWriter;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @SmallTest
 public class DependencyTest extends SysuiTestCase {

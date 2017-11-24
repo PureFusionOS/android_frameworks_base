@@ -27,10 +27,10 @@ import android.os.Handler;
 import android.view.WindowManager.LayoutParams;
 
 import com.android.settingslib.applications.InterestingConfigChanges;
-import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.Dependency;
 import com.android.systemui.SystemUI;
 import com.android.systemui.keyguard.KeyguardViewMediator;
+import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.plugins.PluginDependencyProvider;
 import com.android.systemui.plugins.VolumeDialog;
 import com.android.systemui.plugins.VolumeDialogController;

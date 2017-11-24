@@ -14,15 +14,6 @@
 
 package com.android.systemui.statusbar.phone;
 
-import static android.app.StatusBarManager.NAVIGATION_HINT_BACK_ALT;
-import static android.app.StatusBarManager.NAVIGATION_HINT_IME_SHOWN;
-import static android.app.StatusBarManager.WINDOW_STATE_SHOWING;
-import static android.app.StatusBarManager.windowStateToString;
-
-import static com.android.systemui.statusbar.phone.BarTransitions.MODE_SEMI_TRANSPARENT;
-import static com.android.systemui.statusbar.phone.StatusBar.DEBUG_WINDOW_STATE;
-import static com.android.systemui.statusbar.phone.StatusBar.dumpBarTransitions;
-
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.Nullable;
 import android.app.ActivityManager;
@@ -87,6 +78,14 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Locale;
+
+import static android.app.StatusBarManager.NAVIGATION_HINT_BACK_ALT;
+import static android.app.StatusBarManager.NAVIGATION_HINT_IME_SHOWN;
+import static android.app.StatusBarManager.WINDOW_STATE_SHOWING;
+import static android.app.StatusBarManager.windowStateToString;
+import static com.android.systemui.statusbar.phone.BarTransitions.MODE_SEMI_TRANSPARENT;
+import static com.android.systemui.statusbar.phone.StatusBar.DEBUG_WINDOW_STATE;
+import static com.android.systemui.statusbar.phone.StatusBar.dumpBarTransitions;
 
 /**
  * Fragment containing the NavigationBarFragment. Contains logic for what happens

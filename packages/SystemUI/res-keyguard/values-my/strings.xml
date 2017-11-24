@@ -18,8 +18,7 @@
 */
  -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name" msgid="3171996292755059205">"လုံခြုံရေးကီး"</string>
     <string name="keyguard_password_enter_pin_code" msgid="3420548423949593123">"ပင်နံပါတ်ထည့်ပါ"</string>
     <string name="keyguard_password_enter_puk_code" msgid="670683628782925409">"ဆင်းမ် ပင်နံပါတ် ပြန်ဖွင့်သည့်ကုဒ်နှင့် ပင်နံပါတ်အသစ် ထည့်ပါ"</string>

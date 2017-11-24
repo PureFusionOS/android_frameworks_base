@@ -17,8 +17,11 @@ package com.android.systemui.qs.tileimpl;
 import android.content.Context;
 import android.util.Log;
 
-import com.android.systemui.plugins.qs.*;
+import com.android.systemui.plugins.qs.QSFactory;
+import com.android.systemui.plugins.qs.QSIconView;
+import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTileView;
+import com.android.systemui.qs.QSTileHost;
 import com.android.systemui.qs.external.CustomTile;
 import com.android.systemui.qs.tiles.AdbOverNetworkTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
@@ -47,7 +50,6 @@ import com.android.systemui.qs.tiles.UserTile;
 import com.android.systemui.qs.tiles.WeatherTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.qs.tiles.WorkModeTile;
-import com.android.systemui.qs.QSTileHost;
 
 public class QSFactoryImpl implements QSFactory {
 

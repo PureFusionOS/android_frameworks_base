@@ -29,11 +29,11 @@ import com.android.systemui.recents.events.EventBus;
 import com.android.systemui.recents.events.ui.RecentsDrawnEvent;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 
-import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 /**
  * Controls the docked stack divider.

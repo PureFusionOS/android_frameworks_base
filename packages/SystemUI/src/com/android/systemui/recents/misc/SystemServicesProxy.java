@@ -16,15 +16,6 @@
 
 package com.android.systemui.recents.misc;
 
-import static android.app.ActivityManager.StackId.DOCKED_STACK_ID;
-import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
-import static android.app.ActivityManager.StackId.FULLSCREEN_WORKSPACE_STACK_ID;
-import static android.app.ActivityManager.StackId.HOME_STACK_ID;
-import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
-import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
-import static android.app.ActivityManager.StackId.RECENTS_STACK_ID;
-import static android.provider.Settings.Global.DEVELOPMENT_ENABLE_FREEFORM_WINDOWS_SUPPORT;
-
 import android.annotation.NonNull;
 import android.annotation.Nullable;
 import android.app.ActivityManager;
@@ -95,7 +86,6 @@ import com.android.systemui.recents.RecentsImpl;
 import com.android.systemui.recents.model.Task;
 import com.android.systemui.recents.model.ThumbnailData;
 import com.android.systemui.statusbar.policy.UserInfoController;
-import com.android.systemui.statusbar.policy.UserInfoController.OnUserInfoChangedListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,6 +93,15 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import static android.app.ActivityManager.StackId.DOCKED_STACK_ID;
+import static android.app.ActivityManager.StackId.FREEFORM_WORKSPACE_STACK_ID;
+import static android.app.ActivityManager.StackId.FULLSCREEN_WORKSPACE_STACK_ID;
+import static android.app.ActivityManager.StackId.HOME_STACK_ID;
+import static android.app.ActivityManager.StackId.INVALID_STACK_ID;
+import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
+import static android.app.ActivityManager.StackId.RECENTS_STACK_ID;
+import static android.provider.Settings.Global.DEVELOPMENT_ENABLE_FREEFORM_WINDOWS_SUPPORT;
 
 /**
  * Acts as a shim around the real system services that we need to access data from, and provides

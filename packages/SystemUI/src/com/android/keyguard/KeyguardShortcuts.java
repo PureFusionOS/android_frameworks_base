@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -28,7 +27,6 @@ import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
-import android.view.Display;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -36,12 +34,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.android.internal.util.fusion.AppHelper;
-import com.android.internal.util.fusion.ActionHelper;
-import com.android.internal.util.fusion.ActionConfig;
 import com.android.internal.util.fusion.Action;
+import com.android.internal.util.fusion.ActionConfig;
+import com.android.internal.util.fusion.ActionHelper;
+import com.android.internal.util.fusion.AppHelper;
 import com.android.internal.widget.LockPatternUtils;
-
 import com.android.keyguard.R;
 
 import java.util.ArrayList;

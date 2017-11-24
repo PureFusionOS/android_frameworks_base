@@ -21,7 +21,6 @@ import android.util.Property;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Filters the animations for only a certain type of properties.

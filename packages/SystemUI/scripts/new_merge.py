@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 
+import filecmp
 import os
 import sys
-import difflib
-import filecmp
-import tempfile
-from optparse import OptionParser
-from subprocess import call
-from subprocess import Popen
 from subprocess import PIPE
+from subprocess import Popen
+from subprocess import call
+
 
 def which(program):
     def executable(path):

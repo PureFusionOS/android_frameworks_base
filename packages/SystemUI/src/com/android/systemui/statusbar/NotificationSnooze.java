@@ -15,12 +15,6 @@ package com.android.systemui.statusbar;
  * limitations under the License
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper;
-import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper.SnoozeOption;
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -31,7 +25,6 @@ import android.service.notification.StatusBarNotification;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +34,11 @@ import android.widget.TextView;
 
 import com.android.systemui.Interpolators;
 import com.android.systemui.R;
+import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper;
+import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper.SnoozeOption;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NotificationSnooze extends LinearLayout
         implements NotificationGuts.GutsContent, View.OnClickListener {

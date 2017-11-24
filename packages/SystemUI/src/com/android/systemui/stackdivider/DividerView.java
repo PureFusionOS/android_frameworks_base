@@ -16,9 +16,6 @@
 
 package com.android.systemui.stackdivider;
 
-import static android.view.PointerIcon.TYPE_HORIZONTAL_DOUBLE_ARROW;
-import static android.view.PointerIcon.TYPE_VERTICAL_DOUBLE_ARROW;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -66,15 +63,16 @@ import com.android.systemui.recents.Recents;
 import com.android.systemui.recents.events.EventBus;
 import com.android.systemui.recents.events.activity.DockedTopTaskEvent;
 import com.android.systemui.recents.events.activity.RecentsActivityStartingEvent;
-import com.android.systemui.recents.events.activity.ToggleRecentsEvent;
 import com.android.systemui.recents.events.activity.UndockingTaskEvent;
-import com.android.systemui.recents.events.ui.RecentsDrawnEvent;
 import com.android.systemui.recents.events.ui.RecentsGrowingEvent;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.stackdivider.events.StartedDragingEvent;
 import com.android.systemui.stackdivider.events.StoppedDragingEvent;
 import com.android.systemui.statusbar.FlingAnimationUtils;
 import com.android.systemui.statusbar.phone.NavigationBarGestureHelper;
+
+import static android.view.PointerIcon.TYPE_HORIZONTAL_DOUBLE_ARROW;
+import static android.view.PointerIcon.TYPE_VERTICAL_DOUBLE_ARROW;
 
 /**
  * Docked stack divider.

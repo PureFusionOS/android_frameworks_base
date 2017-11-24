@@ -16,10 +16,6 @@
 
 package com.android.systemui.pip.phone;
 
-import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_NONE;
-import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_CLOSE;
-import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_FULL;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -43,12 +39,14 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.policy.PipSnapAlgorithm;
-import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.FlingAnimationUtils;
-import com.android.systemui.tuner.TunerService;
 
 import java.io.PrintWriter;
+
+import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_CLOSE;
+import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_FULL;
+import static com.android.systemui.pip.phone.PipMenuActivityController.MENU_STATE_NONE;
 
 /**
  * Manages all the touch handling for PIP on the Phone, including moving, dismissing and expanding

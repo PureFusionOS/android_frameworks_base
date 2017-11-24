@@ -14,14 +14,14 @@
 
 package com.android.systemui.plugins.statusbar;
 
-import com.android.systemui.plugins.annotations.DependsOn;
-import com.android.systemui.plugins.annotations.ProvidesInterface;
-import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper.SnoozeOption;
-
 import android.service.notification.SnoozeCriterion;
 import android.service.notification.StatusBarNotification;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.android.systemui.plugins.annotations.DependsOn;
+import com.android.systemui.plugins.annotations.ProvidesInterface;
+import com.android.systemui.plugins.statusbar.NotificationSwipeActionHelper.SnoozeOption;
 
 @ProvidesInterface(version = NotificationSwipeActionHelper.VERSION)
 @DependsOn(target = SnoozeOption.class)

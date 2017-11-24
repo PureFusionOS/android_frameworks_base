@@ -15,14 +15,12 @@
   ~ limitations under the License
   -->
 
-<com.android.systemui.statusbar.phone.KeyguardBottomAreaView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:systemui="http://schemas.android.com/apk/res/com.android.systemui"
+<com.android.systemui.statusbar.phone.KeyguardBottomAreaView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/keyguard_bottom_area"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:outlineProvider="none"
-    android:elevation="5dp" > <!-- Put it above the status bar header -->
+    android:elevation="5dp"> <!-- Put it above the status bar header -->
 
     <LinearLayout
         android:id="@+id/keyguard_indication_area"

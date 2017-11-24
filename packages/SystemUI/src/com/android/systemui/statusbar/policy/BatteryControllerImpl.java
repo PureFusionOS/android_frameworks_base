@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
-import com.android.systemui.DemoMode;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;

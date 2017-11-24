@@ -14,13 +14,13 @@
 
 package com.android.systemui.globalactions;
 
+import android.content.Context;
+import android.support.v7.view.ContextThemeWrapper;
+
 import com.android.systemui.Dependency;
 import com.android.systemui.plugins.GlobalActions;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.KeyguardMonitor;
-
-import android.content.Context;
-import android.support.v7.view.ContextThemeWrapper;
 
 public class GlobalActionsImpl implements GlobalActions {
 

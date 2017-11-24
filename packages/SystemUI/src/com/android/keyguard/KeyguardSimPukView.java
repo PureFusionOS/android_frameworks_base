@@ -16,13 +16,13 @@
 
 package com.android.keyguard;
 
-import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -36,8 +36,8 @@ import android.widget.ImageView;
 
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.telephony.IccCardConstants;
-import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.IccCardConstants.State;
+import com.android.internal.telephony.PhoneConstants;
 
 
 /**

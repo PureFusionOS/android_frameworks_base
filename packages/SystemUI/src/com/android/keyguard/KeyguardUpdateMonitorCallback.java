@@ -17,9 +17,9 @@ package com.android.keyguard;
 
 import android.app.admin.DevicePolicyManager;
 import android.graphics.Bitmap;
+import android.hardware.fingerprint.FingerprintManager;
 import android.media.AudioManager;
 import android.os.SystemClock;
-import android.hardware.fingerprint.FingerprintManager;
 import android.telephony.TelephonyManager;
 import android.view.WindowManagerPolicy;
 

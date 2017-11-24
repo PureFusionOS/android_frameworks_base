@@ -29,6 +29,7 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import com.android.systemui.R;
 
 import java.net.URISyntaxException;

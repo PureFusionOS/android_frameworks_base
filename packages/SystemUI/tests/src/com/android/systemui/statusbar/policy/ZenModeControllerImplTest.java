@@ -14,10 +14,6 @@
 
 package com.android.systemui.statusbar.policy;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 import android.os.Handler;
 import android.service.notification.ZenModeConfig;
 import android.support.test.filters.SmallTest;
@@ -29,6 +25,10 @@ import com.android.systemui.statusbar.policy.ZenModeController.Callback;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @SmallTest
 @RunWith(AndroidTestingRunner.class)

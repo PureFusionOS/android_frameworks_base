@@ -16,7 +16,6 @@
 
 package com.android.systemui.keyguard;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.IActivityManager;
@@ -29,7 +28,6 @@ import android.os.RemoteException;
 import android.os.UserHandle;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.systemui.recents.events.EventBus;
 import com.android.systemui.recents.misc.SystemServicesProxy;
 import com.android.systemui.recents.misc.SystemServicesProxy.TaskStackListener;
 

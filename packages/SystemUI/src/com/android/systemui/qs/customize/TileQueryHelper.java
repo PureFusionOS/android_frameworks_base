@@ -33,9 +33,9 @@ import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTile.State;
-import com.android.systemui.qs.tileimpl.QSTileImpl.DrawableIcon;
-import com.android.systemui.qs.external.CustomTile;
 import com.android.systemui.qs.QSTileHost;
+import com.android.systemui.qs.external.CustomTile;
+import com.android.systemui.qs.tileimpl.QSTileImpl.DrawableIcon;
 
 import java.util.ArrayList;
 import java.util.Collection;
