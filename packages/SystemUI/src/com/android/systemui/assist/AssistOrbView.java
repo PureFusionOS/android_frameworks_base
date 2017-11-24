@@ -44,9 +44,8 @@ public class AssistOrbView extends FrameLayout {
     private final Rect mCircleRect = new Rect();
     private final Rect mStaticRect = new Rect();
     private final Interpolator mOvershootInterpolator = new OvershootInterpolator();
-
-    private boolean mClipToOutline;
     private final int mMaxElevation;
+    private boolean mClipToOutline;
     private float mOutlineAlpha;
     private float mOffset;
     private float mCircleSize;
@@ -93,7 +92,7 @@ public class AssistOrbView extends FrameLayout {
     }
 
     public AssistOrbView(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                         int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setOutlineProvider(new ViewOutlineProvider() {
             @Override
@@ -149,7 +148,7 @@ public class AssistOrbView extends FrameLayout {
     }
 
     public void animateCircleSize(float circleSize, long duration,
-            long startDelay, Interpolator interpolator) {
+                                  long startDelay, Interpolator interpolator) {
         if (circleSize == mCircleAnimationEndValue) {
             return;
         }
@@ -181,15 +180,14 @@ public class AssistOrbView extends FrameLayout {
     /**
      * Animates the offset to the edge of the screen.
      *
-     * @param offset The offset to apply.
-     * @param startDelay The desired start delay if animated.
-     *
+     * @param offset       The offset to apply.
+     * @param startDelay   The desired start delay if animated.
      * @param interpolator The desired interpolator if animated. If null,
      *                     a default interpolator will be taken designed for appearing or
      *                     disappearing.
      */
     private void animateOffset(float offset, long duration, long startDelay,
-            Interpolator interpolator) {
+                               Interpolator interpolator) {
         if (mOffsetAnimator != null) {
             mOffsetAnimator.removeAllListeners();
             mOffsetAnimator.cancel();
@@ -230,7 +228,7 @@ public class AssistOrbView extends FrameLayout {
                 - mLogo.getHeight() / 2.0f - mCircleMinSize / 7f;
         float t = (mStaticOffset - mOffset) / (float) mStaticOffset;
         translationY += t * mStaticOffset * 0.1f;
-        float alpha = 1.0f-t;
+        float alpha = 1.0f - t;
         alpha = Math.max((alpha - 0.5f) * 2.0f, 0);
         mLogo.setImageAlpha((int) (alpha * 255));
         mLogo.setTranslationX(translationX);

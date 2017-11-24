@@ -31,10 +31,10 @@ public class PipUtils {
 
     /**
      * @return the ComponentName of the top non-SystemUI activity in the pinned stack, or null if
-     *         none exists.
+     * none exists.
      */
     public static ComponentName getTopPinnedActivity(Context context,
-            IActivityManager activityManager) {
+                                                     IActivityManager activityManager) {
         try {
             final String sysUiPackageName = context.getPackageName();
             final StackInfo pinnedStackInfo = activityManager.getStackInfo(PINNED_STACK_ID);

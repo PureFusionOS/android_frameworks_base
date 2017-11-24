@@ -44,8 +44,8 @@ public class HeadsUpTouchHelper implements Gefingerpoken {
     private ExpandableNotificationRow mPickedChild;
 
     public HeadsUpTouchHelper(HeadsUpManager headsUpManager,
-            NotificationStackScrollLayout stackScroller,
-            NotificationPanelView notificationPanelView) {
+                              NotificationStackScrollLayout stackScroller,
+                              NotificationPanelView notificationPanelView) {
         mHeadsUpManager = headsUpManager;
         mStackScroller = stackScroller;
         mPanel = notificationPanelView;
@@ -56,6 +56,12 @@ public class HeadsUpTouchHelper implements Gefingerpoken {
 
     public boolean isTrackingHeadsUp() {
         return mTrackingHeadsUp;
+    }
+
+    private void setTrackingHeadsUp(boolean tracking) {
+        mTrackingHeadsUp = tracking;
+        mHeadsUpManager.setTrackingHeadsUp(tracking);
+        mPanel.setTrackingHeadsUp(tracking);
     }
 
     @Override
@@ -129,12 +135,6 @@ public class HeadsUpTouchHelper implements Gefingerpoken {
                 break;
         }
         return false;
-    }
-
-    private void setTrackingHeadsUp(boolean tracking) {
-        mTrackingHeadsUp = tracking;
-        mHeadsUpManager.setTrackingHeadsUp(tracking);
-        mPanel.setTrackingHeadsUp(tracking);
     }
 
     public void notifyFling(boolean collapse) {

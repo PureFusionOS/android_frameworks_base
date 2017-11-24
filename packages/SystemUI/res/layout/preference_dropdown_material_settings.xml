@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2016 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +17,7 @@
 
 <!-- Based off frameworks/base/core/res/res/layout/preference_dropdown_material.xml
      except that icon space in this layout is always reserved -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -30,6 +28,6 @@
         android:layout_marginStart="@dimen/preference_no_icon_padding_start"
         android:visibility="invisible" />
 
-    <include layout="@layout/preference_material_settings"/>
+    <include layout="@layout/preference_material_settings" />
 
 </FrameLayout>

@@ -58,8 +58,8 @@ public class WifiSignalController extends
     private boolean mScoringUiEnabled = false;
 
     public WifiSignalController(Context context, boolean hasMobileData,
-            CallbackHandler callbackHandler, NetworkControllerImpl networkController,
-            NetworkScoreManager networkScoreManager) {
+                                CallbackHandler callbackHandler, NetworkControllerImpl networkController,
+                                NetworkScoreManager networkScoreManager) {
         super("WifiSignalController", context, NetworkCapabilities.TRANSPORT_WIFI,
                 callbackHandler, networkController);
         mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -82,7 +82,7 @@ public class WifiSignalController extends
                 WifiIcons.WIFI_NO_NETWORK,
                 WifiIcons.QS_WIFI_NO_NETWORK,
                 AccessibilityContentDescriptions.WIFI_NO_CONNECTION
-                );
+        );
 
         mScoreCache = new WifiNetworkScoreCache(context, new CacheListener(handler) {
             @Override
@@ -183,7 +183,7 @@ public class WifiSignalController extends
 
     /**
      * Clears old scores out of the cache and requests new scores if the network key has changed.
-     *
+     * <p>
      * <p>New scores are requested asynchronously.
      */
     private void updateScoreCacheIfNecessary(NetworkKey previousNetworkKey) {
@@ -198,7 +198,7 @@ public class WifiSignalController extends
 
     /**
      * Returns the wifi badge enum for the current {@link #mWifiTracker} state.
-     *
+     * <p>
      * <p>{@link #updateScoreCacheIfNecessary} should be called prior to this method.
      */
     private int getWifiBadgeEnum() {
@@ -220,35 +220,6 @@ public class WifiSignalController extends
         mCurrentState.activityOut = wifiActivity == WifiManager.DATA_ACTIVITY_INOUT
                 || wifiActivity == WifiManager.DATA_ACTIVITY_OUT;
         notifyListenersIfNecessary();
-    }
-
-    /**
-     * Handler to receive the data activity on wifi.
-     */
-    private class WifiHandler extends Handler {
-        WifiHandler(Looper looper) {
-            super(looper);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case AsyncChannel.CMD_CHANNEL_HALF_CONNECTED:
-                    if (msg.arg1 == AsyncChannel.STATUS_SUCCESSFUL) {
-                        mWifiChannel.sendMessage(Message.obtain(this,
-                                AsyncChannel.CMD_CHANNEL_FULL_CONNECTION));
-                    } else {
-                        Log.e(mTag, "Failed to connect to wifi");
-                    }
-                    break;
-                case WifiManager.DATA_ACTIVITY_NOTIFICATION:
-                    setActivity(msg.arg1);
-                    break;
-                default:
-                    // Ignore
-                    break;
-            }
-        }
     }
 
     static class WifiState extends SignalController.State {
@@ -279,6 +250,35 @@ public class WifiSignalController extends
                     && Objects.equals(((WifiState) o).ssid, ssid)
                     && (((WifiState) o).badgeEnum == badgeEnum)
                     && (((WifiState) o).isTransient == isTransient);
+        }
+    }
+
+    /**
+     * Handler to receive the data activity on wifi.
+     */
+    private class WifiHandler extends Handler {
+        WifiHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case AsyncChannel.CMD_CHANNEL_HALF_CONNECTED:
+                    if (msg.arg1 == AsyncChannel.STATUS_SUCCESSFUL) {
+                        mWifiChannel.sendMessage(Message.obtain(this,
+                                AsyncChannel.CMD_CHANNEL_FULL_CONNECTION));
+                    } else {
+                        Log.e(mTag, "Failed to connect to wifi");
+                    }
+                    break;
+                case WifiManager.DATA_ACTIVITY_NOTIFICATION:
+                    setActivity(msg.arg1);
+                    break;
+                default:
+                    // Ignore
+                    break;
+            }
         }
     }
 }

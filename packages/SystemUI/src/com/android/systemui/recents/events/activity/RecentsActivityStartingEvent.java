@@ -21,6 +21,6 @@ import com.android.systemui.recents.events.EventBus;
 /**
  * Called after recents activity is being started, i.e. startActivity has just been called.
  */
-public class RecentsActivityStartingEvent extends EventBus.Event{
+public class RecentsActivityStartingEvent extends EventBus.Event {
 
 }

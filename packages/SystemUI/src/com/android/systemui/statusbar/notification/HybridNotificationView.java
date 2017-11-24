@@ -37,10 +37,9 @@ import com.android.systemui.statusbar.phone.NotificationPanelView;
 public class HybridNotificationView extends AlphaOptimizedLinearLayout
         implements TransformableView {
 
-    private ViewTransformationHelper mTransformationHelper;
-
     protected TextView mTitleView;
     protected TextView mTextView;
+    private ViewTransformationHelper mTransformationHelper;
     private ViewInvertHelper mInvertHelper;
 
     public HybridNotificationView(Context context) {
@@ -56,7 +55,7 @@ public class HybridNotificationView extends AlphaOptimizedLinearLayout
     }
 
     public HybridNotificationView(Context context, @Nullable AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                                  int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -79,7 +78,7 @@ public class HybridNotificationView extends AlphaOptimizedLinearLayout
                 new ViewTransformationHelper.CustomTransformation() {
                     @Override
                     public boolean transformTo(TransformState ownState, TransformableView notification,
-                            float transformationAmount) {
+                                               float transformationAmount) {
                         // We want to transform to the same y location as the title
                         TransformState otherState = notification.getCurrentState(
                                 TRANSFORMING_VIEW_TITLE);
@@ -93,7 +92,7 @@ public class HybridNotificationView extends AlphaOptimizedLinearLayout
 
                     @Override
                     public boolean transformFrom(TransformState ownState,
-                            TransformableView notification, float transformationAmount) {
+                                                 TransformableView notification, float transformationAmount) {
                         // We want to transform from the same y location as the title
                         TransformState otherState = notification.getCurrentState(
                                 TRANSFORMING_VIEW_TITLE);

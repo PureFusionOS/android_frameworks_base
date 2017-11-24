@@ -49,19 +49,28 @@ import static android.app.ActivityManager.TaskDescription;
  * credentials are accepted.
  */
 public class WorkLockActivity extends Activity {
-    private static final String TAG = "WorkLockActivity";
-
     /**
      * Contains a {@link TaskDescription} for the activity being covered.
      */
     static final String EXTRA_TASK_DESCRIPTION =
             "com.android.systemui.keyguard.extra.TASK_DESCRIPTION";
-  
+    private static final String TAG = "WorkLockActivity";
     /**
      * Cached keyguard manager instance populated by {@link #getKeyguardManager}.
+     *
      * @see KeyguardManager
      */
     private KeyguardManager mKgm;
+    private final BroadcastReceiver mLockEventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final int targetUserId = getTargetUserId();
+            final int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, targetUserId);
+            if (userId == targetUserId && !getKeyguardManager().isDeviceLocked(targetUserId)) {
+                finish();
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,17 +128,6 @@ public class WorkLockActivity extends Activity {
         // Leave unset so we use the previous activity's task description.
     }
 
-    private final BroadcastReceiver mLockEventReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final int targetUserId = getTargetUserId();
-            final int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, targetUserId);
-            if (userId == targetUserId && !getKeyguardManager().isDeviceLocked(targetUserId)) {
-                finish();
-            }
-        }
-    };
-
     private void showConfirmCredentialActivity() {
         if (isFinishing() || !getKeyguardManager().isDeviceLocked(getTargetUserId())) {
             // Don't show the confirm credentials screen if we are already unlocked / unlocking.
@@ -148,8 +146,8 @@ public class WorkLockActivity extends Activity {
         // Bring this activity back to the foreground after confirming credentials.
         final PendingIntent target = PendingIntent.getActivity(this, /* request */ -1, getIntent(),
                 PendingIntent.FLAG_CANCEL_CURRENT |
-                PendingIntent.FLAG_ONE_SHOT |
-                PendingIntent.FLAG_IMMUTABLE, options.toBundle());
+                        PendingIntent.FLAG_ONE_SHOT |
+                        PendingIntent.FLAG_IMMUTABLE, options.toBundle());
 
         credential.putExtra(Intent.EXTRA_INTENT, target.getIntentSender());
         try {

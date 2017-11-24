@@ -65,34 +65,28 @@ import static android.view.KeyEvent.ACTION_DOWN;
 import static android.view.KeyEvent.KEYCODE_BACK;
 
 public class AppSidebar extends TriggerOverlayView {
-    private static final String TAG = "AppSidebar";
-    private static final boolean DEBUG_LAYOUT = false;
-    private static final long AUTO_HIDE_DELAY = 3000;
-
     // Sidebar positions
     public static final int SIDEBAR_POSITION_LEFT = 0;
     public static final int SIDEBAR_POSITION_RIGHT = 1;
-
-    private static final String ACTION_HIDE_APP_CONTAINER
-            = "com.android.internal.policy.statusbar.HIDE_APP_CONTAINER";
-
     public static final String ACTION_SIDEBAR_ITEMS_CHANGED
             = "com.android.internal.policy.statusbar.SIDEBAR_ITEMS_CHANGED";
-
-    private static enum SIDEBAR_STATE { OPENING, OPENED, CLOSING, CLOSED };
-    private SIDEBAR_STATE mState = SIDEBAR_STATE.CLOSED;
-
+    private static final String TAG = "AppSidebar";
+    private static final boolean DEBUG_LAYOUT = false;
+    private static final long AUTO_HIDE_DELAY = 3000;
+    private static final String ACTION_HIDE_APP_CONTAINER
+            = "com.android.internal.policy.statusbar.HIDE_APP_CONTAINER";
     private static final LinearLayout.LayoutParams SCROLLVIEW_LAYOUT_PARAMS = new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.MATCH_PARENT,
-            1.0f    );
+            1.0f);
 
+    ;
     private static LinearLayout.LayoutParams ITEM_LAYOUT_PARAMS = new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             1.0f
     );
-
+    private SIDEBAR_STATE mState = SIDEBAR_STATE.CLOSED;
     private int mTriggerColor;
     private LinearLayout mAppContainer;
     private SnappingScrollView mScrollView;
@@ -106,13 +100,73 @@ public class AppSidebar extends TriggerOverlayView {
     private boolean mHideTextLabels = false;
     private boolean mUseTab = false;
     private int mPosition = SIDEBAR_POSITION_RIGHT;
-
     private TranslateAnimation mSlideIn;
     private TranslateAnimation mSlideOut;
-
     private Context mContext;
     private SettingsObserver mSettingsObserver;
     private PackageManager mPm;
+    private Animation.AnimationListener mAnimListener = new Animation.AnimationListener() {
+        @Override
+        public void onAnimationStart(Animation animation) {
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            animation.cancel();
+            mScrollView.clearAnimation();
+            switch (mState) {
+                case CLOSING:
+                    mState = SIDEBAR_STATE.CLOSED;
+                    mScrollView.setVisibility(View.GONE);
+                    reduceToTriggerRegion();
+                    break;
+                case OPENING:
+                    mState = SIDEBAR_STATE.OPENED;
+                    mScrollView.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+        }
+    };
+    private OnClickListener mItemClickedListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (mState != SIDEBAR_STATE.OPENED || mFirstTouch) {
+                mFirstTouch = false;
+                return;
+            }
+
+            launchApplication((AppItemInfo) view.getTag());
+        }
+    };
+    private final BroadcastReceiver mAppChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_PACKAGE_ADDED.equals(action) ||
+                    Intent.ACTION_PACKAGE_REMOVED.equals(action)) {
+                setupAppContainer();
+            }
+        }
+    };
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_HIDE_APP_CONTAINER.equals(action)) {
+                dismissFolderView();
+                showAppContainer(false);
+            } else if (ACTION_SIDEBAR_ITEMS_CHANGED.equals(action)) {
+                if (mContainerItems != null) {
+                    mContainerItems.clear();
+                    setupAppContainer();
+                }
+            }
+        }
+    };
 
     public AppSidebar(Context context) {
         this(context, null);
@@ -265,36 +319,9 @@ public class AppSidebar extends TriggerOverlayView {
         mScrollView.startAnimation(show ? mSlideIn : mSlideOut);
     }
 
-    private Animation.AnimationListener mAnimListener = new Animation.AnimationListener() {
-        @Override
-        public void onAnimationStart(Animation animation) {
-        }
-
-        @Override
-        public void onAnimationEnd(Animation animation) {
-            animation.cancel();
-            mScrollView.clearAnimation();
-            switch (mState) {
-                case CLOSING:
-                    mState = SIDEBAR_STATE.CLOSED;
-                    mScrollView.setVisibility(View.GONE);
-                    reduceToTriggerRegion();
-                    break;
-                case OPENING:
-                    mState = SIDEBAR_STATE.OPENED;
-                    mScrollView.setVisibility(View.VISIBLE);
-                    break;
-            }
-        }
-
-        @Override
-        public void onAnimationRepeat(Animation animation) {
-        }
-    };
-
     public void updateAutoHideTimer(long delay) {
         Context ctx = getContext();
-        AlarmManager am = (AlarmManager)ctx.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(ACTION_HIDE_APP_CONTAINER);
 
         PendingIntent pi = PendingIntent.getBroadcast(ctx, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -309,7 +336,7 @@ public class AppSidebar extends TriggerOverlayView {
 
     public void cancelAutoHideTimer() {
         Context ctx = getContext();
-        AlarmManager am = (AlarmManager)ctx.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(ACTION_HIDE_APP_CONTAINER);
 
         PendingIntent pi = PendingIntent.getBroadcast(ctx, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -318,33 +345,6 @@ public class AppSidebar extends TriggerOverlayView {
         } catch (Exception e) {
         }
     }
-
-    private final BroadcastReceiver mAppChangeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (Intent.ACTION_PACKAGE_ADDED.equals(action) ||
-                    Intent.ACTION_PACKAGE_REMOVED.equals(action)) {
-                setupAppContainer();
-            }
-        }
-    };
-
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (ACTION_HIDE_APP_CONTAINER.equals(action)) {
-                dismissFolderView();
-                showAppContainer(false);
-            } else if (ACTION_SIDEBAR_ITEMS_CHANGED.equals(action)) {
-                if (mContainerItems != null) {
-                    mContainerItems.clear();
-                    setupAppContainer();
-                }
-            }
-        }
-    };
 
     @Override
     protected void expandFromTriggerRegion() {
@@ -389,21 +389,21 @@ public class AppSidebar extends TriggerOverlayView {
         int desiredHeight = mContext.getResources().
                 getDimensionPixelSize(R.dimen.app_sidebar_item_size) +
                 padding * 2;
-        int numItems = (int)Math.floor(windowHeight / desiredHeight);
+        int numItems = (int) Math.floor(windowHeight / desiredHeight);
         ITEM_LAYOUT_PARAMS.height = windowHeight / numItems;
         ITEM_LAYOUT_PARAMS.width = desiredHeight;
 
         for (View icon : mContainerItems) {
-            ItemInfo ai = (ItemInfo)icon.getTag();
+            ItemInfo ai = (ItemInfo) icon.getTag();
             if (ai instanceof AppItemInfo) {
                 icon.setOnClickListener(mItemClickedListener);
                 if (mHideTextLabels)
-                    ((TextView)icon).setTextSize(0);
+                    ((TextView) icon).setTextSize(0);
             } else {
                 icon.setOnClickListener(new FolderClickListener());
                 if (mHideTextLabels) {
-                    ((FolderIcon)icon).setTextVisible(false);
-                    ((FolderIcon)icon).setPreviewSize(mIconBounds.right);
+                    ((FolderIcon) icon).setTextVisible(false);
+                    ((FolderIcon) icon).setPreviewSize(mIconBounds.right);
                 }
             }
             icon.setClickable(true);
@@ -445,27 +445,120 @@ public class AppSidebar extends TriggerOverlayView {
         mContext.startActivity(intent);
     }
 
-    private OnClickListener mItemClickedListener = new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (mState != SIDEBAR_STATE.OPENED || mFirstTouch) {
-                mFirstTouch = false;
-                return;
-            }
+    public void setPosition(int position) {
+        mPosition = position;
+        createSidebarAnimations(position);
+    }
 
-            launchApplication((AppItemInfo)view.getTag());
+    private void dismissFolderView() {
+        if (mFolder != null) {
+            mWM.removeView(mFolder);
+            mFolder = null;
+            updateAutoHideTimer(AUTO_HIDE_DELAY);
         }
-    };
+    }
+
+    private void loadSidebarContents() {
+        String[] projection = {
+                SidebarTable.COLUMN_ITEM_ID,
+                SidebarTable.COLUMN_ITEM_TYPE,
+                SidebarTable.COLUMN_CONTAINER,
+                SidebarTable.COLUMN_TITLE,
+                SidebarTable.COLUMN_COMPONENT
+        };
+        ArrayList<ItemInfo> items = new ArrayList<ItemInfo>();
+        Cursor cursor = mContext.getContentResolver().query(SidebarContentProvider.CONTENT_URI,
+                projection, null, null, null);
+        while (cursor.moveToNext()) {
+            ItemInfo item;
+            int type = cursor.getInt(cursor.getColumnIndex(SidebarTable.COLUMN_ITEM_TYPE));
+            if (type == ItemInfo.TYPE_APPLICATION) {
+                item = new AppItemInfo();
+                String component = cursor.getString(4);
+                ComponentName cn = ComponentName.unflattenFromString(component);
+                ((AppItemInfo) item).packageName = cn.getPackageName();
+                ((AppItemInfo) item).className = cn.getClassName();
+            } else {
+                item = new FolderInfo();
+            }
+            item.id = cursor.getInt(0);
+            item.itemType = type;
+            item.container = cursor.getInt(2);
+            item.title = cursor.getString(3);
+            if (item.container == ItemInfo.CONTAINER_SIDEBAR) {
+                if (item instanceof AppItemInfo) {
+                    TextView tv = createAppItem((AppItemInfo) item);
+                    mContainerItems.add(tv);
+                } else {
+                    FolderIcon icon = FolderIcon.fromXml(R.layout.sidebar_folder_icon,
+                            mAppContainer, null, (FolderInfo) item, mContext, true);
+                    mContainerItems.add(icon);
+                }
+            } else {
+                try {
+                    ((AppItemInfo) item).setIcon(mPm.getActivityIcon(
+                            new ComponentName(((AppItemInfo) item).packageName, ((AppItemInfo) item).className)));
+                } catch (NameNotFoundException e) {
+                    ((AppItemInfo) item).setIcon(mPm.getDefaultActivityIcon());
+                }
+                ((AppItemInfo) item).icon.setBounds(mIconBounds);
+                FolderInfo info = (FolderInfo) items.get(item.container);
+                info.add((AppItemInfo) item);
+            }
+            items.add(item);
+        }
+    }
+
+    private TextView createAppItem(AppItemInfo info) {
+        TextView tv = (TextView) View.inflate(mContext, R.layout.sidebar_app_item, null);
+        try {
+            info.setIcon(mPm.getActivityIcon(new ComponentName(info.packageName, info.className)));
+        } catch (NameNotFoundException e) {
+            info.setIcon(mPm.getDefaultActivityIcon());
+        }
+        info.icon.setBounds(mIconBounds);
+        tv.setCompoundDrawables(null, info.icon, null, null);
+        tv.setTag(info);
+        tv.setText(info.title);
+
+        return tv;
+    }
+
+    private WindowManager.LayoutParams getFolderLayoutParams(int iconY, int folderHeight) {
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                mFolderWidth,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_STATUS_BAR_SUB_PANEL,
+                0
+                        | WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
+                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+                        | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
+                PixelFormat.TRANSLUCENT);
+        lp.gravity = Gravity.TOP | Gravity.LEFT;
+        if (mPosition == SIDEBAR_POSITION_LEFT)
+            lp.x = getWidth();
+        else
+            lp.x = mWM.getDefaultDisplay().getWidth() - getWidth() - mFolderWidth;
+        if (iconY < 0)
+            lp.y = 0;
+        else {
+            if (iconY + folderHeight < getHeight())
+                lp.y = iconY;
+            else
+                lp.y = iconY - (getHeight() - (iconY + folderHeight));
+        }
+        lp.setTitle("SidebarFolder");
+        return lp;
+    }
+
+    private static enum SIDEBAR_STATE {OPENING, OPENED, CLOSING, CLOSED}
 
     class SnappingScrollView extends ScrollView {
 
         private boolean mSnapTrigger = false;
-
-        public SnappingScrollView(Context context) {
-            super(context);
-        }
-
-        Runnable mSnapRunnable = new Runnable(){
+        Runnable mSnapRunnable = new Runnable() {
             @Override
             public void run() {
                 int mSelectedItem = ((getScrollY() + (ITEM_LAYOUT_PARAMS.height / 2)) / ITEM_LAYOUT_PARAMS.height);
@@ -474,6 +567,10 @@ public class AppSidebar extends TriggerOverlayView {
                 mSnapTrigger = false;
             }
         };
+
+        public SnappingScrollView(Context context) {
+            super(context);
+        }
 
         @Override
         protected void onScrollChanged(int l, int t, int oldl, int oldt) {
@@ -499,11 +596,6 @@ public class AppSidebar extends TriggerOverlayView {
             }
             return super.onTouchEvent(ev);
         }
-    }
-
-    public void setPosition(int position) {
-        mPosition = position;
-        createSidebarAnimations(position);
     }
 
     class SettingsObserver extends ContentObserver {
@@ -547,7 +639,7 @@ public class AppSidebar extends TriggerOverlayView {
                     resolver, Settings.System.APP_SIDEBAR_ENABLED, 0) == 1;
             setVisibility(enabled ? View.VISIBLE : View.GONE);
 
-            float barAlpha = (float)(100 - Settings.System.getInt(
+            float barAlpha = (float) (100 - Settings.System.getInt(
                     resolver, Settings.System.APP_SIDEBAR_TRANSPARENCY, 0)) / 100f;
             if (barAlpha != mBarAlpha) {
                 if (mScrollView != null)
@@ -596,7 +688,7 @@ public class AppSidebar extends TriggerOverlayView {
                 dismissFolderView();
                 return;
             }
-            final Folder folder = mFolder = ((FolderIcon)v).getFolder();
+            final Folder folder = mFolder = ((FolderIcon) v).getFolder();
             int iconY = v.getTop() - mScrollView.getScrollY();
             mWM.addView(mFolder, getFolderLayoutParams(iconY, folder.getHeight()));
             mFolder.setVisibility(View.VISIBLE);
@@ -616,108 +708,5 @@ public class AppSidebar extends TriggerOverlayView {
                 }
             });
         }
-    }
-
-    private void dismissFolderView() {
-        if (mFolder != null) {
-            mWM.removeView(mFolder);
-            mFolder = null;
-            updateAutoHideTimer(AUTO_HIDE_DELAY);
-        }
-    }
-
-    private void loadSidebarContents() {
-        String[] projection = {
-                SidebarTable.COLUMN_ITEM_ID,
-                SidebarTable.COLUMN_ITEM_TYPE,
-                SidebarTable.COLUMN_CONTAINER,
-                SidebarTable.COLUMN_TITLE,
-                SidebarTable.COLUMN_COMPONENT
-        };
-        ArrayList<ItemInfo> items = new ArrayList<ItemInfo>();
-        Cursor cursor = mContext.getContentResolver().query(SidebarContentProvider.CONTENT_URI,
-                projection, null, null, null);
-        while (cursor.moveToNext()) {
-            ItemInfo item;
-            int type = cursor.getInt(cursor.getColumnIndex(SidebarTable.COLUMN_ITEM_TYPE));
-            if (type == ItemInfo.TYPE_APPLICATION) {
-                item = new AppItemInfo();
-                String component = cursor.getString(4);
-                ComponentName cn = ComponentName.unflattenFromString(component);
-                ((AppItemInfo)item).packageName = cn.getPackageName();
-                ((AppItemInfo)item).className = cn.getClassName();
-            } else {
-                item = new FolderInfo();
-            }
-            item.id = cursor.getInt(0);
-            item.itemType = type;
-            item.container = cursor.getInt(2);
-            item.title = cursor.getString(3);
-            if (item.container == ItemInfo.CONTAINER_SIDEBAR) {
-                if (item instanceof AppItemInfo) {
-                    TextView tv = createAppItem((AppItemInfo) item);
-                    mContainerItems.add(tv);
-                } else {
-                    FolderIcon icon = FolderIcon.fromXml(R.layout.sidebar_folder_icon,
-                            mAppContainer, null, (FolderInfo)item, mContext, true);
-                    mContainerItems.add(icon);
-                }
-            } else {
-                try {
-                    ((AppItemInfo)item).setIcon(mPm.getActivityIcon(
-                            new ComponentName(((AppItemInfo)item).packageName, ((AppItemInfo)item).className)));
-                } catch (NameNotFoundException e) {
-                    ((AppItemInfo)item).setIcon(mPm.getDefaultActivityIcon());
-                }
-                ((AppItemInfo)item).icon.setBounds(mIconBounds);
-                FolderInfo info = (FolderInfo) items.get(item.container);
-                info.add((AppItemInfo) item);
-            }
-            items.add(item);
-        }
-    }
-
-    private TextView createAppItem(AppItemInfo info) {
-        TextView tv = (TextView) View.inflate(mContext, R.layout.sidebar_app_item, null);
-        try {
-            info.setIcon(mPm.getActivityIcon(new ComponentName(info.packageName, info.className)));
-        } catch (NameNotFoundException e) {
-            info.setIcon(mPm.getDefaultActivityIcon());
-        }
-        info.icon.setBounds(mIconBounds);
-        tv.setCompoundDrawables(null, info.icon, null, null);
-        tv.setTag(info);
-        tv.setText(info.title);
-
-        return tv;
-    }
-
-    private WindowManager.LayoutParams getFolderLayoutParams(int iconY, int folderHeight) {
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
-                mFolderWidth,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_STATUS_BAR_SUB_PANEL,
-                0
-                | WindowManager.LayoutParams.FLAG_TOUCHABLE_WHEN_WAKING
-                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
-                | WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
-                PixelFormat.TRANSLUCENT);
-        lp.gravity = Gravity.TOP | Gravity.LEFT;
-        if (mPosition == SIDEBAR_POSITION_LEFT)
-            lp.x = getWidth();
-        else
-            lp.x = mWM.getDefaultDisplay().getWidth() - getWidth() - mFolderWidth;
-        if (iconY < 0)
-            lp.y = 0;
-        else {
-            if (iconY + folderHeight < getHeight())
-                lp.y = iconY;
-            else
-                lp.y = iconY - (getHeight() - (iconY + folderHeight));
-        }
-        lp.setTitle("SidebarFolder");
-        return lp;
     }
 }

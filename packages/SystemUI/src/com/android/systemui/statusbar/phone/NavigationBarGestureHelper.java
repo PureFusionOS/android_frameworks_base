@@ -45,32 +45,28 @@ import static android.view.WindowManager.DOCKED_TOP;
 public class NavigationBarGestureHelper extends GestureDetector.SimpleOnGestureListener
         implements TunerService.Tunable, GestureHelper {
 
-    private static final String KEY_DOCK_WINDOW_GESTURE = "overview_nav_bar_gesture";
     /**
      * When dragging from the navigation bar, we drag in recents.
      */
     public static final int DRAG_MODE_NONE = -1;
-
     /**
      * When dragging from the navigation bar, we drag in recents.
      */
     public static final int DRAG_MODE_RECENTS = 0;
-
     /**
      * When dragging from the navigation bar, we drag the divider.
      */
     public static final int DRAG_MODE_DIVIDER = 1;
-
+    private static final String KEY_DOCK_WINDOW_GESTURE = "overview_nav_bar_gesture";
+    private final GestureDetector mTaskSwitcherDetector;
+    private final int mScrollTouchSlop;
+    private final int mMinFlingVelocity;
     private RecentsComponent mRecentsComponent;
     private Divider mDivider;
     private Context mContext;
     private NavigationBarView mNavigationBarView;
     private boolean mIsVertical;
     private boolean mIsRTL;
-
-    private final GestureDetector mTaskSwitcherDetector;
-    private final int mScrollTouchSlop;
-    private final int mMinFlingVelocity;
     private int mTouchDownX;
     private int mTouchDownY;
     private boolean mDownOnRecents;
@@ -95,7 +91,7 @@ public class NavigationBarGestureHelper extends GestureDetector.SimpleOnGestureL
     }
 
     public void setComponents(RecentsComponent recentsComponent, Divider divider,
-            NavigationBarView navigationBarView) {
+                              NavigationBarView navigationBarView) {
         mRecentsComponent = recentsComponent;
         mDivider = divider;
         mNavigationBarView = navigationBarView;

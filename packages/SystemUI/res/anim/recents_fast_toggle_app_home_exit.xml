@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
 ** Copyright 2012, The Android Open Source Project
 **
@@ -15,13 +14,15 @@
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
--->
-<!-- Recents Activity -->
+--><!-- Recents Activity -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-     android:shareInterpolator="false"
-     android:zAdjustment="top">
-  <alpha android:fromAlpha="1.0" android:toAlpha="1.0"
-         android:fillEnabled="true"
-         android:fillBefore="true" android:fillAfter="true"
-         android:duration="250"/>
+    android:shareInterpolator="false"
+    android:zAdjustment="top">
+    <alpha
+        android:duration="250"
+        android:fillAfter="true"
+        android:fillBefore="true"
+        android:fillEnabled="true"
+        android:fromAlpha="1.0"
+        android:toAlpha="1.0" />
 </set>

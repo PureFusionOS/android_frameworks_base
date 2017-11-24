@@ -33,10 +33,12 @@ import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.policy.HotspotController;
 
-/** Quick settings tile: Hotspot **/
+/**
+ * Quick settings tile: Hotspot
+ **/
 public class HotspotTile extends QSTileImpl<AirplaneBooleanState> {
     static final Intent TETHER_SETTINGS = new Intent().setComponent(new ComponentName(
-             "com.android.settings", "com.android.settings.TetherSettings"));
+            "com.android.settings", "com.android.settings.TetherSettings"));
 
     private final AnimationIcon mEnable =
             new AnimationIcon(R.drawable.ic_hotspot_enable_animation,
@@ -161,5 +163,7 @@ public class HotspotTile extends QSTileImpl<AirplaneBooleanState> {
         public void onHotspotChanged(boolean enabled) {
             refreshState(enabled);
         }
-    };
+    }
+
+    ;
 }

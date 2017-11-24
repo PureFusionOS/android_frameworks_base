@@ -77,24 +77,20 @@ public class PipMotionHelper implements Handler.Callback {
 
     private static final int MSG_RESIZE_IMMEDIATE = 1;
     private static final int MSG_RESIZE_ANIMATE = 2;
-
+    private final Rect mBounds = new Rect();
+    private final Rect mStableInsets = new Rect();
     private Context mContext;
     private IActivityManager mActivityManager;
     private Handler mHandler;
-
     private PipMenuActivityController mMenuController;
     private PipSnapAlgorithm mSnapAlgorithm;
     private FlingAnimationUtils mFlingAnimationUtils;
     private AnimationHandler mAnimationHandler;
-
-    private final Rect mBounds = new Rect();
-    private final Rect mStableInsets = new Rect();
-
     private ValueAnimator mBoundsAnimator = null;
 
     public PipMotionHelper(Context context, IActivityManager activityManager,
-            PipMenuActivityController menuController, PipSnapAlgorithm snapAlgorithm,
-            FlingAnimationUtils flingAnimationUtils) {
+                           PipMenuActivityController menuController, PipSnapAlgorithm snapAlgorithm,
+                           FlingAnimationUtils flingAnimationUtils) {
         mContext = context;
         mHandler = new Handler(ForegroundThread.get().getLooper(), this);
         mActivityManager = activityManager;
@@ -262,7 +258,7 @@ public class PipMotionHelper implements Handler.Callback {
      * Animates the PiP to the minimized state, slightly offscreen.
      */
     Rect animateToClosestMinimizedState(Rect movementBounds,
-            AnimatorUpdateListener updateListener) {
+                                        AnimatorUpdateListener updateListener) {
         cancelAnimations();
         Rect toBounds = getClosestMinimizedBounds(mBounds, movementBounds);
         if (!mBounds.equals(toBounds)) {
@@ -280,7 +276,7 @@ public class PipMotionHelper implements Handler.Callback {
      * Flings the PiP to the closest snap target.
      */
     Rect flingToSnapTarget(float velocity, float velocityX, float velocityY, Rect movementBounds,
-            AnimatorUpdateListener updateListener, AnimatorListener listener) {
+                           AnimatorUpdateListener updateListener, AnimatorListener listener) {
         cancelAnimations();
         Rect toBounds = mSnapAlgorithm.findClosestSnapBounds(movementBounds, mBounds,
                 velocityX, velocityY);
@@ -292,7 +288,7 @@ public class PipMotionHelper implements Handler.Callback {
             if (updateListener != null) {
                 mBoundsAnimator.addUpdateListener(updateListener);
             }
-            if (listener != null){
+            if (listener != null) {
                 mBoundsAnimator.addListener(listener);
             }
             mBoundsAnimator.start();
@@ -304,7 +300,7 @@ public class PipMotionHelper implements Handler.Callback {
      * Animates the PiP to the closest snap target.
      */
     Rect animateToClosestSnapTarget(Rect movementBounds, AnimatorUpdateListener updateListener,
-            AnimatorListener listener) {
+                                    AnimatorListener listener) {
         cancelAnimations();
         Rect toBounds = mSnapAlgorithm.findClosestSnapBounds(movementBounds, mBounds);
         if (!mBounds.equals(toBounds)) {
@@ -313,7 +309,7 @@ public class PipMotionHelper implements Handler.Callback {
             if (updateListener != null) {
                 mBoundsAnimator.addUpdateListener(updateListener);
             }
-            if (listener != null){
+            if (listener != null) {
                 mBoundsAnimator.addListener(listener);
             }
             mBoundsAnimator.start();
@@ -325,7 +321,7 @@ public class PipMotionHelper implements Handler.Callback {
      * Animates the PiP to the expanded state to show the menu.
      */
     float animateToExpandedState(Rect expandedBounds, Rect movementBounds,
-            Rect expandedMovementBounds) {
+                                 Rect expandedMovementBounds) {
         float savedSnapFraction = mSnapAlgorithm.getSnapFraction(new Rect(mBounds), movementBounds);
         mSnapAlgorithm.applySnapFraction(expandedBounds, expandedMovementBounds, savedSnapFraction);
         resizeAndAnimatePipUnchecked(expandedBounds, EXPAND_STACK_TO_MENU_DURATION);
@@ -336,8 +332,8 @@ public class PipMotionHelper implements Handler.Callback {
      * Animates the PiP from the expanded state to the normal state after the menu is hidden.
      */
     void animateToUnexpandedState(Rect normalBounds, float savedSnapFraction,
-            Rect normalMovementBounds, Rect currentMovementBounds, boolean minimized,
-            boolean immediate) {
+                                  Rect normalMovementBounds, Rect currentMovementBounds, boolean minimized,
+                                  boolean immediate) {
         if (savedSnapFraction < 0f) {
             // If there are no saved snap fractions, then just use the current bounds
             savedSnapFraction = mSnapAlgorithm.getSnapFraction(new Rect(mBounds),
@@ -366,7 +362,7 @@ public class PipMotionHelper implements Handler.Callback {
      * Animates the dismissal of the PiP off the edge of the screen.
      */
     Rect animateDismiss(Rect pipBounds, float velocityX, float velocityY,
-            AnimatorUpdateListener listener) {
+                        AnimatorUpdateListener listener) {
         cancelAnimations();
         final float velocity = PointF.length(velocityX, velocityY);
         final boolean isFling = velocity > mFlingAnimationUtils.getMinVelocityPxPerSecond();
@@ -406,7 +402,7 @@ public class PipMotionHelper implements Handler.Callback {
      * Creates an animation to move the PiP to give given {@param toBounds}.
      */
     private ValueAnimator createAnimationToBounds(Rect fromBounds, Rect toBounds, int duration,
-            Interpolator interpolator) {
+                                                  Interpolator interpolator) {
         ValueAnimator anim = new ValueAnimator() {
             @Override
             public AnimationHandler getAnimationHandler() {
@@ -456,7 +452,7 @@ public class PipMotionHelper implements Handler.Callback {
 
     /**
      * @return the coordinates the PIP should animate to based on the direction of velocity when
-     *         dismissing.
+     * dismissing.
      */
     private Point getDismissEndPoint(Rect pipBounds, float velX, float velY, boolean isFling) {
         Point displaySize = new Point();
@@ -480,10 +476,10 @@ public class PipMotionHelper implements Handler.Callback {
 
     /**
      * @return whether the gesture it towards the dismiss area based on the velocity when
-     *         dismissing.
+     * dismissing.
      */
     public boolean isGestureToDismissArea(Rect pipBounds, float velX, float velY,
-            boolean isFling) {
+                                          boolean isFling) {
         Point endpoint = getDismissEndPoint(pipBounds, velX, velY, isFling);
         // Center the point
         endpoint.x += pipBounds.width() / 2;

@@ -58,7 +58,8 @@ public class VolumeUI extends SystemUI {
 
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
-        pw.print("mEnabled="); pw.println(mEnabled);
+        pw.print("mEnabled=");
+        pw.println(mEnabled);
         if (!mEnabled) return;
         getVolumeComponent().dump(fd, pw, args);
     }

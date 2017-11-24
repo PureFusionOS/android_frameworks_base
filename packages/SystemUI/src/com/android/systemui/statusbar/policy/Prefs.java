@@ -20,9 +20,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class Prefs {
-    private static final String SHARED_PREFS_NAME = "status_bar";
-
     public static final String LAST_BATTERY_LEVEL = "last_battery_level";
+    private static final String SHARED_PREFS_NAME = "status_bar";
 
     public static SharedPreferences read(Context context) {
         return context.getSharedPreferences(Prefs.SHARED_PREFS_NAME, Context.MODE_PRIVATE);

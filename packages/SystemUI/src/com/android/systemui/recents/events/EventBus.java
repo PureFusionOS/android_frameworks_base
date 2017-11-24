@@ -46,9 +46,8 @@ import java.util.List;
  * Represents a subscriber, which implements various event bus handler methods.
  */
 class Subscriber {
-    private WeakReference<Object> mSubscriber;
-
     long registrationTime;
+    private WeakReference<Object> mSubscriber;
 
     Subscriber(Object subscriber, long registrationTime) {
         mSubscriber = new WeakReference<>(subscriber);
@@ -90,8 +89,8 @@ class EventHandler {
  * Represents the low level method handling a particular event.
  */
 class EventHandlerMethod {
-    private Method mMethod;
     Class<? extends EventBus.Event> eventType;
+    private Method mMethod;
 
     EventHandlerMethod(Method method, Class<? extends EventBus.Event> eventType) {
         mMethod = method;
@@ -113,7 +112,7 @@ class EventHandlerMethod {
 /**
  * A simple in-process event bus.  It is simple because we can make assumptions about the state of
  * SystemUI and Recent's lifecycle.
- *
+ * <p>
  * <p>
  * Currently, there is a single EventBus that handles {@link EventBus.Event}s for each subscriber
  * on the main application thread.  Publishers can send() events to synchronously call subscribers
@@ -122,11 +121,11 @@ class EventHandlerMethod {
  * (within the same package) implemented using standard {@link BroadcastReceiver} mechanism.
  * Interprocess events must be posted using postInterprocess() to ensure that it is dispatched
  * correctly across processes.
- *
+ * <p>
  * <p>
  * Subscribers must be registered with a particular EventBus before they will receive events, and
  * handler methods must match a specific signature.
- *
+ * <p>
  * <p>
  * Event method signature:<ul>
  * <li>Methods must be public final
@@ -134,7 +133,7 @@ class EventHandlerMethod {
  * <li>Methods must be called "onBusEvent"
  * <li>Methods must take one parameter, of class type deriving from {@link EventBus.Event}
  * </ul>
- *
+ * <p>
  * <p>
  * Interprocess-Event method signature:<ul>
  * <li>Methods must be public final
@@ -143,17 +142,17 @@ class EventHandlerMethod {
  * <li>Methods must take one parameter, of class type deriving from {@link EventBus.InterprocessEvent}
  * </ul>
  * </p>
- *
+ * <p>
  * </p>
  * Each subscriber can be registered with a given priority (default 1), and events will be dispatch
  * in decreasing order of priority.  For subscribers with the same priority, events will be
  * dispatched by latest registration time to earliest.
- *
+ * <p>
  * <p>
  * Interprocess events must extend {@link EventBus.InterprocessEvent}, have a constructor which
  * takes a {@link Bundle} and implement toBundle().  This allows us to serialize events to be sent
  * across processes.
- *
+ * <p>
  * <p>
  * Caveats:<ul>
  * <li>The EventBus keeps a {@link WeakReference} to the publisher to prevent memory leaks, so
@@ -165,7 +164,7 @@ class EventHandlerMethod {
  * <li>Because the event handlers are called back using reflection, there will often be no
  * references to them from actual code.  The proguard configuration will be need to be updated to
  * keep these extra methods:
- *
+ * <p>
  * -keepclassmembers class ** {
  * public void onBusEvent(**);
  * public void onInterprocessBusEvent(**);
@@ -173,7 +172,7 @@ class EventHandlerMethod {
  * -keepclassmembers class ** extends **.EventBus$InterprocessEvent {
  * public <init>(android.os.Bundle);
  * }
- *
+ * <p>
  * <li>Subscriber registration can be expensive depending on the subscriber's {@link Class}.  This
  * is only done once per class type, but if possible, it is best to pre-register an instance of
  * that class beforehand or when idle.
@@ -184,7 +183,7 @@ class EventHandlerMethod {
  * initialized by the constructor and read by each subscriber of that event.  Subscribers should
  * never alter events as they are processed, and this enforces that pattern.
  * </ul>
- *
+ * <p>
  * <p>
  * Future optimizations:
  * <li>throw exception/log when a subscriber loses the reference
@@ -205,163 +204,22 @@ public class EventBus extends BroadcastReceiver {
 
     private static final String TAG = "EventBus";
     private static final boolean DEBUG_TRACE_ALL = false;
-
-    /**
-     * An event super class that allows us to track internal event state across subscriber
-     * invocations.
-     *
-     * Events should not be edited by subscribers.
-     */
-    public static class Event implements Cloneable {
-        // Indicates that this event's dispatch should be traced and logged to logcat
-        boolean trace;
-        // Indicates that this event must be posted on the EventBus's looper thread before invocation
-        boolean requiresPost;
-        // Not currently exposed, allows a subscriber to cancel further dispatch of this event
-        boolean cancelled;
-
-        // Only accessible from derived events
-        protected Event() {}
-
-        /**
-         * Called by the EventBus prior to dispatching this event to any subscriber of this event.
-         */
-        void onPreDispatch() {
-            // Do nothing
-        }
-
-        /**
-         * Called by the EventBus after dispatching this event to every subscriber of this event.
-         */
-        void onPostDispatch() {
-            // Do nothing
-        }
-
-        @Override
-        protected Object clone() throws CloneNotSupportedException {
-            Event evt = (Event) super.clone();
-            // When cloning an event, reset the cancelled-dispatch state
-            evt.cancelled = false;
-            return evt;
-        }
-    }
-
-    /**
-     * An event that represents an animated state change, which allows subscribers to coordinate
-     * callbacks which happen after the animation has taken place.
-     *
-     * Internally, it is guaranteed that increment() and decrement() will be called before and the
-     * after the event is dispatched.
-     */
-    public static class AnimatedEvent extends Event {
-
-        private final ReferenceCountedTrigger mTrigger = new ReferenceCountedTrigger();
-
-        // Only accessible from derived events
-        protected AnimatedEvent() {}
-
-        /**
-         * Returns the reference counted trigger that coordinates the animations for this event.
-         */
-        public ReferenceCountedTrigger getAnimationTrigger() {
-            return mTrigger;
-        }
-
-        /**
-         * Adds a callback that is guaranteed to be called after the state has changed regardless of
-         * whether an actual animation took place.
-         */
-        public void addPostAnimationCallback(Runnable r) {
-            mTrigger.addLastDecrementRunnable(r);
-        }
-
-        @Override
-        void onPreDispatch() {
-            mTrigger.increment();
-        }
-
-        @Override
-        void onPostDispatch() {
-            mTrigger.decrement();
-        }
-
-        @Override
-        protected Object clone() throws CloneNotSupportedException {
-            throw new CloneNotSupportedException();
-        }
-    }
-
-    /**
-     * An event that can be reusable, only used for situations where we want to reduce memory
-     * allocations when events are sent frequently (ie. on scroll).
-     */
-    public static class ReusableEvent extends Event {
-
-        private int mDispatchCount;
-
-        protected ReusableEvent() {}
-
-        @Override
-        void onPostDispatch() {
-            super.onPostDispatch();
-            mDispatchCount++;
-        }
-
-        @Override
-        protected Object clone() throws CloneNotSupportedException {
-            throw new CloneNotSupportedException();
-        }
-    }
-
-    /**
-     * An inter-process event super class that allows us to track user state across subscriber
-     * invocations.
-     */
-    public static class InterprocessEvent extends Event {
-        private static final String EXTRA_USER = "_user";
-
-        // The user which this event originated from
-        public final int user;
-
-        // Only accessible from derived events
-        protected InterprocessEvent(int user) {
-            this.user = user;
-        }
-
-        /**
-         * Called from the event bus
-         */
-        protected InterprocessEvent(Bundle b) {
-            user = b.getInt(EXTRA_USER);
-        }
-
-        protected Bundle toBundle() {
-            Bundle b = new Bundle();
-            b.putInt(EXTRA_USER, user);
-            return b;
-        }
-    }
-
     /**
      * Proguard must also know, and keep, all methods matching this signature.
-     *
+     * <p>
      * -keepclassmembers class ** {
-     *     public void onBusEvent(**);
-     *     public void onInterprocessBusEvent(**);
+     * public void onBusEvent(**);
+     * public void onInterprocessBusEvent(**);
      * }
      */
     private static final String METHOD_PREFIX = "onBusEvent";
     private static final String INTERPROCESS_METHOD_PREFIX = "onInterprocessBusEvent";
-
     // Ensures that interprocess events can only be sent from a process holding this permission. */
     private static final String PERMISSION_SELF = "com.android.systemui.permission.SELF";
-
     // Used for passing event data across process boundaries
     private static final String EXTRA_INTERPROCESS_EVENT_BUNDLE = "interprocess_event_bundle";
-
     // The default priority of all subscribers
     private static final int DEFAULT_SUBSCRIBER_PRIORITY = 1;
-
     // Orders the handlers by priority and registration time
     private static final Comparator<EventHandler> EVENT_HANDLER_COMPARATOR = new Comparator<EventHandler>() {
         @Override
@@ -375,43 +233,35 @@ public class EventBus extends BroadcastReceiver {
             }
         }
     };
-
     // Used for initializing the default bus
     private static final Object sLock = new Object();
     private static volatile EventBus sDefaultBus;
-
     // The handler to post all events
     private Handler mHandler;
-
     // Keep track of whether we have registered a broadcast receiver already, so that we can
     // unregister ourselves before re-registering again with a new IntentFilter.
     private boolean mHasRegisteredReceiver;
-
     /**
      * Map from event class -> event handler list.  Keeps track of the actual mapping from event
      * to subscriber method.
      */
     private HashMap<Class<? extends Event>, ArrayList<EventHandler>> mEventTypeMap = new HashMap<>();
-
     /**
      * Map from subscriber class -> event handler method lists.  Used to determine upon registration
      * of a new subscriber whether we need to read all the subscriber's methods again using
      * reflection or whether we can just add the subscriber to the event type map.
      */
     private HashMap<Class<? extends Object>, ArrayList<EventHandlerMethod>> mSubscriberTypeMap = new HashMap<>();
-
     /**
      * Map from interprocess event name -> interprocess event class.  Used for mapping the event
      * name after receiving the broadcast, to the event type.  After which a new instance is created
      * and posted in the local process.
      */
     private HashMap<String, Class<? extends InterprocessEvent>> mInterprocessEventNameMap = new HashMap<>();
-
     /**
      * Set of all currently registered subscribers
      */
     private ArrayList<Subscriber> mSubscribers = new ArrayList<>();
-
     // For tracing
     private int mCallCount;
     private long mCallDurationMicros;
@@ -428,15 +278,22 @@ public class EventBus extends BroadcastReceiver {
      */
     public static EventBus getDefault() {
         if (sDefaultBus == null)
-        synchronized (sLock) {
-            if (sDefaultBus == null) {
-                if (DEBUG_TRACE_ALL) {
-                    logWithPid("New EventBus");
+            synchronized (sLock) {
+                if (sDefaultBus == null) {
+                    if (DEBUG_TRACE_ALL) {
+                        logWithPid("New EventBus");
+                    }
+                    sDefaultBus = new EventBus(Looper.getMainLooper());
                 }
-                sDefaultBus = new EventBus(Looper.getMainLooper());
             }
-        }
         return sDefaultBus;
+    }
+
+    /**
+     * Helper method to log the given {@param text} with the current process and user id.
+     */
+    private static void logWithPid(String text) {
+        Log.d(TAG, "[" + android.os.Process.myPid() + ", u" + UserHandle.myUserId() + "] " + text);
     }
 
     /**
@@ -456,8 +313,8 @@ public class EventBus extends BroadcastReceiver {
      * @param subscriber the subscriber to handle events.  If this is the first instance of the
      *                   subscriber's class type that has been registered, the class's methods will
      *                   be scanned for appropriate event handler methods.
-     * @param priority the priority that this subscriber will receive events relative to other
-     *                 subscribers
+     * @param priority   the priority that this subscriber will receive events relative to other
+     *                   subscribers
      */
     public void register(Object subscriber, int priority) {
         registerSubscriber(subscriber, priority, null);
@@ -480,8 +337,8 @@ public class EventBus extends BroadcastReceiver {
      * @param subscriber the subscriber to handle events.  If this is the first instance of the
      *                   subscriber's class type that has been registered, the class's methods will
      *                   be scanned for appropriate event handler methods.
-     * @param priority the priority that this subscriber will receive events relative to other
-     *                 subscribers
+     * @param priority   the priority that this subscriber will receive events relative to other
+     *                   subscribers
      */
     public void registerInterprocessAsCurrentUser(Context context, Object subscriber, int priority) {
         if (DEBUG_TRACE_ALL) {
@@ -599,13 +456,17 @@ public class EventBus extends BroadcastReceiver {
         }
     }
 
-    /** Prevent post()ing an InterprocessEvent */
+    /**
+     * Prevent post()ing an InterprocessEvent
+     */
     @Deprecated
     public void post(InterprocessEvent event) {
         throw new RuntimeException("Not supported, use postInterprocess");
     }
 
-    /** Prevent send()ing an InterprocessEvent */
+    /**
+     * Prevent send()ing an InterprocessEvent
+     */
     @Deprecated
     public void send(InterprocessEvent event) {
         throw new RuntimeException("Not supported, use postInterprocess");
@@ -642,9 +503,9 @@ public class EventBus extends BroadcastReceiver {
         try {
             Constructor<? extends InterprocessEvent> ctor = eventType.getConstructor(Bundle.class);
             send((Event) ctor.newInstance(eventBundle));
-        } catch (NoSuchMethodException|
-                InvocationTargetException|
-                InstantiationException|
+        } catch (NoSuchMethodException |
+                InvocationTargetException |
+                InstantiationException |
                 IllegalAccessException e) {
             Log.e(TAG, "Failed to create InterprocessEvent", e.getCause());
         }
@@ -712,7 +573,7 @@ public class EventBus extends BroadcastReceiver {
      * Registers a new subscriber.
      */
     private void registerSubscriber(Object subscriber, int priority,
-            MutableBoolean hasInterprocessEventsChangedOut) {
+                                    MutableBoolean hasInterprocessEventsChangedOut) {
         // Fail immediately if we are being called from the non-main thread
         long callingThreadId = Thread.currentThread().getId();
         if (callingThreadId != mHandler.getLooper().getThread().getId()) {
@@ -941,7 +802,7 @@ public class EventBus extends BroadcastReceiver {
      * @return whether {@param method} is a valid (normal or interprocess) event bus handler method
      */
     private boolean isValidEventBusHandlerMethod(Method method, Class<?>[] parameterTypes,
-            MutableBoolean isInterprocessEventOut) {
+                                                 MutableBoolean isInterprocessEventOut) {
         int modifiers = method.getModifiers();
         if (Modifier.isPublic(modifiers) &&
                 Modifier.isFinal(modifiers) &&
@@ -952,7 +813,7 @@ public class EventBus extends BroadcastReceiver {
                 isInterprocessEventOut.value = true;
                 return true;
             } else if (EventBus.Event.class.isAssignableFrom(parameterTypes[0]) &&
-                            method.getName().startsWith(METHOD_PREFIX)) {
+                    method.getName().startsWith(METHOD_PREFIX)) {
                 isInterprocessEventOut.value = false;
                 return true;
             } else {
@@ -987,9 +848,141 @@ public class EventBus extends BroadcastReceiver {
     }
 
     /**
-     * Helper method to log the given {@param text} with the current process and user id.
+     * An event super class that allows us to track internal event state across subscriber
+     * invocations.
+     * <p>
+     * Events should not be edited by subscribers.
      */
-    private static void logWithPid(String text) {
-        Log.d(TAG, "[" + android.os.Process.myPid() + ", u" + UserHandle.myUserId() + "] " + text);
+    public static class Event implements Cloneable {
+        // Indicates that this event's dispatch should be traced and logged to logcat
+        boolean trace;
+        // Indicates that this event must be posted on the EventBus's looper thread before invocation
+        boolean requiresPost;
+        // Not currently exposed, allows a subscriber to cancel further dispatch of this event
+        boolean cancelled;
+
+        // Only accessible from derived events
+        protected Event() {
+        }
+
+        /**
+         * Called by the EventBus prior to dispatching this event to any subscriber of this event.
+         */
+        void onPreDispatch() {
+            // Do nothing
+        }
+
+        /**
+         * Called by the EventBus after dispatching this event to every subscriber of this event.
+         */
+        void onPostDispatch() {
+            // Do nothing
+        }
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            Event evt = (Event) super.clone();
+            // When cloning an event, reset the cancelled-dispatch state
+            evt.cancelled = false;
+            return evt;
+        }
+    }
+
+    /**
+     * An event that represents an animated state change, which allows subscribers to coordinate
+     * callbacks which happen after the animation has taken place.
+     * <p>
+     * Internally, it is guaranteed that increment() and decrement() will be called before and the
+     * after the event is dispatched.
+     */
+    public static class AnimatedEvent extends Event {
+
+        private final ReferenceCountedTrigger mTrigger = new ReferenceCountedTrigger();
+
+        // Only accessible from derived events
+        protected AnimatedEvent() {
+        }
+
+        /**
+         * Returns the reference counted trigger that coordinates the animations for this event.
+         */
+        public ReferenceCountedTrigger getAnimationTrigger() {
+            return mTrigger;
+        }
+
+        /**
+         * Adds a callback that is guaranteed to be called after the state has changed regardless of
+         * whether an actual animation took place.
+         */
+        public void addPostAnimationCallback(Runnable r) {
+            mTrigger.addLastDecrementRunnable(r);
+        }
+
+        @Override
+        void onPreDispatch() {
+            mTrigger.increment();
+        }
+
+        @Override
+        void onPostDispatch() {
+            mTrigger.decrement();
+        }
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            throw new CloneNotSupportedException();
+        }
+    }
+
+    /**
+     * An event that can be reusable, only used for situations where we want to reduce memory
+     * allocations when events are sent frequently (ie. on scroll).
+     */
+    public static class ReusableEvent extends Event {
+
+        private int mDispatchCount;
+
+        protected ReusableEvent() {
+        }
+
+        @Override
+        void onPostDispatch() {
+            super.onPostDispatch();
+            mDispatchCount++;
+        }
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            throw new CloneNotSupportedException();
+        }
+    }
+
+    /**
+     * An inter-process event super class that allows us to track user state across subscriber
+     * invocations.
+     */
+    public static class InterprocessEvent extends Event {
+        private static final String EXTRA_USER = "_user";
+
+        // The user which this event originated from
+        public final int user;
+
+        // Only accessible from derived events
+        protected InterprocessEvent(int user) {
+            this.user = user;
+        }
+
+        /**
+         * Called from the event bus
+         */
+        protected InterprocessEvent(Bundle b) {
+            user = b.getInt(EXTRA_USER);
+        }
+
+        protected Bundle toBundle() {
+            Bundle b = new Bundle();
+            b.putInt(EXTRA_USER, user);
+            return b;
+        }
     }
 }

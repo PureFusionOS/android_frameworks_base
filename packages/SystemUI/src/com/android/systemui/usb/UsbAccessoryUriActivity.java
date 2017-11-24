@@ -47,10 +47,10 @@ public class UsbAccessoryUriActivity extends AlertActivity
 
     @Override
     public void onCreate(Bundle icicle) {
-       super.onCreate(icicle);
+        super.onCreate(icicle);
 
-       Intent intent = getIntent();
-        mAccessory = (UsbAccessory)intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
+        Intent intent = getIntent();
+        mAccessory = (UsbAccessory) intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
         String uriString = intent.getStringExtra("uri");
         mUri = (uriString == null ? null : Uri.parse(uriString));
 

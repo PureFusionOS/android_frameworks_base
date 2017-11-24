@@ -35,9 +35,9 @@ import com.android.systemui.R;
  */
 public class PipControlButtonView extends RelativeLayout {
 
+    ImageView mButtonImageView;
     private OnFocusChangeListener mFocusChangeListener;
     private ImageView mIconImageView;
-    ImageView mButtonImageView;
     private TextView mDescriptionTextView;
     private Animator mTextFocusGainAnimator;
     private Animator mButtonFocusGainAnimator;
@@ -83,14 +83,20 @@ public class PipControlButtonView extends RelativeLayout {
         mButtonImageView = findViewById(R.id.button);
         mDescriptionTextView = findViewById(R.id.desc);
 
-        int[] values = new int[] {android.R.attr.src, android.R.attr.text};
+        int[] values = new int[]{android.R.attr.src, android.R.attr.text};
         TypedArray typedArray =
-            context.obtainStyledAttributes(attrs, values, defStyleAttr, defStyleRes);
+                context.obtainStyledAttributes(attrs, values, defStyleAttr, defStyleRes);
 
         setImageResource(typedArray.getResourceId(0, 0));
         setText(typedArray.getResourceId(1, 0));
 
         typedArray.recycle();
+    }
+
+    private static void cancelAnimator(Animator animator) {
+        if (animator.isStarted()) {
+            animator.cancel();
+        }
     }
 
     @Override
@@ -154,12 +160,6 @@ public class PipControlButtonView extends RelativeLayout {
         if (resId != 0) {
             mButtonImageView.setContentDescription(getContext().getString(resId));
             mDescriptionTextView.setText(resId);
-        }
-    }
-
-    private static void cancelAnimator(Animator animator) {
-        if (animator.isStarted()) {
-            animator.cancel();
         }
     }
 

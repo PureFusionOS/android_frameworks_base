@@ -100,12 +100,11 @@ import java.util.List;
  */
 public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreDrawListener {
 
-    private final static String TAG = "RecentsActivity";
-    private final static boolean DEBUG = false;
-
     public final static int EVENT_BUS_PRIORITY = Recents.EVENT_BUS_PRIORITY + 1;
     public final static int INCOMPATIBLE_APP_ALPHA_DURATION = 150;
-
+    private final static String TAG = "RecentsActivity";
+    private final static boolean DEBUG = false;
+    private final UserInteractionEvent mUserInteractionEvent = new UserInteractionEvent();
     private RecentsPackageMonitor mPackageMonitor;
     private Handler mHandler = new Handler();
     private long mLastTabKeyEventTime;
@@ -114,55 +113,30 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
     private boolean mFinishedOnStartup;
     private boolean mIgnoreAltTabRelease;
     private boolean mIsVisible;
-
     // Top level views
     private RecentsView mRecentsView;
+    private final OnPreDrawListener mRecentsDrawnEventListener =
+            new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    mRecentsView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    EventBus.getDefault().post(new RecentsDrawnEvent());
+                    if (LatencyTracker.isEnabled(getApplicationContext())) {
+                        DejankUtils.postAfterTraversal(() -> LatencyTracker.getInstance(
+                                getApplicationContext()).onActionEnd(
+                                LatencyTracker.ACTION_TOGGLE_RECENTS));
+                    }
+                    DejankUtils.postAfterTraversal(() -> {
+                        Recents.getTaskLoader().startLoader(RecentsActivity.this);
+                        Recents.getTaskLoader().getHighResThumbnailLoader().setVisible(true);
+                    });
+                    return true;
+                }
+            };
     private SystemBarScrimViews mScrimViews;
     private View mIncompatibleAppOverlay;
-
     // Runnables to finish the Recents activity
     private Intent mHomeIntent;
-
-    // The trigger to automatically launch the current task
-    private int mFocusTimerDuration;
-    private DozeTrigger mIterateTrigger;
-    private final UserInteractionEvent mUserInteractionEvent = new UserInteractionEvent();
-
-    /**
-     * A common Runnable to finish Recents by launching Home with an animation depending on the
-     * last activity launch state. Generally we always launch home when we exit Recents rather than
-     * just finishing the activity since we don't know what is behind Recents in the task stack.
-     */
-    class LaunchHomeRunnable implements Runnable {
-
-        Intent mLaunchIntent;
-        ActivityOptions mOpts;
-
-        /**
-         * Creates a finish runnable that starts the specified intent.
-         */
-        public LaunchHomeRunnable(Intent launchIntent, ActivityOptions opts) {
-            mLaunchIntent = launchIntent;
-            mOpts = opts;
-        }
-
-        @Override
-        public void run() {
-            try {
-                mHandler.post(() -> {
-                    ActivityOptions opts = mOpts;
-                    if (opts == null) {
-                        opts = ActivityOptions.makeCustomAnimation(RecentsActivity.this,
-                                R.anim.recents_to_launcher_enter, R.anim.recents_to_launcher_exit);
-                    }
-                    startActivityAsUser(mLaunchIntent, opts.toBundle(), UserHandle.CURRENT);
-                });
-            } catch (Exception e) {
-                Log.e(TAG, getString(R.string.recents_launch_error_message, "Home"), e);
-            }
-        }
-    }
-
     /**
      * Broadcast receiver to handle messages from the system
      */
@@ -211,25 +185,9 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
             }
         }
     };
-
-    private final OnPreDrawListener mRecentsDrawnEventListener =
-            new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    mRecentsView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    EventBus.getDefault().post(new RecentsDrawnEvent());
-                    if (LatencyTracker.isEnabled(getApplicationContext())) {
-                        DejankUtils.postAfterTraversal(() -> LatencyTracker.getInstance(
-                                getApplicationContext()).onActionEnd(
-                                LatencyTracker.ACTION_TOGGLE_RECENTS));
-                    }
-                    DejankUtils.postAfterTraversal(() -> {
-                        Recents.getTaskLoader().startLoader(RecentsActivity.this);
-                        Recents.getTaskLoader().getHighResThumbnailLoader().setVisible(true);
-                    });
-                    return true;
-                }
-            };
+    // The trigger to automatically launch the current task
+    private int mFocusTimerDuration;
+    private DozeTrigger mIterateTrigger;
 
     /**
      * Dismisses recents if we are already visible and the intent is to toggle the recents view.
@@ -305,7 +263,9 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
         EventBus.getDefault().send(dismissEvent);
     }
 
-    /** Dismisses Recents directly to Home if we currently aren't transitioning. */
+    /**
+     * Dismisses Recents directly to Home if we currently aren't transitioning.
+     */
     boolean dismissRecentsToHomeIfVisible(boolean animated) {
         SystemServicesProxy ssp = Recents.getSystemServices();
         if (ssp.isRecentsActivityVisible()) {
@@ -316,7 +276,9 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
         return false;
     }
 
-    /** Called with the activity is first created. */
+    /**
+     * Called with the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -641,22 +603,22 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
                 break;
             case 1: // full immersive
                 getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
                 break;
             case 2: // status bar only
                 getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
                 break;
             case 3: // navigation bar only
                 getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
                 break;
         }
     }
@@ -753,7 +715,7 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
         intent.setComponent(intent.resolveActivity(getPackageManager()));
         TaskStackBuilder.create(this)
                 .addNextIntentWithParentStack(intent).startActivities(null,
-                        new UserHandle(event.task.key.userId));
+                new UserHandle(event.task.key.userId));
 
         // Keep track of app-info invocations
         MetricsLogger.count(this, "overview_app_info", 1);
@@ -897,15 +859,56 @@ public class RecentsActivity extends Activity implements ViewTreeObserver.OnPreD
                 Secure.OVERVIEW_LAST_STACK_ACTIVE_TIME, -1,
                 SystemServicesProxy.getInstance(this).getCurrentUser());
 
-        writer.print(prefix); writer.print(TAG);
-        writer.print(" visible="); writer.print(mIsVisible ? "Y" : "N");
-        writer.print(" lastStackTaskActiveTime="); writer.print(lastStackActiveTime);
-        writer.print(" currentTime="); writer.print(System.currentTimeMillis());
-        writer.print(" [0x"); writer.print(id); writer.print("]");
+        writer.print(prefix);
+        writer.print(TAG);
+        writer.print(" visible=");
+        writer.print(mIsVisible ? "Y" : "N");
+        writer.print(" lastStackTaskActiveTime=");
+        writer.print(lastStackActiveTime);
+        writer.print(" currentTime=");
+        writer.print(System.currentTimeMillis());
+        writer.print(" [0x");
+        writer.print(id);
+        writer.print("]");
         writer.println();
 
         if (mRecentsView != null) {
             mRecentsView.dump(prefix, writer);
+        }
+    }
+
+    /**
+     * A common Runnable to finish Recents by launching Home with an animation depending on the
+     * last activity launch state. Generally we always launch home when we exit Recents rather than
+     * just finishing the activity since we don't know what is behind Recents in the task stack.
+     */
+    class LaunchHomeRunnable implements Runnable {
+
+        Intent mLaunchIntent;
+        ActivityOptions mOpts;
+
+        /**
+         * Creates a finish runnable that starts the specified intent.
+         */
+        public LaunchHomeRunnable(Intent launchIntent, ActivityOptions opts) {
+            mLaunchIntent = launchIntent;
+            mOpts = opts;
+        }
+
+        @Override
+        public void run() {
+            try {
+                mHandler.post(() -> {
+                    ActivityOptions opts = mOpts;
+                    if (opts == null) {
+                        opts = ActivityOptions.makeCustomAnimation(RecentsActivity.this,
+                                R.anim.recents_to_launcher_enter, R.anim.recents_to_launcher_exit);
+                    }
+                    startActivityAsUser(mLaunchIntent, opts.toBundle(), UserHandle.CURRENT);
+                });
+            } catch (Exception e) {
+                Log.e(TAG, getString(R.string.recents_launch_error_message, "Home"), e);
+            }
         }
     }
 }

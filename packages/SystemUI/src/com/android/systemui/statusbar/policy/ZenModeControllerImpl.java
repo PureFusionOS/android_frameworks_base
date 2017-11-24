@@ -48,7 +48,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Objects;
 
-/** Platform implementation of the zen mode controller. **/
+/**
+ * Platform implementation of the zen mode controller.
+ **/
 public class ZenModeControllerImpl extends CurrentUserTracker implements ZenModeController {
     private static final String TAG = "ZenModeController";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
@@ -62,9 +64,28 @@ public class ZenModeControllerImpl extends CurrentUserTracker implements ZenMode
     private final AlarmManager mAlarmManager;
     private final SetupObserver mSetupObserver;
     private final UserManager mUserManager;
-
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED.equals(intent.getAction())) {
+                fireNextAlarmChanged();
+            }
+            if (NotificationManager.ACTION_EFFECTS_SUPPRESSOR_CHANGED.equals(intent.getAction())) {
+                fireEffectsSuppressorChanged();
+            }
+        }
+    };
     private int mUserId;
     private boolean mRequesting;
+    private final IConditionListener mListener = new IConditionListener.Stub() {
+        @Override
+        public void onConditionsReceived(Condition[] conditions) {
+            if (DEBUG) Slog.d(TAG, "onConditionsReceived "
+                    + (conditions == null ? 0 : conditions.length) + " mRequesting=" + mRequesting);
+            if (!mRequesting) return;
+            updateConditions(conditions);
+        }
+    };
     private boolean mRegistered;
     private ZenModeConfig mConfig;
 
@@ -219,28 +240,6 @@ public class ZenModeControllerImpl extends CurrentUserTracker implements ZenMode
         if (Objects.equals(oldRule, newRule)) return;
         fireManualRuleChanged(newRule);
     }
-
-    private final IConditionListener mListener = new IConditionListener.Stub() {
-        @Override
-        public void onConditionsReceived(Condition[] conditions) {
-            if (DEBUG) Slog.d(TAG, "onConditionsReceived "
-                    + (conditions == null ? 0 : conditions.length) + " mRequesting=" + mRequesting);
-            if (!mRequesting) return;
-            updateConditions(conditions);
-        }
-    };
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED.equals(intent.getAction())) {
-                fireNextAlarmChanged();
-            }
-            if (NotificationManager.ACTION_EFFECTS_SUPPRESSOR_CHANGED.equals(intent.getAction())) {
-                fireEffectsSuppressorChanged();
-            }
-        }
-    };
 
     private final class SetupObserver extends ContentObserver {
         private final ContentResolver mResolver;

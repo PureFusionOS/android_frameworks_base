@@ -58,6 +58,42 @@ public class NotificationInflaterTest extends SysuiTestCase {
     private Notification.Builder mBuilder;
     private ExpandableNotificationRow mRow;
 
+    public static void runThenWaitForInflation(Runnable block,
+                                               NotificationInflater inflater) throws Exception {
+        runThenWaitForInflation(block, false /* expectingException */, inflater);
+    }
+
+    private static void runThenWaitForInflation(Runnable block, boolean expectingException,
+                                                NotificationInflater inflater) throws Exception {
+        com.android.systemui.util.Assert.isNotMainThread();
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        final ExceptionHolder exceptionHolder = new ExceptionHolder();
+        inflater.setInflationCallback(new NotificationInflater.InflationCallback() {
+            @Override
+            public void handleInflationException(StatusBarNotification notification,
+                                                 Exception e) {
+                if (!expectingException) {
+                    exceptionHolder.setException(e);
+                }
+                countDownLatch.countDown();
+            }
+
+            @Override
+            public void onAsyncInflationFinished(NotificationData.Entry entry) {
+                if (expectingException) {
+                    exceptionHolder.setException(new RuntimeException(
+                            "Inflation finished even though there should be an error"));
+                }
+                countDownLatch.countDown();
+            }
+        });
+        block.run();
+        countDownLatch.await();
+        if (exceptionHolder.mException != null) {
+            throw exceptionHolder.mException;
+        }
+    }
+
     @Before
     public void setUp() throws Exception {
         mBuilder = new Notification.Builder(mContext).setSmallIcon(
@@ -72,7 +108,7 @@ public class NotificationInflaterTest extends SysuiTestCase {
         mNotificationInflater.setInflationCallback(new NotificationInflater.InflationCallback() {
             @Override
             public void handleInflationException(StatusBarNotification notification,
-                    Exception e) {
+                                                 Exception e) {
             }
 
             @Override
@@ -156,7 +192,7 @@ public class NotificationInflaterTest extends SysuiTestCase {
                 new NotificationInflater.InflationCallback() {
                     @Override
                     public void handleInflationException(StatusBarNotification notification,
-                            Exception e) {
+                                                         Exception e) {
                         countDownLatch.countDown();
                         throw new RuntimeException("No Exception expected");
                     }
@@ -194,42 +230,6 @@ public class NotificationInflaterTest extends SysuiTestCase {
         runningTask.abort();
     }
 
-    public static void runThenWaitForInflation(Runnable block,
-            NotificationInflater inflater) throws Exception {
-        runThenWaitForInflation(block, false /* expectingException */, inflater);
-    }
-
-    private static void runThenWaitForInflation(Runnable block, boolean expectingException,
-            NotificationInflater inflater) throws Exception {
-        com.android.systemui.util.Assert.isNotMainThread();
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        final ExceptionHolder exceptionHolder = new ExceptionHolder();
-        inflater.setInflationCallback(new NotificationInflater.InflationCallback() {
-            @Override
-            public void handleInflationException(StatusBarNotification notification,
-                    Exception e) {
-                if (!expectingException) {
-                    exceptionHolder.setException(e);
-                }
-                countDownLatch.countDown();
-            }
-
-            @Override
-            public void onAsyncInflationFinished(NotificationData.Entry entry) {
-                if (expectingException) {
-                    exceptionHolder.setException(new RuntimeException(
-                            "Inflation finished even though there should be an error"));
-                }
-                countDownLatch.countDown();
-            }
-        });
-        block.run();
-        countDownLatch.await();
-        if (exceptionHolder.mException != null) {
-            throw exceptionHolder.mException;
-        }
-    }
-
     private static class ExceptionHolder {
         private Exception mException;
 
@@ -252,14 +252,14 @@ public class NotificationInflaterTest extends SysuiTestCase {
 
         @Override
         public CancellationSignal applyAsync(Context context, ViewGroup parent, Executor executor,
-                OnViewAppliedListener listener, OnClickHandler handler) {
+                                             OnViewAppliedListener listener, OnClickHandler handler) {
             mHandler.post(() -> listener.onError(new RuntimeException("Failed to inflate async")));
             return new CancellationSignal();
         }
 
         @Override
         public CancellationSignal applyAsync(Context context, ViewGroup parent, Executor executor,
-                OnViewAppliedListener listener) {
+                                             OnViewAppliedListener listener) {
             return applyAsync(context, parent, executor, listener, null);
         }
     }

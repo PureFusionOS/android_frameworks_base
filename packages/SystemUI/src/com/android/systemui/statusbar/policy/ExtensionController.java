@@ -28,7 +28,9 @@ public interface ExtensionController {
 
     interface Extension<T> {
         T get();
+
         void destroy();
+
         /**
          * Triggers the extension to cycle through each of the sources again because something
          * (like configuration) may have changed.
@@ -38,12 +40,18 @@ public interface ExtensionController {
 
     interface ExtensionBuilder<T> {
         ExtensionBuilder<T> withTunerFactory(TunerFactory<T> factory);
+
         <P extends T> ExtensionBuilder<T> withPlugin(Class<P> cls);
+
         <P extends T> ExtensionBuilder<T> withPlugin(Class<P> cls, String action);
+
         <P> ExtensionBuilder<T> withPlugin(Class<P> cls, String action,
-                PluginConverter<T, P> converter);
+                                           PluginConverter<T, P> converter);
+
         ExtensionBuilder<T> withDefault(Supplier<T> def);
+
         ExtensionBuilder<T> withCallback(Consumer<T> callback);
+
         Extension build();
     }
 
@@ -53,6 +61,7 @@ public interface ExtensionController {
 
     public interface TunerFactory<T> {
         String[] keys();
+
         T create(Map<String, String> settings);
     }
 }

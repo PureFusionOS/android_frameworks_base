@@ -27,11 +27,11 @@ public class DozeTrigger {
 
     Handler mHandler;
 
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     boolean mIsDozing;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     boolean mIsAsleep;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     int mDozeDurationMilliseconds;
     Runnable mOnSleepRunnable;
 
@@ -94,12 +94,16 @@ public class DozeTrigger {
         mIsDozing = true;
     }
 
-    /** Returns whether we are dozing or not. */
+    /**
+     * Returns whether we are dozing or not.
+     */
     public boolean isDozing() {
         return mIsDozing;
     }
 
-    /** Returns whether the trigger has fired at least once. */
+    /**
+     * Returns whether the trigger has fired at least once.
+     */
     public boolean isAsleep() {
         return mIsAsleep;
     }

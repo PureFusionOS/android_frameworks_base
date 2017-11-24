@@ -40,12 +40,15 @@ public class TaskKeyStrongCache<V> extends TaskKeyCache<V> {
 
     public void dump(String prefix, PrintWriter writer) {
         String innerPrefix = prefix + "  ";
-        writer.print(prefix); writer.print(TAG);
-        writer.print(" numEntries="); writer.print(mKeys.size());
+        writer.print(prefix);
+        writer.print(TAG);
+        writer.print(" numEntries=");
+        writer.print(mKeys.size());
         writer.println();
         int keyCount = mKeys.size();
         for (int i = 0; i < keyCount; i++) {
-            writer.print(innerPrefix); writer.println(mKeys.get(mKeys.keyAt(i)));
+            writer.print(innerPrefix);
+            writer.println(mKeys.get(mKeys.keyAt(i)));
         }
     }
 

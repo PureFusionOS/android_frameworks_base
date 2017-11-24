@@ -32,9 +32,9 @@ import android.view.View;
  * Draws a selection rectangle while taking screenshot
  */
 public class ScreenshotSelectorView extends View {
+    private final Paint mPaintSelection, mPaintBackground;
     private Point mStartPoint;
     private Rect mSelectionRect;
-    private final Paint mPaintSelection, mPaintBackground;
 
     public ScreenshotSelectorView(Context context) {
         this(context, null);

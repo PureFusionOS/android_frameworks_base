@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,27 +13,26 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<set xmlns:android="http://schemas.android.com/apk/res/android" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="350"
+        android:interpolator="@interpolator/ic_signal_flashlight_enable_cross_1_pathdata_interpolator"
         android:propertyName="pathData"
         android:valueFrom="M 8.34049987793,5.6930847168 c 0.0,0.0 29.7749786377,29.7999725342 29.7749786377,29.7999725342 "
         android:valueTo="M 8.34049987793,5.6930847168 c 0.0,0.0 0.274993896484,0.29997253418 0.274993896484,0.29997253418 "
-        android:valueType="pathType"
-        android:interpolator="@interpolator/ic_signal_flashlight_enable_cross_1_pathdata_interpolator" />
-    <set
-        android:ordering="sequentially" >
+        android:valueType="pathType" />
+    <set android:ordering="sequentially">
         <objectAnimator
             android:duration="333"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="strokeAlpha"
             android:valueFrom="1"
-            android:valueTo="1"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueTo="1" />
         <objectAnimator
             android:duration="17"
+            android:interpolator="@android:interpolator/linear"
             android:propertyName="strokeAlpha"
             android:valueFrom="1"
-            android:valueTo="0"
-            android:interpolator="@android:interpolator/linear" />
+            android:valueTo="0" />
     </set>
 </set>

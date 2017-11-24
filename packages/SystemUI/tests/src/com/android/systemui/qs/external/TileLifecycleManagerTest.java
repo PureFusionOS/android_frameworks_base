@@ -229,7 +229,8 @@ public class TileLifecycleManagerTest extends SysuiTestCase {
         mStateManager.onServiceDisconnected(mTileServiceComponentName);
 
         // Guarantees mHandler has processed all messages.
-        assertTrue(mHandler.runWithScissors(()->{}, TEST_FAIL_TIMEOUT));
+        assertTrue(mHandler.runWithScissors(() -> {
+        }, TEST_FAIL_TIMEOUT));
 
         // Two calls: one for the first bind, one for the restart.
         verifyBind(2);

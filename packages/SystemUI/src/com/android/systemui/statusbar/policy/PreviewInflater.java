@@ -50,6 +50,55 @@ public class PreviewInflater {
         mLockPatternUtils = lockPatternUtils;
     }
 
+    public static boolean wouldLaunchResolverActivity(Context ctx, Intent intent,
+                                                      int currentUserId) {
+        return getTargetActivityInfo(ctx, intent, currentUserId, false /* onlyDirectBootAware */)
+                == null;
+    }
+
+    /**
+     * @param onlyDirectBootAware a boolean indicating whether the matched activity packages must
+     *                            be direct boot aware when in direct boot mode if false, all
+     *                            packages are considered a match even if they are not aware.
+     * @return the target activity info of the intent it resolves to a specific package or
+     * {@code null} if it resolved to the resolver activity
+     */
+    public static ActivityInfo getTargetActivityInfo(Context ctx, Intent intent,
+                                                     int currentUserId, boolean onlyDirectBootAware) {
+        PackageManager packageManager = ctx.getPackageManager();
+        int flags = PackageManager.MATCH_DEFAULT_ONLY;
+        if (!onlyDirectBootAware) {
+            flags |= PackageManager.MATCH_DIRECT_BOOT_AWARE
+                    | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
+        }
+        final List<ResolveInfo> appList = packageManager.queryIntentActivitiesAsUser(
+                intent, flags, currentUserId);
+        if (appList.size() == 0) {
+            return null;
+        }
+        ResolveInfo resolved = packageManager.resolveActivityAsUser(intent,
+                flags | PackageManager.GET_META_DATA, currentUserId);
+        if (resolved == null || wouldLaunchResolverActivity(resolved, appList)) {
+            return null;
+        } else {
+            return resolved.activityInfo;
+        }
+    }
+
+    private static boolean wouldLaunchResolverActivity(
+            ResolveInfo resolved, List<ResolveInfo> appList) {
+        // If the list contains the above resolved activity, then it can't be
+        // ResolverActivity itself.
+        for (int i = 0; i < appList.size(); i++) {
+            ResolveInfo tmp = appList.get(i);
+            if (tmp.activityInfo.name.equals(resolved.activityInfo.name)
+                    && tmp.activityInfo.packageName.equals(resolved.activityInfo.packageName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public View inflatePreview(Intent intent) {
         WidgetInfo info = getWidgetInfo(intent);
         return inflatePreview(info);
@@ -82,7 +131,7 @@ public class PreviewInflater {
                     appContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             appInflater = appInflater.cloneInContext(appContext);
             widgetView = appInflater.inflate(widgetInfo.layoutId, null, false);
-        } catch (PackageManager.NameNotFoundException|RuntimeException e) {
+        } catch (PackageManager.NameNotFoundException | RuntimeException e) {
             Log.w(TAG, "Error creating widget view", e);
         }
         return widgetView;
@@ -103,7 +152,7 @@ public class PreviewInflater {
     }
 
     private WidgetInfo getWidgetInfoFromMetaData(String contextPackage,
-            Bundle metaData) {
+                                                 Bundle metaData) {
         if (metaData == null) {
             return null;
         }
@@ -138,55 +187,6 @@ public class PreviewInflater {
         }
         return getWidgetInfoFromMetaData(resolved.activityInfo.packageName,
                 resolved.activityInfo.metaData);
-    }
-
-    public static boolean wouldLaunchResolverActivity(Context ctx, Intent intent,
-            int currentUserId) {
-        return getTargetActivityInfo(ctx, intent, currentUserId, false /* onlyDirectBootAware */)
-                == null;
-    }
-
-    /**
-     * @param onlyDirectBootAware a boolean indicating whether the matched activity packages must
-     *                            be direct boot aware when in direct boot mode if false, all
-     *                            packages are considered a match even if they are not aware.
-     * @return the target activity info of the intent it resolves to a specific package or
-     *         {@code null} if it resolved to the resolver activity
-     */
-    public static ActivityInfo getTargetActivityInfo(Context ctx, Intent intent,
-            int currentUserId, boolean onlyDirectBootAware) {
-        PackageManager packageManager = ctx.getPackageManager();
-        int flags = PackageManager.MATCH_DEFAULT_ONLY;
-        if (!onlyDirectBootAware) {
-            flags |=  PackageManager.MATCH_DIRECT_BOOT_AWARE
-                    | PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
-        }
-        final List<ResolveInfo> appList = packageManager.queryIntentActivitiesAsUser(
-                intent, flags, currentUserId);
-        if (appList.size() == 0) {
-            return null;
-        }
-        ResolveInfo resolved = packageManager.resolveActivityAsUser(intent,
-                flags | PackageManager.GET_META_DATA, currentUserId);
-        if (resolved == null || wouldLaunchResolverActivity(resolved, appList)) {
-            return null;
-        } else {
-            return resolved.activityInfo;
-        }
-    }
-
-    private static boolean wouldLaunchResolverActivity(
-            ResolveInfo resolved, List<ResolveInfo> appList) {
-        // If the list contains the above resolved activity, then it can't be
-        // ResolverActivity itself.
-        for (int i = 0; i < appList.size(); i++) {
-            ResolveInfo tmp = appList.get(i);
-            if (tmp.activityInfo.name.equals(resolved.activityInfo.name)
-                    && tmp.activityInfo.packageName.equals(resolved.activityInfo.packageName)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private static class WidgetInfo {

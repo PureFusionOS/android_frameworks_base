@@ -15,26 +15,26 @@
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:name="ic_volume_collapse"
-    android:height="24dp"
-    android:viewportHeight="24"
-    android:viewportWidth="24"
     android:width="24dp"
-    android:tint="?android:attr/colorControlNormal" >
+    android:height="24dp"
+    android:tint="?android:attr/colorControlNormal"
+    android:viewportHeight="24"
+    android:viewportWidth="24">
 
     <group
         android:name="chevron_02"
         android:rotation="90"
         android:translateX="12"
-        android:translateY="9" >
+        android:translateY="9">
         <group
             android:name="rectangle_2"
-            android:rotation="-45" >
+            android:rotation="-45">
             <group
                 android:name="rectangle_2_pivot"
-                android:translateY="4" >
+                android:translateY="4">
                 <group
                     android:name="rectangle_path_2_position"
-                    android:translateY="-1" >
+                    android:translateY="-1">
                     <path
                         android:name="rectangle_path_2"
                         android:fillColor="#FFFFFFFF"
@@ -44,13 +44,13 @@
         </group>
         <group
             android:name="rectangle_1"
-            android:rotation="45" >
+            android:rotation="45">
             <group
                 android:name="rectangle_1_pivot"
-                android:translateY="-4" >
+                android:translateY="-4">
                 <group
                     android:name="rectangle_path_1_position"
-                    android:translateY="1" >
+                    android:translateY="1">
                     <path
                         android:name="rectangle_path_1"
                         android:fillColor="#FFFFFFFF"

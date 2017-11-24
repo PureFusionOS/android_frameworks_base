@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 **
 ** Copyright 2015, The Android Open Source Project
 **
@@ -25,6 +24,6 @@
     <array name="car_facet_icons" />
     <array name="car_facet_intent_uris" />
     <array name="car_facet_longpress_intent_uris" />
-    <array name="car_facet_package_filters"/>
-    <array name="car_facet_category_filters"/>
+    <array name="car_facet_package_filters" />
+    <array name="car_facet_category_filters" />
 </resources>

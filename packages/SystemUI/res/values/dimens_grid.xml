@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  * Copyright (c) 2016, The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +15,13 @@
 */
 -->
 <resources>
-  <dimen name="recents_grid_padding_left_right">32dp</dimen>
-  <dimen name="recents_grid_padding_top_bottom">150dp</dimen>
-  <dimen name="recents_grid_padding_task_view">20dp</dimen>
-  <dimen name="recents_grid_task_view_header_height">44dp</dimen>
-  <dimen name="recents_grid_task_view_header_button_padding">8dp</dimen>
-  <dimen name="recents_grid_task_view_focused_frame_thickness">8dp</dimen>
-  <dimen name="recents_grid_task_view_rounded_corners_radius">4dp</dimen>
-  <dimen name="recents_grid_task_view_focused_frame_rounded_corners_radius">8dp</dimen>
+    <dimen name="recents_grid_padding_left_right">32dp</dimen>
+    <dimen name="recents_grid_padding_top_bottom">150dp</dimen>
+    <dimen name="recents_grid_padding_task_view">20dp</dimen>
+    <dimen name="recents_grid_task_view_header_height">44dp</dimen>
+    <dimen name="recents_grid_task_view_header_button_padding">8dp</dimen>
+    <dimen name="recents_grid_task_view_focused_frame_thickness">8dp</dimen>
+    <dimen name="recents_grid_task_view_rounded_corners_radius">4dp</dimen>
+    <dimen name="recents_grid_task_view_focused_frame_rounded_corners_radius">8dp</dimen>
 </resources>
 

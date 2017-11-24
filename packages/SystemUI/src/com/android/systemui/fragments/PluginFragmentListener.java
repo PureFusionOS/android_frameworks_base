@@ -36,7 +36,7 @@ public class PluginFragmentListener implements PluginListener<Plugin> {
     private final String mTag;
 
     public PluginFragmentListener(View view, String tag, Class<? extends Fragment> defaultFragment,
-            Class<? extends FragmentBase> expectedInterface) {
+                                  Class<? extends FragmentBase> expectedInterface) {
         mTag = tag;
         mFragmentHostManager = FragmentHostManager.get(view);
         mPluginManager = Dependency.get(PluginManager.class);

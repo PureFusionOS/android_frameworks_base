@@ -38,11 +38,6 @@ import java.util.List;
 public class AnimationProps {
 
     public static final AnimationProps IMMEDIATE = new AnimationProps(0, Interpolators.LINEAR);
-
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({ALL, TRANSLATION_X, TRANSLATION_Y, TRANSLATION_Z, ALPHA, SCALE, BOUNDS})
-    public @interface PropType {}
-
     public static final int ALL = 0;
     public static final int TRANSLATION_X = 1;
     public static final int TRANSLATION_Y = 2;
@@ -52,16 +47,15 @@ public class AnimationProps {
     public static final int BOUNDS = 6;
     public static final int DIM_ALPHA = 7;
     public static final int FOCUS_STATE = 8;
-
     private SparseLongArray mPropStartDelay;
     private SparseLongArray mPropDuration;
     private SparseArray<Interpolator> mPropInterpolators;
     private Animator.AnimatorListener mListener;
-
     /**
      * The builder constructor.
      */
-    public AnimationProps() {}
+    public AnimationProps() {
+    }
 
     /**
      * Creates an animation with a default {@param duration} and {@param interpolator} for all
@@ -76,7 +70,7 @@ public class AnimationProps {
      * properties in this animation.
      */
     public AnimationProps(int duration, Interpolator interpolator,
-            Animator.AnimatorListener listener) {
+                          Animator.AnimatorListener listener) {
         this(0, duration, interpolator, listener);
     }
 
@@ -93,7 +87,7 @@ public class AnimationProps {
      * {@param interpolator} for all properties in this animation.
      */
     public AnimationProps(int startDelay, int duration, Interpolator interpolator,
-            Animator.AnimatorListener listener) {
+                          Animator.AnimatorListener listener) {
         setStartDelay(ALL, startDelay);
         setDuration(ALL, duration);
         setInterpolator(ALL, interpolator);
@@ -201,18 +195,18 @@ public class AnimationProps {
     }
 
     /**
+     * Returns the animator listener for this animation.
+     */
+    public Animator.AnimatorListener getListener() {
+        return mListener;
+    }
+
+    /**
      * Sets an animator listener for this animation.
      */
     public AnimationProps setListener(Animator.AnimatorListener listener) {
         mListener = listener;
         return this;
-    }
-
-    /**
-     * Returns the animator listener for this animation.
-     */
-    public Animator.AnimatorListener getListener() {
-        return mListener;
     }
 
     /**
@@ -226,5 +220,10 @@ public class AnimationProps {
             }
         }
         return true;
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({ALL, TRANSLATION_X, TRANSLATION_Y, TRANSLATION_Z, ALPHA, SCALE, BOUNDS})
+    public @interface PropType {
     }
 }

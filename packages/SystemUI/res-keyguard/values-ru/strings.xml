@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"Для разблокировки нажмите \"Меню\"."</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"Сеть заблокирована"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"Нет SIM-карты."</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"Нет SIM-карты."</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"Нет SIM-карты."</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"Нет SIM-карты."</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"Нет SIM-карты."</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"Вставьте SIM-карту."</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"SIM-карта отсутствует или недоступна. Вставьте SIM-карту."</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"SIM-карта непригодна к использованию."</string>
@@ -69,38 +68,38 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"Введите PIN-код (от 4 до 8 цифр)."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"PUK-код должен содержать не менее 8 цифр."</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"Введите правильный PUK-код. После нескольких неудачных попыток SIM-карта будет заблокирована."</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"PIN-коды не совпадают."</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"PIN-коды не совпадают."</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"Слишком много попыток ввести графический ключ."</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"Вы ввели неверный PIN-код несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>).\n\nПовторите попытку через <xliff:g id="NUMBER_1">%2$d</xliff:g> сек."</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"Вы ввели неверный пароль несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>).\n\nПовторите попытку через <xliff:g id="NUMBER_1">%2$d</xliff:g> сек."</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"Вы начертили неверный графический ключ несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>).\n\nПовторите попытку через <xliff:g id="NUMBER_1">%2$d</xliff:g> сек."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"Вы пытались разблокировать планшет несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи произойдет сброс настроек и все данные на устройстве будут удалены."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"Вы пытались разблокировать телефон несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи произойдет сброс настроек и все данные на устройстве будут удалены."</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"Достигнуто максимальное количество неудачных попыток разблокировать планшет (<xliff:g id="NUMBER">%d</xliff:g>). Настройки устройства будут сброшены, а все его данные – удалены."</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"Достигнуто максимальное количество неудачных попыток разблокировать телефон (<xliff:g id="NUMBER">%d</xliff:g>). Настройки устройства будут сброшены, а все его данные – удалены."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"Вы пытались разблокировать планшет несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи профиль пользователя и все его данные будут удалены."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"Вы пытались разблокировать телефон несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи профиль пользователя и все его данные будут удалены."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"Достигнуто максимальное количество неудачных попыток разблокировать планшет (<xliff:g id="NUMBER">%d</xliff:g>). Профиль пользователя и все его данные будут удалены."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"Достигнуто максимальное количество неудачных попыток разблокировать телефон (<xliff:g id="NUMBER">%d</xliff:g>). Профиль пользователя и все его данные будут удалены."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"Вы пытались разблокировать планшет несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи рабочий профиль и все его данные будут удалены."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"Вы пытались разблокировать телефон несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи рабочий профиль и все его данные будут удалены."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"Достигнуто максимальное количество неудачных попыток разблокировать планшет (<xliff:g id="NUMBER">%d</xliff:g>). Рабочий профиль и все его данные будут удалены."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"Достигнуто максимальное количество неудачных попыток разблокировать телефон (<xliff:g id="NUMBER">%d</xliff:g>). Рабочий профиль и все его данные будут удалены."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"Вы ввели неверный графический ключ несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи вам будет предложено разблокировать планшет с помощью аккаунта электронной почты.\n\nПовторите попытку через <xliff:g id="NUMBER_2">%3$d</xliff:g> сек."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"Вы ввели неверный графический ключ несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи вам будет предложено разблокировать телефон с помощью аккаунта электронной почты.\n\nПовторите попытку через <xliff:g id="NUMBER_2">%3$d</xliff:g> сек."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"Вы пытались разблокировать планшет несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи произойдет сброс настроек и все данные на устройстве будут удалены."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"Вы пытались разблокировать телефон несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи произойдет сброс настроек и все данные на устройстве будут удалены."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"Достигнуто максимальное количество неудачных попыток разблокировать планшет (<xliff:g id="NUMBER">%d</xliff:g>). Настройки устройства будут сброшены, а все его данные – удалены."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"Достигнуто максимальное количество неудачных попыток разблокировать телефон (<xliff:g id="NUMBER">%d</xliff:g>). Настройки устройства будут сброшены, а все его данные – удалены."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"Вы пытались разблокировать планшет несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи профиль пользователя и все его данные будут удалены."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"Вы пытались разблокировать телефон несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи профиль пользователя и все его данные будут удалены."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"Достигнуто максимальное количество неудачных попыток разблокировать планшет (<xliff:g id="NUMBER">%d</xliff:g>). Профиль пользователя и все его данные будут удалены."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"Достигнуто максимальное количество неудачных попыток разблокировать телефон (<xliff:g id="NUMBER">%d</xliff:g>). Профиль пользователя и все его данные будут удалены."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"Вы пытались разблокировать планшет несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи рабочий профиль и все его данные будут удалены."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"Вы пытались разблокировать телефон несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи рабочий профиль и все его данные будут удалены."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"Достигнуто максимальное количество неудачных попыток разблокировать планшет (<xliff:g id="NUMBER">%d</xliff:g>). Рабочий профиль и все его данные будут удалены."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"Достигнуто максимальное количество неудачных попыток разблокировать телефон (<xliff:g id="NUMBER">%d</xliff:g>). Рабочий профиль и все его данные будут удалены."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"Вы ввели неверный графический ключ несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи вам будет предложено разблокировать планшет с помощью аккаунта электронной почты.\n\nПовторите попытку через <xliff:g id="NUMBER_2">%3$d</xliff:g> сек."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"Вы ввели неверный графический ключ несколько раз (<xliff:g id="NUMBER_0">%1$d</xliff:g>). Осталось попыток: <xliff:g id="NUMBER_1">%2$d</xliff:g>. В случае неудачи вам будет предложено разблокировать телефон с помощью аккаунта электронной почты.\n\nПовторите попытку через <xliff:g id="NUMBER_2">%3$d</xliff:g> сек."</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"Неверный PIN-код. Обратитесь к оператору связи, чтобы разблокировать SIM-карту."</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="one">Неверный PIN-код. Осталась <xliff:g id="NUMBER_1">%d</xliff:g> попытка.</item>
-      <item quantity="few">Неверный PIN-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попытки.</item>
-      <item quantity="many">Неверный PIN-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попыток.</item>
-      <item quantity="other">Неверный PIN-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попытки.</item>
+        <item quantity="one">Неверный PIN-код. Осталась <xliff:g id="NUMBER_1">%d</xliff:g> попытка.</item>
+        <item quantity="few">Неверный PIN-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попытки.</item>
+        <item quantity="many">Неверный PIN-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попыток.</item>
+        <item quantity="other">Неверный PIN-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попытки.</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"SIM-карта заблокирована навсегда. Обратитесь к оператору связи."</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="one">Неверный PUK-код. Осталась <xliff:g id="NUMBER_1">%d</xliff:g> попытка. После этого SIM-карта будет заблокирована навсегда.</item>
-      <item quantity="few">Неверный PUK-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попытки. После этого SIM-карта будет заблокирована навсегда.</item>
-      <item quantity="many">Неверный PUK-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попыток. После этого SIM-карта будет заблокирована навсегда.</item>
-      <item quantity="other">Неверный PUK-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попытки. После этого SIM-карта будет заблокирована навсегда.</item>
+        <item quantity="one">Неверный PUK-код. Осталась <xliff:g id="NUMBER_1">%d</xliff:g> попытка. После этого SIM-карта будет заблокирована навсегда.</item>
+        <item quantity="few">Неверный PUK-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попытки. После этого SIM-карта будет заблокирована навсегда.</item>
+        <item quantity="many">Неверный PUK-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попыток. После этого SIM-карта будет заблокирована навсегда.</item>
+        <item quantity="other">Неверный PUK-код. Осталось <xliff:g id="NUMBER_1">%d</xliff:g> попытки. После этого SIM-карта будет заблокирована навсегда.</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"Не удалось разблокировать SIM-карту"</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"Не удалось разблокировать SIM-карту"</string>
@@ -120,22 +119,22 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"Устройство заблокировано администратором"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"Устройство было заблокировано вручную"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="one">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Подтвердите графический ключ.</item>
-      <item quantity="few">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Подтвердите графический ключ.</item>
-      <item quantity="many">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Подтвердите графический ключ.</item>
-      <item quantity="other">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Подтвердите графический ключ.</item>
+        <item quantity="one">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Подтвердите графический ключ.</item>
+        <item quantity="few">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Подтвердите графический ключ.</item>
+        <item quantity="many">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Подтвердите графический ключ.</item>
+        <item quantity="other">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Подтвердите графический ключ.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="one">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Введите PIN-код ещё раз.</item>
-      <item quantity="few">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Введите PIN-код ещё раз.</item>
-      <item quantity="many">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Введите PIN-код ещё раз.</item>
-      <item quantity="other">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Введите PIN-код ещё раз.</item>
+        <item quantity="one">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Введите PIN-код ещё раз.</item>
+        <item quantity="few">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Введите PIN-код ещё раз.</item>
+        <item quantity="many">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Введите PIN-код ещё раз.</item>
+        <item quantity="other">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Введите PIN-код ещё раз.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="one">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Введите пароль ещё раз.</item>
-      <item quantity="few">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Введите пароль ещё раз.</item>
-      <item quantity="many">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Введите пароль ещё раз.</item>
-      <item quantity="other">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Введите пароль ещё раз.</item>
+        <item quantity="one">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Введите пароль ещё раз.</item>
+        <item quantity="few">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Введите пароль ещё раз.</item>
+        <item quantity="many">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часов. Введите пароль ещё раз.</item>
+        <item quantity="other">Устройство не разблокировалось в течение <xliff:g id="NUMBER_1">%d</xliff:g> часа. Введите пароль ещё раз.</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"Не распознано"</string>
 </resources>

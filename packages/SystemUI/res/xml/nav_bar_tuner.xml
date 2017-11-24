@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2017 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2017 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,20 +17,20 @@
     android:title="@string/nav_bar">
 
     <com.android.systemui.tuner.RadioListPreference
-        android:key="layout"
-        android:title="@string/nav_bar_layout"
-        android:summary="%s"
-        android:persistent="false"
         android:entries="@array/nav_bar_layouts"
-        android:entryValues="@array/nav_bar_layouts_values" />
+        android:entryValues="@array/nav_bar_layouts_values"
+        android:key="layout"
+        android:persistent="false"
+        android:summary="%s"
+        android:title="@string/nav_bar_layout" />
 
     <com.android.systemui.tuner.RadioListPreference
+        android:entries="@array/nav_bar_buttons"
+        android:entryValues="@array/nav_bar_button_values"
         android:key="type_left"
-        android:title="@string/left_nav_bar_button_type"
         android:persistent="false"
         android:summary="%s"
-        android:entries="@array/nav_bar_buttons"
-        android:entryValues="@array/nav_bar_button_values" />
+        android:title="@string/left_nav_bar_button_type" />
 
     <Preference
         android:key="keycode_left"
@@ -45,12 +44,12 @@
         android:title="@string/left_icon" />
 
     <com.android.systemui.tuner.RadioListPreference
-        android:key="type_right"
-        android:title="@string/right_nav_bar_button_type"
-        android:summary="%s"
-        android:persistent="false"
         android:entries="@array/nav_bar_buttons"
-        android:entryValues="@array/nav_bar_button_values" />
+        android:entryValues="@array/nav_bar_button_values"
+        android:key="type_right"
+        android:persistent="false"
+        android:summary="%s"
+        android:title="@string/right_nav_bar_button_type" />
 
     <Preference
         android:key="keycode_right"

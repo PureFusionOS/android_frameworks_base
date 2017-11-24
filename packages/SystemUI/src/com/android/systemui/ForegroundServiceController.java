@@ -18,13 +18,13 @@ import android.service.notification.StatusBarNotification;
 
 public interface ForegroundServiceController {
     /**
-     * @param sbn notification that was just posted
+     * @param sbn        notification that was just posted
      * @param importance
      */
     void addNotification(StatusBarNotification sbn, int importance);
 
     /**
-     * @param sbn notification that was just changed in some way
+     * @param sbn           notification that was just changed in some way
      * @param newImportance
      */
     void updateNotification(StatusBarNotification sbn, int newImportance);

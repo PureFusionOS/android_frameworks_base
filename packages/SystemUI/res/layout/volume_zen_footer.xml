@@ -33,19 +33,19 @@
         android:id="@+id/zen_introduction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:layout_marginStart="16dp"
         android:background="@drawable/zen_introduction_message_background"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:theme="@*android:style/ThemeOverlay.DeviceDefault.Accent.Light">
 
         <ImageView
             android:id="@+id/zen_introduction_confirm"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/btn_borderless_rect"
             android:clickable="true"
             android:contentDescription="@string/accessibility_desc_close"
@@ -57,19 +57,19 @@
             android:id="@+id/zen_introduction_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_marginStart="24dp"
-            android:textDirection="locale"
-            android:lineSpacingMultiplier="1.20029"
+            android:layout_marginTop="12dp"
             android:layout_toStartOf="@id/zen_introduction_confirm"
+            android:lineSpacingMultiplier="1.20029"
             android:text="@string/zen_alarms_introduction"
-            android:textAppearance="@style/TextAppearance.QS.Introduction" />
+            android:textAppearance="@style/TextAppearance.QS.Introduction"
+            android:textDirection="locale" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="16dp"
-            android:layout_below="@id/zen_introduction_message"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/zen_introduction_message" />
 
     </RelativeLayout>
 
@@ -78,7 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/volume_zen_icon"
@@ -91,22 +91,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/volume_zen_summary_line_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textDirection="locale"
-                android:textAppearance="@style/TextAppearance.Volume.ZenSummary" />
+                android:textAppearance="@style/TextAppearance.Volume.ZenSummary"
+                android:textDirection="locale" />
 
             <TextView
                 android:id="@+id/volume_zen_summary_line_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:textDirection="locale"
-                android:textAppearance="@style/TextAppearance.Volume.ZenDetail" />
+                android:textAppearance="@style/TextAppearance.Volume.ZenDetail"
+                android:textDirection="locale" />
 
         </LinearLayout>
 
@@ -121,10 +121,10 @@
         android:layout_marginEnd="8dp"
         android:clickable="true"
         android:focusable="true"
-        android:paddingStart="15dp"
         android:paddingEnd="15dp"
+        android:paddingStart="15dp"
         android:text="@string/volume_zen_end_now"
-        android:textColor="?android:attr/colorAccent"
-        android:textAppearance="@style/TextAppearance.QS.DetailButton" />
+        android:textAppearance="@style/TextAppearance.QS.DetailButton"
+        android:textColor="?android:attr/colorAccent" />
 
 </com.android.systemui.volume.ZenFooter>

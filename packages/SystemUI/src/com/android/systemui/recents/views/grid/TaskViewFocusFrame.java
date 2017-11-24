@@ -30,6 +30,7 @@ public class TaskViewFocusFrame extends View implements OnGlobalFocusChangeListe
 
     private TaskStackView mSv;
     private TaskGridLayoutAlgorithm mTaskGridLayoutAlgorithm;
+
     public TaskViewFocusFrame(Context context) {
         this(context, null);
     }
@@ -43,16 +44,16 @@ public class TaskViewFocusFrame extends View implements OnGlobalFocusChangeListe
     }
 
     public TaskViewFocusFrame(Context context, AttributeSet attrs, int defStyleAttr,
-        int defStyleRes) {
+                              int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setBackground(mContext.getDrawable(
-            R.drawable.recents_grid_task_view_focus_frame_background));
+                R.drawable.recents_grid_task_view_focus_frame_background));
         setFocusable(false);
         hide();
     }
 
     public TaskViewFocusFrame(Context context, TaskStackView stackView,
-        TaskGridLayoutAlgorithm taskGridLayoutAlgorithm) {
+                              TaskGridLayoutAlgorithm taskGridLayoutAlgorithm) {
         this(context);
         mSv = stackView;
         mTaskGridLayoutAlgorithm = taskGridLayoutAlgorithm;
@@ -65,8 +66,8 @@ public class TaskViewFocusFrame extends View implements OnGlobalFocusChangeListe
         int thickness = mTaskGridLayoutAlgorithm.getFocusFrameThickness();
         Rect rect = mTaskGridLayoutAlgorithm.getTaskGridRect();
         measure(
-            MeasureSpec.makeMeasureSpec(rect.width() + thickness * 2, MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(rect.height() + thickness * 2, MeasureSpec.EXACTLY));
+                MeasureSpec.makeMeasureSpec(rect.width() + thickness * 2, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(rect.height() + thickness * 2, MeasureSpec.EXACTLY));
     }
 
     /**
@@ -90,6 +91,7 @@ public class TaskViewFocusFrame extends View implements OnGlobalFocusChangeListe
     /**
      * Move the task view focus frame to surround the newly focused view. If it's {@code null} or
      * it's not an instance of GridTaskView, we hide the focus frame.
+     *
      * @param newFocus The newly focused view.
      */
     public void moveGridTaskViewFocus(View newFocus) {

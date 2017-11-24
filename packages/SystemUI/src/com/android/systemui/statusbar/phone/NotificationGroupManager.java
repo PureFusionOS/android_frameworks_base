@@ -81,11 +81,11 @@ public class NotificationGroupManager implements OnHeadsUpChangedListener {
      * An entry was removed.
      *
      * @param removed the removed entry
-     * @param sbn the notification the entry has, which doesn't need to be the same as it's internal
-     *            notification
+     * @param sbn     the notification the entry has, which doesn't need to be the same as it's internal
+     *                notification
      */
     private void onEntryRemovedInternal(NotificationData.Entry removed,
-            final StatusBarNotification sbn) {
+                                        final StatusBarNotification sbn) {
         String groupKey = getGroupKey(sbn);
         final NotificationGroup group = mGroupMap.get(groupKey);
         if (group == null) {
@@ -149,8 +149,8 @@ public class NotificationGroupManager implements OnHeadsUpChangedListener {
         group.suppressed = group.summary != null && !group.expanded
                 && (group.children.size() == 1
                 || (group.children.size() == 0
-                        && group.summary.notification.getNotification().isGroupSummary()
-                        && hasIsolatedChildren(group)));
+                && group.summary.notification.getNotification().isGroupSummary()
+                && hasIsolatedChildren(group)));
         if (prevSuppressed != group.suppressed) {
             if (group.suppressed) {
                 handleSuppressedSummaryHeadsUpped(group.summary);
@@ -185,7 +185,7 @@ public class NotificationGroupManager implements OnHeadsUpChangedListener {
     }
 
     public void onEntryUpdated(NotificationData.Entry entry,
-            StatusBarNotification oldNotification) {
+                               StatusBarNotification oldNotification) {
         String oldKey = oldNotification.getGroupKey();
         String newKey = entry.notification.getGroupKey();
         boolean groupKeysChanged = !oldKey.equals(newKey);
@@ -254,7 +254,7 @@ public class NotificationGroupManager implements OnHeadsUpChangedListener {
         ArrayList<NotificationGroup> groupCopy = new ArrayList<>(mGroupMap.values());
         int size = groupCopy.size();
         for (int i = 0; i < size; i++) {
-            NotificationGroup group =  groupCopy.get(i);
+            NotificationGroup group = groupCopy.get(i);
             if (group.expanded) {
                 setGroupExpanded(group, false);
             }
@@ -319,10 +319,12 @@ public class NotificationGroupManager implements OnHeadsUpChangedListener {
         NotificationGroup group = mGroupMap.get(groupKey);
         return group == null ? null
                 : group.summary == null ? null
-                        : group.summary.row;
+                : group.summary.row;
     }
 
-    /** @return group expansion state after toggling. */
+    /**
+     * @return group expansion state after toggling.
+     */
     public boolean toggleGroupExpansion(StatusBarNotification sbn) {
         NotificationGroup group = mGroupMap.get(getGroupKey(sbn));
         if (group == null) {
@@ -434,9 +436,9 @@ public class NotificationGroupManager implements OnHeadsUpChangedListener {
         NotificationGroup notificationGroup = mGroupMap.get(sbn.getGroupKey());
         return (sbn.isGroup() && !sbn.getNotification().isGroupSummary())
                 && (sbn.getNotification().fullScreenIntent != null
-                        || notificationGroup == null
-                        || !notificationGroup.expanded
-                        || isGroupNotFullyVisible(notificationGroup));
+                || notificationGroup == null
+                || !notificationGroup.expanded
+                || isGroupNotFullyVisible(notificationGroup));
     }
 
     private boolean isGroupNotFullyVisible(NotificationGroup notificationGroup) {
@@ -451,15 +453,42 @@ public class NotificationGroupManager implements OnHeadsUpChangedListener {
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("GroupManager state:");
-        pw.println("  number of groups: " +  mGroupMap.size());
-        for (Map.Entry<String, NotificationGroup>  entry : mGroupMap.entrySet()) {
-            pw.println("\n    key: " + entry.getKey()); pw.println(entry.getValue());
+        pw.println("  number of groups: " + mGroupMap.size());
+        for (Map.Entry<String, NotificationGroup> entry : mGroupMap.entrySet()) {
+            pw.println("\n    key: " + entry.getKey());
+            pw.println(entry.getValue());
         }
-        pw.println("\n    isolated entries: " +  mIsolatedEntries.size());
+        pw.println("\n    isolated entries: " + mIsolatedEntries.size());
         for (Map.Entry<String, StatusBarNotification> entry : mIsolatedEntries.entrySet()) {
-            pw.print("      "); pw.print(entry.getKey());
-            pw.print(", "); pw.println(entry.getValue());
+            pw.print("      ");
+            pw.print(entry.getKey());
+            pw.print(", ");
+            pw.println(entry.getValue());
         }
+    }
+
+    public interface OnGroupChangeListener {
+        /**
+         * The expansion of a group has changed.
+         *
+         * @param changedRow the row for which the expansion has changed, which is also the summary
+         * @param expanded   a boolean indicating the new expanded state
+         */
+        void onGroupExpansionChanged(ExpandableNotificationRow changedRow, boolean expanded);
+
+        /**
+         * A group of children just received a summary notification and should therefore become
+         * children of it.
+         *
+         * @param group the group created
+         */
+        void onGroupCreatedFromChildren(NotificationGroup group);
+
+        /**
+         * The groups have changed. This can happen if the isolation of a child has changes or if a
+         * group became suppressed / unsuppressed
+         */
+        void onGroupsChanged();
     }
 
     public static class NotificationGroup {
@@ -481,29 +510,5 @@ public class NotificationGroupManager implements OnHeadsUpChangedListener {
             }
             return result;
         }
-    }
-
-    public interface OnGroupChangeListener {
-        /**
-         * The expansion of a group has changed.
-         *
-         * @param changedRow the row for which the expansion has changed, which is also the summary
-         * @param expanded a boolean indicating the new expanded state
-         */
-        void onGroupExpansionChanged(ExpandableNotificationRow changedRow, boolean expanded);
-
-        /**
-         * A group of children just received a summary notification and should therefore become
-         * children of it.
-         *
-         * @param group the group created
-         */
-        void onGroupCreatedFromChildren(NotificationGroup group);
-
-        /**
-         * The groups have changed. This can happen if the isolation of a child has changes or if a
-         * group became suppressed / unsuppressed
-         */
-        void onGroupsChanged();
     }
 }

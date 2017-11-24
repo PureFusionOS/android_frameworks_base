@@ -147,6 +147,19 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
                 com.android.internal.R.dimen.status_bar_height);
     }
 
+    private static String snoozeKey(String packageName, int user) {
+        return user + "," + packageName;
+    }
+
+    public static void setIsClickedNotification(View child, boolean clicked) {
+        child.setTag(TAG_CLICKED_NOTIFICATION, clicked ? true : null);
+    }
+
+    public static boolean isClickedHeadsUpNotification(View child) {
+        Boolean clicked = (Boolean) child.getTag(TAG_CLICKED_NOTIFICATION);
+        return clicked != null && clicked;
+    }
+
     private void updateTouchableRegionListener() {
         boolean shouldObserve = mHasPinnedNotification || mHeadsUpGoingAway
                 || mWaitingOnCollapseWhenGoingAway;
@@ -162,10 +175,6 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
         mIsObserving = shouldObserve;
     }
 
-    public void setBar(StatusBar bar) {
-        mBar = bar;
-    }
-
     public void addListener(OnHeadsUpChangedListener listener) {
         mListeners.add(listener);
     }
@@ -176,6 +185,10 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
 
     public StatusBar getBar() {
         return mBar;
+    }
+
+    public void setBar(StatusBar bar) {
+        mBar = bar;
     }
 
     /**
@@ -350,10 +363,6 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
         mReleaseOnExpandFinish = true;
     }
 
-    private static String snoozeKey(String packageName, int user) {
-        return user + "," + packageName;
-    }
-
     private HeadsUpEntry getHeadsUpEntry(String key) {
         return mHeadsUpEntries.get(key);
     }
@@ -371,7 +380,7 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
             return null;
         }
         HeadsUpEntry topEntry = null;
-        for (HeadsUpEntry entry: mHeadsUpEntries.values()) {
+        for (HeadsUpEntry entry : mHeadsUpEntries.values()) {
             if (topEntry == null || entry.compareTo(topEntry) == -1) {
                 topEntry = entry;
             }
@@ -427,18 +436,25 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("HeadsUpManager state:");
-        pw.print("  mTouchAcceptanceDelay="); pw.println(mTouchAcceptanceDelay);
-        pw.print("  mSnoozeLengthMs="); pw.println(mSnoozeLengthMs);
-        pw.print("  now="); pw.println(SystemClock.elapsedRealtime());
-        pw.print("  mUser="); pw.println(mUser);
-        for (HeadsUpEntry entry: mHeadsUpEntries.values()) {
-            pw.print("  HeadsUpEntry="); pw.println(entry.entry);
+        pw.print("  mTouchAcceptanceDelay=");
+        pw.println(mTouchAcceptanceDelay);
+        pw.print("  mSnoozeLengthMs=");
+        pw.println(mSnoozeLengthMs);
+        pw.print("  now=");
+        pw.println(SystemClock.elapsedRealtime());
+        pw.print("  mUser=");
+        pw.println(mUser);
+        for (HeadsUpEntry entry : mHeadsUpEntries.values()) {
+            pw.print("  HeadsUpEntry=");
+            pw.println(entry.entry);
         }
         int N = mSnoozedPackages.size();
         pw.println("  snoozed packages: " + N);
         for (int i = 0; i < N; i++) {
-            pw.print("    "); pw.print(mSnoozedPackages.valueAt(i));
-            pw.print(", "); pw.println(mSnoozedPackages.keyAt(i));
+            pw.print("    ");
+            pw.print(mSnoozedPackages.valueAt(i));
+            pw.print(", ");
+            pw.println(mSnoozedPackages.keyAt(i));
         }
     }
 
@@ -489,12 +505,12 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
         mEntriesToRemoveAfterExpand.clear();
     }
 
-    public void setTrackingHeadsUp(boolean trackingHeadsUp) {
-        mTrackingHeadsUp = trackingHeadsUp;
-    }
-
     public boolean isTrackingHeadsUp() {
         return mTrackingHeadsUp;
+    }
+
+    public void setTrackingHeadsUp(boolean trackingHeadsUp) {
+        mTrackingHeadsUp = trackingHeadsUp;
     }
 
     public void setIsExpanded(boolean isExpanded) {
@@ -511,8 +527,8 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
 
     /**
      * @return the height of the top heads up notification when pinned. This is different from the
-     *         intrinsic height, which also includes whether the notification is system expanded and
-     *         is mainly used when dragging down from a heads up notification.
+     * intrinsic height, which also includes whether the notification is system expanded and
+     * is mainly used when dragging down from a heads up notification.
      */
     public int getTopHeadsUpPinnedHeight() {
         HeadsUpEntry topEntry = getTopEntry();
@@ -568,8 +584,8 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
         mStatusBarWindowView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom,
-                    int oldLeft,
-                    int oldTop, int oldRight, int oldBottom) {
+                                       int oldLeft,
+                                       int oldTop, int oldRight, int oldBottom) {
                 if (mStatusBarWindowView.getHeight() <= mStatusBarHeight) {
                     mStatusBarWindowView.removeOnLayoutChangeListener(this);
                     mWaitingOnCollapseWhenGoingAway = false;
@@ -577,15 +593,6 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
                 }
             }
         });
-    }
-
-    public static void setIsClickedNotification(View child, boolean clicked) {
-        child.setTag(TAG_CLICKED_NOTIFICATION, clicked ? true : null);
-    }
-
-    public static boolean isClickedHeadsUpNotification(View child) {
-        Boolean clicked = (Boolean) child.getTag(TAG_CLICKED_NOTIFICATION);
-        return clicked != null && clicked;
     }
 
     public void setRemoteInputActive(NotificationData.Entry entry, boolean remoteInputActive) {
@@ -635,6 +642,12 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
         mStatusBarState = statusBarState;
     }
 
+    public static class Clock {
+        public long currentTimeMillis() {
+            return SystemClock.elapsedRealtime();
+        }
+    }
+
     /**
      * This represents a notification and how long it is in a heads up mode. It also manages its
      * lifecycle automatically when created.
@@ -643,9 +656,9 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
         public NotificationData.Entry entry;
         public long postTime;
         public long earliestRemovaltime;
-        private Runnable mRemoveHeadsUpRunnable;
         public boolean remoteInputActive;
         public boolean expanded;
+        private Runnable mRemoveHeadsUpRunnable;
 
         public void setEntry(final NotificationData.Entry entry) {
             this.entry = entry;
@@ -722,7 +735,7 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
 
             return postTime < o.postTime ? 1
                     : postTime == o.postTime ? entry.key.compareTo(o.entry.key)
-                            : -1;
+                    : -1;
         }
 
         public void removeAutoRemovalCallbacks() {
@@ -745,12 +758,6 @@ public class HeadsUpManager implements ViewTreeObserver.OnComputeInternalInsetsL
             mRemoveHeadsUpRunnable = null;
             expanded = false;
             remoteInputActive = false;
-        }
-    }
-
-    public static class Clock {
-        public long currentTimeMillis() {
-            return SystemClock.elapsedRealtime();
         }
     }
 

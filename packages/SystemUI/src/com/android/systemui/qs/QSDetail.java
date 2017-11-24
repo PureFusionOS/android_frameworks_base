@@ -49,23 +49,28 @@ public class QSDetail extends LinearLayout {
     private static final long FADE_DURATION = 300;
 
     private final SparseArray<View> mDetailViews = new SparseArray<>();
-
-    private ViewGroup mDetailContent;
     protected TextView mDetailSettingsButton;
     protected TextView mDetailDoneButton;
-    private QSDetailClipper mClipper;
-    private DetailAdapter mDetailAdapter;
-    private QSPanel mQsPanel;
-
     protected View mQsDetailHeader;
     protected TextView mQsDetailHeaderTitle;
     protected Switch mQsDetailHeaderSwitch;
     protected ImageView mQsDetailHeaderProgress;
-
     protected QSTileHost mHost;
-
+    private ViewGroup mDetailContent;
+    private QSDetailClipper mClipper;
+    private DetailAdapter mDetailAdapter;
+    private QSPanel mQsPanel;
     private boolean mScanState;
     private boolean mClosingDetail;
+    private final AnimatorListenerAdapter mTeardownDetailWhenDone = new AnimatorListenerAdapter() {
+        public void onAnimationEnd(Animator animation) {
+            mDetailContent.removeAllViews();
+            setVisibility(View.INVISIBLE);
+            mClosingDetail = false;
+        }
+
+        ;
+    };
     private boolean mFullyExpanded;
     private QuickStatusBarHeader mHeader;
     private boolean mTriggeredExpand;
@@ -74,6 +79,61 @@ public class QSDetail extends LinearLayout {
     private boolean mAnimatingOpen;
     private boolean mSwitchState;
     private View mFooter;
+    protected Callback mQsPanelCallback = new Callback() {
+        @Override
+        public void onToggleStateChanged(final boolean state) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    handleToggleStateChanged(state,
+                            mDetailAdapter != null && mDetailAdapter.getToggleEnabled());
+                }
+            });
+        }
+
+        @Override
+        public void onShowingDetail(final DetailAdapter detail, final int x, final int y) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    handleShowingDetail(detail, x, y, true /* toggleQs */);
+                }
+            });
+        }
+
+        @Override
+        public void onScanStateChanged(final boolean state) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    handleScanStateChanged(state);
+                }
+            });
+        }
+    };
+    private final AnimatorListenerAdapter mHideGridContentWhenDone = new AnimatorListenerAdapter() {
+        public void onAnimationCancel(Animator animation) {
+            // If we have been cancelled, remove the listener so that onAnimationEnd doesn't get
+            // called, this will avoid accidentally turning off the grid when we don't want to.
+            animation.removeListener(this);
+            mAnimatingOpen = false;
+            checkPendingAnimations();
+        }
+
+        ;
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            // Only hide content if still in detail state.
+            if (mDetailAdapter != null) {
+                mQsPanel.setGridContentVisibility(false);
+                mHeader.setVisibility(View.INVISIBLE);
+                mFooter.setVisibility(View.INVISIBLE);
+            }
+            mAnimatingOpen = false;
+            checkPendingAnimations();
+        }
+    };
 
     public QSDetail(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -128,6 +188,7 @@ public class QSDetail extends LinearLayout {
     public void setHost(QSTileHost host) {
         mHost = host;
     }
+
     public boolean isShowingDetail() {
         return mDetailAdapter != null;
     }
@@ -155,14 +216,8 @@ public class QSDetail extends LinearLayout {
         return mClosingDetail;
     }
 
-    public interface Callback {
-        void onShowingDetail(DetailAdapter detail, int x, int y);
-        void onToggleStateChanged(boolean state);
-        void onScanStateChanged(boolean state);
-    }
-
     public void handleShowingDetail(final DetailAdapter adapter, int x, int y,
-            boolean toggleQs) {
+                                    boolean toggleQs) {
         final boolean showingDetail = adapter != null;
         setClickable(showingDetail);
         if (showingDetail) {
@@ -297,69 +352,14 @@ public class QSDetail extends LinearLayout {
 
     private void checkPendingAnimations() {
         handleToggleStateChanged(mSwitchState,
-                            mDetailAdapter != null && mDetailAdapter.getToggleEnabled());
+                mDetailAdapter != null && mDetailAdapter.getToggleEnabled());
     }
 
-    protected Callback mQsPanelCallback = new Callback() {
-        @Override
-        public void onToggleStateChanged(final boolean state) {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    handleToggleStateChanged(state,
-                            mDetailAdapter != null && mDetailAdapter.getToggleEnabled());
-                }
-            });
-        }
+    public interface Callback {
+        void onShowingDetail(DetailAdapter detail, int x, int y);
 
-        @Override
-        public void onShowingDetail(final DetailAdapter detail, final int x, final int y) {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    handleShowingDetail(detail, x, y, true /* toggleQs */);
-                }
-            });
-        }
+        void onToggleStateChanged(boolean state);
 
-        @Override
-        public void onScanStateChanged(final boolean state) {
-            post(new Runnable() {
-                @Override
-                public void run() {
-                    handleScanStateChanged(state);
-                }
-            });
-        }
-    };
-
-    private final AnimatorListenerAdapter mHideGridContentWhenDone = new AnimatorListenerAdapter() {
-        public void onAnimationCancel(Animator animation) {
-            // If we have been cancelled, remove the listener so that onAnimationEnd doesn't get
-            // called, this will avoid accidentally turning off the grid when we don't want to.
-            animation.removeListener(this);
-            mAnimatingOpen = false;
-            checkPendingAnimations();
-        };
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-            // Only hide content if still in detail state.
-            if (mDetailAdapter != null) {
-                mQsPanel.setGridContentVisibility(false);
-                mHeader.setVisibility(View.INVISIBLE);
-                mFooter.setVisibility(View.INVISIBLE);
-            }
-            mAnimatingOpen = false;
-            checkPendingAnimations();
-        }
-    };
-
-    private final AnimatorListenerAdapter mTeardownDetailWhenDone = new AnimatorListenerAdapter() {
-        public void onAnimationEnd(Animator animation) {
-            mDetailContent.removeAllViews();
-            setVisibility(View.INVISIBLE);
-            mClosingDetail = false;
-        };
-    };
+        void onScanStateChanged(boolean state);
+    }
 }

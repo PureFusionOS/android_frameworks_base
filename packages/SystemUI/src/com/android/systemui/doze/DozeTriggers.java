@@ -48,7 +48,9 @@ public class DozeTriggers implements DozeMachine.Part {
     private static final String TAG = "DozeTriggers";
     private static final boolean DEBUG = DozeService.DEBUG;
 
-    /** adb shell am broadcast -a com.android.systemui.doze.pulse com.android.systemui */
+    /**
+     * adb shell am broadcast -a com.android.systemui.doze.pulse com.android.systemui
+     */
     private static final String PULSE_ACTION = "com.android.systemui.doze.pulse";
 
     private final Context mContext;
@@ -66,12 +68,24 @@ public class DozeTriggers implements DozeMachine.Part {
 
     private long mNotificationPulseTime;
     private boolean mPulsePending;
+    private DozeHost.Callback mHostCallback = new DozeHost.Callback() {
+        @Override
+        public void onNotificationHeadsUp() {
+            onNotification();
+        }
 
+        @Override
+        public void onPowerSaveChanged(boolean active) {
+            if (active) {
+                onPowerSave();
+            }
+        }
+    };
 
     public DozeTriggers(Context context, DozeMachine machine, DozeHost dozeHost,
-            AmbientDisplayConfiguration config,
-            DozeParameters dozeParameters, SensorManager sensorManager, Handler handler,
-            WakeLock wakeLock, boolean allowPulseTriggers) {
+                        AmbientDisplayConfiguration config,
+                        DozeParameters dozeParameters, SensorManager sensorManager, Handler handler,
+                        WakeLock wakeLock, boolean allowPulseTriggers) {
         mContext = context;
         mMachine = machine;
         mDozeHost = dozeHost;
@@ -235,18 +249,17 @@ public class DozeTriggers implements DozeMachine.Part {
         pw.print(" notificationPulseTime=");
         pw.println(Formatter.formatShortElapsedTime(mContext, mNotificationPulseTime));
 
-        pw.print(" pulsePending="); pw.println(mPulsePending);
+        pw.print(" pulsePending=");
+        pw.println(mPulsePending);
         pw.println("DozeSensors:");
         mDozeSensors.dump(pw);
     }
 
     private abstract class ProximityCheck implements SensorEventListener, Runnable {
-        private static final int TIMEOUT_DELAY_MS = 500;
-
         protected static final int RESULT_UNKNOWN = 0;
         protected static final int RESULT_NEAR = 1;
         protected static final int RESULT_FAR = 2;
-
+        private static final int TIMEOUT_DELAY_MS = 500;
         private boolean mRegistered;
         private boolean mFinished;
         private float mMaxRange;
@@ -349,18 +362,4 @@ public class DozeTriggers implements DozeMachine.Part {
             mRegistered = false;
         }
     }
-
-    private DozeHost.Callback mHostCallback = new DozeHost.Callback() {
-        @Override
-        public void onNotificationHeadsUp() {
-            onNotification();
-        }
-
-        @Override
-        public void onPowerSaveChanged(boolean active) {
-            if (active) {
-                onPowerSave();
-            }
-        }
-    };
 }

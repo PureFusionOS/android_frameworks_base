@@ -73,7 +73,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         return inflater.inflate(R.layout.status_bar, container, false);
     }
 
@@ -123,7 +123,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void initNotificationIconArea(NotificationIconAreaController
-            notificationIconAreaController) {
+                                                 notificationIconAreaController) {
         ViewGroup notificationIconArea = mStatusBar.findViewById(R.id.notification_icon_area);
         mNotificationIconAreaInner =
                 notificationIconAreaController.getNotificationInnerAreaView();

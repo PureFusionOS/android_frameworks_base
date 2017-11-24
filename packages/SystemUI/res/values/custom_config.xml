@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
 **
 ** Copyright (c) 2018 PureFusionOS
@@ -19,8 +18,8 @@
 -->
 <resources>
 
-   <!-- configurable width dimension for the app sidebar trigger area -->
-   <dimen name="config_app_sidebar_trigger_width">8dip</dimen>
+    <!-- configurable width dimension for the app sidebar trigger area -->
+    <dimen name="config_app_sidebar_trigger_width">8dip</dimen>
 
     <!-- Allow Opa (Pixel navbar) layout -->
     <bool name="config_allowOpaLayout">true</bool>

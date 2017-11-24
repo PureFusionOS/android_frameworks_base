@@ -29,7 +29,9 @@ import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.SecureSetting;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 
-/** Quick settings tile: Invert colors **/
+/**
+ * Quick settings tile: Invert colors
+ **/
 public class ColorInversionTile extends QSTileImpl<BooleanState> {
 
     private final AnimationIcon mEnable

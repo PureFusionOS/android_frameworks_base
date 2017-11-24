@@ -29,13 +29,11 @@ import com.android.systemui.R;
 import java.io.PrintWriter;
 
 public class DozeParameters {
-    private static final int MAX_DURATION = 60 * 1000;
     public static final String DOZE_SENSORS_WAKE_UP_FULLY = "doze_sensors_wake_up_fully";
-
+    private static final int MAX_DURATION = 60 * 1000;
+    private static IntInOutMatcher sPickupSubtypePerformsProxMatcher;
     private final Context mContext;
     private final AmbientDisplayConfiguration mAmbientDisplayConfiguration;
-
-    private static IntInOutMatcher sPickupSubtypePerformsProxMatcher;
 
     public DozeParameters(Context context) {
         mContext = context;
@@ -44,19 +42,32 @@ public class DozeParameters {
 
     public void dump(PrintWriter pw) {
         pw.println("  DozeParameters:");
-        pw.print("    getDisplayStateSupported(): "); pw.println(getDisplayStateSupported());
-        pw.print("    getPulseDuration(pickup=false): "); pw.println(getPulseDuration(false));
-        pw.print("    getPulseDuration(pickup=true): "); pw.println(getPulseDuration(true));
-        pw.print("    getPulseInDuration(pickup=false): "); pw.println(getPulseInDuration(false));
-        pw.print("    getPulseInDuration(pickup=true): "); pw.println(getPulseInDuration(true));
-        pw.print("    getPulseInVisibleDuration(): "); pw.println(getPulseVisibleDuration());
-        pw.print("    getPulseOutDuration(): "); pw.println(getPulseOutDuration());
-        pw.print("    getPulseOnSigMotion(): "); pw.println(getPulseOnSigMotion());
-        pw.print("    getVibrateOnSigMotion(): "); pw.println(getVibrateOnSigMotion());
-        pw.print("    getVibrateOnPickup(): "); pw.println(getVibrateOnPickup());
-        pw.print("    getProxCheckBeforePulse(): "); pw.println(getProxCheckBeforePulse());
-        pw.print("    getPickupVibrationThreshold(): "); pw.println(getPickupVibrationThreshold());
-        pw.print("    getPickupSubtypePerformsProxCheck(): ");pw.println(
+        pw.print("    getDisplayStateSupported(): ");
+        pw.println(getDisplayStateSupported());
+        pw.print("    getPulseDuration(pickup=false): ");
+        pw.println(getPulseDuration(false));
+        pw.print("    getPulseDuration(pickup=true): ");
+        pw.println(getPulseDuration(true));
+        pw.print("    getPulseInDuration(pickup=false): ");
+        pw.println(getPulseInDuration(false));
+        pw.print("    getPulseInDuration(pickup=true): ");
+        pw.println(getPulseInDuration(true));
+        pw.print("    getPulseInVisibleDuration(): ");
+        pw.println(getPulseVisibleDuration());
+        pw.print("    getPulseOutDuration(): ");
+        pw.println(getPulseOutDuration());
+        pw.print("    getPulseOnSigMotion(): ");
+        pw.println(getPulseOnSigMotion());
+        pw.print("    getVibrateOnSigMotion(): ");
+        pw.println(getVibrateOnSigMotion());
+        pw.print("    getVibrateOnPickup(): ");
+        pw.println(getVibrateOnPickup());
+        pw.print("    getProxCheckBeforePulse(): ");
+        pw.println(getProxCheckBeforePulse());
+        pw.print("    getPickupVibrationThreshold(): ");
+        pw.println(getPickupVibrationThreshold());
+        pw.print("    getPickupSubtypePerformsProxCheck(): ");
+        pw.println(
                 dumpPickupSubtypePerformsProxCheck());
     }
 
@@ -157,12 +168,12 @@ public class DozeParameters {
      * Parses a spec of the form `1,2,3,!5,*`. The resulting object will match numbers that are
      * listed, will not match numbers that are listed with a ! prefix, and will match / not match
      * unlisted numbers depending on whether * or !* is present.
-     *
+     * <p>
      * *  -> match any numbers that are not explicitly listed
      * !* -> don't match any numbers that are not explicitly listed
      * 2  -> match 2
      * !3 -> don't match 3
-     *
+     * <p>
      * It is illegal to specify:
      * - an empty spec
      * - a spec containing that are empty, or a lone !
@@ -172,10 +183,9 @@ public class DozeParameters {
     public static class IntInOutMatcher {
         private static final String WILDCARD = "*";
         private static final char OUT_PREFIX = '!';
-
+        final String mSpec;
         private final SparseBooleanArray mIsIn;
         private final boolean mDefaultIsIn;
-        final String mSpec;
 
         public IntInOutMatcher(String spec) {
             if (TextUtils.isEmpty(spec)) {

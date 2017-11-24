@@ -31,12 +31,11 @@ import com.android.systemui.qs.customize.QSCustomizer;
 public class QSContainerImpl extends FrameLayout {
 
     private final Point mSizePoint = new Point();
-
-    private int mHeightOverride = -1;
     protected View mQSPanel;
-    private View mQSDetail;
     protected View mHeader;
     protected float mQsExpansion;
+    private int mHeightOverride = -1;
+    private View mQSDetail;
     private QSCustomizer mQSCustomizer;
     private QSFooter mQSFooter;
     private int mGutterHeight;

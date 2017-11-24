@@ -39,6 +39,70 @@ public class AutoTileManager {
     private final Context mContext;
     private final QSTileHost mHost;
     private final Handler mHandler;
+    @VisibleForTesting
+    final NightDisplayController.Callback mNightDisplayCallback =
+            new NightDisplayController.Callback() {
+                @Override
+                public void onActivated(boolean activated) {
+                    if (activated) {
+                        addNightTile();
+                    }
+                }
+
+                @Override
+                public void onAutoModeChanged(int autoMode) {
+                    if (autoMode == NightDisplayController.AUTO_MODE_CUSTOM
+                            || autoMode == NightDisplayController.AUTO_MODE_TWILIGHT) {
+                        addNightTile();
+                    }
+                }
+
+                private void addNightTile() {
+                    mHost.addTile("night");
+                    Prefs.putBoolean(mContext, Key.QS_NIGHTDISPLAY_ADDED, true);
+                    mHandler.post(() -> Dependency.get(NightDisplayController.class)
+                            .setListener(null));
+                }
+            };
+    private final ManagedProfileController.Callback mProfileCallback =
+            new ManagedProfileController.Callback() {
+                @Override
+                public void onManagedProfileChanged() {
+                    if (Dependency.get(ManagedProfileController.class).hasActiveProfile()) {
+                        mHost.addTile("work");
+                        Prefs.putBoolean(mContext, Key.QS_WORK_ADDED, true);
+                        mHandler.post(() -> Dependency.get(ManagedProfileController.class)
+                                .removeCallback(mProfileCallback));
+                    }
+                }
+
+                @Override
+                public void onManagedProfileRemoved() {
+                }
+            };
+    private final DataSaverController.Listener mDataSaverListener = new Listener() {
+        @Override
+        public void onDataSaverChanged(boolean isDataSaving) {
+            if (isDataSaving) {
+                mHost.addTile("saver");
+                Prefs.putBoolean(mContext, Key.QS_DATA_SAVER_ADDED, true);
+                mHandler.post(() -> Dependency.get(DataSaverController.class).removeCallback(
+                        mDataSaverListener));
+            }
+        }
+    };
+    private final HotspotController.Callback mHotspotCallback = new Callback() {
+        @Override
+        public void onHotspotChanged(boolean enabled) {
+            if (enabled) {
+                mHost.addTile("hotspot");
+                Prefs.putBoolean(mContext, Key.QS_HOTSPOT_ADDED, true);
+                mHandler.post(() -> Dependency.get(HotspotController.class)
+                        .removeCallback(mHotspotCallback));
+            }
+        }
+    };
+    private SecureSetting mColorsSetting;
 
     public AutoTileManager(Context context, QSTileHost host) {
         mContext = context;
@@ -81,73 +145,4 @@ public class AutoTileManager {
         Dependency.get(ManagedProfileController.class).removeCallback(mProfileCallback);
         Dependency.get(NightDisplayController.class).setListener(null);
     }
-
-    private final ManagedProfileController.Callback mProfileCallback =
-            new ManagedProfileController.Callback() {
-                @Override
-                public void onManagedProfileChanged() {
-                    if (Dependency.get(ManagedProfileController.class).hasActiveProfile()) {
-                        mHost.addTile("work");
-                        Prefs.putBoolean(mContext, Key.QS_WORK_ADDED, true);
-                        mHandler.post(() -> Dependency.get(ManagedProfileController.class)
-                                .removeCallback(mProfileCallback));
-                    }
-                }
-
-                @Override
-                public void onManagedProfileRemoved() {
-                }
-            };
-
-    private SecureSetting mColorsSetting;
-
-    private final DataSaverController.Listener mDataSaverListener = new Listener() {
-        @Override
-        public void onDataSaverChanged(boolean isDataSaving) {
-            if (isDataSaving) {
-                mHost.addTile("saver");
-                Prefs.putBoolean(mContext, Key.QS_DATA_SAVER_ADDED, true);
-                mHandler.post(() -> Dependency.get(DataSaverController.class).removeCallback(
-                        mDataSaverListener));
-            }
-        }
-    };
-
-    private final HotspotController.Callback mHotspotCallback = new Callback() {
-        @Override
-        public void onHotspotChanged(boolean enabled) {
-            if (enabled) {
-                mHost.addTile("hotspot");
-                Prefs.putBoolean(mContext, Key.QS_HOTSPOT_ADDED, true);
-                mHandler.post(() -> Dependency.get(HotspotController.class)
-                        .removeCallback(mHotspotCallback));
-            }
-        }
-    };
-
-    @VisibleForTesting
-    final NightDisplayController.Callback mNightDisplayCallback =
-            new NightDisplayController.Callback() {
-        @Override
-        public void onActivated(boolean activated) {
-            if (activated) {
-                addNightTile();
-            }
-        }
-
-        @Override
-        public void onAutoModeChanged(int autoMode) {
-            if (autoMode == NightDisplayController.AUTO_MODE_CUSTOM
-                    || autoMode == NightDisplayController.AUTO_MODE_TWILIGHT) {
-                addNightTile();
-            }
-        }
-
-        private void addNightTile() {
-            mHost.addTile("night");
-            Prefs.putBoolean(mContext, Key.QS_NIGHTDISPLAY_ADDED, true);
-            mHandler.post(() -> Dependency.get(NightDisplayController.class)
-                    .setListener(null));
-        }
-    };
 }

@@ -57,12 +57,9 @@ import java.text.NumberFormat;
 
 public class StatusBarIconView extends AnimatedImageView {
     public static final int NO_COLOR = 0;
-    private final int ANIMATION_DURATION_FAST = 100;
-
     public static final int STATE_ICON = 0;
     public static final int STATE_DOT = 1;
     public static final int STATE_HIDDEN = 2;
-
     private static final String TAG = "StatusBarIconView";
     private static final Property<StatusBarIconView, Float> ICON_APPEAR_AMOUNT
             = new FloatProperty<StatusBarIconView>("iconAppearAmount") {
@@ -90,23 +87,25 @@ public class StatusBarIconView extends AnimatedImageView {
             return object.getDotAppearAmount();
         }
     };
-
+    private final int ANIMATION_DURATION_FAST = 100;
+    private final boolean mBlocked;
+    private final Paint mDotPaint = new Paint();
+    private final NotificationIconDozeHelper mDozer;
     private boolean mAlwaysScaleIcon;
     private int mStatusBarIconDrawingSizeDark = 1;
     private int mStatusBarIconDrawingSize = 1;
     private int mStatusBarIconSize = 1;
     private StatusBarIcon mIcon;
-    @ViewDebug.ExportedProperty private String mSlot;
+    @ViewDebug.ExportedProperty
+    private String mSlot;
     private Drawable mNumberBackground;
     private Paint mNumberPain;
     private int mNumberX;
     private int mNumberY;
     private String mNumberText;
     private StatusBarNotification mNotification;
-    private final boolean mBlocked;
     private int mDensity;
     private float mIconScale = 1.0f;
-    private final Paint mDotPaint = new Paint();
     private float mDotRadius;
     private int mStaticDotRadius;
     private int mVisibleState = STATE_ICON;
@@ -128,7 +127,6 @@ public class StatusBarIconView extends AnimatedImageView {
                 animation.getAnimatedFraction());
         setColorInternal(newColor);
     };
-    private final NotificationIconDozeHelper mDozer;
     private int mContrastedDrawableColor;
     private int mCachedContrastBackgroundColor = NO_COLOR;
 
@@ -137,7 +135,7 @@ public class StatusBarIconView extends AnimatedImageView {
     }
 
     public StatusBarIconView(Context context, String slot, StatusBarNotification sbn,
-            boolean blocked) {
+                             boolean blocked) {
         super(context);
         mDozer = new NotificationIconDozeHelper(context);
         mBlocked = blocked;
@@ -155,6 +153,84 @@ public class StatusBarIconView extends AnimatedImageView {
                     com.android.internal.R.color.notification_icon_default_color));
         }
         reloadDimens();
+    }
+
+    public StatusBarIconView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        mDozer = new NotificationIconDozeHelper(context);
+        mBlocked = false;
+        mAlwaysScaleIcon = true;
+        updateIconScaleDimens();
+        mDensity = context.getResources().getDisplayMetrics().densityDpi;
+    }
+
+    private static boolean streq(String a, String b) {
+        if (a == b) {
+            return true;
+        }
+        if (a == null && b != null) {
+            return false;
+        }
+        if (a != null && b == null) {
+            return false;
+        }
+        return a.equals(b);
+    }
+
+    /**
+     * Returns the right icon to use for this item
+     *
+     * @param context Context to use to get resources
+     * @return Drawable for this item, or null if the package or item could not
+     * be found
+     */
+    public static Drawable getIcon(Context context, StatusBarIcon statusBarIcon) {
+        int userId = statusBarIcon.user.getIdentifier();
+        if (userId == UserHandle.USER_ALL) {
+            userId = UserHandle.USER_SYSTEM;
+        }
+
+        Drawable icon = statusBarIcon.icon.loadDrawableAsUser(context, userId);
+
+        TypedValue typedValue = new TypedValue();
+        context.getResources().getValue(R.dimen.status_bar_icon_scale_factor, typedValue, true);
+        float scaleFactor = typedValue.getFloat();
+
+        // No need to scale the icon, so return it as is.
+        if (scaleFactor == 1.f) {
+            return icon;
+        }
+
+        return new ScalingDrawableWrapper(icon, scaleFactor);
+    }
+
+    public static String contentDescForNotification(Context c, Notification n) {
+        String appName = "";
+        try {
+            Notification.Builder builder = Notification.Builder.recoverBuilder(c, n);
+            appName = builder.loadHeaderAppName();
+        } catch (RuntimeException e) {
+            Log.e(TAG, "Unable to recover builder", e);
+            // Trying to get the app name from the app info instead.
+            Parcelable appInfo = n.extras.getParcelable(
+                    Notification.EXTRA_BUILDER_APPLICATION_INFO);
+            if (appInfo instanceof ApplicationInfo) {
+                appName = String.valueOf(((ApplicationInfo) appInfo).loadLabel(
+                        c.getPackageManager()));
+            }
+        }
+
+        CharSequence title = n.extras.getCharSequence(Notification.EXTRA_TITLE);
+        CharSequence text = n.extras.getCharSequence(Notification.EXTRA_TEXT);
+        CharSequence ticker = n.tickerText;
+
+        // Some apps just put the app name into the title
+        CharSequence titleOrText = TextUtils.equals(title, appName) ? text : title;
+
+        CharSequence desc = !TextUtils.isEmpty(titleOrText) ? titleOrText
+                : !TextUtils.isEmpty(ticker) ? ticker : "";
+
+        return c.getString(R.string.accessibility_desc_notification_icon, appName, desc);
     }
 
     private void maybeUpdateIconScaleDimens() {
@@ -181,7 +257,7 @@ public class StatusBarIconView extends AnimatedImageView {
                 mStatusBarIconDrawingSizeDark,
                 mDarkAmount);
         final int outerBounds = mStatusBarIconSize;
-        mIconScale = (float)imageBounds / (float)outerBounds;
+        mIconScale = (float) imageBounds / (float) outerBounds;
     }
 
     public float getIconScaleFullyDark() {
@@ -212,35 +288,6 @@ public class StatusBarIconView extends AnimatedImageView {
         }
     }
 
-    public void setNotification(StatusBarNotification notification) {
-        mNotification = notification;
-        if (notification != null) {
-            setContentDescription(notification.getNotification());
-        }
-    }
-
-    public StatusBarIconView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        mDozer = new NotificationIconDozeHelper(context);
-        mBlocked = false;
-        mAlwaysScaleIcon = true;
-        updateIconScaleDimens();
-        mDensity = context.getResources().getDisplayMetrics().densityDpi;
-    }
-
-    private static boolean streq(String a, String b) {
-        if (a == b) {
-            return true;
-        }
-        if (a == null && b != null) {
-            return false;
-        }
-        if (a != null && b == null) {
-            return false;
-        }
-        return a.equals(b);
-    }
-
     public boolean equalIcons(Icon a, Icon b) {
         if (a == b) return true;
         if (a.getType() != b.getType()) return false;
@@ -253,6 +300,7 @@ public class StatusBarIconView extends AnimatedImageView {
                 return false;
         }
     }
+
     /**
      * Returns whether the set succeeded.
      */
@@ -277,7 +325,7 @@ public class StatusBarIconView extends AnimatedImageView {
 
         if (!numberEquals) {
             if (icon.number > 0 && getContext().getResources().getBoolean(
-                        R.bool.config_statusBarShowNumber)) {
+                    R.bool.config_statusBarShowNumber)) {
                 if (mNumberBackground == null) {
                     mNumberBackground = getContext().getResources().getDrawable(
                             R.drawable.ic_notification_overlay);
@@ -328,33 +376,6 @@ public class StatusBarIconView extends AnimatedImageView {
 
     private Drawable getIcon(StatusBarIcon icon) {
         return getIcon(getContext(), icon);
-    }
-
-    /**
-     * Returns the right icon to use for this item
-     *
-     * @param context Context to use to get resources
-     * @return Drawable for this item, or null if the package or item could not
-     *         be found
-     */
-    public static Drawable getIcon(Context context, StatusBarIcon statusBarIcon) {
-        int userId = statusBarIcon.user.getIdentifier();
-        if (userId == UserHandle.USER_ALL) {
-            userId = UserHandle.USER_SYSTEM;
-        }
-
-        Drawable icon = statusBarIcon.icon.loadDrawableAsUser(context, userId);
-
-        TypedValue typedValue = new TypedValue();
-        context.getResources().getValue(R.dimen.status_bar_icon_scale_factor, typedValue, true);
-        float scaleFactor = typedValue.getFloat();
-
-        // No need to scale the icon, so return it as is.
-        if (scaleFactor == 1.f) {
-            return icon;
-        }
-
-        return new ScalingDrawableWrapper(icon, scaleFactor);
     }
 
     public StatusBarIcon getStatusBarIcon() {
@@ -426,7 +447,7 @@ public class StatusBarIconView extends AnimatedImageView {
                 android.R.integer.status_bar_notification_info_maxnum);
         if (mIcon.number > tooBig) {
             str = getContext().getResources().getString(
-                        android.R.string.status_bar_notification_info_overflow);
+                    android.R.string.status_bar_notification_info_overflow);
         } else {
             NumberFormat f = NumberFormat.getIntegerInstance();
             str = f.format(mIcon.number);
@@ -444,13 +465,13 @@ public class StatusBarIconView extends AnimatedImageView {
         if (dw < mNumberBackground.getMinimumWidth()) {
             dw = mNumberBackground.getMinimumWidth();
         }
-        mNumberX = w-r.right-((dw-r.right-r.left)/2);
+        mNumberX = w - r.right - ((dw - r.right - r.left) / 2);
         int dh = r.top + th + r.bottom;
         if (dh < mNumberBackground.getMinimumWidth()) {
             dh = mNumberBackground.getMinimumWidth();
         }
-        mNumberY = h-r.bottom-((dh-r.top-th-r.bottom)/2);
-        mNumberBackground.setBounds(w-dw, h-dh, w, h);
+        mNumberY = h - r.bottom - ((dh - r.top - th - r.bottom) / 2);
+        mNumberBackground.setBounds(w - dw, h - dh, w, h);
     }
 
     private void setContentDescription(Notification notification) {
@@ -464,45 +485,22 @@ public class StatusBarIconView extends AnimatedImageView {
 
     public String toString() {
         return "StatusBarIconView(slot=" + mSlot + " icon=" + mIcon
-            + " notification=" + mNotification + ")";
+                + " notification=" + mNotification + ")";
     }
 
     public StatusBarNotification getNotification() {
         return mNotification;
     }
 
-    public String getSlot() {
-        return mSlot;
+    public void setNotification(StatusBarNotification notification) {
+        mNotification = notification;
+        if (notification != null) {
+            setContentDescription(notification.getNotification());
+        }
     }
 
-
-    public static String contentDescForNotification(Context c, Notification n) {
-        String appName = "";
-        try {
-            Notification.Builder builder = Notification.Builder.recoverBuilder(c, n);
-            appName = builder.loadHeaderAppName();
-        } catch (RuntimeException e) {
-            Log.e(TAG, "Unable to recover builder", e);
-            // Trying to get the app name from the app info instead.
-            Parcelable appInfo = n.extras.getParcelable(
-                    Notification.EXTRA_BUILDER_APPLICATION_INFO);
-            if (appInfo instanceof ApplicationInfo) {
-                appName = String.valueOf(((ApplicationInfo) appInfo).loadLabel(
-                        c.getPackageManager()));
-            }
-        }
-
-        CharSequence title = n.extras.getCharSequence(Notification.EXTRA_TITLE);
-        CharSequence text = n.extras.getCharSequence(Notification.EXTRA_TEXT);
-        CharSequence ticker = n.tickerText;
-
-        // Some apps just put the app name into the title
-        CharSequence titleOrText = TextUtils.equals(title, appName) ? text : title;
-
-        CharSequence desc = !TextUtils.isEmpty(titleOrText) ? titleOrText
-                : !TextUtils.isEmpty(ticker) ? ticker : "";
-
-        return c.getString(R.string.accessibility_desc_notification_icon, appName, desc);
+    public String getSlot() {
+        return mSlot;
     }
 
     /**
@@ -523,18 +521,6 @@ public class StatusBarIconView extends AnimatedImageView {
                 invalidate();
             }
         }
-    }
-
-    /**
-     * Set the static color that should be used for the drawable of this icon if it's not
-     * transitioning this also immediately sets the color.
-     */
-    public void setStaticDrawableColor(int color) {
-        mDrawableColor = color;
-        setColorInternal(color);
-        updateContrastedStaticColor();
-        mIconColor = color;
-        mDozer.setColor(color);
     }
 
     private void setColorInternal(int color) {
@@ -586,6 +572,18 @@ public class StatusBarIconView extends AnimatedImageView {
     }
 
     /**
+     * Set the static color that should be used for the drawable of this icon if it's not
+     * transitioning this also immediately sets the color.
+     */
+    public void setStaticDrawableColor(int color) {
+        mDrawableColor = color;
+        setColorInternal(color);
+        updateContrastedStaticColor();
+        mIconColor = color;
+        mDozer.setColor(color);
+    }
+
+    /**
      * A drawable color that passes GAR on a specific background.
      * This value is cached.
      *
@@ -620,10 +618,6 @@ public class StatusBarIconView extends AnimatedImageView {
                     contrastedColor, mCachedContrastBackgroundColor);
         }
         mContrastedDrawableColor = contrastedColor;
-    }
-
-    public void setVisibleState(int state) {
-        setVisibleState(state, true /* animate */, null /* endRunnable */);
     }
 
     public void setVisibleState(int state, boolean animate) {
@@ -712,6 +706,10 @@ public class StatusBarIconView extends AnimatedImageView {
         }
     }
 
+    public float getIconAppearAmount() {
+        return mIconAppearAmount;
+    }
+
     public void setIconAppearAmount(float iconAppearAmount) {
         if (mIconAppearAmount != iconAppearAmount) {
             mIconAppearAmount = iconAppearAmount;
@@ -719,19 +717,12 @@ public class StatusBarIconView extends AnimatedImageView {
         }
     }
 
-    public float getIconAppearAmount() {
-        return mIconAppearAmount;
-    }
-
     public int getVisibleState() {
         return mVisibleState;
     }
 
-    public void setDotAppearAmount(float dotAppearAmount) {
-        if (mDotAppearAmount != dotAppearAmount) {
-            mDotAppearAmount = dotAppearAmount;
-            invalidate();
-        }
+    public void setVisibleState(int state) {
+        setVisibleState(state, true /* animate */, null /* endRunnable */);
     }
 
     @Override
@@ -744,6 +735,13 @@ public class StatusBarIconView extends AnimatedImageView {
 
     public float getDotAppearAmount() {
         return mDotAppearAmount;
+    }
+
+    public void setDotAppearAmount(float dotAppearAmount) {
+        if (mDotAppearAmount != dotAppearAmount) {
+            mDotAppearAmount = dotAppearAmount;
+            invalidate();
+        }
     }
 
     public void setOnVisibilityChangedListener(OnVisibilityChangedListener listener) {

@@ -33,11 +33,13 @@ import com.android.systemui.plugins.qs.QSTile;
 
 import libcore.util.Objects;
 
-/** View that represents a standard quick settings tile. **/
+/**
+ * View that represents a standard quick settings tile.
+ **/
 public class QSTileView extends QSTileBaseView {
 
-    private View mDivider;
     protected TextView mLabel;
+    private View mDivider;
     private ImageView mPadLock;
     private int mState;
     private ViewGroup mLabelContainer;
@@ -121,7 +123,7 @@ public class QSTileView extends QSTileBaseView {
 
     @Override
     public void init(OnClickListener click, OnClickListener secondaryClick,
-            OnLongClickListener longClick) {
+                     OnLongClickListener longClick) {
         super.init(click, secondaryClick, longClick);
         mLabelContainer.setOnClickListener(secondaryClick);
         mLabelContainer.setOnLongClickListener(longClick);

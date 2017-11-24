@@ -60,25 +60,16 @@ public class CarrierText extends TextView {
 
         public void onFinishedGoingToSleep(int why) {
             setSelected(false);
-        };
+        }
+
+        ;
 
         public void onStartedWakingUp() {
             setSelected(true);
-        };
+        }
+
+        ;
     };
-    /**
-     * The status of this lock screen. Primarily used for widgets on LockScreen.
-     */
-    private static enum StatusMode {
-        Normal, // Normal case (sim card present, it's not locked)
-        NetworkLocked, // SIM card is 'network locked'.
-        SimMissing, // SIM card is missing.
-        SimMissingLocked, // SIM card is missing, and device isn't provisioned; don't allow access
-        SimPukLocked, // SIM card is PUK locked because SIM entered wrong too many times
-        SimLocked, // SIM card is currently locked
-        SimPermDisabled, // SIM card is permanently disabled due to PUK unlock failure
-        SimNotReady; // SIM is not ready yet. May never be on devices w/o a SIM.
-    }
 
     public CarrierText(Context context) {
         this(context, null);
@@ -99,6 +90,20 @@ public class CarrierText extends TextView {
         setTransformationMethod(new CarrierTextTransformationMethod(mContext, useAllCaps));
 
         mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+    }
+
+    private static CharSequence concatenate(CharSequence plmn, CharSequence spn) {
+        final boolean plmnValid = !TextUtils.isEmpty(plmn);
+        final boolean spnValid = !TextUtils.isEmpty(spn);
+        if (plmnValid && spnValid) {
+            return new StringBuilder().append(plmn).append(mSeparator).append(spn).toString();
+        } else if (plmnValid) {
+            return plmn;
+        } else if (spnValid) {
+            return spn;
+        } else {
+            return "";
+        }
     }
 
     protected void updateCarrierText() {
@@ -128,8 +133,8 @@ public class CarrierText extends TextView {
                     // Wi-Fi is disassociated or disabled
                     if (ss.getRilDataRadioTechnology() != ServiceState.RIL_RADIO_TECHNOLOGY_IWLAN
                             || (mWifiManager.isWifiEnabled()
-                                    && mWifiManager.getConnectionInfo() != null
-                                    && mWifiManager.getConnectionInfo().getBSSID() != null)) {
+                            && mWifiManager.getConnectionInfo() != null
+                            && mWifiManager.getConnectionInfo().getBSSID() != null)) {
                         if (DEBUG) {
                             Log.d(TAG, "SIM ready and in service: subId=" + subId + ", ss=" + ss);
                         }
@@ -146,7 +151,7 @@ public class CarrierText extends TextView {
                 // "No SIM card"
                 // Grab the first subscripton, because they all should contain the emergency text,
                 // described above.
-                displayText =  makeCarrierStringOnEmergencyCapable(
+                displayText = makeCarrierStringOnEmergencyCapable(
                         getContext().getText(R.string.keyguard_missing_sim_message_short),
                         subs.get(0).getCarrierName());
             } else {
@@ -174,7 +179,7 @@ public class CarrierText extends TextView {
                         text = concatenate(plmn, spn);
                     }
                 }
-                displayText =  makeCarrierStringOnEmergencyCapable(
+                displayText = makeCarrierStringOnEmergencyCapable(
                         getContext().getText(R.string.keyguard_missing_sim_message_short), text);
             }
         }
@@ -228,7 +233,7 @@ public class CarrierText extends TextView {
      * @return Carrier text if not in missing state, null otherwise.
      */
     private CharSequence getCarrierTextForSimState(IccCardConstants.State simState,
-            CharSequence text) {
+                                                   CharSequence text) {
         CharSequence carrierText = null;
         StatusMode status = getStatusForIccState(simState);
         switch (status) {
@@ -297,7 +302,7 @@ public class CarrierText extends TextView {
 
         final boolean missingAndNotProvisioned =
                 !KeyguardUpdateMonitor.getInstance(mContext).isDeviceProvisioned()
-                && (simState == IccCardConstants.State.ABSENT ||
+                        && (simState == IccCardConstants.State.ABSENT ||
                         simState == IccCardConstants.State.PERM_DISABLED);
 
         // Assume we're NETWORK_LOCKED if not provisioned
@@ -323,22 +328,8 @@ public class CarrierText extends TextView {
         return StatusMode.SimMissing;
     }
 
-    private static CharSequence concatenate(CharSequence plmn, CharSequence spn) {
-        final boolean plmnValid = !TextUtils.isEmpty(plmn);
-        final boolean spnValid = !TextUtils.isEmpty(spn);
-        if (plmnValid && spnValid) {
-            return new StringBuilder().append(plmn).append(mSeparator).append(spn).toString();
-        } else if (plmnValid) {
-            return plmn;
-        } else if (spnValid) {
-            return spn;
-        } else {
-            return "";
-        }
-    }
-
     private CharSequence getCarrierHelpTextForSimState(IccCardConstants.State simState,
-            String plmn, String spn) {
+                                                       String plmn, String spn) {
         int carrierHelpTextId = 0;
         StatusMode status = getStatusForIccState(simState);
         switch (status) {
@@ -365,6 +356,20 @@ public class CarrierText extends TextView {
         }
 
         return mContext.getText(carrierHelpTextId);
+    }
+
+    /**
+     * The status of this lock screen. Primarily used for widgets on LockScreen.
+     */
+    private static enum StatusMode {
+        Normal, // Normal case (sim card present, it's not locked)
+        NetworkLocked, // SIM card is 'network locked'.
+        SimMissing, // SIM card is missing.
+        SimMissingLocked, // SIM card is missing, and device isn't provisioned; don't allow access
+        SimPukLocked, // SIM card is PUK locked because SIM entered wrong too many times
+        SimLocked, // SIM card is currently locked
+        SimPermDisabled, // SIM card is permanently disabled due to PUK unlock failure
+        SimNotReady; // SIM is not ready yet. May never be on devices w/o a SIM.
     }
 
     private class CarrierTextTransformationMethod extends SingleLineTransformationMethod {

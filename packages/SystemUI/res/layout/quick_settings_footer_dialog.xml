@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,108 +23,109 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="?android:attr/dialogPreferredPadding"
-        android:paddingRight="?android:attr/dialogPreferredPadding"
+        android:orientation="vertical"
         android:paddingLeft="?android:attr/dialogPreferredPadding"
-        android:orientation="vertical">
+        android:paddingRight="?android:attr/dialogPreferredPadding"
+        android:paddingTop="?android:attr/dialogPreferredPadding">
+
         <LinearLayout
             android:id="@+id/device_management_disclosures"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="?android:attr/dialogPreferredPadding"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="?android:attr/dialogPreferredPadding">
+
             <TextView
                 android:id="@+id/device_management_subtitle"
+                style="@android:style/TextAppearance.Material.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/monitoring_title_device_owned"
-                style="@android:style/TextAppearance.Material.Title"
-                android:textColor="?android:attr/textColorPrimary"
                 android:paddingBottom="@dimen/qs_footer_dialog_subtitle_padding"
-            />
+                android:text="@string/monitoring_title_device_owned"
+                android:textColor="?android:attr/textColorPrimary" />
+
             <TextView
                 android:id="@+id/device_management_warning"
+                style="@android:style/TextAppearance.Material.Subhead"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@null"
-                style="@android:style/TextAppearance.Material.Subhead"
-                android:textColor="?android:attr/textColorPrimary"
-            />
+                android:textColor="?android:attr/textColorPrimary" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ca_certs_disclosures"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="?android:attr/dialogPreferredPadding"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="?android:attr/dialogPreferredPadding">
+
             <TextView
                 android:id="@+id/ca_certs_subtitle"
+                style="@android:style/TextAppearance.Material.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/monitoring_subtitle_ca_certificate"
-                style="@android:style/TextAppearance.Material.Title"
-                android:textColor="?android:attr/textColorPrimary"
                 android:paddingBottom="@dimen/qs_footer_dialog_subtitle_padding"
-            />
+                android:text="@string/monitoring_subtitle_ca_certificate"
+                android:textColor="?android:attr/textColorPrimary" />
+
             <TextView
                 android:id="@+id/ca_certs_warning"
+                style="@android:style/TextAppearance.Material.Subhead"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@null"
-                style="@android:style/TextAppearance.Material.Subhead"
-                android:textColor="?android:attr/textColorPrimary"
-            />
+                android:textColor="?android:attr/textColorPrimary" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/network_logging_disclosures"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="?android:attr/dialogPreferredPadding"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="?android:attr/dialogPreferredPadding">
+
             <TextView
                 android:id="@+id/network_logging_subtitle"
+                style="@android:style/TextAppearance.Material.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/monitoring_subtitle_network_logging"
-                style="@android:style/TextAppearance.Material.Title"
-                android:textColor="?android:attr/textColorPrimary"
                 android:paddingBottom="@dimen/qs_footer_dialog_subtitle_padding"
-            />
+                android:text="@string/monitoring_subtitle_network_logging"
+                android:textColor="?android:attr/textColorPrimary" />
+
             <TextView
                 android:id="@+id/network_logging_warning"
+                style="@android:style/TextAppearance.Material.Subhead"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@null"
-                style="@android:style/TextAppearance.Material.Subhead"
-                android:textColor="?android:attr/textColorPrimary"
-            />
+                android:textColor="?android:attr/textColorPrimary" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/vpn_disclosures"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="?android:attr/dialogPreferredPadding"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="?android:attr/dialogPreferredPadding">
+
             <TextView
                 android:id="@+id/vpn_subtitle"
+                style="@android:style/TextAppearance.Material.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/monitoring_subtitle_vpn"
-                style="@android:style/TextAppearance.Material.Title"
-                android:textColor="?android:attr/textColorPrimary"
                 android:paddingBottom="@dimen/qs_footer_dialog_subtitle_padding"
-            />
+                android:text="@string/monitoring_subtitle_vpn"
+                android:textColor="?android:attr/textColorPrimary" />
+
             <TextView
                 android:id="@+id/vpn_warning"
+                style="@android:style/TextAppearance.Material.Subhead"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@null"
-                style="@android:style/TextAppearance.Material.Subhead"
-                android:textColor="?android:attr/textColorPrimary"
-            />
+                android:textColor="?android:attr/textColorPrimary" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

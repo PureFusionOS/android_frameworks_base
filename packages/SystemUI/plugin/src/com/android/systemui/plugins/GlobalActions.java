@@ -32,9 +32,11 @@ public interface GlobalActions extends Plugin {
         int VERSION = 1;
 
         void onGlobalActionsShown();
+
         void onGlobalActionsHidden();
 
         void shutdown();
+
         void reboot(boolean safeMode);
     }
 }

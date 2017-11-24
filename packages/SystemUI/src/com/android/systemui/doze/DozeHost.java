@@ -24,27 +24,40 @@ import android.app.PendingIntent;
  */
 public interface DozeHost {
     void addCallback(@NonNull Callback callback);
+
     void removeCallback(@NonNull Callback callback);
+
     void startDozing();
+
     void pulseWhileDozing(@NonNull PulseCallback callback, int reason);
+
     void stopDozing();
+
     void dozeTimeTick();
+
     boolean isPowerSaveActive();
+
     boolean isPulsingBlocked();
 
     void startPendingIntentDismissingKeyguard(PendingIntent intent);
+
     void abortPulsing();
+
     void extendPulse();
 
     void setAnimateWakeup(boolean animateWakeup);
 
     interface Callback {
-        default void onNotificationHeadsUp() {}
-        default void onPowerSaveChanged(boolean active) {}
+        default void onNotificationHeadsUp() {
+        }
+
+        default void onPowerSaveChanged(boolean active) {
+        }
     }
 
     interface PulseCallback {
         void onPulseStarted();
+
         void onPulseFinished();
     }
 }

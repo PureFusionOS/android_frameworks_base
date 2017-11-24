@@ -26,14 +26,13 @@ import android.os.Bundle;
 import com.android.systemui.R;
 
 import java.util.Collections;
+
 /**
  * Activity to show the PIP menu to control PIP.
  */
 public class PipMenuActivity extends Activity implements PipManager.Listener {
-    private static final String TAG = "PipMenuActivity";
-
     static final String EXTRA_CUSTOM_ACTIONS = "custom_actions";
-
+    private static final String TAG = "PipMenuActivity";
     private final PipManager mPipManager = PipManager.getInstance();
 
     private Animator mFadeInAnimation;
@@ -101,7 +100,8 @@ public class PipMenuActivity extends Activity implements PipManager.Listener {
     }
 
     @Override
-    public void onPipEntered() { }
+    public void onPipEntered() {
+    }
 
     @Override
     public void onPipActivityClosed() {
@@ -115,7 +115,8 @@ public class PipMenuActivity extends Activity implements PipManager.Listener {
     }
 
     @Override
-    public void onShowPipMenu() { }
+    public void onShowPipMenu() {
+    }
 
     @Override
     public void onMoveToFullscreen() {

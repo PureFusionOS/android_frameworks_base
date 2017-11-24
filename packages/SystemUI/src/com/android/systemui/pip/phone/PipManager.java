@@ -50,14 +50,11 @@ public class PipManager implements BasePipManager {
     private static final String TAG = "PipManager";
 
     private static PipManager sPipController;
-
+    private final PinnedStackListener mPinnedStackListener = new PinnedStackListener();
     private Context mContext;
     private IActivityManager mActivityManager;
     private IWindowManager mWindowManager;
     private Handler mHandler = new Handler();
-
-    private final PinnedStackListener mPinnedStackListener = new PinnedStackListener();
-
     private InputConsumerController mInputConsumerController;
     private PipMenuActivityController mMenuController;
     private PipMediaController mMediaController;
@@ -122,50 +119,18 @@ public class PipManager implements BasePipManager {
         }
     };
 
-    /**
-     * Handler for messages from the PIP controller.
-     */
-    private class PinnedStackListener extends IPinnedStackListener.Stub {
-
-        @Override
-        public void onListenerRegistered(IPinnedStackController controller) {
-            mHandler.post(() -> {
-                mTouchHandler.setPinnedStackController(controller);
-            });
-        }
-
-        @Override
-        public void onImeVisibilityChanged(boolean imeVisible, int imeHeight) {
-            mHandler.post(() -> {
-                mTouchHandler.onImeVisibilityChanged(imeVisible, imeHeight);
-            });
-        }
-
-        @Override
-        public void onMinimizedStateChanged(boolean isMinimized) {
-            mHandler.post(() -> {
-                mTouchHandler.setMinimizedState(isMinimized, true /* fromController */);
-            });
-        }
-
-        @Override
-        public void onMovementBoundsChanged(Rect insetBounds, Rect normalBounds,
-                Rect animatingBounds, boolean fromImeAdjustement, int displayRotation) {
-            mHandler.post(() -> {
-                mTouchHandler.onMovementBoundsChanged(insetBounds, normalBounds, animatingBounds,
-                        fromImeAdjustement, displayRotation);
-            });
-        }
-
-        @Override
-        public void onActionsChanged(ParceledListSlice actions) {
-            mHandler.post(() -> {
-                mMenuController.setAppActions(actions);
-            });
-        }
+    private PipManager() {
     }
 
-    private PipManager() {}
+    /**
+     * Gets an instance of {@link PipManager}.
+     */
+    public static PipManager getInstance() {
+        if (sPipController == null) {
+            sPipController = new PipManager();
+        }
+        return sPipController;
+    }
 
     /**
      * Initializes {@link PipManager}.
@@ -227,21 +192,54 @@ public class PipManager implements BasePipManager {
         mTouchHandler.showPictureInPictureMenu();
     }
 
-    /**
-     * Gets an instance of {@link PipManager}.
-     */
-    public static PipManager getInstance() {
-        if (sPipController == null) {
-            sPipController = new PipManager();
-        }
-        return sPipController;
-    }
-
     public void dump(PrintWriter pw) {
         final String innerPrefix = "  ";
         pw.println(TAG);
         mInputConsumerController.dump(pw, innerPrefix);
         mMenuController.dump(pw, innerPrefix);
         mTouchHandler.dump(pw, innerPrefix);
+    }
+
+    /**
+     * Handler for messages from the PIP controller.
+     */
+    private class PinnedStackListener extends IPinnedStackListener.Stub {
+
+        @Override
+        public void onListenerRegistered(IPinnedStackController controller) {
+            mHandler.post(() -> {
+                mTouchHandler.setPinnedStackController(controller);
+            });
+        }
+
+        @Override
+        public void onImeVisibilityChanged(boolean imeVisible, int imeHeight) {
+            mHandler.post(() -> {
+                mTouchHandler.onImeVisibilityChanged(imeVisible, imeHeight);
+            });
+        }
+
+        @Override
+        public void onMinimizedStateChanged(boolean isMinimized) {
+            mHandler.post(() -> {
+                mTouchHandler.setMinimizedState(isMinimized, true /* fromController */);
+            });
+        }
+
+        @Override
+        public void onMovementBoundsChanged(Rect insetBounds, Rect normalBounds,
+                                            Rect animatingBounds, boolean fromImeAdjustement, int displayRotation) {
+            mHandler.post(() -> {
+                mTouchHandler.onMovementBoundsChanged(insetBounds, normalBounds, animatingBounds,
+                        fromImeAdjustement, displayRotation);
+            });
+        }
+
+        @Override
+        public void onActionsChanged(ParceledListSlice actions) {
+            mHandler.post(() -> {
+                mMenuController.setAppActions(actions);
+            });
+        }
     }
 }

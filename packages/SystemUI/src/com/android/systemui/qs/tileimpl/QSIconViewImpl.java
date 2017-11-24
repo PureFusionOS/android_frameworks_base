@@ -49,10 +49,33 @@ public class QSIconViewImpl extends QSIconView {
 
         final Resources res = context.getResources();
         mIconSizePx = res.getDimensionPixelSize(R.dimen.qs_tile_icon_size);
-        mTilePaddingBelowIconPx =  res.getDimensionPixelSize(R.dimen.qs_tile_padding_below_icon);
+        mTilePaddingBelowIconPx = res.getDimensionPixelSize(R.dimen.qs_tile_padding_below_icon);
 
         mIcon = createIcon();
         addView(mIcon);
+    }
+
+    public static void animateGrayScale(int fromColor, int toColor, ImageView iv) {
+        final float fromAlpha = Color.alpha(fromColor);
+        final float toAlpha = Color.alpha(toColor);
+        final float fromChannel = Color.red(fromColor);
+        final float toChannel = Color.red(toColor);
+
+        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
+        anim.setDuration(350);
+
+        anim.addUpdateListener(animation -> {
+            float fraction = animation.getAnimatedFraction();
+            int alpha = (int) (fromAlpha + (toAlpha - fromAlpha) * fraction);
+            int channel = (int) (fromChannel + (toChannel - fromChannel) * fraction);
+
+            setTint(iv, Color.argb(alpha, channel, channel, channel));
+        });
+        anim.start();
+    }
+
+    public static void setTint(ImageView iv, int color) {
+        iv.setImageTintList(ColorStateList.valueOf(color));
     }
 
     public void disableAnimation() {
@@ -135,30 +158,6 @@ public class QSIconViewImpl extends QSIconView {
     protected int getColor(int state) {
         return getColorForState(getContext(), state);
     }
-
-    public static void animateGrayScale(int fromColor, int toColor, ImageView iv) {
-        final float fromAlpha = Color.alpha(fromColor);
-        final float toAlpha = Color.alpha(toColor);
-        final float fromChannel = Color.red(fromColor);
-        final float toChannel = Color.red(toColor);
-
-        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
-        anim.setDuration(350);
-
-        anim.addUpdateListener(animation -> {
-            float fraction = animation.getAnimatedFraction();
-            int alpha = (int) (fromAlpha + (toAlpha - fromAlpha) * fraction);
-            int channel = (int) (fromChannel + (toChannel - fromChannel) * fraction);
-
-            setTint(iv, Color.argb(alpha, channel, channel, channel));
-        });
-        anim.start();
-    }
-
-    public static void setTint(ImageView iv, int color) {
-        iv.setImageTintList(ColorStateList.valueOf(color));
-    }
-
 
     protected int getIconMeasureMode() {
         return MeasureSpec.EXACTLY;

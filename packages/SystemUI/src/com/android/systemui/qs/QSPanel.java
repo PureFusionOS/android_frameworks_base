@@ -54,7 +54,9 @@ import java.util.Collection;
 
 import static com.android.systemui.qs.tileimpl.QSTileImpl.getColorForState;
 
-/** View that represents the quick settings tile panel. **/
+/**
+ * View that represents the quick settings tile panel.
+ **/
 public class QSPanel extends LinearLayout implements Tunable, Callback {
 
     public static final String QS_SHOW_BRIGHTNESS = "qs_show_brightness";
@@ -66,21 +68,16 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
     private final H mHandler = new H();
     private final View mPageIndicator;
     private final MetricsLogger mMetricsLogger = Dependency.get(MetricsLogger.class);
-
-    private int mPanelPaddingBottom;
-    private int mBrightnessPaddingTop;
     protected boolean mExpanded;
     protected boolean mListening;
-
+    protected QSTileHost mHost;
+    protected QSSecurityFooter mFooter;
+    protected QSTileLayout mTileLayout;
+    private int mPanelPaddingBottom;
+    private int mBrightnessPaddingTop;
     private QSDetail.Callback mCallback;
     private BrightnessController mBrightnessController;
-    protected QSTileHost mHost;
-
-    protected QSSecurityFooter mFooter;
     private boolean mGridContentVisible = true;
-
-    protected QSTileLayout mTileLayout;
-
     private QSCustomizer mCustomizePanel;
     private Record mDetailRecord;
 
@@ -203,7 +200,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
 
     private void setBrightnessIcon() {
         boolean brightnessIconEnabled = Settings.System.getIntForUser(
-            mContext.getContentResolver(), Settings.System.QS_SHOW_BRIGHTNESS_ICON,
+                mContext.getContentResolver(), Settings.System.QS_SHOW_BRIGHTNESS_ICON,
                 0, UserHandle.USER_CURRENT) == 1;
         mBrightnessIcon.setVisibility(brightnessIconEnabled ? View.VISIBLE : View.GONE);
         updateResources();
@@ -274,6 +271,10 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
         }
     }
 
+    public boolean isExpanded() {
+        return mExpanded;
+    }
+
     public void setExpanded(boolean expanded) {
         if (mExpanded == expanded) return;
         mExpanded = expanded;
@@ -286,10 +287,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
         } else {
             logTiles();
         }
-    }
-
-    public boolean isExpanded() {
-        return mExpanded;
     }
 
     public void setListening(boolean listening) {
@@ -561,49 +558,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
         mFooter.showDeviceMonitoringDialog();
     }
 
-    private class H extends Handler {
-        private static final int SHOW_DETAIL = 1;
-        private static final int SET_TILE_VISIBILITY = 2;
-        private static final int ANNOUNCE_FOR_ACCESSIBILITY = 3;
-
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == SHOW_DETAIL) {
-                handleShowDetail((Record) msg.obj, msg.arg1 != 0);
-            } else if (msg.what == ANNOUNCE_FOR_ACCESSIBILITY) {
-                announceForAccessibility((CharSequence) msg.obj);
-            }
-        }
-    }
-
-    protected static class Record {
-        DetailAdapter detailAdapter;
-        int x;
-        int y;
-    }
-
-    public static final class TileRecord extends Record {
-        public QSTile tile;
-        public com.android.systemui.plugins.qs.QSTileView tileView;
-        public boolean scanState;
-        public QSTile.Callback callback;
-    }
-
-    public interface QSTileLayout {
-        void addTile(TileRecord tile);
-
-        void removeTile(TileRecord tile);
-
-        int getOffsetTop(TileRecord tile);
-
-        boolean updateResources();
-        void updateSettings();
-        int getNumColumns();
-        boolean isShowTitles();
-
-        void setListening(boolean listening);
-    }
-
     private void configureTile(QSTile t, QSTileView v) {
         if (mTileLayout != null) {
             v.setHideExpand(mTileLayout.getNumColumns() > 4);
@@ -633,6 +587,52 @@ public class QSPanel extends LinearLayout implements Tunable, Callback {
 
             for (TileRecord r : mRecords) {
                 configureTile(r.tile, r.tileView);
+            }
+        }
+    }
+
+    public interface QSTileLayout {
+        void addTile(TileRecord tile);
+
+        void removeTile(TileRecord tile);
+
+        int getOffsetTop(TileRecord tile);
+
+        boolean updateResources();
+
+        void updateSettings();
+
+        int getNumColumns();
+
+        boolean isShowTitles();
+
+        void setListening(boolean listening);
+    }
+
+    protected static class Record {
+        DetailAdapter detailAdapter;
+        int x;
+        int y;
+    }
+
+    public static final class TileRecord extends Record {
+        public QSTile tile;
+        public com.android.systemui.plugins.qs.QSTileView tileView;
+        public boolean scanState;
+        public QSTile.Callback callback;
+    }
+
+    private class H extends Handler {
+        private static final int SHOW_DETAIL = 1;
+        private static final int SET_TILE_VISIBILITY = 2;
+        private static final int ANNOUNCE_FOR_ACCESSIBILITY = 3;
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == SHOW_DETAIL) {
+                handleShowDetail((Record) msg.obj, msg.arg1 != 0);
+            } else if (msg.what == ANNOUNCE_FOR_ACCESSIBILITY) {
+                announceForAccessibility((CharSequence) msg.obj);
             }
         }
     }

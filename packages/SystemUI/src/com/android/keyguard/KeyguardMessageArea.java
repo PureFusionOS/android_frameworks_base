@@ -31,7 +31,9 @@ import java.lang.ref.WeakReference;
  * Manages a number of views inside of the given layout. See below for a list of widgets.
  */
 class KeyguardMessageArea extends TextView implements SecurityMessageDisplay {
-    /** Handler token posted with accessibility announcement runnables. */
+    /**
+     * Handler token posted with accessibility announcement runnables.
+     */
     private static final Object ANNOUNCE_TOKEN = new Object();
 
     /**
@@ -50,10 +52,15 @@ class KeyguardMessageArea extends TextView implements SecurityMessageDisplay {
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
         public void onFinishedGoingToSleep(int why) {
             setSelected(false);
-        };
+        }
+
+        ;
+
         public void onStartedWakingUp() {
             setSelected(true);
-        };
+        }
+
+        ;
     };
 
     public KeyguardMessageArea(Context context) {
@@ -73,6 +80,15 @@ class KeyguardMessageArea extends TextView implements SecurityMessageDisplay {
 
         mDefaultColor = getCurrentTextColor();
         update();
+    }
+
+    public static SecurityMessageDisplay findSecurityMessageDisplay(View v) {
+        KeyguardMessageArea messageArea = (KeyguardMessageArea) v.findViewById(
+                R.id.keyguard_message_area);
+        if (messageArea == null) {
+            throw new RuntimeException("Can't find keyguard_message_area in " + v.getClass());
+        }
+        return messageArea;
     }
 
     @Override
@@ -105,15 +121,6 @@ class KeyguardMessageArea extends TextView implements SecurityMessageDisplay {
             message = getContext().getString(resId, formatArgs);
         }
         setMessage(message);
-    }
-
-    public static SecurityMessageDisplay findSecurityMessageDisplay(View v) {
-        KeyguardMessageArea messageArea = (KeyguardMessageArea) v.findViewById(
-                R.id.keyguard_message_area);
-        if (messageArea == null) {
-            throw new RuntimeException("Can't find keyguard_message_area in " + v.getClass());
-        }
-        return messageArea;
     }
 
     @Override

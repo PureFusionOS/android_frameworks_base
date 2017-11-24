@@ -224,7 +224,7 @@ public class NetworkControllerWifiTest extends NetworkControllerBaseTest {
 
     protected void setWifiLevel(int level) {
         float amountPerLevel = (MAX_RSSI - MIN_RSSI) / (WifiIcons.WIFI_LEVEL_COUNT - 1);
-        int rssi = (int)(MIN_RSSI + level * amountPerLevel);
+        int rssi = (int) (MIN_RSSI + level * amountPerLevel);
         // Put RSSI in the middle of the range.
         rssi += amountPerLevel / 2;
         Intent i = new Intent(WifiManager.RSSI_CHANGED_ACTION);
@@ -270,14 +270,14 @@ public class NetworkControllerWifiTest extends NetworkControllerBaseTest {
     }
 
     protected void verifyLastQsWifiIcon(boolean enabled, boolean connected, int icon,
-            String description) {
+                                        String description) {
         ArgumentCaptor<IconState> iconArg = ArgumentCaptor.forClass(IconState.class);
         ArgumentCaptor<Boolean> enabledArg = ArgumentCaptor.forClass(Boolean.class);
         ArgumentCaptor<String> descArg = ArgumentCaptor.forClass(String.class);
 
         Mockito.verify(mCallbackHandler, Mockito.atLeastOnce()).setWifiIndicators(
                 enabledArg.capture(), any(), iconArg.capture(), anyBoolean(),
-                anyBoolean(),  descArg.capture(), anyBoolean());
+                anyBoolean(), descArg.capture(), anyBoolean());
         IconState iconState = iconArg.getValue();
         assertEquals("WiFi enabled, in quick settings", enabled, (boolean) enabledArg.getValue());
         assertEquals("WiFi connected, in quick settings", connected, iconState.visible);

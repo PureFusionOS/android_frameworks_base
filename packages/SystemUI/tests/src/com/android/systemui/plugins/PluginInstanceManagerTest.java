@@ -192,7 +192,8 @@ public class PluginInstanceManagerTest extends SysuiTestCase {
         mPluginInstanceManager.loadAll();
 
         waitForIdleSync(mPluginInstanceManager.mPluginHandler);
-        waitForIdleSync(mPluginInstanceManager.mMainHandler);;
+        waitForIdleSync(mPluginInstanceManager.mMainHandler);
+        ;
 
         // Non-debuggable build should receive no plugins.
         verify(mMockListener, Mockito.never()).onPluginConnected(any(), any());

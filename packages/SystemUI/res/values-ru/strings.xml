@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /**
  * Copyright (c) 2009, The Android Open Source Project
  *
@@ -25,10 +24,10 @@
     <string name="status_bar_no_recent_apps" msgid="7374907845131203189">"Здесь будут показаны недавние приложения."</string>
     <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"Закрыть недавние приложения"</string>
     <plurals name="status_bar_accessibility_recent_apps" formatted="false" msgid="9138535907802238759">
-      <item quantity="one">Показан %d экран</item>
-      <item quantity="few">Показано %d экрана</item>
-      <item quantity="many">Показано %d экранов</item>
-      <item quantity="other">Показано %d экранов</item>
+        <item quantity="one">Показан %d экран</item>
+        <item quantity="few">Показано %d экрана</item>
+        <item quantity="many">Показано %d экранов</item>
+        <item quantity="other">Показано %d экранов</item>
     </plurals>
     <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"Нет уведомлений"</string>
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Текущие"</string>
@@ -255,10 +254,10 @@
     <string name="accessibility_clear_all" msgid="5235938559247164925">"Удалить все уведомления"</string>
     <string name="notification_group_overflow_indicator" msgid="1863231301642314183">"+ <xliff:g id="NUMBER">%s</xliff:g>"</string>
     <plurals name="notification_group_overflow_description" formatted="false" msgid="4579313201268495404">
-      <item quantity="one">Ещё <xliff:g id="NUMBER_1">%s</xliff:g> уведомление.</item>
-      <item quantity="few">Ещё <xliff:g id="NUMBER_1">%s</xliff:g> уведомления.</item>
-      <item quantity="many">Ещё <xliff:g id="NUMBER_1">%s</xliff:g> уведомлений.</item>
-      <item quantity="other">Ещё <xliff:g id="NUMBER_1">%s</xliff:g> уведомления.</item>
+        <item quantity="one">Ещё <xliff:g id="NUMBER_1">%s</xliff:g> уведомление.</item>
+        <item quantity="few">Ещё <xliff:g id="NUMBER_1">%s</xliff:g> уведомления.</item>
+        <item quantity="many">Ещё <xliff:g id="NUMBER_1">%s</xliff:g> уведомлений.</item>
+        <item quantity="other">Ещё <xliff:g id="NUMBER_1">%s</xliff:g> уведомления.</item>
     </plurals>
     <string name="status_bar_notification_inspect_item_title" msgid="5668348142410115323">"Настройки уведомлений"</string>
     <string name="status_bar_notification_app_settings_title" msgid="5525260160341558869">"Настройки приложения \"<xliff:g id="APP_NAME">%s</xliff:g>\""</string>
@@ -347,8 +346,7 @@
     <string name="recents_accessibility_split_screen_top" msgid="9056056469282256287">"Разделить экран по верхнему краю"</string>
     <string name="recents_accessibility_split_screen_left" msgid="8987144699630620019">"Разделить экран по левому краю"</string>
     <string name="recents_accessibility_split_screen_right" msgid="275069779299592867">"Разделить экран по правому краю"</string>
-  <string-array name="recents_blacklist_array">
-  </string-array>
+    <string-array name="recents_blacklist_array"></string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Батарея заряжена"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"Зарядка батареи"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"<xliff:g id="CHARGING_TIME">%s</xliff:g> до полной зарядки"</string>
@@ -557,17 +555,17 @@
     <string name="notification_num_channels" msgid="2048144408999179471">"Категорий оповещений: <xliff:g id="NUMBER">%d</xliff:g>"</string>
     <string name="notification_default_channel_desc" msgid="2506053815870808359">"В приложении нет категорий уведомлений"</string>
     <plurals name="notification_num_channels_desc" formatted="false" msgid="5492793452274077663">
-      <item quantity="one">1 из <xliff:g id="NUMBER_1">%d</xliff:g> категории уведомлений этого приложения</item>
-      <item quantity="few">1 из <xliff:g id="NUMBER_1">%d</xliff:g> категорий уведомлений этого приложения</item>
-      <item quantity="many">1 из <xliff:g id="NUMBER_1">%d</xliff:g> категорий уведомлений этого приложения</item>
-      <item quantity="other">1 из <xliff:g id="NUMBER_1">%d</xliff:g> категории уведомлений этого приложения</item>
+        <item quantity="one">1 из <xliff:g id="NUMBER_1">%d</xliff:g> категории уведомлений этого приложения</item>
+        <item quantity="few">1 из <xliff:g id="NUMBER_1">%d</xliff:g> категорий уведомлений этого приложения</item>
+        <item quantity="many">1 из <xliff:g id="NUMBER_1">%d</xliff:g> категорий уведомлений этого приложения</item>
+        <item quantity="other">1 из <xliff:g id="NUMBER_1">%d</xliff:g> категории уведомлений этого приложения</item>
     </plurals>
     <string name="notification_channels_list_desc_2" msgid="6214732715833946441">"<xliff:g id="CHANNEL_NAME_1">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2">%2$s</xliff:g>"</string>
     <plurals name="notification_channels_list_desc_2_and_others" formatted="false" msgid="2747813553355336157">
-      <item quantity="one"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> и ещё <xliff:g id="NUMBER_5">%3$d</xliff:g> канал</item>
-      <item quantity="few"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> и ещё <xliff:g id="NUMBER_5">%3$d</xliff:g> канала</item>
-      <item quantity="many"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> и ещё <xliff:g id="NUMBER_5">%3$d</xliff:g> каналов</item>
-      <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> и ещё <xliff:g id="NUMBER_5">%3$d</xliff:g> канала</item>
+        <item quantity="one"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> и ещё <xliff:g id="NUMBER_5">%3$d</xliff:g> канал</item>
+        <item quantity="few"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> и ещё <xliff:g id="NUMBER_5">%3$d</xliff:g> канала</item>
+        <item quantity="many"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> и ещё <xliff:g id="NUMBER_5">%3$d</xliff:g> каналов</item>
+        <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> и ещё <xliff:g id="NUMBER_5">%3$d</xliff:g> канала</item>
     </plurals>
     <string name="notification_channel_controls_opened_accessibility" msgid="6553950422055908113">"Настройки уведомлений для приложения <xliff:g id="APP_NAME">%1$s</xliff:g> открыты"</string>
     <string name="notification_channel_controls_closed_accessibility" msgid="7521619812603693144">"Настройки уведомлений для приложения <xliff:g id="APP_NAME">%1$s</xliff:g> закрыты"</string>
@@ -650,18 +648,18 @@
     <string name="left_nav_bar_button_type" msgid="8555981238887546528">"Дополнительный тип кнопки \"Влево\""</string>
     <string name="right_nav_bar_button_type" msgid="2481056627065649656">"Дополнительный тип кнопки \"Вправо\""</string>
     <string name="nav_bar_default" msgid="8587114043070993007">"(по умолчанию)"</string>
-  <string-array name="nav_bar_buttons">
-    <item msgid="1545641631806817203">"Буфер обмена"</item>
-    <item msgid="5742013440802239414">"Код клавиши"</item>
-    <item msgid="8802889973626281575">"Переключение раскладки"</item>
-    <item msgid="8175437057325747277">"Нет"</item>
-  </string-array>
-  <string-array name="nav_bar_layouts">
-    <item msgid="8077901629964902399">"Обычная"</item>
-    <item msgid="8256205964297588988">"Компактная"</item>
-    <item msgid="8719936228094005878">"Со сдвигом влево"</item>
-    <item msgid="586019486955594690">"Со сдвигом вправо"</item>
-  </string-array>
+    <string-array name="nav_bar_buttons">
+        <item msgid="1545641631806817203">"Буфер обмена"</item>
+        <item msgid="5742013440802239414">"Код клавиши"</item>
+        <item msgid="8802889973626281575">"Переключение раскладки"</item>
+        <item msgid="8175437057325747277">"Нет"</item>
+    </string-array>
+    <string-array name="nav_bar_layouts">
+        <item msgid="8077901629964902399">"Обычная"</item>
+        <item msgid="8256205964297588988">"Компактная"</item>
+        <item msgid="8719936228094005878">"Со сдвигом влево"</item>
+        <item msgid="586019486955594690">"Со сдвигом вправо"</item>
+    </string-array>
     <string name="menu_ime" msgid="4998010205321292416">"Переключение раскладки"</string>
     <string name="save" msgid="2311877285724540644">"Сохранить"</string>
     <string name="reset" msgid="2448168080964209908">"Сбросить"</string>
@@ -676,16 +674,16 @@
     <string name="drag_to_remove_tiles" msgid="3361212377437088062">"Чтобы удалить, перетащите сюда"</string>
     <string name="qs_edit" msgid="2232596095725105230">"Изменить"</string>
     <string name="tuner_time" msgid="6572217313285536011">"Время"</string>
-  <string-array name="clock_options">
-    <item msgid="5965318737560463480">"Часы, минуты и секунды"</item>
-    <item msgid="1427801730816895300">"Часы и минуты (по умолчанию)"</item>
-    <item msgid="3830170141562534721">"Не показывать этот значок"</item>
-  </string-array>
-  <string-array name="battery_options">
-    <item msgid="3160236755818672034">"Всегда показывать процент заряда"</item>
-    <item msgid="2139628951880142927">"Показывать процент во время зарядки (по умолчанию)"</item>
-    <item msgid="3327323682209964956">"Не показывать этот значок"</item>
-  </string-array>
+    <string-array name="clock_options">
+        <item msgid="5965318737560463480">"Часы, минуты и секунды"</item>
+        <item msgid="1427801730816895300">"Часы и минуты (по умолчанию)"</item>
+        <item msgid="3830170141562534721">"Не показывать этот значок"</item>
+    </string-array>
+    <string-array name="battery_options">
+        <item msgid="3160236755818672034">"Всегда показывать процент заряда"</item>
+        <item msgid="2139628951880142927">"Показывать процент во время зарядки (по умолчанию)"</item>
+        <item msgid="3327323682209964956">"Не показывать этот значок"</item>
+    </string-array>
     <string name="other" msgid="4060683095962566764">"Другое"</string>
     <string name="accessibility_divider" msgid="5903423481953635044">"Разделитель экрана"</string>
     <string name="accessibility_action_divider_left_full" msgid="2801570521881574972">"Левый во весь экран"</string>

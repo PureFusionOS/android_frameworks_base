@@ -32,7 +32,7 @@ public class NotificationBigTextTemplateViewWrapper extends NotificationTemplate
     private ImageFloatingTextView mBigtext;
 
     protected NotificationBigTextTemplateViewWrapper(Context ctx, View view,
-            ExpandableNotificationRow row) {
+                                                     ExpandableNotificationRow row) {
         super(ctx, view, row);
     }
 

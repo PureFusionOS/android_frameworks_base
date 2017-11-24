@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +13,19 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<set xmlns:android="http://schemas.android.com/apk/res/android" >
-    <set
-        android:ordering="sequentially" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <set android:ordering="sequentially">
         <objectAnimator
             android:duration="200"
+            android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="alpha"
             android:valueFrom="0.54"
-            android:valueTo="0.54"
-            android:interpolator="@android:interpolator/fast_out_slow_in" />
+            android:valueTo="0.54" />
         <objectAnimator
             android:duration="350"
+            android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="alpha"
             android:valueFrom="0.54"
-            android:valueTo="1"
-            android:interpolator="@android:interpolator/fast_out_slow_in" />
+            android:valueTo="1" />
     </set>
 </set>

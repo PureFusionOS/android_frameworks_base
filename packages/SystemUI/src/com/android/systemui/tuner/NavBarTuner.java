@@ -200,7 +200,7 @@ public class NavBarTuner extends TunerPreferenceFragment {
     }
 
     private void setValue(String setting, ListPreference type, Preference keycode,
-            ListPreference icon) {
+                          ListPreference icon) {
         String button = type.getValue();
         if (KEY.equals(button)) {
             String uri = icon.getValue();

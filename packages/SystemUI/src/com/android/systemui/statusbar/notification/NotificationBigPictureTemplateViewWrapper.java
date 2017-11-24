@@ -31,7 +31,7 @@ import com.android.systemui.statusbar.ExpandableNotificationRow;
 public class NotificationBigPictureTemplateViewWrapper extends NotificationTemplateViewWrapper {
 
     protected NotificationBigPictureTemplateViewWrapper(Context ctx, View view,
-            ExpandableNotificationRow row) {
+                                                        ExpandableNotificationRow row) {
         super(ctx, view, row);
     }
 

@@ -39,6 +39,12 @@ public class AdbOverNetworkTile extends QSTileImpl<BooleanState> {
 
     private boolean mActive = false;
     private boolean mListening;
+    private ContentObserver mObserver = new ContentObserver(mHandler) {
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            refreshState();
+        }
+    };
 
     public AdbOverNetworkTile(QSHost host) {
         super(host);
@@ -52,7 +58,7 @@ public class AdbOverNetworkTile extends QSTileImpl<BooleanState> {
     @Override
     protected void handleClick() {
         if (!isAdbEnabled()) {
-           Toast.makeText(mContext, mContext.getString(
+            Toast.makeText(mContext, mContext.getString(
                     R.string.quick_settings_network_adb_toast), Toast.LENGTH_LONG).show();
         } else {
             Settings.Secure.putIntForUser(mContext.getContentResolver(),
@@ -117,13 +123,6 @@ public class AdbOverNetworkTile extends QSTileImpl<BooleanState> {
         return Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.ADB_PORT, 0) > 0;
     }
-
-    private ContentObserver mObserver = new ContentObserver(mHandler) {
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            refreshState();
-        }
-    };
 
     @Override
     public void setListening(boolean listening) {

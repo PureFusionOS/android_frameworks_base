@@ -42,16 +42,13 @@ import com.android.systemui.statusbar.policy.UserSwitcherController;
  */
 public class MultiUserSwitch extends FrameLayout implements View.OnClickListener {
 
+    final UserManager mUserManager;
+    private final int[] mTmpInt2 = new int[2];
     protected QSPanel mQsPanel;
+    protected UserSwitcherController mUserSwitcherController;
     private KeyguardUserSwitcher mKeyguardUserSwitcher;
     private boolean mKeyguardMode;
     private UserSwitcherController.BaseUserAdapter mUserListener;
-
-    final UserManager mUserManager;
-
-    private final int[] mTmpInt2 = new int[2];
-
-    protected UserSwitcherController mUserSwitcherController;
 
     public MultiUserSwitch(Context context, AttributeSet attrs) {
         super(context, attrs);

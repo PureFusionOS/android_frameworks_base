@@ -43,7 +43,7 @@ public class NotificationIconDozeHelper extends NotificationDozeHelper {
     }
 
     public void setImageDark(ImageView target, boolean dark, boolean fade, long delay,
-            boolean useGrayscale) {
+                             boolean useGrayscale) {
         if (fade) {
             if (!useGrayscale) {
                 fadeImageColorFilter(target, dark, delay);

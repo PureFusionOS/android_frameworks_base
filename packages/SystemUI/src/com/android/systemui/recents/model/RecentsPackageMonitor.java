@@ -30,7 +30,9 @@ import com.android.systemui.recents.misc.ForegroundThread;
  */
 public class RecentsPackageMonitor extends PackageMonitor {
 
-    /** Registers the broadcast receivers with the specified callbacks. */
+    /**
+     * Registers the broadcast receivers with the specified callbacks.
+     */
     public void register(Context context) {
         try {
             // We register for events from all users, but will cross-reference them with
@@ -42,7 +44,9 @@ public class RecentsPackageMonitor extends PackageMonitor {
         }
     }
 
-    /** Unregisters the broadcast receivers. */
+    /**
+     * Unregisters the broadcast receivers.
+     */
     @Override
     public void unregister() {
         try {

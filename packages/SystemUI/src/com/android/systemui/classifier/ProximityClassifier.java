@@ -70,7 +70,7 @@ public class ProximityClassifier extends GestureClassifier {
 
 
     /**
-     * @param near is the sensor showing the near state right now
+     * @param near          is the sensor showing the near state right now
      * @param timestampNano time of this event in nanoseconds
      */
     private void update(boolean near, long timestampNano) {

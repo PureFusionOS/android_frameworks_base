@@ -46,8 +46,6 @@ import java.util.Map;
  * listeners listening.
  */
 public abstract class LeakCheckedTest extends SysuiTestCase {
-    private static final String TAG = "LeakCheckedTest";
-
     public static final Class<?>[] ALL_SUPPORTED_CLASSES = new Class[]{
             BluetoothController.class,
             LocationController.class,
@@ -67,7 +65,7 @@ public abstract class LeakCheckedTest extends SysuiTestCase {
             TunerService.class,
             StatusBarIconController.class,
     };
-
+    private static final String TAG = "LeakCheckedTest";
     @Rule
     public SysuiLeakCheck mLeakCheck = new SysuiLeakCheck();
 

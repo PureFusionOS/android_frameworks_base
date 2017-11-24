@@ -35,7 +35,9 @@ public class HumanInteractionClassifier extends Classifier {
     private static final String HIC_ENABLE = "HIC_enable";
     private static final float FINGER_DISTANCE = 0.1f;
 
-    /** Default value for the HIC_ENABLE setting: 1 - enabled, 0 - disabled */
+    /**
+     * Default value for the HIC_ENABLE setting: 1 - enabled, 0 - disabled
+     */
     private static final int HIC_ENABLE_DEFAULT = 1;
 
     private static HumanInteractionClassifier sInstance = null;
@@ -50,14 +52,13 @@ public class HumanInteractionClassifier extends Classifier {
     private final float mDpi;
 
     private boolean mEnableClassifier = false;
-    private int mCurrentType = Classifier.GENERIC;
-
     protected final ContentObserver mSettingsObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
             updateConfiguration();
         }
     };
+    private int mCurrentType = Classifier.GENERIC;
 
     private HumanInteractionClassifier(Context context) {
         mContext = context;
@@ -83,7 +84,7 @@ public class HumanInteractionClassifier extends Classifier {
                 new DirectionClassifier(mClassifierData),
         };
 
-        mGestureClassifiers = new GestureClassifier[] {
+        mGestureClassifiers = new GestureClassifier[]{
                 new PointerCountClassifier(mClassifierData),
                 new ProximityClassifier(mClassifierData)
         };

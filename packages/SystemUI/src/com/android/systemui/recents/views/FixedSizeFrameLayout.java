@@ -44,7 +44,7 @@ public class FixedSizeFrameLayout extends FrameLayout {
     }
 
     public FixedSizeFrameLayout(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                                int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

@@ -24,7 +24,7 @@ import android.view.animation.Interpolator;
  * An interpolator that can traverse a Path. The x coordinate along the <code>Path</code>
  * is the input value and the output is the y coordinate of the line at that point.
  * This means that the Path must conform to a function <code>y = f(x)</code>.
- *
+ * <p>
  * <p>The <code>Path</code> must not have gaps in the x direction and must not
  * loop back on itself such that there can be two points sharing the same x coordinate.
  * It is alright to have a disjoint line in the vertical direction:</p>

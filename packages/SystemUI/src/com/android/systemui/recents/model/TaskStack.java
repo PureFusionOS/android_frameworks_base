@@ -74,7 +74,9 @@ import static android.view.WindowManager.DOCKED_TOP;
  * An interface for a task filter to query whether a particular task should show in a stack.
  */
 interface TaskFilter {
-    /** Returns whether the filter accepts the specified task */
+    /**
+     * Returns whether the filter accepts the specified task
+     */
     public boolean acceptTask(SparseArray<Task> taskIdMap, Task t, int index);
 }
 
@@ -88,7 +90,9 @@ class FilteredTaskList {
     ArrayMap<Task.TaskKey, Integer> mTaskIndices = new ArrayMap<>();
     TaskFilter mFilter;
 
-    /** Sets the task filter, saving the current touch state */
+    /**
+     * Sets the task filter, saving the current touch state
+     */
     boolean setFilter(TaskFilter filter) {
         ArrayList<Task> prevFilteredTasks = new ArrayList<>(mFilteredTasks);
         mFilter = filter;
@@ -100,13 +104,17 @@ class FilteredTaskList {
         }
     }
 
-    /** Removes the task filter and returns the previous touch state */
+    /**
+     * Removes the task filter and returns the previous touch state
+     */
     void removeFilter() {
         mFilter = null;
         updateFilteredTasks();
     }
 
-    /** Adds a new task to the task list */
+    /**
+     * Adds a new task to the task list
+     */
     void add(Task t) {
         mTasks.add(t);
         updateFilteredTasks();
@@ -131,14 +139,18 @@ class FilteredTaskList {
         updateFilteredTasks();
     }
 
-    /** Sets the list of tasks */
+    /**
+     * Sets the list of tasks
+     */
     void set(List<Task> tasks) {
         mTasks.clear();
         mTasks.addAll(tasks);
         updateFilteredTasks();
     }
 
-    /** Removes a task from the base list only if it is in the filtered list */
+    /**
+     * Removes a task from the base list only if it is in the filtered list
+     */
     boolean remove(Task t) {
         if (mFilteredTasks.contains(t)) {
             boolean removed = mTasks.remove(t);
@@ -148,7 +160,9 @@ class FilteredTaskList {
         return false;
     }
 
-    /** Returns the index of this task in the list of filtered tasks */
+    /**
+     * Returns the index of this task in the list of filtered tasks
+     */
     int indexOf(Task t) {
         if (t != null && mTaskIndices.containsKey(t.key)) {
             return mTaskIndices.get(t.key);
@@ -156,17 +170,23 @@ class FilteredTaskList {
         return -1;
     }
 
-    /** Returns the size of the list of filtered tasks */
+    /**
+     * Returns the size of the list of filtered tasks
+     */
     int size() {
         return mFilteredTasks.size();
     }
 
-    /** Returns whether the filtered list contains this task */
+    /**
+     * Returns whether the filtered list contains this task
+     */
     boolean contains(Task t) {
         return mTaskIndices.containsKey(t.key);
     }
 
-    /** Updates the list of filtered tasks whenever the base task list changes */
+    /**
+     * Updates the list of filtered tasks whenever the base task list changes
+     */
     private void updateFilteredTasks() {
         mFilteredTasks.clear();
         if (mFilter != null) {
@@ -190,7 +210,9 @@ class FilteredTaskList {
         updateFilteredTaskIndices();
     }
 
-    /** Updates the mapping of tasks to indices. */
+    /**
+     * Updates the mapping of tasks to indices.
+     */
     private void updateFilteredTaskIndices() {
         int taskCount = mFilteredTasks.size();
         mTaskIndices.clear();
@@ -200,12 +222,16 @@ class FilteredTaskList {
         }
     }
 
-    /** Returns whether this task list is filtered */
+    /**
+     * Returns whether this task list is filtered
+     */
     boolean hasFilter() {
         return (mFilter != null);
     }
 
-    /** Returns the list of filtered tasks */
+    /**
+     * Returns the list of filtered tasks
+     */
     ArrayList<Task> getTasks() {
         return mFilteredTasks;
     }
@@ -216,331 +242,14 @@ class FilteredTaskList {
  */
 public class TaskStack {
 
+    // The task offset to apply to a task id as a group affiliation
+    static final int IndividualTaskIdOffset = 1 << 16;
     private static final String TAG = "TaskStack";
-
-    /** Task stack callbacks */
-    public interface TaskStackCallbacks {
-        /**
-         * Notifies when a new task has been added to the stack.
-         */
-        void onStackTaskAdded(TaskStack stack, Task newTask);
-
-        /**
-         * Notifies when a task has been removed from the stack.
-         */
-        void onStackTaskRemoved(TaskStack stack, Task removedTask, Task newFrontMostTask,
-                AnimationProps animation, boolean fromDockGesture,
-                boolean dismissRecentsIfAllRemoved);
-
-        /**
-         * Notifies when all tasks have been removed from the stack.
-         */
-        void onStackTasksRemoved(TaskStack stack);
-
-        /**
-         * Notifies when tasks in the stack have been updated.
-         */
-        void onStackTasksUpdated(TaskStack stack);
-    }
-
-    /**
-     * The various possible dock states when dragging and dropping a task.
-     */
-    public static class DockState implements DropTarget {
-
-        public static final int DOCK_AREA_BG_COLOR = 0xFFffffff;
-        public static final int DOCK_AREA_GRID_BG_COLOR = 0xFF000000;
-
-        // The rotation to apply to the hint text
-        @Retention(RetentionPolicy.SOURCE)
-        @IntDef({HORIZONTAL, VERTICAL})
-        public @interface TextOrientation {}
-        private static final int HORIZONTAL = 0;
-        private static final int VERTICAL = 1;
-
-        private static final int DOCK_AREA_ALPHA = 80;
-        public static final DockState NONE = new DockState(DOCKED_INVALID, -1, 80, 255, HORIZONTAL,
-                null, null, null);
-        public static final DockState LEFT = new DockState(DOCKED_LEFT,
-                DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT, DOCK_AREA_ALPHA, 0, VERTICAL,
-                new RectF(0, 0, 0.125f, 1), new RectF(0, 0, 0.125f, 1),
-                new RectF(0, 0, 0.5f, 1));
-        public static final DockState TOP = new DockState(DOCKED_TOP,
-                DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT, DOCK_AREA_ALPHA, 0, HORIZONTAL,
-                new RectF(0, 0, 1, 0.125f), new RectF(0, 0, 1, 0.125f),
-                new RectF(0, 0, 1, 0.5f));
-        public static final DockState RIGHT = new DockState(DOCKED_RIGHT,
-                DOCKED_STACK_CREATE_MODE_BOTTOM_OR_RIGHT, DOCK_AREA_ALPHA, 0, VERTICAL,
-                new RectF(0.875f, 0, 1, 1), new RectF(0.875f, 0, 1, 1),
-                new RectF(0.5f, 0, 1, 1));
-        public static final DockState BOTTOM = new DockState(DOCKED_BOTTOM,
-                DOCKED_STACK_CREATE_MODE_BOTTOM_OR_RIGHT, DOCK_AREA_ALPHA, 0, HORIZONTAL,
-                new RectF(0, 0.875f, 1, 1), new RectF(0, 0.875f, 1, 1),
-                new RectF(0, 0.5f, 1, 1));
-
-        @Override
-        public boolean acceptsDrop(int x, int y, int width, int height, Rect insets,
-                boolean isCurrentTarget) {
-            if (isCurrentTarget) {
-                getMappedRect(expandedTouchDockArea, width, height, mTmpRect);
-                return mTmpRect.contains(x, y);
-            } else {
-                getMappedRect(touchArea, width, height, mTmpRect);
-                updateBoundsWithSystemInsets(mTmpRect, insets);
-                return mTmpRect.contains(x, y);
-            }
-        }
-
-        // Represents the view state of this dock state
-        public static class ViewState {
-            private static final IntProperty<ViewState> HINT_ALPHA =
-                    new IntProperty<ViewState>("drawableAlpha") {
-                        @Override
-                        public void setValue(ViewState object, int alpha) {
-                            object.mHintTextAlpha = alpha;
-                            object.dockAreaOverlay.invalidateSelf();
-                        }
-
-                        @Override
-                        public Integer get(ViewState object) {
-                            return object.mHintTextAlpha;
-                        }
-                    };
-
-            public final int dockAreaAlpha;
-            public final ColorDrawable dockAreaOverlay;
-            public final int hintTextAlpha;
-            public final int hintTextOrientation;
-
-            private final int mHintTextResId;
-            private String mHintText;
-            private Paint mHintTextPaint;
-            private Point mHintTextBounds = new Point();
-            private int mHintTextAlpha = 255;
-            private AnimatorSet mDockAreaOverlayAnimator;
-            private Rect mTmpRect = new Rect();
-
-            private ViewState(int areaAlpha, int hintAlpha, @TextOrientation int hintOrientation,
-                    int hintTextResId) {
-                dockAreaAlpha = areaAlpha;
-                dockAreaOverlay = new ColorDrawable(Recents.getConfiguration().isGridEnabled
-                        ? DOCK_AREA_GRID_BG_COLOR : DOCK_AREA_BG_COLOR);
-                dockAreaOverlay.setAlpha(0);
-                hintTextAlpha = hintAlpha;
-                hintTextOrientation = hintOrientation;
-                mHintTextResId = hintTextResId;
-                mHintTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                mHintTextPaint.setColor(Color.WHITE);
-            }
-
-            /**
-             * Updates the view state with the given context.
-             */
-            public void update(Context context) {
-                Resources res = context.getResources();
-                mHintText = context.getString(mHintTextResId);
-                mHintTextPaint.setTextSize(res.getDimensionPixelSize(
-                        R.dimen.recents_drag_hint_text_size));
-                mHintTextPaint.getTextBounds(mHintText, 0, mHintText.length(), mTmpRect);
-                mHintTextBounds.set((int) mHintTextPaint.measureText(mHintText), mTmpRect.height());
-            }
-
-            /**
-             * Draws the current view state.
-             */
-            public void draw(Canvas canvas) {
-                // Draw the overlay background
-                if (dockAreaOverlay.getAlpha() > 0) {
-                    dockAreaOverlay.draw(canvas);
-                }
-
-                // Draw the hint text
-                if (mHintTextAlpha > 0) {
-                    Rect bounds = dockAreaOverlay.getBounds();
-                    int x = bounds.left + (bounds.width() - mHintTextBounds.x) / 2;
-                    int y = bounds.top + (bounds.height() + mHintTextBounds.y) / 2;
-                    mHintTextPaint.setAlpha(mHintTextAlpha);
-                    if (hintTextOrientation == VERTICAL) {
-                        canvas.save();
-                        canvas.rotate(-90f, bounds.centerX(), bounds.centerY());
-                    }
-                    canvas.drawText(mHintText, x, y, mHintTextPaint);
-                    if (hintTextOrientation == VERTICAL) {
-                        canvas.restore();
-                    }
-                }
-            }
-
-            /**
-             * Creates a new bounds and alpha animation.
-             */
-            public void startAnimation(Rect bounds, int areaAlpha, int hintAlpha, int duration,
-                    Interpolator interpolator, boolean animateAlpha, boolean animateBounds) {
-                if (mDockAreaOverlayAnimator != null) {
-                    mDockAreaOverlayAnimator.cancel();
-                }
-
-                ObjectAnimator anim;
-                ArrayList<Animator> animators = new ArrayList<>();
-                if (dockAreaOverlay.getAlpha() != areaAlpha) {
-                    if (animateAlpha) {
-                        anim = ObjectAnimator.ofInt(dockAreaOverlay,
-                                Utilities.DRAWABLE_ALPHA, dockAreaOverlay.getAlpha(), areaAlpha);
-                        anim.setDuration(duration);
-                        anim.setInterpolator(interpolator);
-                        animators.add(anim);
-                    } else {
-                        dockAreaOverlay.setAlpha(areaAlpha);
-                    }
-                }
-                if (mHintTextAlpha != hintAlpha) {
-                    if (animateAlpha) {
-                        anim = ObjectAnimator.ofInt(this, HINT_ALPHA, mHintTextAlpha,
-                                hintAlpha);
-                        anim.setDuration(150);
-                        anim.setInterpolator(hintAlpha > mHintTextAlpha
-                                ? Interpolators.ALPHA_IN
-                                : Interpolators.ALPHA_OUT);
-                        animators.add(anim);
-                    } else {
-                        mHintTextAlpha = hintAlpha;
-                        dockAreaOverlay.invalidateSelf();
-                    }
-                }
-                if (bounds != null && !dockAreaOverlay.getBounds().equals(bounds)) {
-                    if (animateBounds) {
-                        PropertyValuesHolder prop = PropertyValuesHolder.ofObject(
-                                Utilities.DRAWABLE_RECT, Utilities.RECT_EVALUATOR,
-                                new Rect(dockAreaOverlay.getBounds()), bounds);
-                        anim = ObjectAnimator.ofPropertyValuesHolder(dockAreaOverlay, prop);
-                        anim.setDuration(duration);
-                        anim.setInterpolator(interpolator);
-                        animators.add(anim);
-                    } else {
-                        dockAreaOverlay.setBounds(bounds);
-                    }
-                }
-                if (!animators.isEmpty()) {
-                    mDockAreaOverlayAnimator = new AnimatorSet();
-                    mDockAreaOverlayAnimator.playTogether(animators);
-                    mDockAreaOverlayAnimator.start();
-                }
-            }
-        }
-
-        public final int dockSide;
-        public final int createMode;
-        public final ViewState viewState;
-        private final RectF touchArea;
-        private final RectF dockArea;
-        private final RectF expandedTouchDockArea;
-        private static final Rect mTmpRect = new Rect();
-
-        /**
-         * @param createMode used to pass to ActivityManager to dock the task
-         * @param touchArea the area in which touch will initiate this dock state
-         * @param dockArea the visible dock area
-         * @param expandedTouchDockArea the area in which touch will continue to dock after entering
-         *                              the initial touch area.  This is also the new dock area to
-         *                              draw.
-         */
-        DockState(int dockSide, int createMode, int dockAreaAlpha, int hintTextAlpha,
-                  @TextOrientation int hintTextOrientation, RectF touchArea, RectF dockArea,
-                  RectF expandedTouchDockArea) {
-            this.dockSide = dockSide;
-            this.createMode = createMode;
-            this.viewState = new ViewState(dockAreaAlpha, hintTextAlpha, hintTextOrientation,
-                    R.string.recents_drag_hint_message);
-            this.dockArea = dockArea;
-            this.touchArea = touchArea;
-            this.expandedTouchDockArea = expandedTouchDockArea;
-        }
-
-        /**
-         * Updates the dock state with the given context.
-         */
-        public void update(Context context) {
-            viewState.update(context);
-        }
-
-        /**
-         * Returns the docked task bounds with the given {@param width} and {@param height}.
-         */
-        public Rect getPreDockedBounds(int width, int height, Rect insets) {
-            getMappedRect(dockArea, width, height, mTmpRect);
-            return updateBoundsWithSystemInsets(mTmpRect, insets);
-        }
-
-        /**
-         * Returns the expanded docked task bounds with the given {@param width} and
-         * {@param height}.
-         */
-        public Rect getDockedBounds(int width, int height, int dividerSize, Rect insets,
-                Resources res) {
-            // Calculate the docked task bounds
-            boolean isHorizontalDivision =
-                    res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-            int position = DockedDividerUtils.calculateMiddlePosition(isHorizontalDivision,
-                    insets, width, height, dividerSize);
-            Rect newWindowBounds = new Rect();
-            DockedDividerUtils.calculateBoundsForPosition(position, dockSide, newWindowBounds,
-                    width, height, dividerSize);
-            return newWindowBounds;
-        }
-
-        /**
-         * Returns the task stack bounds with the given {@param width} and
-         * {@param height}.
-         */
-        public Rect getDockedTaskStackBounds(Rect displayRect, int width, int height,
-                int dividerSize, Rect insets, TaskStackLayoutAlgorithm layoutAlgorithm,
-                Resources res, Rect windowRectOut) {
-            // Calculate the inverse docked task bounds
-            boolean isHorizontalDivision =
-                    res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-            int position = DockedDividerUtils.calculateMiddlePosition(isHorizontalDivision,
-                    insets, width, height, dividerSize);
-            DockedDividerUtils.calculateBoundsForPosition(position,
-                    DockedDividerUtils.invertDockSide(dockSide), windowRectOut, width, height,
-                    dividerSize);
-
-            // Calculate the task stack bounds from the new window bounds
-            Rect taskStackBounds = new Rect();
-            // If the task stack bounds is specifically under the dock area, then ignore the top
-            // inset
-            int top = dockArea.bottom < 1f
-                    ? 0
-                    : insets.top;
-            // For now, ignore the left insets since we always dock on the left and show Recents
-            // on the right
-            layoutAlgorithm.getTaskStackBounds(displayRect, windowRectOut, top, 0, insets.right,
-                    taskStackBounds);
-            return taskStackBounds;
-        }
-
-        /**
-         * Returns the expanded bounds in certain dock sides such that the bounds account for the
-         * system insets (namely the vertical nav bar).  This call modifies and returns the given
-         * {@param bounds}.
-         */
-        private Rect updateBoundsWithSystemInsets(Rect bounds, Rect insets) {
-            if (dockSide == DOCKED_LEFT) {
-                bounds.right += insets.left;
-            } else if (dockSide == DOCKED_RIGHT) {
-                bounds.left -= insets.right;
-            }
-            return bounds;
-        }
-
-        /**
-         * Returns the mapped rect to the given dimensions.
-         */
-        private void getMappedRect(RectF bounds, int width, int height, Rect out) {
-            out.set((int) (bounds.left * width), (int) (bounds.top * height),
-                    (int) (bounds.right * width), (int) (bounds.bottom * height));
-        }
-    }
-
+    ArrayList<Task> mRawTaskList = new ArrayList<>();
+    FilteredTaskList mStackTaskList = new FilteredTaskList();
+    TaskStackCallbacks mCb;
+    ArrayList<TaskGrouping> mGroups = new ArrayList<>();
+    ArrayMap<Integer, TaskGrouping> mAffinitiesGroups = new ArrayMap<>();
     // A comparator that sorts tasks by their freeform state
     private Comparator<Task> FREEFORM_COMPARATOR = new Comparator<Task>() {
         @Override
@@ -553,17 +262,6 @@ public class TaskStack {
             return Long.compare(o1.temporarySortIndexInStack, o2.temporarySortIndexInStack);
         }
     };
-
-
-    // The task offset to apply to a task id as a group affiliation
-    static final int IndividualTaskIdOffset = 1 << 16;
-
-    ArrayList<Task> mRawTaskList = new ArrayList<>();
-    FilteredTaskList mStackTaskList = new FilteredTaskList();
-    TaskStackCallbacks mCb;
-
-    ArrayList<TaskGrouping> mGroups = new ArrayList<>();
-    ArrayMap<Integer, TaskGrouping> mAffinitiesGroups = new ArrayMap<>();
 
     public TaskStack() {
         // Ensure that we only show non-docked tasks
@@ -585,7 +283,9 @@ public class TaskStack {
         });
     }
 
-    /** Sets the callbacks for this task stack. */
+    /**
+     * Sets the callbacks for this task stack.
+     */
     public void setCallbacks(TaskStackCallbacks cb) {
         mCb = cb;
     }
@@ -613,7 +313,9 @@ public class TaskStack {
         }
     }
 
-    /** Does the actual work associated with removing the task. */
+    /**
+     * Does the actual work associated with removing the task.
+     */
     void removeTaskImpl(FilteredTaskList taskList, Task t) {
         // Remove the task from the list
         taskList.remove(t);
@@ -640,7 +342,7 @@ public class TaskStack {
      * how they should update themselves.
      */
     public void removeTask(Task t, AnimationProps animation, boolean fromDockGesture,
-            boolean dismissRecentsIfAllRemoved) {
+                           boolean dismissRecentsIfAllRemoved) {
         if (Recents.sLockedTasks.contains(t)) {
             Recents.sLockedTasks.remove(t);
         }
@@ -675,7 +377,6 @@ public class TaskStack {
         }
     }
 
-
     /**
      * @see #setTasks(Context, List, boolean, boolean)
      */
@@ -686,7 +387,7 @@ public class TaskStack {
     /**
      * Sets a few tasks in one go, without calling any callbacks.
      *
-     * @param tasks the new set of tasks to replace the current set.
+     * @param tasks              the new set of tasks to replace the current set.
      * @param notifyStackChanges whether or not to callback on specific changes to the list of tasks.
      */
     public void setTasks(Context context, List<Task> tasks, boolean notifyStackChanges) {
@@ -780,7 +481,9 @@ public class TaskStack {
         return null;
     }
 
-    /** Gets the task keys */
+    /**
+     * Gets the task keys
+     */
     public ArrayList<Task.TaskKey> getTaskKeys() {
         ArrayList<Task.TaskKey> taskKeys = new ArrayList<>();
         ArrayList<Task> tasks = computeAllTasksList();
@@ -921,12 +624,16 @@ public class TaskStack {
         return null;
     }
 
-    /** Returns the index of this task in this current task stack */
+    /**
+     * Returns the index of this task in this current task stack
+     */
     public int indexOfStackTask(Task t) {
         return mStackTaskList.indexOf(t);
     }
 
-    /** Finds the task with the specified task id. */
+    /**
+     * Finds the task with the specified task id.
+     */
     public Task findTaskWithId(int taskId) {
         ArrayList<Task> tasks = computeAllTasksList();
         int taskCount = tasks.size();
@@ -939,9 +646,9 @@ public class TaskStack {
         return null;
     }
 
-    /******** Grouping ********/
-
-    /** Adds a group to the set */
+    /**
+     * Adds a group to the set
+     */
     public void addGroup(TaskGrouping group) {
         mGroups.add(group);
         mAffinitiesGroups.put(group.affiliation, group);
@@ -952,7 +659,11 @@ public class TaskStack {
         mAffinitiesGroups.remove(group.affiliation);
     }
 
-    /** Returns the group with the specified affiliation. */
+    /******** Grouping ********/
+
+    /**
+     * Returns the group with the specified affiliation.
+     */
     public TaskGrouping getGroupWithAffiliation(int affiliation) {
         return mAffinitiesGroups.get(affiliation);
     }
@@ -1136,13 +847,339 @@ public class TaskStack {
     public void dump(String prefix, PrintWriter writer) {
         String innerPrefix = prefix + "  ";
 
-        writer.print(prefix); writer.print(TAG);
-        writer.print(" numStackTasks="); writer.print(mStackTaskList.size());
+        writer.print(prefix);
+        writer.print(TAG);
+        writer.print(" numStackTasks=");
+        writer.print(mStackTaskList.size());
         writer.println();
         ArrayList<Task> tasks = mStackTaskList.getTasks();
         int taskCount = tasks.size();
         for (int i = 0; i < taskCount; i++) {
             tasks.get(i).dump(innerPrefix, writer);
+        }
+    }
+
+    /**
+     * Task stack callbacks
+     */
+    public interface TaskStackCallbacks {
+        /**
+         * Notifies when a new task has been added to the stack.
+         */
+        void onStackTaskAdded(TaskStack stack, Task newTask);
+
+        /**
+         * Notifies when a task has been removed from the stack.
+         */
+        void onStackTaskRemoved(TaskStack stack, Task removedTask, Task newFrontMostTask,
+                                AnimationProps animation, boolean fromDockGesture,
+                                boolean dismissRecentsIfAllRemoved);
+
+        /**
+         * Notifies when all tasks have been removed from the stack.
+         */
+        void onStackTasksRemoved(TaskStack stack);
+
+        /**
+         * Notifies when tasks in the stack have been updated.
+         */
+        void onStackTasksUpdated(TaskStack stack);
+    }
+
+    /**
+     * The various possible dock states when dragging and dropping a task.
+     */
+    public static class DockState implements DropTarget {
+
+        public static final int DOCK_AREA_BG_COLOR = 0xFFffffff;
+        public static final int DOCK_AREA_GRID_BG_COLOR = 0xFF000000;
+        private static final int HORIZONTAL = 0;
+        public static final DockState NONE = new DockState(DOCKED_INVALID, -1, 80, 255, HORIZONTAL,
+                null, null, null);
+        private static final int VERTICAL = 1;
+
+        private static final int DOCK_AREA_ALPHA = 80;
+        public static final DockState LEFT = new DockState(DOCKED_LEFT,
+                DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT, DOCK_AREA_ALPHA, 0, VERTICAL,
+                new RectF(0, 0, 0.125f, 1), new RectF(0, 0, 0.125f, 1),
+                new RectF(0, 0, 0.5f, 1));
+        public static final DockState TOP = new DockState(DOCKED_TOP,
+                DOCKED_STACK_CREATE_MODE_TOP_OR_LEFT, DOCK_AREA_ALPHA, 0, HORIZONTAL,
+                new RectF(0, 0, 1, 0.125f), new RectF(0, 0, 1, 0.125f),
+                new RectF(0, 0, 1, 0.5f));
+        public static final DockState RIGHT = new DockState(DOCKED_RIGHT,
+                DOCKED_STACK_CREATE_MODE_BOTTOM_OR_RIGHT, DOCK_AREA_ALPHA, 0, VERTICAL,
+                new RectF(0.875f, 0, 1, 1), new RectF(0.875f, 0, 1, 1),
+                new RectF(0.5f, 0, 1, 1));
+        public static final DockState BOTTOM = new DockState(DOCKED_BOTTOM,
+                DOCKED_STACK_CREATE_MODE_BOTTOM_OR_RIGHT, DOCK_AREA_ALPHA, 0, HORIZONTAL,
+                new RectF(0, 0.875f, 1, 1), new RectF(0, 0.875f, 1, 1),
+                new RectF(0, 0.5f, 1, 1));
+        private static final Rect mTmpRect = new Rect();
+        public final int dockSide;
+        public final int createMode;
+        public final ViewState viewState;
+        private final RectF touchArea;
+        private final RectF dockArea;
+        private final RectF expandedTouchDockArea;
+        /**
+         * @param createMode            used to pass to ActivityManager to dock the task
+         * @param touchArea             the area in which touch will initiate this dock state
+         * @param dockArea              the visible dock area
+         * @param expandedTouchDockArea the area in which touch will continue to dock after entering
+         *                              the initial touch area.  This is also the new dock area to
+         *                              draw.
+         */
+        DockState(int dockSide, int createMode, int dockAreaAlpha, int hintTextAlpha,
+                  @TextOrientation int hintTextOrientation, RectF touchArea, RectF dockArea,
+                  RectF expandedTouchDockArea) {
+            this.dockSide = dockSide;
+            this.createMode = createMode;
+            this.viewState = new ViewState(dockAreaAlpha, hintTextAlpha, hintTextOrientation,
+                    R.string.recents_drag_hint_message);
+            this.dockArea = dockArea;
+            this.touchArea = touchArea;
+            this.expandedTouchDockArea = expandedTouchDockArea;
+        }
+
+        @Override
+        public boolean acceptsDrop(int x, int y, int width, int height, Rect insets,
+                                   boolean isCurrentTarget) {
+            if (isCurrentTarget) {
+                getMappedRect(expandedTouchDockArea, width, height, mTmpRect);
+                return mTmpRect.contains(x, y);
+            } else {
+                getMappedRect(touchArea, width, height, mTmpRect);
+                updateBoundsWithSystemInsets(mTmpRect, insets);
+                return mTmpRect.contains(x, y);
+            }
+        }
+
+        /**
+         * Updates the dock state with the given context.
+         */
+        public void update(Context context) {
+            viewState.update(context);
+        }
+
+        /**
+         * Returns the docked task bounds with the given {@param width} and {@param height}.
+         */
+        public Rect getPreDockedBounds(int width, int height, Rect insets) {
+            getMappedRect(dockArea, width, height, mTmpRect);
+            return updateBoundsWithSystemInsets(mTmpRect, insets);
+        }
+
+        /**
+         * Returns the expanded docked task bounds with the given {@param width} and
+         * {@param height}.
+         */
+        public Rect getDockedBounds(int width, int height, int dividerSize, Rect insets,
+                                    Resources res) {
+            // Calculate the docked task bounds
+            boolean isHorizontalDivision =
+                    res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+            int position = DockedDividerUtils.calculateMiddlePosition(isHorizontalDivision,
+                    insets, width, height, dividerSize);
+            Rect newWindowBounds = new Rect();
+            DockedDividerUtils.calculateBoundsForPosition(position, dockSide, newWindowBounds,
+                    width, height, dividerSize);
+            return newWindowBounds;
+        }
+
+        /**
+         * Returns the task stack bounds with the given {@param width} and
+         * {@param height}.
+         */
+        public Rect getDockedTaskStackBounds(Rect displayRect, int width, int height,
+                                             int dividerSize, Rect insets, TaskStackLayoutAlgorithm layoutAlgorithm,
+                                             Resources res, Rect windowRectOut) {
+            // Calculate the inverse docked task bounds
+            boolean isHorizontalDivision =
+                    res.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+            int position = DockedDividerUtils.calculateMiddlePosition(isHorizontalDivision,
+                    insets, width, height, dividerSize);
+            DockedDividerUtils.calculateBoundsForPosition(position,
+                    DockedDividerUtils.invertDockSide(dockSide), windowRectOut, width, height,
+                    dividerSize);
+
+            // Calculate the task stack bounds from the new window bounds
+            Rect taskStackBounds = new Rect();
+            // If the task stack bounds is specifically under the dock area, then ignore the top
+            // inset
+            int top = dockArea.bottom < 1f
+                    ? 0
+                    : insets.top;
+            // For now, ignore the left insets since we always dock on the left and show Recents
+            // on the right
+            layoutAlgorithm.getTaskStackBounds(displayRect, windowRectOut, top, 0, insets.right,
+                    taskStackBounds);
+            return taskStackBounds;
+        }
+
+        /**
+         * Returns the expanded bounds in certain dock sides such that the bounds account for the
+         * system insets (namely the vertical nav bar).  This call modifies and returns the given
+         * {@param bounds}.
+         */
+        private Rect updateBoundsWithSystemInsets(Rect bounds, Rect insets) {
+            if (dockSide == DOCKED_LEFT) {
+                bounds.right += insets.left;
+            } else if (dockSide == DOCKED_RIGHT) {
+                bounds.left -= insets.right;
+            }
+            return bounds;
+        }
+
+        /**
+         * Returns the mapped rect to the given dimensions.
+         */
+        private void getMappedRect(RectF bounds, int width, int height, Rect out) {
+            out.set((int) (bounds.left * width), (int) (bounds.top * height),
+                    (int) (bounds.right * width), (int) (bounds.bottom * height));
+        }
+
+        // The rotation to apply to the hint text
+        @Retention(RetentionPolicy.SOURCE)
+        @IntDef({HORIZONTAL, VERTICAL})
+        public @interface TextOrientation {
+        }
+
+        // Represents the view state of this dock state
+        public static class ViewState {
+            private static final IntProperty<ViewState> HINT_ALPHA =
+                    new IntProperty<ViewState>("drawableAlpha") {
+                        @Override
+                        public void setValue(ViewState object, int alpha) {
+                            object.mHintTextAlpha = alpha;
+                            object.dockAreaOverlay.invalidateSelf();
+                        }
+
+                        @Override
+                        public Integer get(ViewState object) {
+                            return object.mHintTextAlpha;
+                        }
+                    };
+
+            public final int dockAreaAlpha;
+            public final ColorDrawable dockAreaOverlay;
+            public final int hintTextAlpha;
+            public final int hintTextOrientation;
+
+            private final int mHintTextResId;
+            private String mHintText;
+            private Paint mHintTextPaint;
+            private Point mHintTextBounds = new Point();
+            private int mHintTextAlpha = 255;
+            private AnimatorSet mDockAreaOverlayAnimator;
+            private Rect mTmpRect = new Rect();
+
+            private ViewState(int areaAlpha, int hintAlpha, @TextOrientation int hintOrientation,
+                              int hintTextResId) {
+                dockAreaAlpha = areaAlpha;
+                dockAreaOverlay = new ColorDrawable(Recents.getConfiguration().isGridEnabled
+                        ? DOCK_AREA_GRID_BG_COLOR : DOCK_AREA_BG_COLOR);
+                dockAreaOverlay.setAlpha(0);
+                hintTextAlpha = hintAlpha;
+                hintTextOrientation = hintOrientation;
+                mHintTextResId = hintTextResId;
+                mHintTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                mHintTextPaint.setColor(Color.WHITE);
+            }
+
+            /**
+             * Updates the view state with the given context.
+             */
+            public void update(Context context) {
+                Resources res = context.getResources();
+                mHintText = context.getString(mHintTextResId);
+                mHintTextPaint.setTextSize(res.getDimensionPixelSize(
+                        R.dimen.recents_drag_hint_text_size));
+                mHintTextPaint.getTextBounds(mHintText, 0, mHintText.length(), mTmpRect);
+                mHintTextBounds.set((int) mHintTextPaint.measureText(mHintText), mTmpRect.height());
+            }
+
+            /**
+             * Draws the current view state.
+             */
+            public void draw(Canvas canvas) {
+                // Draw the overlay background
+                if (dockAreaOverlay.getAlpha() > 0) {
+                    dockAreaOverlay.draw(canvas);
+                }
+
+                // Draw the hint text
+                if (mHintTextAlpha > 0) {
+                    Rect bounds = dockAreaOverlay.getBounds();
+                    int x = bounds.left + (bounds.width() - mHintTextBounds.x) / 2;
+                    int y = bounds.top + (bounds.height() + mHintTextBounds.y) / 2;
+                    mHintTextPaint.setAlpha(mHintTextAlpha);
+                    if (hintTextOrientation == VERTICAL) {
+                        canvas.save();
+                        canvas.rotate(-90f, bounds.centerX(), bounds.centerY());
+                    }
+                    canvas.drawText(mHintText, x, y, mHintTextPaint);
+                    if (hintTextOrientation == VERTICAL) {
+                        canvas.restore();
+                    }
+                }
+            }
+
+            /**
+             * Creates a new bounds and alpha animation.
+             */
+            public void startAnimation(Rect bounds, int areaAlpha, int hintAlpha, int duration,
+                                       Interpolator interpolator, boolean animateAlpha, boolean animateBounds) {
+                if (mDockAreaOverlayAnimator != null) {
+                    mDockAreaOverlayAnimator.cancel();
+                }
+
+                ObjectAnimator anim;
+                ArrayList<Animator> animators = new ArrayList<>();
+                if (dockAreaOverlay.getAlpha() != areaAlpha) {
+                    if (animateAlpha) {
+                        anim = ObjectAnimator.ofInt(dockAreaOverlay,
+                                Utilities.DRAWABLE_ALPHA, dockAreaOverlay.getAlpha(), areaAlpha);
+                        anim.setDuration(duration);
+                        anim.setInterpolator(interpolator);
+                        animators.add(anim);
+                    } else {
+                        dockAreaOverlay.setAlpha(areaAlpha);
+                    }
+                }
+                if (mHintTextAlpha != hintAlpha) {
+                    if (animateAlpha) {
+                        anim = ObjectAnimator.ofInt(this, HINT_ALPHA, mHintTextAlpha,
+                                hintAlpha);
+                        anim.setDuration(150);
+                        anim.setInterpolator(hintAlpha > mHintTextAlpha
+                                ? Interpolators.ALPHA_IN
+                                : Interpolators.ALPHA_OUT);
+                        animators.add(anim);
+                    } else {
+                        mHintTextAlpha = hintAlpha;
+                        dockAreaOverlay.invalidateSelf();
+                    }
+                }
+                if (bounds != null && !dockAreaOverlay.getBounds().equals(bounds)) {
+                    if (animateBounds) {
+                        PropertyValuesHolder prop = PropertyValuesHolder.ofObject(
+                                Utilities.DRAWABLE_RECT, Utilities.RECT_EVALUATOR,
+                                new Rect(dockAreaOverlay.getBounds()), bounds);
+                        anim = ObjectAnimator.ofPropertyValuesHolder(dockAreaOverlay, prop);
+                        anim.setDuration(duration);
+                        anim.setInterpolator(interpolator);
+                        animators.add(anim);
+                    } else {
+                        dockAreaOverlay.setBounds(bounds);
+                    }
+                }
+                if (!animators.isEmpty()) {
+                    mDockAreaOverlayAnimator = new AnimatorSet();
+                    mDockAreaOverlayAnimator.playTogether(animators);
+                    mDockAreaOverlayAnimator.start();
+                }
+            }
         }
     }
 }

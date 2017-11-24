@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2014 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +14,9 @@
   ~ limitations under the License
   -->
 <view xmlns:android="http://schemas.android.com/apk/res/android"
-        class="com.android.systemui.statusbar.policy.KeyguardUserSwitcher$Container"
-        android:visibility="gone"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+    class="com.android.systemui.statusbar.policy.KeyguardUserSwitcher$Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
     <!-- KeyguardUserSwitcher loads keyguard_user_switcher_inner.xml here -->
 </view>

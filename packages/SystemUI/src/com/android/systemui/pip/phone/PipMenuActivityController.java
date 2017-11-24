@@ -46,14 +46,11 @@ import static android.app.ActivityManager.StackId.PINNED_STACK_ID;
 
 /**
  * Manages the PiP menu activity which can show menu options or a scrim.
- *
+ * <p>
  * The current media session provides actions whenever there are no valid actions provided by the
  * current PiP activity. Otherwise, those actions always take precedence.
  */
 public class PipMenuActivityController {
-
-    private static final String TAG = "PipMenuActController";
-    private static final boolean DEBUG = false;
 
     public static final String EXTRA_CONTROLLER_MESSENGER = "messenger";
     public static final String EXTRA_ACTIONS = "actions";
@@ -62,7 +59,6 @@ public class PipMenuActivityController {
     public static final String EXTRA_ALLOW_TIMEOUT = "allow_timeout";
     public static final String EXTRA_DISMISS_FRACTION = "dismiss_fraction";
     public static final String EXTRA_MENU_STATE = "menu_state";
-
     public static final int MESSAGE_MENU_STATE_CHANGED = 100;
     public static final int MESSAGE_EXPAND_PIP = 101;
     public static final int MESSAGE_MINIMIZE_PIP = 102;
@@ -71,60 +67,31 @@ public class PipMenuActivityController {
     public static final int MESSAGE_REGISTER_INPUT_CONSUMER = 105;
     public static final int MESSAGE_UNREGISTER_INPUT_CONSUMER = 106;
     public static final int MESSAGE_SHOW_MENU = 107;
-
     public static final int MENU_STATE_NONE = 0;
     public static final int MENU_STATE_CLOSE = 1;
     public static final int MENU_STATE_FULL = 2;
-
-    /**
-     * A listener interface to receive notification on changes in PIP.
-     */
-    public interface Listener {
-        /**
-         * Called when the PIP menu visibility changes.
-         *
-         * @param menuState the current state of the menu
-         * @param resize whether or not to resize the PiP with the state change
-         */
-        void onPipMenuStateChanged(int menuState, boolean resize);
-
-        /**
-         * Called when the PIP requested to be expanded.
-         */
-        void onPipExpand();
-
-        /**
-         * Called when the PIP requested to be minimized.
-         */
-        void onPipMinimize();
-
-        /**
-         * Called when the PIP requested to be dismissed.
-         */
-        void onPipDismiss();
-
-        /**
-         * Called when the PIP requested to show the menu.
-         */
-        void onPipShowMenu();
-    }
-
+    private static final String TAG = "PipMenuActController";
+    private static final boolean DEBUG = false;
     private Context mContext;
     private IActivityManager mActivityManager;
     private PipMediaController mMediaController;
     private InputConsumerController mInputConsumerController;
-
     private ArrayList<Listener> mListeners = new ArrayList<>();
     private ParceledListSlice mAppActions;
     private ParceledListSlice mMediaActions;
     private int mMenuState;
-
     // The dismiss fraction update is sent frequently, so use a temporary bundle for the message
     private Bundle mTmpDismissFractionData = new Bundle();
-
     private ReferenceCountedTrigger mOnAttachDecrementTrigger;
     private boolean mStartActivityRequested;
     private Messenger mToActivityMessenger;
+    private ActionListener mMediaActionListener = new ActionListener() {
+        @Override
+        public void onMediaActionsChanged(List<RemoteAction> mediaActions) {
+            mMediaActions = new ParceledListSlice<>(mediaActions);
+            updateMenuActions();
+        }
+    };
     private Messenger mMessenger = new Messenger(new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -175,16 +142,8 @@ public class PipMenuActivityController {
         }
     });
 
-    private ActionListener mMediaActionListener = new ActionListener() {
-        @Override
-        public void onMediaActionsChanged(List<RemoteAction> mediaActions) {
-            mMediaActions = new ParceledListSlice<>(mediaActions);
-            updateMenuActions();
-        }
-    };
-
     public PipMenuActivityController(Context context, IActivityManager activityManager,
-            PipMediaController mediaController, InputConsumerController inputConsumerController) {
+                                     PipMediaController mediaController, InputConsumerController inputConsumerController) {
         mContext = context;
         mActivityManager = activityManager;
         mMediaController = mediaController;
@@ -252,7 +211,7 @@ public class PipMenuActivityController {
      * Shows the menu activity.
      */
     public void showMenu(int menuState, Rect stackBounds, Rect movementBounds,
-            boolean allowMenuTimeout) {
+                         boolean allowMenuTimeout) {
         if (DEBUG) {
             Log.d(TAG, "showMenu() state=" + menuState
                     + " hasActivity=" + (mToActivityMessenger != null)
@@ -346,7 +305,7 @@ public class PipMenuActivityController {
      * Starts the menu activity on the top task of the pinned stack.
      */
     private void startMenuActivity(int menuState, Rect stackBounds, Rect movementBounds,
-            boolean allowMenuTimeout) {
+                                   boolean allowMenuTimeout) {
         try {
             StackInfo pinnedStackInfo = mActivityManager.getStackInfo(PINNED_STACK_ID);
             if (pinnedStackInfo != null && pinnedStackInfo.taskIds != null &&
@@ -457,5 +416,38 @@ public class PipMenuActivityController {
         pw.println(innerPrefix + "mMenuState=" + mMenuState);
         pw.println(innerPrefix + "mToActivityMessenger=" + mToActivityMessenger);
         pw.println(innerPrefix + "mListeners=" + mListeners.size());
+    }
+
+    /**
+     * A listener interface to receive notification on changes in PIP.
+     */
+    public interface Listener {
+        /**
+         * Called when the PIP menu visibility changes.
+         *
+         * @param menuState the current state of the menu
+         * @param resize    whether or not to resize the PiP with the state change
+         */
+        void onPipMenuStateChanged(int menuState, boolean resize);
+
+        /**
+         * Called when the PIP requested to be expanded.
+         */
+        void onPipExpand();
+
+        /**
+         * Called when the PIP requested to be minimized.
+         */
+        void onPipMinimize();
+
+        /**
+         * Called when the PIP requested to be dismissed.
+         */
+        void onPipDismiss();
+
+        /**
+         * Called when the PIP requested to show the menu.
+         */
+        void onPipShowMenu();
     }
 }

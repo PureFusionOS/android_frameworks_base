@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /**
  * Copyright (c) 2014, The Android Open Source Project
  *
@@ -15,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
--->
-<!--
+--><!--
      This layout matches the structure of navigation_bar.xml and will need
      to be kept up to sync with changes there.
      On sw600dp, dimensions are changed to be large enough such that the
@@ -41,8 +39,8 @@
         android:layout_width="@dimen/screen_pinning_request_button_width"
         android:layout_height="@dimen/screen_pinning_request_button_height"
         android:layout_weight="0"
-        android:paddingStart="@dimen/screen_pinning_request_frame_padding"
         android:paddingEnd="@dimen/screen_pinning_request_frame_padding"
+        android:paddingStart="@dimen/screen_pinning_request_frame_padding"
         android:theme="@*android:style/ThemeOverlay.DeviceDefault.Accent">
 
         <ImageView
@@ -83,8 +81,8 @@
         android:layout_width="@dimen/screen_pinning_request_button_width"
         android:layout_height="@dimen/screen_pinning_request_button_height"
         android:layout_weight="0"
-        android:paddingStart="@dimen/screen_pinning_request_frame_padding"
-        android:paddingEnd="@dimen/screen_pinning_request_frame_padding" >
+        android:paddingEnd="@dimen/screen_pinning_request_frame_padding"
+        android:paddingStart="@dimen/screen_pinning_request_frame_padding">
 
         <ImageView
             android:layout_width="match_parent"
@@ -107,8 +105,8 @@
         android:layout_width="@dimen/screen_pinning_request_button_width"
         android:layout_height="@dimen/screen_pinning_request_button_height"
         android:layout_weight="0"
-        android:paddingStart="@dimen/screen_pinning_request_frame_padding"
         android:paddingEnd="@dimen/screen_pinning_request_frame_padding"
+        android:paddingStart="@dimen/screen_pinning_request_frame_padding"
         android:theme="@*android:style/ThemeOverlay.DeviceDefault.Accent">
 
         <ImageView

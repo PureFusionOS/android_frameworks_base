@@ -24,8 +24,7 @@ import android.widget.LinearLayout;
  * A linear layout which does not have overlapping renderings commands and therefore does not need a
  * layer when alpha is changed.
  */
-public class AlphaOptimizedLinearLayout extends LinearLayout
-{
+public class AlphaOptimizedLinearLayout extends LinearLayout {
     public AlphaOptimizedLinearLayout(Context context) {
         super(context);
     }
@@ -39,7 +38,7 @@ public class AlphaOptimizedLinearLayout extends LinearLayout
     }
 
     public AlphaOptimizedLinearLayout(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                                      int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

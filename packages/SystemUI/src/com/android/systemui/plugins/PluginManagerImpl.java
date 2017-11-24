@@ -79,7 +79,7 @@ public class PluginManagerImpl extends BroadcastReceiver implements PluginManage
 
     @VisibleForTesting
     PluginManagerImpl(Context context, PluginInstanceManagerFactory factory, boolean debuggable,
-            UncaughtExceptionHandler defaultHandler) {
+                      UncaughtExceptionHandler defaultHandler) {
         mContext = context;
         mFactory = factory;
         mLooper = Dependency.get(Dependency.BG_LOOPER);
@@ -136,17 +136,17 @@ public class PluginManagerImpl extends BroadcastReceiver implements PluginManage
     }
 
     public <T extends Plugin> void addPluginListener(PluginListener<T> listener, Class<?> cls,
-            boolean allowMultiple) {
+                                                     boolean allowMultiple) {
         addPluginListener(PluginManager.getAction(cls), listener, cls, allowMultiple);
     }
 
     public <T extends Plugin> void addPluginListener(String action, PluginListener<T> listener,
-            Class<?> cls) {
+                                                     Class<?> cls) {
         addPluginListener(action, listener, cls, false);
     }
 
     public <T extends Plugin> void addPluginListener(String action, PluginListener<T> listener,
-            Class cls, boolean allowMultiple) {
+                                                     Class cls, boolean allowMultiple) {
         if (!isDebuggable) {
             // Never ever ever allow these on production builds, they are only for prototyping.
             return;
@@ -233,7 +233,7 @@ public class PluginManagerImpl extends BroadcastReceiver implements PluginManage
                                 .setContentTitle("Plugin \"" + label + "\" has updated")
                                 .setContentText("Restart SysUI for changes to take effect.");
                 Intent i = new Intent("com.android.systemui.action.RESTART").setData(
-                            Uri.parse("package://" + pkg));
+                        Uri.parse("package://" + pkg));
                 PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, i, 0);
                 nb.addAction(new Action.Builder(null, "Restart SysUI", pi).build());
                 mContext.getSystemService(NotificationManager.class).notifyAsUser(pkg,
@@ -293,8 +293,8 @@ public class PluginManagerImpl extends BroadcastReceiver implements PluginManage
     @VisibleForTesting
     public static class PluginInstanceManagerFactory {
         public <T extends Plugin> PluginInstanceManager createPluginInstanceManager(Context context,
-                String action, PluginListener<T> listener, boolean allowMultiple, Looper looper,
-                Class<?> cls, PluginManagerImpl manager) {
+                                                                                    String action, PluginListener<T> listener, boolean allowMultiple, Looper looper,
+                                                                                    Class<?> cls, PluginManagerImpl manager) {
             return new PluginInstanceManager(context, action, listener, allowMultiple, looper,
                     new VersionInfo().addClass(cls), manager);
         }

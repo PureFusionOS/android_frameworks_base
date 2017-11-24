@@ -29,7 +29,9 @@ import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.phone.ManagedProfileController;
 
-/** Quick settings tile: Work profile on/off */
+/**
+ * Quick settings tile: Work profile on/off
+ */
 public class WorkModeTile extends QSTileImpl<BooleanState> implements
         ManagedProfileController.Callback {
     private final AnimationIcon mEnable =
@@ -101,11 +103,11 @@ public class WorkModeTile extends QSTileImpl<BooleanState> implements
         state.label = mContext.getString(R.string.quick_settings_work_mode_label);
         if (state.value) {
             state.icon = mEnable;
-            state.contentDescription =  mContext.getString(
+            state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_work_mode_on);
         } else {
             state.icon = mDisable;
-            state.contentDescription =  mContext.getString(
+            state.contentDescription = mContext.getString(
                     R.string.accessibility_quick_settings_work_mode_off);
         }
         state.expandedAccessibilityClassName = Switch.class.getName();

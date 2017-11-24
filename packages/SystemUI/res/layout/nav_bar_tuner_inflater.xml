@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,12 +13,16 @@
      limitations under the License.
 -->
 <com.android.systemui.tuner.PreviewNavInflater xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@android:color/black"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/navigation_bar_size">
+    android:layout_height="@dimen/navigation_bar_size"
+    android:background="@android:color/black">
 
-    <include android:id="@+id/rot0" layout="@layout/navigation_layout" />
+    <include
+        android:id="@+id/rot0"
+        layout="@layout/navigation_layout" />
 
-    <include android:id="@+id/rot90" layout="@layout/navigation_layout_rot90" />
+    <include
+        android:id="@+id/rot90"
+        layout="@layout/navigation_layout_rot90" />
 
 </com.android.systemui.tuner.PreviewNavInflater>

@@ -44,18 +44,14 @@ import java.util.List;
 public class LocationControllerImpl extends BroadcastReceiver implements LocationController {
 
     private static final int[] mHighPowerRequestAppOpArray
-        = new int[] {AppOpsManager.OP_MONITOR_HIGH_POWER_LOCATION};
-
+            = new int[]{AppOpsManager.OP_MONITOR_HIGH_POWER_LOCATION};
+    private final H mHandler = new H();
     private Context mContext;
-
     private AppOpsManager mAppOpsManager;
     private StatusBarManager mStatusBarManager;
-
     private boolean mAreActiveLocationRequests;
-
     private ArrayList<LocationChangeCallback> mSettingsChangeCallbacks =
             new ArrayList<LocationChangeCallback>();
-    private final H mHandler = new H();
 
     public LocationControllerImpl(Context context, Looper bgLooper) {
         mContext = context;
@@ -88,10 +84,10 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
 
     /**
      * Enable or disable location in settings.
-     *
+     * <p>
      * <p>This will attempt to enable/disable every type of location setting
      * (e.g. high and balanced power).
-     *
+     * <p>
      * <p>If enabling, a user consent dialog will pop up prompting the user to accept.
      * If the user doesn't accept, network location won't be enabled.
      *
@@ -145,7 +141,7 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
     @VisibleForTesting
     protected boolean areActiveHighPowerLocationRequests() {
         List<AppOpsManager.PackageOps> packages
-            = mAppOpsManager.getPackagesForOps(mHighPowerRequestAppOpArray);
+                = mAppOpsManager.getPackagesForOps(mHighPowerRequestAppOpArray);
         // AppOpsManager can return null when there is no requested data.
         if (packages != null) {
             final int numPackages = packages.size();

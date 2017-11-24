@@ -39,7 +39,7 @@ public class ImageGradientColorizer {
         int widthInset = (width - size) / 2;
         int heightInset = (height - size) / 2;
         drawable = drawable.mutate();
-        drawable.setBounds(- widthInset, - heightInset, width - widthInset, height - heightInset);
+        drawable.setBounds(-widthInset, -heightInset, width - widthInset, height - heightInset);
         Bitmap newBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
 
@@ -61,7 +61,7 @@ public class ImageGradientColorizer {
         // Calculate the luminance of the color extraction color
         float cLum = (tr * lr + tg * lg + tb * lb) * 255;
 
-        ColorMatrix m = new ColorMatrix(new float[] {
+        ColorMatrix m = new ColorMatrix(new float[]{
                 lr, lg, lb, 0, tri - cLum,
                 lr, lg, lb, 0, tgi - cLum,
                 lr, lg, lb, 0, tbi - cLum,
@@ -69,9 +69,9 @@ public class ImageGradientColorizer {
         });
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        LinearGradient linearGradient =  new LinearGradient(0, 0, size, 0,
-                new int[] {0, Color.argb(0.5f, 1, 1, 1), Color.BLACK},
-                new float[] {0.0f, 0.4f, 1.0f}, Shader.TileMode.CLAMP);
+        LinearGradient linearGradient = new LinearGradient(0, 0, size, 0,
+                new int[]{0, Color.argb(0.5f, 1, 1, 1), Color.BLACK},
+                new float[]{0.0f, 0.4f, 1.0f}, Shader.TileMode.CLAMP);
         paint.setShader(linearGradient);
         Bitmap fadeIn = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
         Canvas fadeInCanvas = new Canvas(fadeIn);
@@ -91,9 +91,9 @@ public class ImageGradientColorizer {
         coloredPaint.setAlpha((int) (0.5f * 255));
         canvas.drawBitmap(fadeIn, 0, 0, coloredPaint);
 
-        linearGradient =  new LinearGradient(0, 0, size, 0,
-                new int[] {0, Color.argb(0.5f, 1, 1, 1), Color.BLACK},
-                new float[] {0.0f, 0.6f, 1.0f}, Shader.TileMode.CLAMP);
+        linearGradient = new LinearGradient(0, 0, size, 0,
+                new int[]{0, Color.argb(0.5f, 1, 1, 1), Color.BLACK},
+                new float[]{0.0f, 0.6f, 1.0f}, Shader.TileMode.CLAMP);
         paint.setShader(linearGradient);
         fadeInCanvas.drawPaint(paint);
         canvas.drawBitmap(fadeIn, 0, 0, null);

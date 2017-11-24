@@ -25,7 +25,10 @@ import com.android.systemui.statusbar.policy.ConfigurationController.Configurati
 public interface ConfigurationController extends CallbackController<ConfigurationListener> {
 
     interface ConfigurationListener {
-        default void onConfigChanged(Configuration newConfig) {}
-        default void onDensityOrFontScaleChanged() {}
+        default void onConfigChanged(Configuration newConfig) {
+        }
+
+        default void onDensityOrFontScaleChanged() {
+        }
     }
 }

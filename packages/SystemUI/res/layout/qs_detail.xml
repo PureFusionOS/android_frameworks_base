@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,15 +12,13 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<!-- Extends LinearLayout -->
-<com.android.systemui.qs.QSDetail
-    xmlns:android="http://schemas.android.com/apk/res/android"
+--><!-- Extends LinearLayout -->
+<com.android.systemui.qs.QSDetail xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/qs_detail_background"
-    android:elevation="4dp"
     android:clickable="true"
+    android:elevation="4dp"
     android:orientation="vertical"
     android:paddingBottom="8dp"
     android:visibility="invisible">
@@ -30,8 +27,7 @@
         android:id="@+id/qs_detail_header"
         layout="@layout/qs_detail_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
     <com.android.systemui.statusbar.AlphaOptimizedImageView
         android:id="@+id/qs_detail_header_progress"
@@ -39,10 +35,9 @@
         android:layout_height="wrap_content"
         android:alpha="0"
         android:background="@color/qs_detail_progress_track"
-        android:src="@drawable/indeterminate_anim"
         android:scaleType="fitXY"
-        android:translationY="16dp"
-        />
+        android:src="@drawable/indeterminate_anim"
+        android:translationY="16dp" />
 
     <com.android.systemui.qs.NonInterceptingScrollView
         android:layout_width="match_parent"
@@ -53,7 +48,7 @@
         <FrameLayout
             android:id="@android:id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </com.android.systemui.qs.NonInterceptingScrollView>
 
     <include layout="@layout/qs_detail_buttons" />

@@ -38,11 +38,7 @@ import com.android.systemui.Interpolators;
 import com.android.systemui.R;
 
 public class BarTransitions {
-    private static final boolean DEBUG = false;
-    private static final boolean DEBUG_COLORS = false;
-
     public static final boolean HIGH_END = ActivityManager.isHighEndGfx();
-
     public static final int MODE_OPAQUE = 0;
     public static final int MODE_SEMI_TRANSPARENT = 1;
     public static final int MODE_TRANSLUCENT = 2;
@@ -50,11 +46,11 @@ public class BarTransitions {
     public static final int MODE_TRANSPARENT = 4;
     public static final int MODE_WARNING = 5;
     public static final int MODE_LIGHTS_OUT_TRANSPARENT = 6;
-
     public static final int LIGHTS_IN_DURATION = 250;
     public static final int LIGHTS_OUT_DURATION = 750;
     public static final int BACKGROUND_DURATION = 200;
-
+    private static final boolean DEBUG = false;
+    private static final boolean DEBUG_COLORS = false;
     private final String mTag;
     private final View mView;
     private final BarBackgroundDrawable mBarBackground;
@@ -71,21 +67,32 @@ public class BarTransitions {
         }
     }
 
-    public int getMode() {
-        return mMode;
+    public static String modeToString(int mode) {
+        if (mode == MODE_OPAQUE) return "MODE_OPAQUE";
+        if (mode == MODE_SEMI_TRANSPARENT) return "MODE_SEMI_TRANSPARENT";
+        if (mode == MODE_TRANSLUCENT) return "MODE_TRANSLUCENT";
+        if (mode == MODE_LIGHTS_OUT) return "MODE_LIGHTS_OUT";
+        if (mode == MODE_TRANSPARENT) return "MODE_TRANSPARENT";
+        if (mode == MODE_WARNING) return "MODE_WARNING";
+        if (mode == MODE_LIGHTS_OUT_TRANSPARENT) return "MODE_LIGHTS_OUT_TRANSPARENT";
+        throw new IllegalArgumentException("Unknown mode " + mode);
     }
 
-    /**
-     * @param alwaysOpaque if {@code true}, the bar's background will always be opaque, regardless
-     *         of what mode it is currently set to.
-     */
-    public void setAlwaysOpaque(boolean alwaysOpaque) {
-        mAlwaysOpaque = alwaysOpaque;
+    public int getMode() {
+        return mMode;
     }
 
     public boolean isAlwaysOpaque() {
         // Low-end devices do not support translucent modes, fallback to opaque
         return !HIGH_END || mAlwaysOpaque;
+    }
+
+    /**
+     * @param alwaysOpaque if {@code true}, the bar's background will always be opaque, regardless
+     *                     of what mode it is currently set to.
+     */
+    public void setAlwaysOpaque(boolean alwaysOpaque) {
+        mAlwaysOpaque = alwaysOpaque;
     }
 
     public void transitionTo(int mode, boolean animate) {
@@ -100,7 +107,7 @@ public class BarTransitions {
         int oldMode = mMode;
         mMode = mode;
         if (DEBUG) Log.d(mTag, String.format("%s -> %s animate=%s",
-                modeToString(oldMode), modeToString(mode),  animate));
+                modeToString(oldMode), modeToString(mode), animate));
         onTransition(oldMode, mMode, animate);
     }
 
@@ -114,17 +121,6 @@ public class BarTransitions {
         if (DEBUG) Log.d(mTag, String.format("applyModeBackground oldMode=%s newMode=%s animate=%s",
                 modeToString(oldMode), modeToString(newMode), animate));
         mBarBackground.applyModeBackground(oldMode, newMode, animate);
-    }
-
-    public static String modeToString(int mode) {
-        if (mode == MODE_OPAQUE) return "MODE_OPAQUE";
-        if (mode == MODE_SEMI_TRANSPARENT) return "MODE_SEMI_TRANSPARENT";
-        if (mode == MODE_TRANSLUCENT) return "MODE_TRANSLUCENT";
-        if (mode == MODE_LIGHTS_OUT) return "MODE_LIGHTS_OUT";
-        if (mode == MODE_TRANSPARENT) return "MODE_TRANSPARENT";
-        if (mode == MODE_WARNING) return "MODE_WARNING";
-        if (mode == MODE_LIGHTS_OUT_TRANSPARENT) return "MODE_LIGHTS_OUT_TRANSPARENT";
-        throw new IllegalArgumentException("Unknown mode " + mode);
     }
 
     public void finishAnimations() {
@@ -260,15 +256,15 @@ public class BarTransitions {
                     mColor = targetColor;
                     mGradientAlpha = targetGradientAlpha;
                 } else {
-                    final float t = (now - mStartTime) / (float)(mEndTime - mStartTime);
+                    final float t = (now - mStartTime) / (float) (mEndTime - mStartTime);
                     final float v = Math.max(0, Math.min(
                             Interpolators.LINEAR.getInterpolation(t), 1));
-                    mGradientAlpha = (int)(v * targetGradientAlpha + mGradientAlphaStart * (1 - v));
+                    mGradientAlpha = (int) (v * targetGradientAlpha + mGradientAlphaStart * (1 - v));
                     mColor = Color.argb(
-                          (int)(v * Color.alpha(targetColor) + Color.alpha(mColorStart) * (1 - v)),
-                          (int)(v * Color.red(targetColor) + Color.red(mColorStart) * (1 - v)),
-                          (int)(v * Color.green(targetColor) + Color.green(mColorStart) * (1 - v)),
-                          (int)(v * Color.blue(targetColor) + Color.blue(mColorStart) * (1 - v)));
+                            (int) (v * Color.alpha(targetColor) + Color.alpha(mColorStart) * (1 - v)),
+                            (int) (v * Color.red(targetColor) + Color.red(mColorStart) * (1 - v)),
+                            (int) (v * Color.green(targetColor) + Color.green(mColorStart) * (1 - v)),
+                            (int) (v * Color.blue(targetColor) + Color.blue(mColorStart) * (1 - v)));
                 }
             }
             if (mGradientAlpha > 0) {

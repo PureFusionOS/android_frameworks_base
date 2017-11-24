@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright 2017, The Android Open Source Project
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,54 +14,57 @@
     limitations under the License.
 -->
 
-<com.android.systemui.statusbar.NotificationInfo
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/notification_guts"
-        android:clickable="true"
-        android:orientation="vertical"
-        android:paddingStart="@*android:dimen/notification_content_margin_start"
-        android:background="@color/notification_guts_bg_color"
-        android:theme="@*android:style/Theme.DeviceDefault.Light">
+<com.android.systemui.statusbar.NotificationInfo xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/notification_guts"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/notification_guts_bg_color"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:paddingStart="@*android:dimen/notification_content_margin_start"
+    android:theme="@*android:style/Theme.DeviceDefault.Light">
 
     <!-- Package Info -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@*android:dimen/notification_header_height"
         android:clipChildren="false"
-        android:paddingTop="@*android:dimen/notification_header_padding_top"
-        android:paddingBottom="@*android:dimen/notification_header_padding_bottom"
         android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:paddingBottom="@*android:dimen/notification_header_padding_bottom"
+        android:paddingTop="@*android:dimen/notification_header_padding_top">
+
         <ImageView
             android:id="@+id/pkgicon"
             android:layout_width="@*android:dimen/notification_header_icon_size"
             android:layout_height="@*android:dimen/notification_header_icon_size"
-            android:layout_marginEnd="3dp"/>
+            android:layout_marginEnd="3dp" />
+
         <TextView
             android:id="@+id/pkgname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@*android:style/TextAppearance.Material.Notification.Info"
-            android:layout_marginStart="3dp"
             android:layout_marginEnd="2dp"
-            android:singleLine="true"/>
+            android:layout_marginStart="3dp"
+            android:singleLine="true"
+            android:textAppearance="@*android:style/TextAppearance.Material.Notification.Info" />
+
         <TextView
             android:id="@+id/pkg_group_divider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@*android:style/TextAppearance.Material.Notification.Info"
-            android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
-            android:text="@*android:string/notification_header_divider_symbol"/>
+            android:layout_marginStart="2dp"
+            android:text="@*android:string/notification_header_divider_symbol"
+            android:textAppearance="@*android:style/TextAppearance.Material.Notification.Info" />
+
         <TextView
             android:id="@+id/group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@*android:style/TextAppearance.Material.Notification.Info"
+            android:layout_marginEnd="2dp"
             android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"/>
+            android:textAppearance="@*android:style/TextAppearance.Material.Notification.Info" />
     </LinearLayout>
 
     <!-- Channel Info Block -->
@@ -80,64 +82,67 @@
             <!-- Channel Name -->
             <TextView
                 android:id="@+id/channel_name"
+                style="@style/TextAppearance.NotificationInfo.Primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginBottom="6dp"
-                style="@style/TextAppearance.NotificationInfo.Primary" />
+                android:layout_weight="1" />
             <!-- Ban Channel Switch -->
             <Switch
                 android:id="@+id/channel_enabled_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:contentDescription="@string/notification_channel_switch_accessibility"
-                android:background="@null" />
+                android:background="@null"
+                android:contentDescription="@string/notification_channel_switch_accessibility" />
         </LinearLayout>
         <!-- Secondary Text - only one shows at a time -->
         <TextView
             android:id="@+id/channel_disabled"
+            style="@style/TextAppearance.NotificationInfo.Secondary.Warning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/notification_channel_disabled"
-            style="@style/TextAppearance.NotificationInfo.Secondary.Warning" />
+            android:text="@string/notification_channel_disabled" />
+
         <TextView
             android:id="@+id/num_channels_desc"
+            style="@style/TextAppearance.NotificationInfo.Secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/notification_channel_disabled"
-            style="@style/TextAppearance.NotificationInfo.Secondary" />
+            android:text="@string/notification_channel_disabled" />
         <!-- Optional link to app. Only appears if the channel is not disabled -->
         <TextView
             android:id="@+id/app_settings"
+            style="@style/TextAppearance.NotificationInfo.Secondary.Link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:ellipsize="end"
             android:maxLines="1"
-            style="@style/TextAppearance.NotificationInfo.Secondary.Link"/>
+            android:visibility="gone" />
     </LinearLayout>
 
     <!-- Settings and Done buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
         android:gravity="end"
-        android:layout_marginBottom="8dp" >
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/more_settings"
-            android:text="@string/notification_more_settings"
+            style="@style/TextAppearance.NotificationInfo.Button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
-            style="@style/TextAppearance.NotificationInfo.Button"/>
+            android:text="@string/notification_more_settings" />
+
         <TextView
             android:id="@+id/done"
-            android:text="@string/notification_done"
+            style="@style/TextAppearance.NotificationInfo.Button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
-            style="@style/TextAppearance.NotificationInfo.Button"/>
+            android:text="@string/notification_done" />
     </LinearLayout>
 </com.android.systemui.statusbar.NotificationInfo>

@@ -39,7 +39,7 @@ public class HeadsUpAppearInterpolator extends PathInterpolator {
         float xTot = (x1 + x2 + x3);
         path.cubicTo(x1 * 0.9f / xTot, 0f,
                 x1 * 0.8f / xTot, y1 / y3,
-                x1 / xTot , y1 / y3);
+                x1 / xTot, y1 / y3);
         path.cubicTo((x1 + x2 * 0.4f) / xTot, y1 / y3,
                 (x1 + x2 * 0.2f) / xTot, y2 / y3,
                 (x1 + x2) / xTot, y2 / y3);

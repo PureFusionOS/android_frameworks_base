@@ -51,8 +51,10 @@ public class AccessibilityController implements
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("AccessibilityController state:");
-        pw.print("  mAccessibilityEnabled="); pw.println(mAccessibilityEnabled);
-        pw.print("  mTouchExplorationEnabled="); pw.println(mTouchExplorationEnabled);
+        pw.print("  mAccessibilityEnabled=");
+        pw.println(mAccessibilityEnabled);
+        pw.print("  mTouchExplorationEnabled=");
+        pw.println(mTouchExplorationEnabled);
     }
 
     public void addStateChangedCallback(AccessibilityStateChangedCallback cb) {

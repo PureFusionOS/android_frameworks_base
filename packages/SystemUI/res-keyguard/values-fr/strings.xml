@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"Appuyez sur \"Menu\" pour déverrouiller le clavier."</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"Réseau verrouillé"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"Pas de carte SIM"</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"Aucune carte SIM n\'est insérée dans la tablette."</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"Aucune carte SIM n\'est insérée dans le téléphone."</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"Aucune carte SIM n\'est insérée dans la tablette."</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"Aucune carte SIM n\'est insérée dans le téléphone."</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"Insérez une carte SIM."</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"Carte SIM absente ou illisible. Insérez une carte SIM."</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"La carte SIM est inutilisable."</string>
@@ -69,34 +68,34 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"Saisissez un code PIN comprenant 4 à 8 chiffres."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"La clé PUK doit contenir au moins 8 chiffres."</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"Veuillez saisir de nouveau la clé PUK. Après plusieurs tentatives, la carte SIM sera définitivement désactivée."</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"Les codes PIN ne correspondent pas"</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"Les codes PIN ne correspondent pas"</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"Trop de tentatives"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"Vous avez saisi un code incorrect à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises.\n\nRéessayez dans <xliff:g id="NUMBER_1">%2$d</xliff:g> secondes."</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"Vous avez saisi un mot de passe incorrect à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises.\n\nRéessayez dans <xliff:g id="NUMBER_1">%2$d</xliff:g> secondes."</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"Vous avez dessiné un schéma de déverrouillage incorrect à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises.\n\nRéessayez dans <xliff:g id="NUMBER_1">%2$d</xliff:g> secondes."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, elle sera réinitialisée et toutes les données qu\'elle contient seront supprimées."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, il sera réinitialisé et toutes les données qu\'il contient seront supprimées."</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER">%d</xliff:g> reprises. Elle va être réinitialisée et toutes les données qu\'elle contient seront supprimées."</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER">%d</xliff:g> reprises. Il va être réinitialisé et toutes les données qu\'il contient seront supprimées."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, ce compte utilisateur et toutes les données associées seront supprimés."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, ce compte utilisateur et toutes les données associées seront supprimés."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER">%d</xliff:g> reprises. Cet utilisateur et toutes les données associées vont être supprimés."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER">%d</xliff:g> reprises. Cet utilisateur et toutes les données associées vont être supprimés."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, le profil professionnel et toutes les données associées seront supprimés."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, le profil professionnel et toutes les données associées seront supprimés."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER">%d</xliff:g> reprises. Le profil professionnel et toutes les données associées vont être supprimés."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER">%d</xliff:g> reprises. Le profil professionnel et toutes les données associées vont être supprimés."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"Vous avez dessiné un schéma de déverrouillage incorrect à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, vous devrez déverrouiller votre tablette à l\'aide d\'un compte de messagerie électronique.\n\nRéessayez dans <xliff:g id="NUMBER_2">%3$d</xliff:g> secondes."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"Vous avez dessiné un schéma de déverrouillage incorrect à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, vous devrez déverrouiller votre téléphone à l\'aide d\'un compte de messagerie électronique.\n\nRéessayez dans <xliff:g id="NUMBER_2">%3$d</xliff:g> secondes."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, elle sera réinitialisée et toutes les données qu\'elle contient seront supprimées."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, il sera réinitialisé et toutes les données qu\'il contient seront supprimées."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER">%d</xliff:g> reprises. Elle va être réinitialisée et toutes les données qu\'elle contient seront supprimées."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER">%d</xliff:g> reprises. Il va être réinitialisé et toutes les données qu\'il contient seront supprimées."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, ce compte utilisateur et toutes les données associées seront supprimés."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, ce compte utilisateur et toutes les données associées seront supprimés."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER">%d</xliff:g> reprises. Cet utilisateur et toutes les données associées vont être supprimés."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER">%d</xliff:g> reprises. Cet utilisateur et toutes les données associées vont être supprimés."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, le profil professionnel et toutes les données associées seront supprimés."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, le profil professionnel et toutes les données associées seront supprimés."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"Vous avez tenté de déverrouiller la tablette à <xliff:g id="NUMBER">%d</xliff:g> reprises. Le profil professionnel et toutes les données associées vont être supprimés."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"Vous avez tenté de déverrouiller le téléphone à <xliff:g id="NUMBER">%d</xliff:g> reprises. Le profil professionnel et toutes les données associées vont être supprimés."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"Vous avez dessiné un schéma de déverrouillage incorrect à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, vous devrez déverrouiller votre tablette à l\'aide d\'un compte de messagerie électronique.\n\nRéessayez dans <xliff:g id="NUMBER_2">%3$d</xliff:g> secondes."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"Vous avez dessiné un schéma de déverrouillage incorrect à <xliff:g id="NUMBER_0">%1$d</xliff:g> reprises. Si vous échouez encore <xliff:g id="NUMBER_1">%2$d</xliff:g> fois, vous devrez déverrouiller votre téléphone à l\'aide d\'un compte de messagerie électronique.\n\nRéessayez dans <xliff:g id="NUMBER_2">%3$d</xliff:g> secondes."</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"Code PIN de la carte SIM incorrect. Vous devez désormais contacter votre opérateur pour déverrouiller votre appareil."</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="one">Code PIN de la carte SIM incorrect. Il vous reste <xliff:g id="NUMBER_1">%d</xliff:g> tentative.</item>
-      <item quantity="other">Code PIN de la carte SIM incorrect. Il vous reste <xliff:g id="NUMBER_1">%d</xliff:g> tentatives.</item>
+        <item quantity="one">Code PIN de la carte SIM incorrect. Il vous reste <xliff:g id="NUMBER_1">%d</xliff:g> tentative.</item>
+        <item quantity="other">Code PIN de la carte SIM incorrect. Il vous reste <xliff:g id="NUMBER_1">%d</xliff:g> tentatives.</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"La carte SIM est inutilisable. Contactez votre opérateur."</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="one">Clé PUK de la carte SIM incorrecte. Il vous reste <xliff:g id="NUMBER_1">%d</xliff:g> tentative avant que votre carte SIM ne devienne définitivement inutilisable.</item>
-      <item quantity="other">Clé PUK de la carte SIM incorrecte. Il vous reste <xliff:g id="NUMBER_1">%d</xliff:g> tentatives avant que votre carte SIM ne devienne définitivement inutilisable.</item>
+        <item quantity="one">Clé PUK de la carte SIM incorrecte. Il vous reste <xliff:g id="NUMBER_1">%d</xliff:g> tentative avant que votre carte SIM ne devienne définitivement inutilisable.</item>
+        <item quantity="other">Clé PUK de la carte SIM incorrecte. Il vous reste <xliff:g id="NUMBER_1">%d</xliff:g> tentatives avant que votre carte SIM ne devienne définitivement inutilisable.</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"Échec du déverrouillage à l\'aide du code PIN de la carte SIM."</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"Échec du déverrouillage à l\'aide de la clé PUK de la carte SIM."</string>
@@ -116,16 +115,16 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"Appareil verrouillé par l\'administrateur"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"Appareil verrouillé manuellement"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="one">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heure. Confirmez le schéma.</item>
-      <item quantity="other">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heures. Confirmez le schéma.</item>
+        <item quantity="one">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heure. Confirmez le schéma.</item>
+        <item quantity="other">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heures. Confirmez le schéma.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="one">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heure. Confirmez le code.</item>
-      <item quantity="other">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heures. Confirmez le code.</item>
+        <item quantity="one">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heure. Confirmez le code.</item>
+        <item quantity="other">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heures. Confirmez le code.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="one">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heure. Confirmez le mot de passe.</item>
-      <item quantity="other">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heures. Confirmez le mot de passe.</item>
+        <item quantity="one">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heure. Confirmez le mot de passe.</item>
+        <item quantity="other">L\'appareil n\'a pas été déverrouillé depuis <xliff:g id="NUMBER_1">%d</xliff:g> heures. Confirmez le mot de passe.</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"Non reconnu"</string>
 </resources>

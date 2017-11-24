@@ -59,6 +59,7 @@ public class KeyguardBouncer {
     private final Handler mHandler;
     protected KeyguardHostView mKeyguardView;
     protected ViewGroup mRoot;
+    private final Runnable mRemoveViewRunnable = this::removeView;
     private boolean mShowingSoon;
     private int mBouncerPromptReason;
     private final KeyguardUpdateMonitorCallback mUpdateMonitorCallback =
@@ -68,11 +69,34 @@ public class KeyguardBouncer {
                     mBouncerPromptReason = mCallback.getBouncerPromptReason();
                 }
             };
-    private final Runnable mRemoveViewRunnable = this::removeView;
+    private final Runnable mShowRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mRoot.setVisibility(View.VISIBLE);
+            mKeyguardView.onResume();
+            showPromptReason(mBouncerPromptReason);
+            if (mKeyguardView.getHeight() != 0) {
+                mKeyguardView.startAppearAnimation();
+            } else {
+                mKeyguardView.getViewTreeObserver().addOnPreDrawListener(
+                        new ViewTreeObserver.OnPreDrawListener() {
+                            @Override
+                            public boolean onPreDraw() {
+                                mKeyguardView.getViewTreeObserver().removeOnPreDrawListener(this);
+                                mKeyguardView.startAppearAnimation();
+                                return true;
+                            }
+                        });
+                mKeyguardView.requestLayout();
+            }
+            mShowingSoon = false;
+            mKeyguardView.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
+        }
+    };
 
     public KeyguardBouncer(Context context, ViewMediatorCallback callback,
-            LockPatternUtils lockPatternUtils, ViewGroup container,
-            DismissCallbackRegistry dismissCallbackRegistry) {
+                           LockPatternUtils lockPatternUtils, ViewGroup container,
+                           DismissCallbackRegistry dismissCallbackRegistry) {
         mContext = context;
         mCallback = callback;
         mLockPatternUtils = lockPatternUtils;
@@ -121,31 +145,6 @@ public class KeyguardBouncer {
         // Split up the work over multiple frames.
         DejankUtils.postAfterTraversal(mShowRunnable);
     }
-
-    private final Runnable mShowRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mRoot.setVisibility(View.VISIBLE);
-            mKeyguardView.onResume();
-            showPromptReason(mBouncerPromptReason);
-            if (mKeyguardView.getHeight() != 0) {
-                mKeyguardView.startAppearAnimation();
-            } else {
-                mKeyguardView.getViewTreeObserver().addOnPreDrawListener(
-                        new ViewTreeObserver.OnPreDrawListener() {
-                            @Override
-                            public boolean onPreDraw() {
-                                mKeyguardView.getViewTreeObserver().removeOnPreDrawListener(this);
-                                mKeyguardView.startAppearAnimation();
-                                return true;
-                            }
-                        });
-                mKeyguardView.requestLayout();
-            }
-            mShowingSoon = false;
-            mKeyguardView.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
-        }
-    };
 
     /**
      * Show a string explaining why the security view needs to be solved.

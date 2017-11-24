@@ -35,7 +35,7 @@ import com.android.systemui.statusbar.ViewTransformationHelper;
 
 /**
  * A transform state of a view.
-*/
+ */
 public class TransformState {
 
     public static final int TRANSFORM_X = 0x1;
@@ -57,13 +57,103 @@ public class TransformState {
     private float mTransformationEndY = UNDEFINED;
     private float mTransformationEndX = UNDEFINED;
 
+    public static void setClippingDeactivated(final View transformedView, boolean deactivated) {
+        if (!(transformedView.getParent() instanceof ViewGroup)) {
+            return;
+        }
+        ViewGroup view = (ViewGroup) transformedView.getParent();
+        while (true) {
+            ArraySet<View> clipSet = (ArraySet<View>) view.getTag(CLIP_CLIPPING_SET);
+            if (clipSet == null) {
+                clipSet = new ArraySet<>();
+                view.setTag(CLIP_CLIPPING_SET, clipSet);
+            }
+            Boolean clipChildren = (Boolean) view.getTag(CLIP_CHILDREN_TAG);
+            if (clipChildren == null) {
+                clipChildren = view.getClipChildren();
+                view.setTag(CLIP_CHILDREN_TAG, clipChildren);
+            }
+            Boolean clipToPadding = (Boolean) view.getTag(CLIP_TO_PADDING);
+            if (clipToPadding == null) {
+                clipToPadding = view.getClipToPadding();
+                view.setTag(CLIP_TO_PADDING, clipToPadding);
+            }
+            ExpandableNotificationRow row = view instanceof ExpandableNotificationRow
+                    ? (ExpandableNotificationRow) view
+                    : null;
+            if (!deactivated) {
+                clipSet.remove(transformedView);
+                if (clipSet.isEmpty()) {
+                    view.setClipChildren(clipChildren);
+                    view.setClipToPadding(clipToPadding);
+                    view.setTag(CLIP_CLIPPING_SET, null);
+                    if (row != null) {
+                        row.setClipToActualHeight(true);
+                    }
+                }
+            } else {
+                clipSet.add(transformedView);
+                view.setClipChildren(false);
+                view.setClipToPadding(false);
+                if (row != null && row.isChildInGroup()) {
+                    // We still want to clip to the parent's height
+                    row.setClipToActualHeight(false);
+                }
+            }
+            if (row != null && !row.isChildInGroup()) {
+                return;
+            }
+            final ViewParent parent = view.getParent();
+            if (parent instanceof ViewGroup) {
+                view = (ViewGroup) parent;
+            } else {
+                return;
+            }
+        }
+    }
+
+    public static TransformState createFrom(View view) {
+        if (view instanceof TextView) {
+            TextViewTransformState result = TextViewTransformState.obtain();
+            result.initFrom(view);
+            return result;
+        }
+        if (view.getId() == com.android.internal.R.id.actions_container) {
+            ActionListTransformState result = ActionListTransformState.obtain();
+            result.initFrom(view);
+            return result;
+        }
+        if (view instanceof ImageView) {
+            ImageTransformState result = ImageTransformState.obtain();
+            result.initFrom(view);
+            return result;
+        }
+        if (view instanceof ProgressBar) {
+            ProgressTransformState result = ProgressTransformState.obtain();
+            result.initFrom(view);
+            return result;
+        }
+        TransformState result = obtain();
+        result.initFrom(view);
+        return result;
+    }
+
+    public static TransformState obtain() {
+        TransformState instance = sInstancePool.acquire();
+        if (instance != null) {
+            return instance;
+        }
+        return new TransformState();
+    }
+
     public void initFrom(View view) {
         mTransformedView = view;
     }
 
     /**
      * Transforms the {@link #mTransformedView} from the given transformviewstate
-     * @param otherState the state to transform from
+     *
+     * @param otherState           the state to transform from
      * @param transformationAmount how much to transform
      */
     public void transformViewFrom(TransformState otherState, float transformationAmount) {
@@ -86,14 +176,14 @@ public class TransformState {
     }
 
     public void transformViewFullyFrom(TransformState otherState,
-            ViewTransformationHelper.CustomTransformation customTransformation,
-            float transformationAmount) {
+                                       ViewTransformationHelper.CustomTransformation customTransformation,
+                                       float transformationAmount) {
         transformViewFrom(otherState, TRANSFORM_ALL, customTransformation, transformationAmount);
     }
 
     public void transformViewVerticalFrom(TransformState otherState,
-            ViewTransformationHelper.CustomTransformation customTransformation,
-            float transformationAmount) {
+                                          ViewTransformationHelper.CustomTransformation customTransformation,
+                                          float transformationAmount) {
         transformViewFrom(otherState, TRANSFORM_Y, customTransformation, transformationAmount);
     }
 
@@ -102,8 +192,8 @@ public class TransformState {
     }
 
     private void transformViewFrom(TransformState otherState, int transformationFlags,
-            ViewTransformationHelper.CustomTransformation customTransformation,
-            float transformationAmount) {
+                                   ViewTransformationHelper.CustomTransformation customTransformation,
+                                   float transformationAmount) {
         final View transformedView = mTransformedView;
         boolean transformX = (transformationFlags & TRANSFORM_X) != 0;
         boolean transformY = (transformationFlags & TRANSFORM_Y) != 0;
@@ -210,7 +300,8 @@ public class TransformState {
 
     /**
      * Transforms the {@link #mTransformedView} to the given transformviewstate
-     * @param otherState the state to transform from
+     *
+     * @param otherState           the state to transform from
      * @param transformationAmount how much to transform
      * @return whether an animation was started
      */
@@ -235,14 +326,14 @@ public class TransformState {
     }
 
     public void transformViewFullyTo(TransformState otherState,
-            ViewTransformationHelper.CustomTransformation customTransformation,
-            float transformationAmount) {
+                                     ViewTransformationHelper.CustomTransformation customTransformation,
+                                     float transformationAmount) {
         transformViewTo(otherState, TRANSFORM_ALL, customTransformation, transformationAmount);
     }
 
     public void transformViewVerticalTo(TransformState otherState,
-            ViewTransformationHelper.CustomTransformation customTransformation,
-            float transformationAmount) {
+                                        ViewTransformationHelper.CustomTransformation customTransformation,
+                                        float transformationAmount) {
         transformViewTo(otherState, TRANSFORM_Y, customTransformation, transformationAmount);
     }
 
@@ -251,8 +342,8 @@ public class TransformState {
     }
 
     private void transformViewTo(TransformState otherState, int transformationFlags,
-            ViewTransformationHelper.CustomTransformation customTransformation,
-            float transformationAmount) {
+                                 ViewTransformationHelper.CustomTransformation customTransformation,
+                                 float transformationAmount) {
         // lets animate the positions correctly
 
         final View transformedView = mTransformedView;
@@ -345,61 +436,6 @@ public class TransformState {
         }
     }
 
-    public static void setClippingDeactivated(final View transformedView, boolean deactivated) {
-        if (!(transformedView.getParent() instanceof ViewGroup)) {
-            return;
-        }
-        ViewGroup view = (ViewGroup) transformedView.getParent();
-        while (true) {
-            ArraySet<View> clipSet = (ArraySet<View>) view.getTag(CLIP_CLIPPING_SET);
-            if (clipSet == null) {
-                clipSet = new ArraySet<>();
-                view.setTag(CLIP_CLIPPING_SET, clipSet);
-            }
-            Boolean clipChildren = (Boolean) view.getTag(CLIP_CHILDREN_TAG);
-            if (clipChildren == null) {
-                clipChildren = view.getClipChildren();
-                view.setTag(CLIP_CHILDREN_TAG, clipChildren);
-            }
-            Boolean clipToPadding = (Boolean) view.getTag(CLIP_TO_PADDING);
-            if (clipToPadding == null) {
-                clipToPadding = view.getClipToPadding();
-                view.setTag(CLIP_TO_PADDING, clipToPadding);
-            }
-            ExpandableNotificationRow row = view instanceof ExpandableNotificationRow
-                    ? (ExpandableNotificationRow) view
-                    : null;
-            if (!deactivated) {
-                clipSet.remove(transformedView);
-                if (clipSet.isEmpty()) {
-                    view.setClipChildren(clipChildren);
-                    view.setClipToPadding(clipToPadding);
-                    view.setTag(CLIP_CLIPPING_SET, null);
-                    if (row != null) {
-                        row.setClipToActualHeight(true);
-                    }
-                }
-            } else {
-                clipSet.add(transformedView);
-                view.setClipChildren(false);
-                view.setClipToPadding(false);
-                if (row != null && row.isChildInGroup()) {
-                    // We still want to clip to the parent's height
-                    row.setClipToActualHeight(false);
-                }
-            }
-            if (row != null && !row.isChildInGroup()) {
-                return;
-            }
-            final ViewParent parent = view.getParent();
-            if (parent instanceof ViewGroup) {
-                view = (ViewGroup) parent;
-            } else {
-                return;
-            }
-        }
-    }
-
     public int[] getLaidOutLocationOnScreen() {
         int[] location = getLocationOnScreen();
         // remove translation
@@ -435,32 +471,6 @@ public class TransformState {
         CrossFadeHelper.fadeOut(mTransformedView, transformationAmount);
     }
 
-    public static TransformState createFrom(View view) {
-        if (view instanceof TextView) {
-            TextViewTransformState result = TextViewTransformState.obtain();
-            result.initFrom(view);
-            return result;
-        }
-        if (view.getId() == com.android.internal.R.id.actions_container) {
-            ActionListTransformState result = ActionListTransformState.obtain();
-            result.initFrom(view);
-            return result;
-        }
-        if (view instanceof ImageView) {
-            ImageTransformState result = ImageTransformState.obtain();
-            result.initFrom(view);
-            return result;
-        }
-        if (view instanceof ProgressBar) {
-            ProgressTransformState result = ProgressTransformState.obtain();
-            result.initFrom(view);
-            return result;
-        }
-        TransformState result = obtain();
-        result.initFrom(view);
-        return result;
-    }
-
     public void recycle() {
         reset();
         if (getClass() == TransformState.class) {
@@ -481,9 +491,17 @@ public class TransformState {
         return tag == null ? UNDEFINED : (float) tag;
     }
 
+    public void setTransformationStartX(float transformationStartX) {
+        mTransformedView.setTag(TRANSFORMATION_START_X, transformationStartX);
+    }
+
     public float getTransformationStartY() {
         Object tag = mTransformedView.getTag(TRANSFORMATION_START_Y);
         return tag == null ? UNDEFINED : (float) tag;
+    }
+
+    public void setTransformationStartY(float transformationStartY) {
+        mTransformedView.setTag(TRANSFORMATION_START_Y, transformationStartY);
     }
 
     public float getTransformationStartScaleX() {
@@ -491,21 +509,13 @@ public class TransformState {
         return tag == null ? UNDEFINED : (float) tag;
     }
 
+    private void setTransformationStartScaleX(float startScaleX) {
+        mTransformedView.setTag(TRANSFORMATION_START_SCLALE_X, startScaleX);
+    }
+
     public float getTransformationStartScaleY() {
         Object tag = mTransformedView.getTag(TRANSFORMATION_START_SCLALE_Y);
         return tag == null ? UNDEFINED : (float) tag;
-    }
-
-    public void setTransformationStartX(float transformationStartX) {
-        mTransformedView.setTag(TRANSFORMATION_START_X, transformationStartX);
-    }
-
-    public void setTransformationStartY(float transformationStartY) {
-        mTransformedView.setTag(TRANSFORMATION_START_Y, transformationStartY);
-    }
-
-    private void setTransformationStartScaleX(float startScaleX) {
-        mTransformedView.setTag(TRANSFORMATION_START_SCLALE_X, startScaleX);
     }
 
     private void setTransformationStartScaleY(float startScaleY) {
@@ -548,14 +558,6 @@ public class TransformState {
         mTransformedView.setTag(TRANSFORMATION_START_Y, UNDEFINED);
         mTransformedView.setTag(TRANSFORMATION_START_SCLALE_X, UNDEFINED);
         mTransformedView.setTag(TRANSFORMATION_START_SCLALE_Y, UNDEFINED);
-    }
-
-    public static TransformState obtain() {
-        TransformState instance = sInstancePool.acquire();
-        if (instance != null) {
-            return instance;
-        }
-        return new TransformState();
     }
 
     public View getTransformedView() {

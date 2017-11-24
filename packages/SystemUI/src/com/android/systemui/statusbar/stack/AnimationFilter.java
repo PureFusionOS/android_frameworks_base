@@ -26,6 +26,7 @@ import java.util.ArrayList;
  * Filters the animations for only a certain type of properties.
  */
 public class AnimationFilter {
+    public boolean animateShadowAlpha;
     boolean animateAlpha;
     boolean animateX;
     boolean animateY;
@@ -36,7 +37,6 @@ public class AnimationFilter {
     boolean animateDimmed;
     boolean animateDark;
     boolean animateHideSensitive;
-    public boolean animateShadowAlpha;
     boolean hasDelays;
     boolean hasGoToFullShadeEvent;
     boolean hasHeadsUpDisappearClickEvent;

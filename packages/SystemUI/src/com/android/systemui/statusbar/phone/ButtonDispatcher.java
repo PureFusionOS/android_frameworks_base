@@ -71,7 +71,7 @@ public class ButtonDispatcher {
             ((ButtonInterface) view).setImageDrawable(mImageDrawable);
         }
 
-        if (view instanceof  ButtonInterface) {
+        if (view instanceof ButtonInterface) {
             ((ButtonInterface) view).setVertical(mVertical);
         }
     }
@@ -84,8 +84,25 @@ public class ButtonDispatcher {
         return mVisibility != null ? mVisibility : View.VISIBLE;
     }
 
+    public void setVisibility(int visibility) {
+        if (mVisibility == visibility) return;
+        mVisibility = visibility;
+        final int N = mViews.size();
+        for (int i = 0; i < N; i++) {
+            mViews.get(i).setVisibility(mVisibility);
+        }
+    }
+
     public float getAlpha() {
         return mAlpha != null ? mAlpha : 1;
+    }
+
+    public void setAlpha(int alpha) {
+        mAlpha = alpha;
+        final int N = mViews.size();
+        for (int i = 0; i < N; i++) {
+            mViews.get(i).setAlpha(alpha);
+        }
     }
 
     public void setImageDrawable(KeyButtonDrawable drawable) {
@@ -96,28 +113,11 @@ public class ButtonDispatcher {
         }
     }
 
-    public void setVisibility(int visibility) {
-        if (mVisibility == visibility) return;
-        mVisibility = visibility;
-        final int N = mViews.size();
-        for (int i = 0; i < N; i++) {
-            mViews.get(i).setVisibility(mVisibility);
-        }
-    }
-
     public void abortCurrentGesture() {
         // This seems to be an instantaneous thing, so not going to persist it.
         final int N = mViews.size();
         for (int i = 0; i < N; i++) {
             ((ButtonInterface) mViews.get(i)).abortCurrentGesture();
-        }
-    }
-
-    public void setAlpha(int alpha) {
-        mAlpha = alpha;
-        final int N = mViews.size();
-        for (int i = 0; i < N; i++) {
-            mViews.get(i).setAlpha(alpha);
         }
     }
 

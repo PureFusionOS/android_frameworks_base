@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2015 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +13,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<View
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<View xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="1dp"
-    android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
-    android:layout_marginStart="40dp"
     android:layout_marginEnd="40dp"
+    android:layout_marginStart="40dp"
+    android:layout_marginTop="10dp"
     android:background="#4dffffff" />

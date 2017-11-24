@@ -45,37 +45,25 @@ import java.util.List;
 
 /**
  * This class stores the loading state as it goes through multiple stages of loading:
- *   1) preloadRawTasks() will load the raw set of recents tasks from the system
- *   2) preloadPlan() will construct a new task stack with all metadata and only icons and
- *      thumbnails that are currently in the cache
- *   3) executePlan() will actually load and fill in the icons and thumbnails according to the load
- *      options specified, such that we can transition into the Recents activity seamlessly
+ * 1) preloadRawTasks() will load the raw set of recents tasks from the system
+ * 2) preloadPlan() will construct a new task stack with all metadata and only icons and
+ * thumbnails that are currently in the cache
+ * 3) executePlan() will actually load and fill in the icons and thumbnails according to the load
+ * options specified, such that we can transition into the Recents activity seamlessly
  */
 public class RecentsTaskLoadPlan {
 
     private static int MIN_NUM_TASKS = 5;
     private static int SESSION_BEGIN_TIME = 1000 /* ms/s */ * 60 /* s/min */ * 60 /* min/hr */ *
             6 /* hrs */;
-
-    /** The set of conditions to load tasks. */
-    public static class Options {
-        public int runningTaskId = -1;
-        public boolean loadIcons = true;
-        public boolean loadThumbnails = false;
-        public boolean onlyLoadForCache = false;
-        public boolean onlyLoadPausedActivities = false;
-        public int numVisibleTasks = 0;
-        public int numVisibleTaskThumbnails = 0;
-    }
-
     Context mContext;
-
     int mPreloadedUserId;
     List<ActivityManager.RecentTaskInfo> mRawTasks;
     TaskStack mStack;
     ArraySet<Integer> mCurrentQuietProfiles = new ArraySet<Integer>();
-
-    /** Package level ctor */
+    /**
+     * Package level ctor
+     */
     RecentsTaskLoadPlan(Context context) {
         mContext = context;
     }
@@ -87,7 +75,7 @@ public class RecentsTaskLoadPlan {
         List<UserInfo> profiles = userManager.getProfiles(currentUserId);
         if (profiles != null) {
             for (int i = 0; i < profiles.size(); i++) {
-                UserInfo user  = profiles.get(i);
+                UserInfo user = profiles.get(i);
                 if (user.isManagedProfile() && user.isQuietModeEnabled()) {
                     mCurrentQuietProfiles.add(user.id);
                 }
@@ -98,7 +86,7 @@ public class RecentsTaskLoadPlan {
     /**
      * An optimization to preload the raw list of tasks. The raw tasks are saved in least-recent
      * to most-recent order.
-     *
+     * <p>
      * Note: Do not lock, callers should synchronize on the loader before making this call.
      */
     void preloadRawTasks(boolean includeFrontMostExcludedTask) {
@@ -117,16 +105,16 @@ public class RecentsTaskLoadPlan {
      * Preloads the list of recent tasks from the system. After this call, the TaskStack will
      * have a list of all the recent tasks with their metadata, not including icons or
      * thumbnails which were not cached and have to be loaded.
-     *
+     * <p>
      * The tasks will be ordered by:
      * - least-recent to most-recent stack tasks
      * - least-recent to most-recent freeform tasks
-     *
+     * <p>
      * Note: Do not lock, since this can be calling back to the loader, which separately also drives
      * this call (callers should synchronize on the loader before making this call).
      */
     void preloadPlan(RecentsTaskLoader loader, int runningTaskId,
-            boolean includeFrontMostExcludedTask) {
+                     boolean includeFrontMostExcludedTask) {
         Resources res = mContext.getResources();
         ArrayList<Task> allTasks = new ArrayList<>();
         if (mRawTasks == null) {
@@ -164,10 +152,10 @@ public class RecentsTaskLoadPlan {
                 // When grid layout is enabled, we only show the first
                 // TaskGridLayoutAlgorithm.MAX_LAYOUT_TASK_COUNT} tasks.
                 isStackTask = t.lastActiveTime >= lastStackActiveTime &&
-                    i >= taskCount - TaskGridLayoutAlgorithm.MAX_LAYOUT_TASK_COUNT;
+                        i >= taskCount - TaskGridLayoutAlgorithm.MAX_LAYOUT_TASK_COUNT;
             } else {
                 isStackTask = isFreeformTask || !isHistoricalTask(t) ||
-                    (t.lastActiveTime >= lastStackActiveTime && i >= (taskCount - MIN_NUM_TASKS));
+                        (t.lastActiveTime >= lastStackActiveTime && i >= (taskCount - MIN_NUM_TASKS));
             }
             boolean isLaunchTarget = taskKey.id == runningTaskId;
 
@@ -223,7 +211,7 @@ public class RecentsTaskLoadPlan {
 
     /**
      * Called to apply the actual loading based on the specified conditions.
-     *
+     * <p>
      * Note: Do not lock, since this can be calling back to the loader, which separately also drives
      * this call (callers should synchronize on the loader before making this call).
      */
@@ -273,7 +261,9 @@ public class RecentsTaskLoadPlan {
         return mRawTasks;
     }
 
-    /** Returns whether there are any tasks in any stacks. */
+    /**
+     * Returns whether there are any tasks in any stacks.
+     */
     public boolean hasTasks() {
         if (mStack != null) {
             return mStack.getTaskCount() > 0;
@@ -288,16 +278,15 @@ public class RecentsTaskLoadPlan {
         return t.lastActiveTime < (System.currentTimeMillis() - SESSION_BEGIN_TIME);
     }
 
-
     /**
      * Migrate the last active time from the prefs to the secure settings.
-     *
+     * <p>
      * The first time this runs, it will:
      * 1) fetch the last stack active time from the prefs
      * 2) set the prefs to the last stack active time for all users
      * 3) clear the pref
      * 4) return the last stack active time
-     *
+     * <p>
      * Subsequent calls to this will return zero.
      */
     private long migrateLegacyLastStackActiveTime(int currentUserId) {
@@ -317,5 +306,18 @@ public class RecentsTaskLoadPlan {
             return legacyLastStackActiveTime;
         }
         return 0;
+    }
+
+    /**
+     * The set of conditions to load tasks.
+     */
+    public static class Options {
+        public int runningTaskId = -1;
+        public boolean loadIcons = true;
+        public boolean loadThumbnails = false;
+        public boolean onlyLoadForCache = false;
+        public boolean onlyLoadPausedActivities = false;
+        public int numVisibleTasks = 0;
+        public int numVisibleTaskThumbnails = 0;
     }
 }

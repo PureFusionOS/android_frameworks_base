@@ -35,10 +35,8 @@ import java.util.ArrayList;
  * level change events that are broadcasted by the system.
  */
 public class BatteryControllerImpl extends BroadcastReceiver implements BatteryController {
-    private static final String TAG = "BatteryController";
-
     public static final String ACTION_LEVEL_TEST = "com.android.systemui.BATTERY_LEVEL_TEST";
-
+    private static final String TAG = "BatteryController";
     private static final boolean DEBUG = Log.isLoggable(TAG, Log.DEBUG);
 
     private final ArrayList<BatteryController.BatteryStateChangeCallback> mChangeCallbacks = new ArrayList<>();
@@ -53,6 +51,7 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
     protected boolean mPowerSave;
     private boolean mTestmode = false;
     private boolean mHasReceivedBattery = false;
+    private boolean mDemoMode;
 
     public BatteryControllerImpl(Context context) {
         mContext = context;
@@ -75,11 +74,16 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
     @Override
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("BatteryController state:");
-        pw.print("  mLevel="); pw.println(mLevel);
-        pw.print("  mPluggedIn="); pw.println(mPluggedIn);
-        pw.print("  mCharging="); pw.println(mCharging);
-        pw.print("  mCharged="); pw.println(mCharged);
-        pw.print("  mPowerSave="); pw.println(mPowerSave);
+        pw.print("  mLevel=");
+        pw.println(mLevel);
+        pw.print("  mPluggedIn=");
+        pw.println(mPluggedIn);
+        pw.print("  mCharging=");
+        pw.println(mCharging);
+        pw.print("  mCharged=");
+        pw.println(mCharged);
+        pw.print("  mPowerSave=");
+        pw.println(mPowerSave);
     }
 
     @Override
@@ -110,7 +114,7 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
         if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
             if (mTestmode && !intent.getBooleanExtra("testmode", false)) return;
             mHasReceivedBattery = true;
-            mLevel = (int)(100f
+            mLevel = (int) (100f
                     * intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
                     / intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100));
             mPluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0;
@@ -133,6 +137,7 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
                 int saveLevel = mLevel;
                 boolean savePlugged = mPluggedIn;
                 Intent dummy = new Intent(Intent.ACTION_BATTERY_CHANGED);
+
                 @Override
                 public void run() {
                     if (curLevel < 0) {
@@ -165,15 +170,15 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
         return mPowerSave;
     }
 
-    private void updatePowerSave() {
-        setPowerSave(mPowerManager.isPowerSaveMode());
-    }
-
     private void setPowerSave(boolean powerSave) {
         if (powerSave == mPowerSave) return;
         mPowerSave = powerSave;
         if (DEBUG) Log.d(TAG, "Power save is " + (mPowerSave ? "on" : "off"));
         firePowerSaveChanged();
+    }
+
+    private void updatePowerSave() {
+        setPowerSave(mPowerManager.isPowerSaveMode());
     }
 
     protected void fireBatteryLevelChanged() {
@@ -194,8 +199,6 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
         }
     }
 
-    private boolean mDemoMode;
-
     @Override
     public void dispatchDemoCommand(String command, Bundle args) {
         if (!mDemoMode && command.equals(COMMAND_ENTER)) {
@@ -206,14 +209,14 @@ public class BatteryControllerImpl extends BroadcastReceiver implements BatteryC
             registerReceiver();
             updatePowerSave();
         } else if (mDemoMode && command.equals(COMMAND_BATTERY)) {
-           String level = args.getString("level");
-           String plugged = args.getString("plugged");
-           if (level != null) {
-               mLevel = Math.min(Math.max(Integer.parseInt(level), 0), 100);
-           }
-           if (plugged != null) {
-               mPluggedIn = Boolean.parseBoolean(plugged);
-           }
+            String level = args.getString("level");
+            String plugged = args.getString("plugged");
+            if (level != null) {
+                mLevel = Math.min(Math.max(Integer.parseInt(level), 0), 100);
+            }
+            if (plugged != null) {
+                mPluggedIn = Boolean.parseBoolean(plugged);
+            }
             fireBatteryLevelChanged();
         }
     }

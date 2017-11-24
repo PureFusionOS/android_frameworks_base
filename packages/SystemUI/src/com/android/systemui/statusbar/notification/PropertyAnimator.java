@@ -35,8 +35,8 @@ import com.android.systemui.statusbar.stack.ViewState;
 public class PropertyAnimator {
 
     public static <T extends View> void startAnimation(final T view,
-            AnimatableProperty animatableProperty, float newEndValue,
-            AnimationProperties properties) {
+                                                       AnimatableProperty animatableProperty, float newEndValue,
+                                                       AnimationProperties properties) {
         Property<T, Float> property = animatableProperty.getProperty();
         int animationStartTag = animatableProperty.getAnimationStartTag();
         int animationEndTag = animatableProperty.getAnimationEndTag();
@@ -73,7 +73,7 @@ public class PropertyAnimator {
         animator.addUpdateListener(
                 animation -> property.set(view, (Float) animation.getAnimatedValue()));
         Interpolator customInterpolator = properties.getCustomInterpolator(view, property);
-        Interpolator interpolator =  customInterpolator != null ? customInterpolator
+        Interpolator interpolator = customInterpolator != null ? customInterpolator
                 : Interpolators.FAST_OUT_SLOW_IN;
         animator.setInterpolator(interpolator);
         long newDuration = ViewState.cancelAnimatorAndGetNewDuration(properties.duration,
@@ -104,8 +104,11 @@ public class PropertyAnimator {
 
     public interface AnimatableProperty {
         int getAnimationStartTag();
+
         int getAnimationEndTag();
+
         int getAnimatorTag();
+
         Property getProperty();
     }
 }

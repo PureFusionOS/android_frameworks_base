@@ -39,9 +39,16 @@ public abstract class NotificationViewWrapper implements TransformableView {
     private final NotificationDozeHelper mDozer;
 
     protected boolean mDark;
-    private int mBackgroundColor = 0;
     protected boolean mShouldInvertDark;
     protected boolean mDarkInitialized = false;
+    private int mBackgroundColor = 0;
+
+    protected NotificationViewWrapper(Context ctx, View view, ExpandableNotificationRow row) {
+        mView = view;
+        mRow = row;
+        mDozer = createDozer(ctx);
+        onReinflated();
+    }
 
     public static NotificationViewWrapper wrap(Context ctx, View v, ExpandableNotificationRow row) {
         if (v.getId() == com.android.internal.R.id.status_bar_latest_event_content) {
@@ -62,13 +69,6 @@ public abstract class NotificationViewWrapper implements TransformableView {
         }
     }
 
-    protected NotificationViewWrapper(Context ctx, View view, ExpandableNotificationRow row) {
-        mView = view;
-        mRow = row;
-        mDozer = createDozer(ctx);
-        onReinflated();
-    }
-
     protected NotificationDozeHelper createDozer(Context ctx) {
         return new NotificationDozeHelper();
     }
@@ -80,8 +80,8 @@ public abstract class NotificationViewWrapper implements TransformableView {
     /**
      * In dark mode, we draw as little as possible, assuming a black background.
      *
-     * @param dark whether we should display ourselves in dark mode
-     * @param fade whether to animate the transition if the mode changes
+     * @param dark  whether we should display ourselves in dark mode
+     * @param fade  whether to animate the transition if the mode changes
      * @param delay if fading, the delay of the animation
      */
     public void setDark(boolean dark, boolean fade, long delay) {
@@ -91,6 +91,7 @@ public abstract class NotificationViewWrapper implements TransformableView {
 
     /**
      * Notifies this wrapper that the content of the view might have changed.
+     *
      * @param row the row this wrapper is attached to
      */
     public void onContentUpdated(ExpandableNotificationRow row) {
@@ -121,10 +122,11 @@ public abstract class NotificationViewWrapper implements TransformableView {
     /**
      * Update the appearance of the expand button.
      *
-     * @param expandable should this view be expandable
+     * @param expandable      should this view be expandable
      * @param onClickListener the listener to invoke when the expand affordance is clicked on
      */
-    public void updateExpandability(boolean expandable, View.OnClickListener onClickListener) {}
+    public void updateExpandability(boolean expandable, View.OnClickListener onClickListener) {
+    }
 
     /**
      * @return the notification header if it exists

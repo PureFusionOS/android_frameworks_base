@@ -147,6 +147,17 @@ public class KeyguardStatusView extends GridLayout implements
         mWeatherEnabled = mWeatherClient.isOmniJawsEnabled();
     }
 
+    public static String formatNextAlarm(Context context, AlarmManager.AlarmClockInfo info) {
+        if (info == null) {
+            return "";
+        }
+        String skeleton = DateFormat.is24HourFormat(context, ActivityManager.getCurrentUser())
+                ? "EHm"
+                : "Ehma";
+        String pattern = DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton);
+        return DateFormat.format(pattern, info.getTriggerTime()).toString();
+    }
+
     private void setEnableMarquee(boolean enabled) {
         if (DEBUG) Log.v(TAG, (enabled ? "Enable" : "Disable") + " transport text marquee");
         if (mAlarmStatusView != null) mAlarmStatusView.setSelected(enabled);
@@ -233,17 +244,6 @@ public class KeyguardStatusView extends GridLayout implements
                 ((MarginLayoutParams) mClockView.getLayoutParams()).bottomMargin;
     }
 
-    public static String formatNextAlarm(Context context, AlarmManager.AlarmClockInfo info) {
-        if (info == null) {
-            return "";
-        }
-        String skeleton = DateFormat.is24HourFormat(context, ActivityManager.getCurrentUser())
-                ? "EHm"
-                : "Ehma";
-        String pattern = DateFormat.getBestDateTimePattern(Locale.getDefault(), skeleton);
-        return DateFormat.format(pattern, info.getTriggerTime()).toString();
-    }
-
     private void updateOwnerInfo() {
         if (mOwnerInfo == null) return;
         String ownerInfo = getOwnerInfo();
@@ -296,7 +296,7 @@ public class KeyguardStatusView extends GridLayout implements
         return false;
     }
 
- 
+
     @Override
     public void weatherUpdated() {
         queryAndUpdateWeather();
@@ -309,27 +309,27 @@ public class KeyguardStatusView extends GridLayout implements
 
     public void queryAndUpdateWeather() {
         try {
-                if (mWeatherEnabled) {
-                    mWeatherClient.queryWeather();
-                    mWeatherData = mWeatherClient.getWeatherInfo();
-                    mWeatherCity.setText(mWeatherData.city);
-                    mWeatherConditionImage.setImageDrawable(
+            if (mWeatherEnabled) {
+                mWeatherClient.queryWeather();
+                mWeatherData = mWeatherClient.getWeatherInfo();
+                mWeatherCity.setText(mWeatherData.city);
+                mWeatherConditionImage.setImageDrawable(
                         mWeatherClient.getWeatherConditionImage(mWeatherData.conditionCode));
-                    mWeatherCurrentTemp.setText(mWeatherData.temp + mWeatherData.tempUnits);
-                    mWeatherConditionText.setText(mWeatherData.condition);
-                    mWeatherView.setVisibility(mShowWeather ? View.VISIBLE : View.GONE);
-                    updateSettings(false);
-                } else {
-                    mWeatherCity.setText(null);
-                    mWeatherConditionImage.setImageDrawable(mContext
+                mWeatherCurrentTemp.setText(mWeatherData.temp + mWeatherData.tempUnits);
+                mWeatherConditionText.setText(mWeatherData.condition);
+                mWeatherView.setVisibility(mShowWeather ? View.VISIBLE : View.GONE);
+                updateSettings(false);
+            } else {
+                mWeatherCity.setText(null);
+                mWeatherConditionImage.setImageDrawable(mContext
                         .getResources().getDrawable(R.drawable.keyguard_weather_default_off));
-                    mWeatherCurrentTemp.setText(null);
-                    mWeatherConditionText.setText(null);
-                    updateSettings(true);
-                }
-          } catch(Exception e) {
+                mWeatherCurrentTemp.setText(null);
+                mWeatherConditionText.setText(null);
+                updateSettings(true);
+            }
+        } catch (Exception e) {
             // Do nothing
-       }
+        }
     }
 
     private void updateSettings(boolean forceHide) {
@@ -341,7 +341,7 @@ public class KeyguardStatusView extends GridLayout implements
         mShowWeather = Settings.System.getInt(resolver,
                 Settings.System.LOCK_SCREEN_SHOW_WEATHER, 0) == 1;
         showLocation = Settings.System.getInt(resolver,
-                    Settings.System.LOCK_SCREEN_SHOW_WEATHER_LOCATION, 0) == 1;
+                Settings.System.LOCK_SCREEN_SHOW_WEATHER_LOCATION, 0) == 1;
         int primaryTextColor =
                 res.getColor(R.color.keyguard_default_primary_text_color);
         // primaryTextColor with a transparency of 70%
@@ -355,9 +355,9 @@ public class KeyguardStatusView extends GridLayout implements
         int currentVisibleNotifications = Settings.System.getInt(resolver,
                 Settings.System.LOCK_SCREEN_VISIBLE_NOTIFICATIONS, 0);
         int hideMode = Settings.System.getInt(resolver,
-                    Settings.System.LOCK_SCREEN_WEATHER_HIDE_PANEL, 0);
+                Settings.System.LOCK_SCREEN_WEATHER_HIDE_PANEL, 0);
         int numberOfNotificationsToHide = Settings.System.getInt(resolver,
-                       Settings.System.LOCK_SCREEN_WEATHER_NUMBER_OF_NOTIFICATIONS, 4);
+                Settings.System.LOCK_SCREEN_WEATHER_NUMBER_OF_NOTIFICATIONS, 4);
         boolean forceHideByNumberOfNotifications = false;
 
         if (hideMode == 0) {
@@ -372,7 +372,7 @@ public class KeyguardStatusView extends GridLayout implements
 
         if (mWeatherView != null) {
             mWeatherView.setVisibility(
-                (mShowWeather && !forceHideByNumberOfNotifications) ? View.VISIBLE : View.GONE);
+                    (mShowWeather && !forceHideByNumberOfNotifications) ? View.VISIBLE : View.GONE);
         }
         if (forceHide) {
             if (noWeatherInfo != null) {
@@ -428,6 +428,35 @@ public class KeyguardStatusView extends GridLayout implements
         mAlarmStatusView.setCompoundDrawablesRelative(alarmIcon, null, null, null);
     }
 
+    public void setDark(boolean dark) {
+        if (mDark == dark) {
+            return;
+        }
+        mDark = dark;
+
+        final int N = mClockContainer.getChildCount();
+        for (int i = 0; i < N; i++) {
+            View child = mClockContainer.getChildAt(i);
+            if (ArrayUtils.contains(mVisibleInDoze, child)) {
+                continue;
+            }
+            child.setAlpha(dark ? 0 : 1);
+        }
+        updateDozeVisibleViews();
+        mBatteryDoze.setDark(dark);
+    }
+
+    public void setPulsing(boolean pulsing) {
+        mPulsing = pulsing;
+        updateDozeVisibleViews();
+    }
+
+    private void updateDozeVisibleViews() {
+        for (View child : mVisibleInDoze) {
+            child.setAlpha(mDark && mPulsing ? 0.8f : 1);
+        }
+    }
+
     // DateFormat.getBestDateTimePattern is extremely expensive, and refresh is called often.
     // This is an optimization to ensure we only recompute the patterns when the inputs change.
     private static final class Patterns {
@@ -461,35 +490,6 @@ public class KeyguardStatusView extends GridLayout implements
             clockView12 = clockView12.replace(':', '\uee01');
 
             cacheKey = key;
-        }
-    }
-
-    public void setDark(boolean dark) {
-        if (mDark == dark) {
-            return;
-        }
-        mDark = dark;
-
-        final int N = mClockContainer.getChildCount();
-        for (int i = 0; i < N; i++) {
-            View child = mClockContainer.getChildAt(i);
-            if (ArrayUtils.contains(mVisibleInDoze, child)) {
-                continue;
-            }
-            child.setAlpha(dark ? 0 : 1);
-        }
-        updateDozeVisibleViews();
-        mBatteryDoze.setDark(dark);
-    }
-
-    public void setPulsing(boolean pulsing) {
-        mPulsing = pulsing;
-        updateDozeVisibleViews();
-    }
-
-    private void updateDozeVisibleViews() {
-        for (View child : mVisibleInDoze) {
-            child.setAlpha(mDark && mPulsing ? 0.8f : 1);
         }
     }
 
@@ -530,23 +530,23 @@ public class KeyguardStatusView extends GridLayout implements
         public void onChange(boolean selfChange, Uri uri) {
             super.onChange(selfChange, uri);
             if (uri.equals(Settings.System.getUriFor(
-                     Settings.System.LOCK_SCREEN_SHOW_WEATHER))) {
-                 queryAndUpdateWeather();
+                    Settings.System.LOCK_SCREEN_SHOW_WEATHER))) {
+                queryAndUpdateWeather();
             } else if (uri.equals(Settings.System.getUriFor(
-                     Settings.System.LOCK_SCREEN_VISIBLE_NOTIFICATIONS))) {
-                 updateSettings(false);
+                    Settings.System.LOCK_SCREEN_VISIBLE_NOTIFICATIONS))) {
+                updateSettings(false);
             } else if (uri.equals(Settings.System.getUriFor(
-                     Settings.System.LOCK_SCREEN_WEATHER_NUMBER_OF_NOTIFICATIONS))) {
-                 updateSettings(false);
+                    Settings.System.LOCK_SCREEN_WEATHER_NUMBER_OF_NOTIFICATIONS))) {
+                updateSettings(false);
             } else if (uri.equals(Settings.System.getUriFor(
-                     Settings.System.LOCK_SCREEN_WEATHER_HIDE_PANEL))) {
-                 updateSettings(false);
+                    Settings.System.LOCK_SCREEN_WEATHER_HIDE_PANEL))) {
+                updateSettings(false);
             } else if (uri.equals(Settings.System.getUriFor(
-                     Settings.System.OMNIJAWS_WEATHER_ICON_PACK))) {
-                 queryAndUpdateWeather();
+                    Settings.System.OMNIJAWS_WEATHER_ICON_PACK))) {
+                queryAndUpdateWeather();
             } else if (uri.equals(Settings.System.getUriFor(
-                     Settings.System.LOCK_SCREEN_SHOW_WEATHER_LOCATION))) {
-                 updateSettings(false);
+                    Settings.System.LOCK_SCREEN_SHOW_WEATHER_LOCATION))) {
+                updateSettings(false);
             }
             update();
         }
@@ -555,19 +555,19 @@ public class KeyguardStatusView extends GridLayout implements
             ContentResolver resolver = mContext.getContentResolver();
             boolean mShowWeather = Settings.System.getIntForUser(resolver,
                     Settings.System.LOCK_SCREEN_SHOW_WEATHER, 0,
-				UserHandle.USER_CURRENT) == 1;
+                    UserHandle.USER_CURRENT) == 1;
 
             boolean showLocation = Settings.System.getIntForUser(resolver,
                     Settings.System.LOCK_SCREEN_SHOW_WEATHER_LOCATION, 0,
-				UserHandle.USER_CURRENT) == 1;
+                    UserHandle.USER_CURRENT) == 1;
 
             hideMode = Settings.System.getIntForUser(resolver,
                     Settings.System.LOCK_SCREEN_WEATHER_HIDE_PANEL, 0,
-				UserHandle.USER_CURRENT);
+                    UserHandle.USER_CURRENT);
 
             numberOfNotificationsToHide = Settings.System.getIntForUser(resolver,
                     Settings.System.LOCK_SCREEN_WEATHER_NUMBER_OF_NOTIFICATIONS, 4,
-				UserHandle.USER_CURRENT);
+                    UserHandle.USER_CURRENT);
 
             queryAndUpdateWeather();
         }

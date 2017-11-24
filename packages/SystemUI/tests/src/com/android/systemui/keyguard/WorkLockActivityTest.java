@@ -46,21 +46,18 @@ import static org.mockito.Mockito.when;
 @SmallTest
 @RunWith(AndroidJUnit4.class)
 public class WorkLockActivityTest extends SysuiTestCase {
-    private static final @UserIdInt int USER_ID = 270;
+    private static final @UserIdInt
+    int USER_ID = 270;
     private static final String TASK_LABEL = "task label";
 
-    private @Mock DevicePolicyManager mDevicePolicyManager;
-    private @Mock KeyguardManager mKeyguardManager;
-    private @Mock Context mContext;
+    private @Mock
+    DevicePolicyManager mDevicePolicyManager;
+    private @Mock
+    KeyguardManager mKeyguardManager;
+    private @Mock
+    Context mContext;
 
     private WorkLockActivity mActivity;
-
-    private static class WorkLockActivityTestable extends WorkLockActivity {
-        WorkLockActivityTestable(Context baseContext) {
-            super();
-            attachBaseContext(baseContext);
-        }
-    }
 
     @Before
     public void setUp() throws Exception {
@@ -82,7 +79,7 @@ public class WorkLockActivityTest extends SysuiTestCase {
         final @ColorInt int orgColor = Color.rgb(250, 199, 67);
         when(mDevicePolicyManager.getOrganizationColorForUser(eq(USER_ID))).thenReturn(orgColor);
 
-        final @ColorInt int opaqueColor= Color.rgb(164, 198, 57);
+        final @ColorInt int opaqueColor = Color.rgb(164, 198, 57);
         final @ColorInt int transparentColor = Color.argb(0, 0, 0, 0);
         TaskDescription opaque = new TaskDescription(null, null, opaqueColor);
         TaskDescription transparent = new TaskDescription(null, null, transparentColor);
@@ -106,5 +103,12 @@ public class WorkLockActivityTest extends SysuiTestCase {
         mActivity.setIntent(new Intent()
                 .putExtra(Intent.EXTRA_USER_ID, USER_ID));
         assertEquals(orgColor, mActivity.getPrimaryColor());
+    }
+
+    private static class WorkLockActivityTestable extends WorkLockActivity {
+        WorkLockActivityTestable(Context baseContext) {
+            super();
+            attachBaseContext(baseContext);
+        }
     }
 }

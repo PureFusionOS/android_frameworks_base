@@ -36,31 +36,39 @@ import java.util.List;
 public class PipAccessibilityInteractionConnection
         extends IAccessibilityInteractionConnection.Stub {
 
-    public interface AccessibilityCallbacks {
-        void onAccessibilityShowMenu();
-    }
-
     private static final long ACCESSIBILITY_NODE_ID = 1;
     private List<AccessibilityNodeInfo> mAccessibilityNodeInfoList;
-
     private Handler mHandler;
     private PipMotionHelper mMotionHelper;
     private AccessibilityCallbacks mCallbacks;
-
     private Rect mTmpBounds = new Rect();
 
     public PipAccessibilityInteractionConnection(PipMotionHelper motionHelper,
-            AccessibilityCallbacks callbacks, Handler handler) {
+                                                 AccessibilityCallbacks callbacks, Handler handler) {
         mHandler = handler;
         mMotionHelper = motionHelper;
         mCallbacks = callbacks;
     }
 
+    public static AccessibilityNodeInfo obtainRootAccessibilityNodeInfo() {
+        AccessibilityNodeInfo info = AccessibilityNodeInfo.obtain();
+        info.setSourceNodeId(AccessibilityNodeInfo.ROOT_NODE_ID,
+                AccessibilityWindowInfo.PICTURE_IN_PICTURE_ACTION_REPLACER_WINDOW_ID);
+        info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK);
+        info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_DISMISS);
+        info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_MOVE_WINDOW);
+        info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_EXPAND);
+        info.setImportantForAccessibility(true);
+        info.setClickable(true);
+        info.setVisibleToUser(true);
+        return info;
+    }
+
     @Override
     public void findAccessibilityNodeInfoByAccessibilityId(long accessibilityNodeId,
-            Region interactiveRegion, int interactionId,
-            IAccessibilityInteractionConnectionCallback callback, int flags,
-            int interrogatingPid, long interrogatingTid, MagnificationSpec spec, Bundle args) {
+                                                           Region interactiveRegion, int interactionId,
+                                                           IAccessibilityInteractionConnectionCallback callback, int flags,
+                                                           int interrogatingPid, long interrogatingTid, MagnificationSpec spec, Bundle args) {
         try {
             callback.setFindAccessibilityNodeInfosResult(
                     (accessibilityNodeId == AccessibilityNodeInfo.ROOT_NODE_ID)
@@ -72,9 +80,9 @@ public class PipAccessibilityInteractionConnection
 
     @Override
     public void performAccessibilityAction(long accessibilityNodeId, int action,
-            Bundle arguments, int interactionId,
-            IAccessibilityInteractionConnectionCallback callback, int flags,
-            int interrogatingPid, long interrogatingTid) {
+                                           Bundle arguments, int interactionId,
+                                           IAccessibilityInteractionConnectionCallback callback, int flags,
+                                           int interrogatingPid, long interrogatingTid) {
         // We only support one view. A request for anything else is invalid
         boolean result = false;
         if (accessibilityNodeId == AccessibilityNodeInfo.ROOT_NODE_ID) {
@@ -117,9 +125,9 @@ public class PipAccessibilityInteractionConnection
 
     @Override
     public void findAccessibilityNodeInfosByViewId(long accessibilityNodeId,
-            String viewId, Region interactiveRegion, int interactionId,
-            IAccessibilityInteractionConnectionCallback callback, int flags,
-            int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
+                                                   String viewId, Region interactiveRegion, int interactionId,
+                                                   IAccessibilityInteractionConnectionCallback callback, int flags,
+                                                   int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
         // We have no view with a proper ID
         try {
             callback.setFindAccessibilityNodeInfoResult(null, interactionId);
@@ -130,9 +138,9 @@ public class PipAccessibilityInteractionConnection
 
     @Override
     public void findAccessibilityNodeInfosByText(long accessibilityNodeId, String text,
-            Region interactiveRegion, int interactionId,
-            IAccessibilityInteractionConnectionCallback callback, int flags,
-            int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
+                                                 Region interactiveRegion, int interactionId,
+                                                 IAccessibilityInteractionConnectionCallback callback, int flags,
+                                                 int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
         // We have no view with text
         try {
             callback.setFindAccessibilityNodeInfoResult(null, interactionId);
@@ -143,8 +151,8 @@ public class PipAccessibilityInteractionConnection
 
     @Override
     public void findFocus(long accessibilityNodeId, int focusType, Region interactiveRegion,
-            int interactionId, IAccessibilityInteractionConnectionCallback callback, int flags,
-            int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
+                          int interactionId, IAccessibilityInteractionConnectionCallback callback, int flags,
+                          int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
         // We have no view that can take focus
         try {
             callback.setFindAccessibilityNodeInfoResult(null, interactionId);
@@ -155,28 +163,14 @@ public class PipAccessibilityInteractionConnection
 
     @Override
     public void focusSearch(long accessibilityNodeId, int direction, Region interactiveRegion,
-            int interactionId, IAccessibilityInteractionConnectionCallback callback, int flags,
-            int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
+                            int interactionId, IAccessibilityInteractionConnectionCallback callback, int flags,
+                            int interrogatingPid, long interrogatingTid, MagnificationSpec spec) {
         // We have no view that can take focus
         try {
             callback.setFindAccessibilityNodeInfoResult(null, interactionId);
         } catch (RemoteException re) {
             /* best effort - ignore */
         }
-    }
-
-    public static AccessibilityNodeInfo obtainRootAccessibilityNodeInfo() {
-        AccessibilityNodeInfo info = AccessibilityNodeInfo.obtain();
-        info.setSourceNodeId(AccessibilityNodeInfo.ROOT_NODE_ID,
-                AccessibilityWindowInfo.PICTURE_IN_PICTURE_ACTION_REPLACER_WINDOW_ID);
-        info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK);
-        info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_DISMISS);
-        info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_MOVE_WINDOW);
-        info.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_EXPAND);
-        info.setImportantForAccessibility(true);
-        info.setClickable(true);
-        info.setVisibleToUser(true);
-        return info;
     }
 
     private List<AccessibilityNodeInfo> getNodeList() {
@@ -187,5 +181,9 @@ public class PipAccessibilityInteractionConnection
         mAccessibilityNodeInfoList.clear();
         mAccessibilityNodeInfoList.add(info);
         return mAccessibilityNodeInfoList;
+    }
+
+    public interface AccessibilityCallbacks {
+        void onAccessibilityShowMenu();
     }
 }

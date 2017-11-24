@@ -63,7 +63,7 @@ class TelephonyIcons {
             0,
             false,
             0
-            );
+    );
 
     static final MobileIconGroup THREE_G = new MobileIconGroup(
             "3G",
@@ -78,7 +78,7 @@ class TelephonyIcons {
             TelephonyIcons.ICON_3G,
             true,
             TelephonyIcons.QS_DATA_3G
-            );
+    );
 
     static final MobileIconGroup WFC = new MobileIconGroup(
             "WFC",
@@ -90,7 +90,7 @@ class TelephonyIcons {
             0,
             AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
             0, 0, false, 0
-            );
+    );
 
     static final MobileIconGroup UNKNOWN = new MobileIconGroup(
             "Unknown",
@@ -102,7 +102,7 @@ class TelephonyIcons {
             0,
             AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
             0, 0, false, 0
-            );
+    );
 
     static final MobileIconGroup E = new MobileIconGroup(
             "E",
@@ -117,7 +117,7 @@ class TelephonyIcons {
             TelephonyIcons.ICON_E,
             false,
             TelephonyIcons.QS_DATA_E
-            );
+    );
 
     static final MobileIconGroup ONE_X = new MobileIconGroup(
             "1X",
@@ -132,7 +132,7 @@ class TelephonyIcons {
             TelephonyIcons.ICON_1X,
             true,
             TelephonyIcons.QS_DATA_1X
-            );
+    );
 
     static final MobileIconGroup G = new MobileIconGroup(
             "G",
@@ -147,7 +147,7 @@ class TelephonyIcons {
             TelephonyIcons.ICON_G,
             false,
             TelephonyIcons.QS_DATA_G
-            );
+    );
 
     static final MobileIconGroup H = new MobileIconGroup(
             "H",
@@ -162,7 +162,7 @@ class TelephonyIcons {
             TelephonyIcons.ICON_H,
             false,
             TelephonyIcons.QS_DATA_H
-            );
+    );
 
     static final MobileIconGroup HP = new MobileIconGroup(
             "HP",
@@ -177,7 +177,7 @@ class TelephonyIcons {
             TelephonyIcons.ICON_HP,
             false,
             TelephonyIcons.QS_DATA_HP
-            );
+    );
 
     static final MobileIconGroup FOUR_G = new MobileIconGroup(
             "4G",
@@ -192,14 +192,14 @@ class TelephonyIcons {
             TelephonyIcons.ICON_4G,
             true,
             TelephonyIcons.QS_DATA_4G
-            );
+    );
 
     static final MobileIconGroup FOUR_G_PLUS = new MobileIconGroup(
             "4G+",
             null,
             null,
             AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH,
-            0,0,
+            0, 0,
             0,
             0,
             AccessibilityContentDescriptions.PHONE_SIGNAL_STRENGTH[0],
@@ -207,7 +207,7 @@ class TelephonyIcons {
             TelephonyIcons.ICON_4G_PLUS,
             true,
             TelephonyIcons.QS_DATA_4G_PLUS
-            );
+    );
 
     static final MobileIconGroup LTE = new MobileIconGroup(
             "LTE",
@@ -222,7 +222,7 @@ class TelephonyIcons {
             TelephonyIcons.ICON_LTE,
             true,
             TelephonyIcons.QS_DATA_LTE
-            );
+    );
 
     static final MobileIconGroup LTE_PLUS = new MobileIconGroup(
             "LTE+",
@@ -237,7 +237,7 @@ class TelephonyIcons {
             TelephonyIcons.ICON_LTE_PLUS,
             true,
             TelephonyIcons.QS_DATA_LTE_PLUS
-            );
+    );
 
     static final MobileIconGroup DATA_DISABLED = new MobileIconGroup(
             "DataDisabled",
@@ -252,6 +252,6 @@ class TelephonyIcons {
             TelephonyIcons.ICON_DATA_DISABLED,
             false,
             TelephonyIcons.QS_ICON_DATA_DISABLED
-            );
+    );
 }
 

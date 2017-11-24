@@ -51,13 +51,15 @@ public class ReferenceCountedTrigger {
     }
 
     public ReferenceCountedTrigger(Runnable firstIncRunnable, Runnable lastDecRunnable,
-            Runnable errorRunanable) {
+                                   Runnable errorRunanable) {
         if (firstIncRunnable != null) mFirstIncRunnables.add(firstIncRunnable);
         if (lastDecRunnable != null) mLastDecRunnables.add(lastDecRunnable);
         mErrorRunnable = errorRunanable;
     }
 
-    /** Increments the ref count */
+    /**
+     * Increments the ref count
+     */
     public void increment() {
         if (mCount == 0 && !mFirstIncRunnables.isEmpty()) {
             int numRunnables = mFirstIncRunnables.size();
@@ -68,17 +70,23 @@ public class ReferenceCountedTrigger {
         mCount++;
     }
 
-    /** Convenience method to increment this trigger as a runnable */
+    /**
+     * Convenience method to increment this trigger as a runnable
+     */
     public Runnable incrementAsRunnable() {
         return mIncrementRunnable;
     }
 
-    /** Adds a runnable to the last-decrement runnables list. */
+    /**
+     * Adds a runnable to the last-decrement runnables list.
+     */
     public void addLastDecrementRunnable(Runnable r) {
         mLastDecRunnables.add(r);
     }
 
-    /** Decrements the ref count */
+    /**
+     * Decrements the ref count
+     */
     public void decrement() {
         mCount--;
         if (mCount == 0) {
@@ -123,7 +131,9 @@ public class ReferenceCountedTrigger {
         };
     }
 
-    /** Returns the current ref count */
+    /**
+     * Returns the current ref count
+     */
     public int getCount() {
         return mCount;
     }

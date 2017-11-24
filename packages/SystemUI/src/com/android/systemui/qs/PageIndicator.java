@@ -34,6 +34,16 @@ public class PageIndicator extends ViewGroup {
 
     private int mPosition = -1;
     private boolean mAnimating;
+    private final Runnable mAnimationDone = new Runnable() {
+        @Override
+        public void run() {
+            if (DEBUG) Log.d(TAG, "onAnimationEnd - queued: " + mQueuedPositions.size());
+            mAnimating = false;
+            if (mQueuedPositions.size() != 0) {
+                setPosition(mQueuedPositions.remove(0));
+            }
+        }
+    };
 
     public PageIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -219,15 +229,4 @@ public class PageIndicator extends ViewGroup {
             getChildAt(i).layout(left, 0, mPageIndicatorWidth + left, mPageIndicatorHeight);
         }
     }
-
-    private final Runnable mAnimationDone = new Runnable() {
-        @Override
-        public void run() {
-            if (DEBUG) Log.d(TAG, "onAnimationEnd - queued: " + mQueuedPositions.size());
-            mAnimating = false;
-            if (mQueuedPositions.size() != 0) {
-                setPosition(mQueuedPositions.remove(0));
-            }
-        }
-    };
 }

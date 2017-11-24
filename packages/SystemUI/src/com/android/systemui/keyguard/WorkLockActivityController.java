@@ -35,6 +35,12 @@ public class WorkLockActivityController {
     private final Context mContext;
     private final SystemServicesProxy mSsp;
     private final IActivityManager mIam;
+    private final TaskStackListener mLockListener = new TaskStackListener() {
+        @Override
+        public void onTaskProfileLocked(int taskId, int userId) {
+            startWorkChallengeInTask(taskId, userId);
+        }
+    };
 
     public WorkLockActivityController(Context context) {
         this(context, SystemServicesProxy.getInstance(context), ActivityManager.getService());
@@ -95,11 +101,4 @@ public class WorkLockActivityController {
             return ActivityManager.START_CANCELED;
         }
     }
-
-    private final TaskStackListener mLockListener = new TaskStackListener() {
-        @Override
-        public void onTaskProfileLocked(int taskId, int userId) {
-            startWorkChallengeInTask(taskId, userId);
-        }
-    };
 }

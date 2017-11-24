@@ -40,157 +40,74 @@ import java.util.Objects;
 public class Task {
 
     public static final String TAG = "Task";
-
-    /* Task callbacks */
-    public interface TaskCallbacks {
-        /* Notifies when a task has been bound */
-        public void onTaskDataLoaded(Task task, ThumbnailData thumbnailData);
-        /* Notifies when a task has been unbound */
-        public void onTaskDataUnloaded();
-        /* Notifies when a task's stack id has changed. */
-        public void onTaskStackIdChanged();
-    }
-
-    /* The Task Key represents the unique primary key for the task */
-    public static class TaskKey {
-        @ViewDebug.ExportedProperty(category="recents")
-        public final int id;
-        @ViewDebug.ExportedProperty(category="recents")
-        public int stackId;
-        @ViewDebug.ExportedProperty(category="recents")
-        public final Intent baseIntent;
-        @ViewDebug.ExportedProperty(category="recents")
-        public final int userId;
-        @ViewDebug.ExportedProperty(category="recents")
-        public long firstActiveTime;
-        @ViewDebug.ExportedProperty(category="recents")
-        public long lastActiveTime;
-
-        private int mHashCode;
-
-        public TaskKey(int id, int stackId, Intent intent, int userId, long firstActiveTime,
-                long lastActiveTime) {
-            this.id = id;
-            this.stackId = stackId;
-            this.baseIntent = intent;
-            this.userId = userId;
-            this.firstActiveTime = firstActiveTime;
-            this.lastActiveTime = lastActiveTime;
-            updateHashCode();
-        }
-
-        public void setStackId(int stackId) {
-            this.stackId = stackId;
-            updateHashCode();
-        }
-
-        public ComponentName getComponent() {
-            return this.baseIntent.getComponent();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (!(o instanceof TaskKey)) {
-                return false;
-            }
-            TaskKey otherKey = (TaskKey) o;
-            return id == otherKey.id && stackId == otherKey.stackId && userId == otherKey.userId;
-        }
-
-        @Override
-        public int hashCode() {
-            return mHashCode;
-        }
-
-        @Override
-        public String toString() {
-            return "id=" + id + " stackId=" + stackId + " user=" + userId + " lastActiveTime=" +
-                    lastActiveTime;
-        }
-
-        private void updateHashCode() {
-            mHashCode = Objects.hash(id, stackId, userId);
-        }
-    }
-
-    @ViewDebug.ExportedProperty(deepExport=true, prefix="key_")
+    @ViewDebug.ExportedProperty(deepExport = true, prefix = "key_")
     public TaskKey key;
-
     /**
      * The temporary sort index in the stack, used when ordering the stack.
      */
     public int temporarySortIndexInStack;
-
     /**
      * The group will be computed separately from the initialization of the task
      */
-    @ViewDebug.ExportedProperty(deepExport=true, prefix="group_")
+    @ViewDebug.ExportedProperty(deepExport = true, prefix = "group_")
     public TaskGrouping group;
     /**
      * The affiliationTaskId is the task id of the parent task or itself if it is not affiliated
      * with any task.
      */
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public int affiliationTaskId;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public int affiliationColor;
-
     /**
      * The icon is the task description icon (if provided), which falls back to the activity icon,
      * which can then fall back to the application icon.
      */
     public Drawable icon;
     public ThumbnailData thumbnail;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public String title;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public String titleDescription;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public String dismissDescription;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public String appInfoDescription;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public int colorPrimary;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public int colorBackground;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public boolean useLightOnPrimaryColor;
-
     /**
      * The bounds of the task, used only if it is a freeform task.
      */
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public Rect bounds;
-
     /**
      * The task description for this task, only used to reload task icons.
      */
     public ActivityManager.TaskDescription taskDescription;
-
     /**
      * The state isLaunchTarget will be set for the correct task upon launching Recents.
      */
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public boolean isLaunchTarget;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public boolean isStackTask;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public boolean isSystemApp;
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public boolean isDockable;
-
     /**
      * Resize mode. See {@link ActivityInfo#resizeMode}.
      */
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public int resizeMode;
-
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public ComponentName topActivity;
-
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public boolean isLocked;
-
     private ArrayList<TaskCallbacks> mCallbacks = new ArrayList<>();
 
     public Task() {
@@ -198,11 +115,11 @@ public class Task {
     }
 
     public Task(TaskKey key, int affiliationTaskId, int affiliationColor, Drawable icon,
-            ThumbnailData thumbnail, String title, String titleDescription,
-            String dismissDescription, String appInfoDescription, int colorPrimary,
-            int colorBackground, boolean isLaunchTarget, boolean isStackTask, boolean isSystemApp,
-            boolean isDockable, Rect bounds, ActivityManager.TaskDescription taskDescription,
-            int resizeMode, ComponentName topActivity, boolean isLocked) {
+                ThumbnailData thumbnail, String title, String titleDescription,
+                String dismissDescription, String appInfoDescription, int colorPrimary,
+                int colorBackground, boolean isLaunchTarget, boolean isStackTask, boolean isSystemApp,
+                boolean isDockable, Rect bounds, ActivityManager.TaskDescription taskDescription,
+                int resizeMode, ComponentName topActivity, boolean isLocked) {
         boolean isInAffiliationGroup = (affiliationTaskId != key.id);
         boolean hasAffiliationGroupColor = isInAffiliationGroup && (affiliationColor != 0);
         this.key = key;
@@ -273,7 +190,9 @@ public class Task {
         mCallbacks.remove(cb);
     }
 
-    /** Set the grouping */
+    /**
+     * Set the grouping
+     */
     public void setGroup(TaskGrouping group) {
         this.group = group;
     }
@@ -297,7 +216,9 @@ public class Task {
         return ssp.hasFreeformWorkspaceSupport() && ssp.isFreeformStack(key.stackId);
     }
 
-    /** Notifies the callback listeners that this task has been loaded */
+    /**
+     * Notifies the callback listeners that this task has been loaded
+     */
     public void notifyTaskDataLoaded(ThumbnailData thumbnailData, Drawable applicationIcon) {
         this.icon = applicationIcon;
         this.thumbnail = thumbnailData;
@@ -307,7 +228,9 @@ public class Task {
         }
     }
 
-    /** Notifies the callback listeners that this task has been unloaded */
+    /**
+     * Notifies the callback listeners that this task has been unloaded
+     */
     public void notifyTaskDataUnloaded(Drawable defaultApplicationIcon) {
         icon = defaultApplicationIcon;
         thumbnail = null;
@@ -345,9 +268,11 @@ public class Task {
     }
 
     public void dump(String prefix, PrintWriter writer) {
-        writer.print(prefix); writer.print(key);
+        writer.print(prefix);
+        writer.print(key);
         if (isAffiliatedTask()) {
-            writer.print(" "); writer.print("affTaskId=" + affiliationTaskId);
+            writer.print(" ");
+            writer.print("affTaskId=" + affiliationTaskId);
         }
         if (!isDockable) {
             writer.print(" dockable=N");
@@ -361,7 +286,82 @@ public class Task {
         if (isLocked) {
             writer.print(" locked=Y");
         }
-        writer.print(" "); writer.print(title);
+        writer.print(" ");
+        writer.print(title);
         writer.println();
+    }
+
+    /* Task callbacks */
+    public interface TaskCallbacks {
+        /* Notifies when a task has been bound */
+        public void onTaskDataLoaded(Task task, ThumbnailData thumbnailData);
+
+        /* Notifies when a task has been unbound */
+        public void onTaskDataUnloaded();
+
+        /* Notifies when a task's stack id has changed. */
+        public void onTaskStackIdChanged();
+    }
+
+    /* The Task Key represents the unique primary key for the task */
+    public static class TaskKey {
+        @ViewDebug.ExportedProperty(category = "recents")
+        public final int id;
+        @ViewDebug.ExportedProperty(category = "recents")
+        public final Intent baseIntent;
+        @ViewDebug.ExportedProperty(category = "recents")
+        public final int userId;
+        @ViewDebug.ExportedProperty(category = "recents")
+        public int stackId;
+        @ViewDebug.ExportedProperty(category = "recents")
+        public long firstActiveTime;
+        @ViewDebug.ExportedProperty(category = "recents")
+        public long lastActiveTime;
+
+        private int mHashCode;
+
+        public TaskKey(int id, int stackId, Intent intent, int userId, long firstActiveTime,
+                       long lastActiveTime) {
+            this.id = id;
+            this.stackId = stackId;
+            this.baseIntent = intent;
+            this.userId = userId;
+            this.firstActiveTime = firstActiveTime;
+            this.lastActiveTime = lastActiveTime;
+            updateHashCode();
+        }
+
+        public void setStackId(int stackId) {
+            this.stackId = stackId;
+            updateHashCode();
+        }
+
+        public ComponentName getComponent() {
+            return this.baseIntent.getComponent();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof TaskKey)) {
+                return false;
+            }
+            TaskKey otherKey = (TaskKey) o;
+            return id == otherKey.id && stackId == otherKey.stackId && userId == otherKey.userId;
+        }
+
+        @Override
+        public int hashCode() {
+            return mHashCode;
+        }
+
+        @Override
+        public String toString() {
+            return "id=" + id + " stackId=" + stackId + " user=" + userId + " lastActiveTime=" +
+                    lastActiveTime;
+        }
+
+        private void updateHashCode() {
+            mHashCode = Objects.hash(id, stackId, userId);
+        }
     }
 }

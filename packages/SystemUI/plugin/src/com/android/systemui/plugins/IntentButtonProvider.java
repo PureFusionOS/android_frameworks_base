@@ -31,15 +31,15 @@ public interface IntentButtonProvider extends Plugin {
     public IntentButton getIntentButton();
 
     public interface IntentButton {
+        public IconState getIcon();
+
+        public Intent getIntent();
+
         public static class IconState {
             public boolean isVisible = true;
             public CharSequence contentDescription = null;
             public Drawable drawable;
             public boolean tint = true;
         }
-
-        public IconState getIcon();
-
-        public Intent getIntent();
     }
 }

@@ -26,7 +26,7 @@ public class IconPackHelper {
     static final String ICON_BACK_TAG = "iconback";
     static final String ICON_UPON_TAG = "iconupon";
     static final String ICON_SCALE_TAG = "scale";
-
+    private static IconPackHelper sInstance;
     // Holds package/class -> drawable
     private Map<String, String> mIconPackResources;
     private Context mContext;
@@ -39,20 +39,18 @@ public class IconPackHelper {
     private String mCurrentIconPack = "";
     private boolean mLoading;
 
-    private static IconPackHelper sInstance;
-
-    public static IconPackHelper getInstance(Context context) {
-        if (sInstance == null){
-            sInstance = new IconPackHelper();
-        }
-        sInstance.setContext(context);
-        return sInstance;
-    }
-
     private IconPackHelper() {
         mIconPackResources = new HashMap<String, String>();
         mIconBackList = new ArrayList<Drawable>();
         mIconBackStrings = new ArrayList<String>();
+    }
+
+    public static IconPackHelper getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new IconPackHelper();
+        }
+        sInstance.setContext(context);
+        return sInstance;
     }
 
     private void setContext(Context context) {
@@ -83,7 +81,7 @@ public class IconPackHelper {
     }
 
     private void loadResourcesFromXmlParser(XmlPullParser parser,
-            Map<String, String> iconPackResources) throws XmlPullParserException, IOException {
+                                            Map<String, String> iconPackResources) throws XmlPullParserException, IOException {
         int eventType = parser.getEventType();
         do {
 
@@ -160,14 +158,14 @@ public class IconPackHelper {
     }
 
     private void loadApplicationResources(Context context,
-            Map<String, String> iconPackResources, String packageName) {
+                                          Map<String, String> iconPackResources, String packageName) {
         Field[] drawableItems = null;
         try {
             Context appContext = context.createPackageContext(packageName,
                     Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
-            drawableItems = Class.forName(packageName+".R$drawable",
+            drawableItems = Class.forName(packageName + ".R$drawable",
                     true, appContext.getClassLoader()).getFields();
-        } catch (Exception e){
+        } catch (Exception e) {
             return;
         }
 
@@ -202,7 +200,7 @@ public class IconPackHelper {
         String packageName = mCurrentIconPack;
         mIconBackList.clear();
         mIconBackStrings.clear();
-        if (TextUtils.isEmpty(packageName)){
+        if (TextUtils.isEmpty(packageName)) {
             return false;
         }
         mLoading = true;
@@ -270,8 +268,8 @@ public class IconPackHelper {
 
         if (parser != null) {
             try {
-                  loadResourcesFromXmlParser(parser, iconPackResources);
-                  return iconPackResources;
+                loadResourcesFromXmlParser(parser, iconPackResources);
+                return iconPackResources;
             } catch (XmlPullParserException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -360,7 +358,7 @@ public class IconPackHelper {
 
     public int getResourceIdForActivityIcon(ActivityInfo info) {
         // TODO since we are loading in background block access until load ready
-        if (!isIconPackLoaded() || mLoading){
+        if (!isIconPackLoaded() || mLoading) {
             return 0;
         }
         String drawable = mIconPackResources.get(info.packageName.toLowerCase()
@@ -380,10 +378,10 @@ public class IconPackHelper {
             return;
         }
         mCurrentIconPack = iconPack;
-        if (!TextUtils.isEmpty(iconPack) || TextUtils.isEmpty(mCurrentIconPack)){
+        if (!TextUtils.isEmpty(iconPack) || TextUtils.isEmpty(mCurrentIconPack)) {
             unloadIconPack();
         }
-        if (!TextUtils.isEmpty(mCurrentIconPack)){
+        if (!TextUtils.isEmpty(mCurrentIconPack)) {
             loadIconPack();
         }
     }

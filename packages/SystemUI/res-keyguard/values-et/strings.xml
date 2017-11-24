@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"Vajutage avamiseks menüüklahvi."</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"Võrk on lukus"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"SIM-kaarti pole"</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"Tahvelarvutis pole SIM-kaarti."</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"Telefonis pole SIM-kaarti."</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"Tahvelarvutis pole SIM-kaarti."</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"Telefonis pole SIM-kaarti."</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"Sisestage SIM-kaart."</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"SIM-kaart puudub või on loetamatu. Sisestage SIM-kaart."</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"Kasutamiskõlbmatu SIM-kaart."</string>
@@ -69,34 +68,34 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"Sisestage 4–8-numbriline PIN-kood."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"PUK-koodi pikkus peab olema vähemalt kaheksa numbrit."</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"Sisestage uuesti õige PUK-kood. Korduvkatsete korral keelatakse SIM-kaart jäädavalt."</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"PIN-koodid ei ole vastavuses"</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"PIN-koodid ei ole vastavuses"</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"Liiga palju mustrikatseid"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"Olete PIN-koodi <xliff:g id="NUMBER_0">%1$d</xliff:g> korda valesti sisestanud. \n\nProovige <xliff:g id="NUMBER_1">%2$d</xliff:g> sekundi pärast uuesti."</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"Olete parooli <xliff:g id="NUMBER_0">%1$d</xliff:g> korda valesti sisestanud. \n\nProovige <xliff:g id="NUMBER_1">%2$d</xliff:g> sekundi pärast uuesti."</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"Olete oma avamismustrit <xliff:g id="NUMBER_0">%1$d</xliff:g> korda valesti joonistanud. \n\nProovige <xliff:g id="NUMBER_1">%2$d</xliff:g> sekundi pärast uuesti."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda tahvelarvutit valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset tahvelarvuti lähtestatakse ja kõik selle andmed kustutatakse."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda telefoni valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset telefon lähtestatakse ja kõik selle andmed kustutatakse."</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda tahvelarvutit valesti avada. Tahvelarvuti lähtestatakse ja kõik selle andmed kustutatakse."</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda telefoni valesti avada. Telefon lähtestatakse ja kõik selle andmed kustutatakse."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda tahvelarvutit valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset kasutaja eemaldatakse ja kõik kasutajaandmed kustutatakse."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda telefoni valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset kasutaja eemaldatakse ja kõik kasutajaandmed kustutatakse."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda tahvelarvutit valesti avada. Kasutaja eemaldatakse ja kõik kasutajaandmed kustutatakse."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda telefoni valesti avada. Kasutaja eemaldatakse ja kõik kasutajaandmed kustutatakse."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda tahvelarvutit valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset tööprofiil eemaldatakse ja kõik profiiliandmed kustutatakse."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda telefoni valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset tööprofiil eemaldatakse ja kõik profiiliandmed kustutatakse."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda tahvelarvutit valesti avada. Tööprofiil eemaldatakse ja kõik profiiliandmed kustutatakse."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda telefoni valesti avada. Tööprofiil eemaldatakse ja kõik profiiliandmed kustutatakse."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"Joonistasite oma avamismustri <xliff:g id="NUMBER_0">%1$d</xliff:g> korda valesti. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset palutakse teil tahvelarvuti avada meilikontoga.\n\n Proovige uuesti <xliff:g id="NUMBER_2">%3$d</xliff:g> sekundi pärast."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"Joonistasite oma avamismustri <xliff:g id="NUMBER_0">%1$d</xliff:g> korda valesti. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset palutakse teil telefon avada meilikontoga.\n\n Proovige uuesti <xliff:g id="NUMBER_2">%3$d</xliff:g> sekundi pärast."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda tahvelarvutit valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset tahvelarvuti lähtestatakse ja kõik selle andmed kustutatakse."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda telefoni valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset telefon lähtestatakse ja kõik selle andmed kustutatakse."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda tahvelarvutit valesti avada. Tahvelarvuti lähtestatakse ja kõik selle andmed kustutatakse."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda telefoni valesti avada. Telefon lähtestatakse ja kõik selle andmed kustutatakse."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda tahvelarvutit valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset kasutaja eemaldatakse ja kõik kasutajaandmed kustutatakse."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda telefoni valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset kasutaja eemaldatakse ja kõik kasutajaandmed kustutatakse."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda tahvelarvutit valesti avada. Kasutaja eemaldatakse ja kõik kasutajaandmed kustutatakse."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda telefoni valesti avada. Kasutaja eemaldatakse ja kõik kasutajaandmed kustutatakse."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda tahvelarvutit valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset tööprofiil eemaldatakse ja kõik profiiliandmed kustutatakse."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"Olete püüdnud <xliff:g id="NUMBER_0">%1$d</xliff:g> korda telefoni valesti avada. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset tööprofiil eemaldatakse ja kõik profiiliandmed kustutatakse."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda tahvelarvutit valesti avada. Tööprofiil eemaldatakse ja kõik profiiliandmed kustutatakse."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"Olete püüdnud <xliff:g id="NUMBER">%d</xliff:g> korda telefoni valesti avada. Tööprofiil eemaldatakse ja kõik profiiliandmed kustutatakse."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"Joonistasite oma avamismustri <xliff:g id="NUMBER_0">%1$d</xliff:g> korda valesti. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset palutakse teil tahvelarvuti avada meilikontoga.\n\n Proovige uuesti <xliff:g id="NUMBER_2">%3$d</xliff:g> sekundi pärast."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"Joonistasite oma avamismustri <xliff:g id="NUMBER_0">%1$d</xliff:g> korda valesti. Pärast veel <xliff:g id="NUMBER_1">%2$d</xliff:g> ebaõnnestunud katset palutakse teil telefon avada meilikontoga.\n\n Proovige uuesti <xliff:g id="NUMBER_2">%3$d</xliff:g> sekundi pärast."</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"SIM-kaardi vale PIN-kood. Seadme avamiseks peate nüüd ühendust võtma oma operaatoriga."</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="other">SIM-kaardi vale PIN-kood. Teil on jäänud veel <xliff:g id="NUMBER_1">%d</xliff:g> katset.</item>
-      <item quantity="one">SIM-kaardi vale PIN-kood. Teil on jäänud veel <xliff:g id="NUMBER_0">%d</xliff:g> katse enne, kui peate seadme avamiseks operaatoriga ühendust võtma.</item>
+        <item quantity="other">SIM-kaardi vale PIN-kood. Teil on jäänud veel <xliff:g id="NUMBER_1">%d</xliff:g> katset.</item>
+        <item quantity="one">SIM-kaardi vale PIN-kood. Teil on jäänud veel <xliff:g id="NUMBER_0">%d</xliff:g> katse enne, kui peate seadme avamiseks operaatoriga ühendust võtma.</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"SIM-kaart on kasutamiskõlbmatu. Võtke ühendust operaatoriga."</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="other">SIM-kaardi vale PUK-kood. Teil on jäänud veel <xliff:g id="NUMBER_1">%d</xliff:g> katset enne, kui SIM-kaart jäädavalt lukustatakse.</item>
-      <item quantity="one">SIM-kaardi vale PUK-kood. Teil on jäänud veel <xliff:g id="NUMBER_0">%d</xliff:g> katse enne, kui SIM-kaart jäädavalt lukustatakse.</item>
+        <item quantity="other">SIM-kaardi vale PUK-kood. Teil on jäänud veel <xliff:g id="NUMBER_1">%d</xliff:g> katset enne, kui SIM-kaart jäädavalt lukustatakse.</item>
+        <item quantity="one">SIM-kaardi vale PUK-kood. Teil on jäänud veel <xliff:g id="NUMBER_0">%d</xliff:g> katse enne, kui SIM-kaart jäädavalt lukustatakse.</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"SIM-kaardi PIN-koodi toiming ebaõnnestus."</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"SIM-kaardi PUK-koodi toiming ebaõnnestus."</string>
@@ -116,16 +115,16 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"Administraator lukustas seadme"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"Seade lukustati käsitsi"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="other">Seadet pole avatud <xliff:g id="NUMBER_1">%d</xliff:g> tundi. Kinnitage muster.</item>
-      <item quantity="one">Seadet pole avatud <xliff:g id="NUMBER_0">%d</xliff:g> tund. Kinnitage muster.</item>
+        <item quantity="other">Seadet pole avatud <xliff:g id="NUMBER_1">%d</xliff:g> tundi. Kinnitage muster.</item>
+        <item quantity="one">Seadet pole avatud <xliff:g id="NUMBER_0">%d</xliff:g> tund. Kinnitage muster.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="other">Seadet pole avatud <xliff:g id="NUMBER_1">%d</xliff:g> tundi. Kinnitage PIN-kood.</item>
-      <item quantity="one">Seadet pole avatud <xliff:g id="NUMBER_0">%d</xliff:g> tund. Kinnitage PIN-kood.</item>
+        <item quantity="other">Seadet pole avatud <xliff:g id="NUMBER_1">%d</xliff:g> tundi. Kinnitage PIN-kood.</item>
+        <item quantity="one">Seadet pole avatud <xliff:g id="NUMBER_0">%d</xliff:g> tund. Kinnitage PIN-kood.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="other">Seadet pole avatud <xliff:g id="NUMBER_1">%d</xliff:g> tundi. Kinnitage parool.</item>
-      <item quantity="one">Seadet pole avatud <xliff:g id="NUMBER_0">%d</xliff:g> tund. Kinnitage parool.</item>
+        <item quantity="other">Seadet pole avatud <xliff:g id="NUMBER_1">%d</xliff:g> tundi. Kinnitage parool.</item>
+        <item quantity="one">Seadet pole avatud <xliff:g id="NUMBER_0">%d</xliff:g> tund. Kinnitage parool.</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"Ei tuvastatud"</string>
 </resources>

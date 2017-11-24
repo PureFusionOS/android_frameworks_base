@@ -42,13 +42,13 @@ import com.android.systemui.qs.tileimpl.QSTileImpl;
 public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsClient.OmniJawsObserver {
     private static final String TAG = "WeatherTile";
     private static final boolean DEBUG = false;
+    private final ActivityStarter mActivityStarter;
     private OmniJawsClient mWeatherClient;
     private Drawable mWeatherImage;
     private String mWeatherLabel;
     private DetailedWeatherView mDetailedView;
     private OmniJawsClient.WeatherInfo mWeatherData;
     private boolean mEnabled;
-    private final ActivityStarter mActivityStarter;
     private WeatherDetailAdapter mDetailAdapter;
 
     public WeatherTile(QSHost host) {
@@ -194,7 +194,7 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
             } else {
                 mWeatherLabel = mContext.getResources().getString(R.string.omnijaws_label_default);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             mWeatherLabel = mContext.getResources().getString(R.string.omnijaws_label_default);
         }
         refreshState();
@@ -252,7 +252,7 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
             mDetailedView.post(() -> {
                 try {
                     mDetailedView.updateWeatherData(mWeatherData);
-                }   catch (Exception e){
+                } catch (Exception e) {
                 }
             });
 

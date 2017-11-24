@@ -109,6 +109,10 @@ public class AmbientState {
         return mDraggedViews;
     }
 
+    public boolean isDimmed() {
+        return mDimmed;
+    }
+
     /**
      * @param dimmed Whether we are in a dimmed state (on the lockscreen), where the backgrounds are
      *               translucent and everything is scaled back a bit.
@@ -117,13 +121,27 @@ public class AmbientState {
         mDimmed = dimmed;
     }
 
-    /** In dark mode, we draw as little as possible, assuming a black background */
+    public boolean isDark() {
+        return mDark;
+    }
+
+    /**
+     * In dark mode, we draw as little as possible, assuming a black background
+     */
     public void setDark(boolean dark) {
         mDark = dark;
     }
 
+    public boolean isHideSensitive() {
+        return mHideSensitive;
+    }
+
     public void setHideSensitive(boolean hideSensitive) {
         mHideSensitive = hideSensitive;
+    }
+
+    public ActivatableNotificationView getActivatedChild() {
+        return mActivatedChild;
     }
 
     /**
@@ -132,22 +150,6 @@ public class AmbientState {
      */
     public void setActivatedChild(ActivatableNotificationView activatedChild) {
         mActivatedChild = activatedChild;
-    }
-
-    public boolean isDimmed() {
-        return mDimmed;
-    }
-
-    public boolean isDark() {
-        return mDark;
-    }
-
-    public boolean isHideSensitive() {
-        return mHideSensitive;
-    }
-
-    public ActivatableNotificationView getActivatedChild() {
-        return mActivatedChild;
     }
 
     public void setOverScrollAmount(float amount, boolean onTop) {
@@ -206,36 +208,40 @@ public class AmbientState {
         mShadeExpanded = shadeExpanded;
     }
 
-    public void setMaxHeadsUpTranslation(float maxHeadsUpTranslation) {
-        mMaxHeadsUpTranslation = maxHeadsUpTranslation;
-    }
-
     public float getMaxHeadsUpTranslation() {
         return mMaxHeadsUpTranslation;
     }
 
-    public void setDismissAllInProgress(boolean dismissAllInProgress) {
-        mDismissAllInProgress = dismissAllInProgress;
+    public void setMaxHeadsUpTranslation(float maxHeadsUpTranslation) {
+        mMaxHeadsUpTranslation = maxHeadsUpTranslation;
     }
 
     public boolean isDismissAllInProgress() {
         return mDismissAllInProgress;
     }
 
-    public void setLayoutMinHeight(int layoutMinHeight) {
-        mLayoutMinHeight = layoutMinHeight;
+    public void setDismissAllInProgress(boolean dismissAllInProgress) {
+        mDismissAllInProgress = dismissAllInProgress;
     }
 
-    public void setShelf(NotificationShelf shelf) {
-        mShelf = shelf;
+    public void setLayoutMinHeight(int layoutMinHeight) {
+        mLayoutMinHeight = layoutMinHeight;
     }
 
     public NotificationShelf getShelf() {
         return mShelf;
     }
 
+    public void setShelf(NotificationShelf shelf) {
+        mShelf = shelf;
+    }
+
     public void setLayoutMaxHeight(int maxLayoutHeight) {
         mMaxLayoutHeight = maxLayoutHeight;
+    }
+
+    public ActivatableNotificationView getLastVisibleBackgroundChild() {
+        return mLastVisibleBackgroundChild;
     }
 
     /**
@@ -247,16 +253,12 @@ public class AmbientState {
         mLastVisibleBackgroundChild = lastVisibleBackgroundChild;
     }
 
-    public ActivatableNotificationView getLastVisibleBackgroundChild() {
-        return mLastVisibleBackgroundChild;
+    public float getCurrentScrollVelocity() {
+        return mCurrentScrollVelocity;
     }
 
     public void setCurrentScrollVelocity(float currentScrollVelocity) {
         mCurrentScrollVelocity = currentScrollVelocity;
-    }
-
-    public float getCurrentScrollVelocity() {
-        return mCurrentScrollVelocity;
     }
 
     public boolean isOnKeyguard() {
@@ -267,24 +269,20 @@ public class AmbientState {
         mStatusBarState = statusBarState;
     }
 
-    public void setExpandingVelocity(float expandingVelocity) {
-        mExpandingVelocity = expandingVelocity;
+    public boolean isExpansionChanging() {
+        return mExpansionChanging;
     }
 
     public void setExpansionChanging(boolean expansionChanging) {
         mExpansionChanging = expansionChanging;
     }
 
-    public boolean isExpansionChanging() {
-        return mExpansionChanging;
-    }
-
     public float getExpandingVelocity() {
         return mExpandingVelocity;
     }
 
-    public void setPanelTracking(boolean panelTracking) {
-        mPanelTracking = panelTracking;
+    public void setExpandingVelocity(float expandingVelocity) {
+        mExpandingVelocity = expandingVelocity;
     }
 
     public boolean hasPulsingNotifications() {
@@ -299,6 +297,10 @@ public class AmbientState {
         return mPanelTracking;
     }
 
+    public void setPanelTracking(boolean panelTracking) {
+        mPanelTracking = panelTracking;
+    }
+
     public boolean isPanelFullWidth() {
         return mPanelFullWidth;
     }
@@ -307,11 +309,11 @@ public class AmbientState {
         mPanelFullWidth = panelFullWidth;
     }
 
-    public void setUnlockHintRunning(boolean unlockHintRunning) {
-        mUnlockHintRunning = unlockHintRunning;
-    }
-
     public boolean isUnlockHintRunning() {
         return mUnlockHintRunning;
+    }
+
+    public void setUnlockHintRunning(boolean unlockHintRunning) {
+        mUnlockHintRunning = unlockHintRunning;
     }
 }

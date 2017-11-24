@@ -26,9 +26,9 @@ import java.util.ArrayList;
  * example, provide information on the current touch state.
  */
 public class ClassifierData {
+    private final float mDpi;
     private SparseArray<Stroke> mCurrentStrokes = new SparseArray<>();
     private ArrayList<Stroke> mEndingStrokes = new ArrayList<>();
-    private final float mDpi;
 
     public ClassifierData(float dpi) {
         mDpi = dpi;

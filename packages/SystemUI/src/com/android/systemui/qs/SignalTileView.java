@@ -27,7 +27,9 @@ import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.plugins.qs.QSTile.SignalState;
 import com.android.systemui.qs.tileimpl.QSIconViewImpl;
 
-/** View that represents a custom quick settings tile for displaying signal info (wifi/cell). **/
+/**
+ * View that represents a custom quick settings tile for displaying signal info (wifi/cell).
+ **/
 public class SignalTileView extends QSIconViewImpl {
     private static final long DEFAULT_DURATION = new ValueAnimator().getDuration();
     private static final long SHORT_DURATION = DEFAULT_DURATION / 3;
@@ -132,9 +134,9 @@ public class SignalTileView extends QSIconViewImpl {
         if (view.getAlpha() == newAlpha) return;
         if (shown) {
             view.animate()
-                .setDuration(visible ? SHORT_DURATION : DEFAULT_DURATION)
-                .alpha(newAlpha)
-                .start();
+                    .setDuration(visible ? SHORT_DURATION : DEFAULT_DURATION)
+                    .alpha(newAlpha)
+                    .start();
         } else {
             view.setAlpha(newAlpha);
         }

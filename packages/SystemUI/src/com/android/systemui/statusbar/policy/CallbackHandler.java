@@ -34,14 +34,14 @@ import java.util.List;
  * the current or specified Looper.
  */
 public class CallbackHandler extends Handler implements EmergencyListener, SignalCallback {
-    private static final int MSG_EMERGENCE_CHANGED           = 0;
-    private static final int MSG_SUBS_CHANGED                = 1;
-    private static final int MSG_NO_SIM_VISIBLE_CHANGED      = 2;
-    private static final int MSG_ETHERNET_CHANGED            = 3;
-    private static final int MSG_AIRPLANE_MODE_CHANGED       = 4;
+    private static final int MSG_EMERGENCE_CHANGED = 0;
+    private static final int MSG_SUBS_CHANGED = 1;
+    private static final int MSG_NO_SIM_VISIBLE_CHANGED = 2;
+    private static final int MSG_ETHERNET_CHANGED = 3;
+    private static final int MSG_AIRPLANE_MODE_CHANGED = 4;
     private static final int MSG_MOBILE_DATA_ENABLED_CHANGED = 5;
-    private static final int MSG_ADD_REMOVE_EMERGENCY        = 6;
-    private static final int MSG_ADD_REMOVE_SIGNAL           = 7;
+    private static final int MSG_ADD_REMOVE_EMERGENCY = 6;
+    private static final int MSG_ADD_REMOVE_SIGNAL = 7;
 
     // All the callbacks.
     private final ArrayList<EmergencyListener> mEmergencyListeners = new ArrayList<>();
@@ -109,8 +109,8 @@ public class CallbackHandler extends Handler implements EmergencyListener, Signa
 
     @Override
     public void setWifiIndicators(final boolean enabled, final IconState statusIcon,
-            final IconState qsIcon, final boolean activityIn, final boolean activityOut,
-            final String description, boolean isTransient) {
+                                  final IconState qsIcon, final boolean activityIn, final boolean activityOut,
+                                  final String description, boolean isTransient) {
         post(new Runnable() {
             @Override
             public void run() {
@@ -124,9 +124,9 @@ public class CallbackHandler extends Handler implements EmergencyListener, Signa
 
     @Override
     public void setMobileDataIndicators(final IconState statusIcon, final IconState qsIcon,
-            final int statusType, final int qsType,final boolean activityIn,
-            final boolean activityOut, final String typeContentDescription,
-            final String description, final boolean isWide, final int subId, boolean roaming) {
+                                        final int statusType, final int qsType, final boolean activityIn,
+                                        final boolean activityOut, final String typeContentDescription,
+                                        final String description, final boolean isWide, final int subId, boolean roaming) {
         post(new Runnable() {
             @Override
             public void run() {
@@ -161,12 +161,14 @@ public class CallbackHandler extends Handler implements EmergencyListener, Signa
 
     @Override
     public void setEthernetIndicators(IconState icon) {
-        obtainMessage(MSG_ETHERNET_CHANGED, icon).sendToTarget();;
+        obtainMessage(MSG_ETHERNET_CHANGED, icon).sendToTarget();
+        ;
     }
 
     @Override
     public void setIsAirplaneMode(IconState icon) {
-        obtainMessage(MSG_AIRPLANE_MODE_CHANGED, icon).sendToTarget();;
+        obtainMessage(MSG_AIRPLANE_MODE_CHANGED, icon).sendToTarget();
+        ;
     }
 
     public void setListening(EmergencyListener listener, boolean listening) {

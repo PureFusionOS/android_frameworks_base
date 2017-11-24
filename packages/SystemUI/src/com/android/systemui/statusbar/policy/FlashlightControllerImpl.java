@@ -46,17 +46,63 @@ public class FlashlightControllerImpl implements FlashlightController {
 
     private final CameraManager mCameraManager;
     private final Context mContext;
-    /** Call {@link #ensureHandler()} before using */
-    private Handler mHandler;
-
-    /** Lock on mListeners when accessing */
+    /**
+     * Lock on mListeners when accessing
+     */
     private final ArrayList<WeakReference<FlashlightListener>> mListeners = new ArrayList<>(1);
-
-    /** Lock on {@code this} when accessing */
+    /**
+     * Call {@link #ensureHandler()} before using
+     */
+    private Handler mHandler;
+    /**
+     * Lock on {@code this} when accessing
+     */
     private boolean mFlashlightEnabled;
 
     private String mCameraId;
     private boolean mTorchAvailable;
+    private final CameraManager.TorchCallback mTorchCallback =
+            new CameraManager.TorchCallback() {
+
+                @Override
+                public void onTorchModeUnavailable(String cameraId) {
+                    if (TextUtils.equals(cameraId, mCameraId)) {
+                        setCameraAvailable(false);
+                    }
+                }
+
+                @Override
+                public void onTorchModeChanged(String cameraId, boolean enabled) {
+                    if (TextUtils.equals(cameraId, mCameraId)) {
+                        setCameraAvailable(true);
+                        setTorchMode(enabled);
+                    }
+                }
+
+                private void setCameraAvailable(boolean available) {
+                    boolean changed;
+                    synchronized (FlashlightControllerImpl.this) {
+                        changed = mTorchAvailable != available;
+                        mTorchAvailable = available;
+                    }
+                    if (changed) {
+                        if (DEBUG) Log.d(TAG, "dispatchAvailabilityChanged(" + available + ")");
+                        dispatchAvailabilityChanged(available);
+                    }
+                }
+
+                private void setTorchMode(boolean enabled) {
+                    boolean changed;
+                    synchronized (FlashlightControllerImpl.this) {
+                        changed = mFlashlightEnabled != enabled;
+                        mFlashlightEnabled = enabled;
+                    }
+                    if (changed) {
+                        if (DEBUG) Log.d(TAG, "dispatchModeChanged(" + enabled + ")");
+                        dispatchModeChanged(enabled);
+                    }
+                }
+            };
 
     public FlashlightControllerImpl(Context context) {
         mContext = context;
@@ -196,49 +242,6 @@ public class FlashlightControllerImpl implements FlashlightController {
             }
         }
     }
-
-    private final CameraManager.TorchCallback mTorchCallback =
-            new CameraManager.TorchCallback() {
-
-        @Override
-        public void onTorchModeUnavailable(String cameraId) {
-            if (TextUtils.equals(cameraId, mCameraId)) {
-                setCameraAvailable(false);
-            }
-        }
-
-        @Override
-        public void onTorchModeChanged(String cameraId, boolean enabled) {
-            if (TextUtils.equals(cameraId, mCameraId)) {
-                setCameraAvailable(true);
-                setTorchMode(enabled);
-            }
-        }
-
-        private void setCameraAvailable(boolean available) {
-            boolean changed;
-            synchronized (FlashlightControllerImpl.this) {
-                changed = mTorchAvailable != available;
-                mTorchAvailable = available;
-            }
-            if (changed) {
-                if (DEBUG) Log.d(TAG, "dispatchAvailabilityChanged(" + available + ")");
-                dispatchAvailabilityChanged(available);
-            }
-        }
-
-        private void setTorchMode(boolean enabled) {
-            boolean changed;
-            synchronized (FlashlightControllerImpl.this) {
-                changed = mFlashlightEnabled != enabled;
-                mFlashlightEnabled = enabled;
-            }
-            if (changed) {
-                if (DEBUG) Log.d(TAG, "dispatchModeChanged(" + enabled + ")");
-                dispatchModeChanged(enabled);
-            }
-        }
-    };
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         pw.println("FlashlightController state:");

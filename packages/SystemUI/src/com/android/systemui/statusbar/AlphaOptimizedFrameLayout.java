@@ -24,8 +24,7 @@ import android.widget.FrameLayout;
  * A frame layout which does not have overlapping renderings commands and therefore does not need a
  * layer when alpha is changed.
  */
-public class AlphaOptimizedFrameLayout extends FrameLayout
-{
+public class AlphaOptimizedFrameLayout extends FrameLayout {
     public AlphaOptimizedFrameLayout(Context context) {
         super(context);
     }
@@ -39,7 +38,7 @@ public class AlphaOptimizedFrameLayout extends FrameLayout
     }
 
     public AlphaOptimizedFrameLayout(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                                     int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

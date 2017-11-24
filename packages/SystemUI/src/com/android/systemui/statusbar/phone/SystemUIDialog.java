@@ -43,22 +43,6 @@ public class SystemUIDialog extends AlertDialog {
         getWindow().setAttributes(attrs);
     }
 
-    public void setShowForAllUsers(boolean show) {
-        setShowForAllUsers(this, show);
-    }
-
-    public void setMessage(int resId) {
-        setMessage(mContext.getString(resId));
-    }
-
-    public void setPositiveButton(int resId, OnClickListener onClick) {
-        setButton(BUTTON_POSITIVE, mContext.getString(resId), onClick);
-    }
-
-    public void setNegativeButton(int resId, OnClickListener onClick) {
-        setButton(BUTTON_NEGATIVE, mContext.getString(resId), onClick);
-    }
-
     public static void setShowForAllUsers(AlertDialog dialog, boolean show) {
         if (show) {
             dialog.getWindow().getAttributes().privateFlags |=
@@ -73,5 +57,21 @@ public class SystemUIDialog extends AlertDialog {
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+    }
+
+    public void setShowForAllUsers(boolean show) {
+        setShowForAllUsers(this, show);
+    }
+
+    public void setMessage(int resId) {
+        setMessage(mContext.getString(resId));
+    }
+
+    public void setPositiveButton(int resId, OnClickListener onClick) {
+        setButton(BUTTON_POSITIVE, mContext.getString(resId), onClick);
+    }
+
+    public void setNegativeButton(int resId, OnClickListener onClick) {
+        setButton(BUTTON_NEGATIVE, mContext.getString(resId), onClick);
     }
 }

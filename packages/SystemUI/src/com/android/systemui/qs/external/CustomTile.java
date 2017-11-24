@@ -84,6 +84,29 @@ public class CustomTile extends QSTileImpl<State> implements TileChangeListener 
         mUser = ActivityManager.getCurrentUser();
     }
 
+    public static String toSpec(ComponentName name) {
+        return PREFIX + name.flattenToShortString() + ")";
+    }
+
+    public static ComponentName getComponentFromSpec(String spec) {
+        final String action = spec.substring(PREFIX.length(), spec.length() - 1);
+        if (action.isEmpty()) {
+            throw new IllegalArgumentException("Empty custom tile spec action");
+        }
+        return ComponentName.unflattenFromString(action);
+    }
+
+    public static QSTile create(QSTileHost host, String spec) {
+        if (spec == null || !spec.startsWith(PREFIX) || !spec.endsWith(")")) {
+            throw new IllegalArgumentException("Bad custom tile spec: " + spec);
+        }
+        final String action = spec.substring(PREFIX.length(), spec.length() - 1);
+        if (action.isEmpty()) {
+            throw new IllegalArgumentException("Empty custom tile spec action");
+        }
+        return new CustomTile(host, action);
+    }
+
     private void setTileIcon() {
         try {
             PackageManager pm = mContext.getPackageManager();
@@ -119,7 +142,7 @@ public class CustomTile extends QSTileImpl<State> implements TileChangeListener 
      * Compare two icons, only works for resources.
      */
     private boolean iconEquals(android.graphics.drawable.Icon icon1,
-            android.graphics.drawable.Icon icon2) {
+                               android.graphics.drawable.Icon icon2) {
         if (icon1 == icon2) {
             return true;
         }
@@ -319,28 +342,5 @@ public class CustomTile extends QSTileImpl<State> implements TileChangeListener 
             } catch (RemoteException e) {
             }
         });
-    }
-
-    public static String toSpec(ComponentName name) {
-        return PREFIX + name.flattenToShortString() + ")";
-    }
-
-    public static ComponentName getComponentFromSpec(String spec) {
-        final String action = spec.substring(PREFIX.length(), spec.length() - 1);
-        if (action.isEmpty()) {
-            throw new IllegalArgumentException("Empty custom tile spec action");
-        }
-        return ComponentName.unflattenFromString(action);
-    }
-
-    public static QSTile create(QSTileHost host, String spec) {
-        if (spec == null || !spec.startsWith(PREFIX) || !spec.endsWith(")")) {
-            throw new IllegalArgumentException("Bad custom tile spec: " + spec);
-        }
-        final String action = spec.substring(PREFIX.length(), spec.length() - 1);
-        if (action.isEmpty()) {
-            throw new IllegalArgumentException("Empty custom tile spec action");
-        }
-        return new CustomTile(host, action);
     }
 }

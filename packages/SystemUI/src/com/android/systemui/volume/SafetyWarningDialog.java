@@ -37,7 +37,16 @@ abstract public class SafetyWarningDialog extends SystemUIDialog
 
     private final Context mContext;
     private final AudioManager mAudioManager;
-
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(intent.getAction())) {
+                if (D.BUG) Log.d(TAG, "Received ACTION_CLOSE_SYSTEM_DIALOGS");
+                cancel();
+                cleanUp();
+            }
+        }
+    };
     private long mShowTime;
     private boolean mNewVolumeUp;
 
@@ -96,15 +105,4 @@ abstract public class SafetyWarningDialog extends SystemUIDialog
         mContext.unregisterReceiver(mReceiver);
         cleanUp();
     }
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(intent.getAction())) {
-                if (D.BUG) Log.d(TAG, "Received ACTION_CLOSE_SYSTEM_DIALOGS");
-                cancel();
-                cleanUp();
-            }
-        }
-    };
 }

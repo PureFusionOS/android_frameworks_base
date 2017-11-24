@@ -39,32 +39,32 @@ public class AppContainer extends LinearLayout {
         super(context, attrs, defStyle);
         mInsertDelta = context.getResources().getDimensionPixelSize(R.dimen.item_above_below_delta);
     }
-    
+
     public void repositionView(View view, float x, float y, boolean isFolder) {
         int index = indexOfChild(view);
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View v = getChildAt(i);
-            float mid = v.getY() + v.getHeight()/2;
-            if (i == index){
-                if((index < childCount-1 && y > mid+mInsertDelta && y < v.getY()+v.getHeight()) &&
+            float mid = v.getY() + v.getHeight() / 2;
+            if (i == index) {
+                if ((index < childCount - 1 && y > mid + mInsertDelta && y < v.getY() + v.getHeight()) &&
                         view.getVisibility() != View.GONE) {
                     removeView(view);
                     view.setVisibility(View.GONE);
-                    addView(view, i+1);
+                    addView(view, i + 1);
                 }
                 continue;
             }
             if (v != view)
                 v.setBackgroundResource(0);
-            if ((i < index && (y > v.getY() && y < mid-mInsertDelta)) ||
-                    (i > index && (y > mid+mInsertDelta && y < v.getY()+v.getHeight()))) {
+            if ((i < index && (y > v.getY() && y < mid - mInsertDelta)) ||
+                    (i > index && (y > mid + mInsertDelta && y < v.getY() + v.getHeight()))) {
                 removeView(view);
                 addView(view, i);
                 view.setVisibility(View.VISIBLE);
                 mAddToItem = null;
                 return;
-            } else if (!isFolder && v != view && y >= mid-mInsertDelta && y <= mid+mInsertDelta) {
+            } else if (!isFolder && v != view && y >= mid - mInsertDelta && y <= mid + mInsertDelta) {
                 view.setVisibility(View.GONE);
                 v.setBackgroundResource(R.drawable.item_placeholder);
                 mAddToItem = (ItemInfo) v.getTag();
@@ -74,7 +74,7 @@ public class AppContainer extends LinearLayout {
             mAddToItem = null;
         }
     }
-    
+
     public ItemInfo getAddToItem() {
         return mAddToItem;
     }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
 ** Copyright 2009, The Android Open Source Project
 **
@@ -49,7 +48,7 @@
     <bool name="config_statusBarShowNumber">false</bool>
 
     <!-- Vibrator pattern for camera gesture launch. -->
-    <integer-array translatable="false" name="config_cameraLaunchGestureVibePattern">
+    <integer-array name="config_cameraLaunchGestureVibePattern" translatable="false">
         <item>0</item>
         <item>400</item>
     </integer-array>
@@ -68,10 +67,10 @@
     <bool name="config_showRotationLock">true</bool>
 
     <!-- Vibration duration for GlowPadView used in SearchPanelView -->
-    <integer translatable="false" name="config_vibration_duration">0</integer>
+    <integer name="config_vibration_duration" translatable="false">0</integer>
 
     <!-- Vibration duration for GlowPadView used in SearchPanelView -->
-    <integer translatable="false" name="config_search_panel_view_vibration_duration">20</integer>
+    <integer name="config_search_panel_view_vibration_duration" translatable="false">20</integer>
 
     <!-- Show camera affordance on Keyguard -->
     <bool name="config_keyguardShowCameraAffordance">true</bool>
@@ -296,9 +295,9 @@
     <integer name="config_warningTemperature">-1</integer>
 
     <!-- Accessibility actions -->
-    <item type="id" name="action_split_task_to_left" />
-    <item type="id" name="action_split_task_to_right" />
-    <item type="id" name="action_split_task_to_top" />
+    <item name="action_split_task_to_left" type="id" />
+    <item name="action_split_task_to_right" type="id" />
+    <item name="action_split_task_to_top" type="id" />
 
     <!-- Whether or not the gear icon on notifications should be shown. The gear is shown when the
          the notification is not swiped enough to dismiss it. -->

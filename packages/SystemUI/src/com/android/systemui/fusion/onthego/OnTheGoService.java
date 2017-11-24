@@ -46,31 +46,58 @@ import java.io.IOException;
 
 public class OnTheGoService extends Service {
 
-    private static final String  TAG   = "OnTheGoService";
-    private static final boolean DEBUG = false;
-
-    private static final int ONTHEGO_NOTIFICATION_ID = 81333378;
-
-    public static final String ACTION_START          = "start";
-    public static final String ACTION_STOP           = "stop";
-    public static final String ACTION_TOGGLE_ALPHA   = "toggle_alpha";
-    public static final String ACTION_TOGGLE_CAMERA  = "toggle_camera";
+    public static final String ACTION_START = "start";
+    public static final String ACTION_STOP = "stop";
+    public static final String ACTION_TOGGLE_ALPHA = "toggle_alpha";
+    public static final String ACTION_TOGGLE_CAMERA = "toggle_camera";
     public static final String ACTION_TOGGLE_OPTIONS = "toggle_options";
-    public static final String EXTRA_ALPHA           = "extra_alpha";
-
-    private static final int CAMERA_BACK  = 0;
+    public static final String EXTRA_ALPHA = "extra_alpha";
+    private static final String TAG = "OnTheGoService";
+    private static final boolean DEBUG = false;
+    private static final int ONTHEGO_NOTIFICATION_ID = 81333378;
+    private static final int CAMERA_BACK = 0;
     private static final int CAMERA_FRONT = 1;
 
     private static final int NOTIFICATION_STARTED = 0;
     private static final int NOTIFICATION_RESTART = 1;
-    private static final int NOTIFICATION_ERROR   = 2;
+    private static final int NOTIFICATION_ERROR = 2;
 
-    private final Handler mHandler       = new Handler();
-    private final Object  mRestartObject = new Object();
+    private final Handler mHandler = new Handler();
+    private final Object mRestartObject = new Object();
 
-    private FrameLayout         mOverlay;
-    private Camera              mCamera;
+    private FrameLayout mOverlay;
+    private final BroadcastReceiver mAlphaReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final float intentAlpha = intent.getFloatExtra(EXTRA_ALPHA, 0.5f);
+            toggleOnTheGoAlpha(intentAlpha);
+        }
+    };
+    private Camera mCamera;
     private NotificationManager mNotificationManager;
+    private final Runnable mRestartRunnable = new Runnable() {
+        @Override
+        public void run() {
+            synchronized (mRestartObject) {
+                setupViews(true);
+            }
+        }
+    };
+    private final BroadcastReceiver mCameraReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            synchronized (mRestartObject) {
+                final ContentResolver resolver = getContentResolver();
+                final boolean restartService = Settings.System.getInt(resolver,
+                        Settings.System.ON_THE_GO_SERVICE_RESTART, 0) == 1;
+                if (restartService) {
+                    restartOnTheGo();
+                } else {
+                    stopOnTheGo(true);
+                }
+            }
+        }
+    };
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -94,35 +121,13 @@ public class OnTheGoService extends Service {
     private void unregisterReceivers() {
         try {
             unregisterReceiver(mAlphaReceiver);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
         try {
             unregisterReceiver(mCameraReceiver);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
-
-    private final BroadcastReceiver mAlphaReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final float intentAlpha = intent.getFloatExtra(EXTRA_ALPHA, 0.5f);
-            toggleOnTheGoAlpha(intentAlpha);
-        }
-    };
-
-    private final BroadcastReceiver mCameraReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            synchronized (mRestartObject) {
-                final ContentResolver resolver = getContentResolver();
-                final boolean restartService = Settings.System.getInt(resolver,
-                        Settings.System.ON_THE_GO_SERVICE_RESTART, 0) == 1;
-                if (restartService) {
-                    restartOnTheGo();
-                } else {
-                    stopOnTheGo(true);
-                }
-            }
-        }
-    };
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -188,15 +193,6 @@ public class OnTheGoService extends Service {
         mHandler.removeCallbacks(mRestartRunnable);
         mHandler.postDelayed(mRestartRunnable, 750);
     }
-
-    private final Runnable mRestartRunnable = new Runnable() {
-        @Override
-        public void run() {
-            synchronized (mRestartObject) {
-                setupViews(true);
-            }
-        }
-    };
 
     private void toggleOnTheGoAlpha() {
         final float alpha = Settings.System.getFloat(getContentResolver(),
@@ -286,13 +282,14 @@ public class OnTheGoService extends Service {
             }
 
             @Override
-            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) { }
+            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+            }
         });
 
         mOverlay = new FrameLayout(this);
         mOverlay.setLayoutParams(new FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT)
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT)
         );
         mOverlay.addView(mTextureView);
 

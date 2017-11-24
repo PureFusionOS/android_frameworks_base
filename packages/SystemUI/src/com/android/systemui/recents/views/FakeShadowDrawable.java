@@ -46,35 +46,22 @@ class FakeShadowDrawable extends Drawable {
     final static float SHADOW_MULTIPLIER = 1.5f;
 
     final float mInsetShadow; // extra shadow to avoid gaps between card and shadow
-
-    Paint mCornerShadowPaint;
-
-    Paint mEdgeShadowPaint;
-
     final RectF mCardBounds;
-
+    private final int mShadowStartColor;
+    private final int mShadowEndColor;
+    Paint mCornerShadowPaint;
+    Paint mEdgeShadowPaint;
     float mCornerRadius;
-
     Path mCornerShadowPath;
-
     // updated value with inset
     float mMaxShadowSize;
-
     // actual value set by developer
     float mRawMaxShadowSize;
-
     // multiplied value to account for shadow offset
     float mShadowSize;
-
     // actual value set by developer
     float mRawShadowSize;
-
     private boolean mDirty = true;
-
-    private final int mShadowStartColor;
-
-    private final int mShadowEndColor;
-
     private boolean mAddPaddingForCorners = true;
 
     /**
@@ -93,10 +80,28 @@ class FakeShadowDrawable extends Drawable {
         mCornerShadowPaint.setDither(true);
         mCornerRadius = Recents.getConfiguration().isGridEnabled ?
                 resources.getDimensionPixelSize(
-                    R.dimen.recents_grid_task_view_rounded_corners_radius) :
+                        R.dimen.recents_grid_task_view_rounded_corners_radius) :
                 resources.getDimensionPixelSize(R.dimen.recents_task_view_rounded_corners_radius);
         mCardBounds = new RectF();
         mEdgeShadowPaint = new Paint(mCornerShadowPaint);
+    }
+
+    static float calculateVerticalPadding(float maxShadowSize, float cornerRadius,
+                                          boolean addPaddingForCorners) {
+        if (addPaddingForCorners) {
+            return (float) (maxShadowSize * SHADOW_MULTIPLIER + (1 - COS_45) * cornerRadius);
+        } else {
+            return maxShadowSize * SHADOW_MULTIPLIER;
+        }
+    }
+
+    static float calculateHorizontalPadding(float maxShadowSize, float cornerRadius,
+                                            boolean addPaddingForCorners) {
+        if (addPaddingForCorners) {
+            return (float) (maxShadowSize + (1 - COS_45) * cornerRadius);
+        } else {
+            return maxShadowSize;
+        }
     }
 
     @Override
@@ -142,24 +147,6 @@ class FakeShadowDrawable extends Drawable {
                 mAddPaddingForCorners));
         padding.set(hOffset, vOffset, hOffset, vOffset);
         return true;
-    }
-
-    static float calculateVerticalPadding(float maxShadowSize, float cornerRadius,
-            boolean addPaddingForCorners) {
-        if (addPaddingForCorners) {
-            return (float) (maxShadowSize * SHADOW_MULTIPLIER + (1 - COS_45) * cornerRadius);
-        } else {
-            return maxShadowSize * SHADOW_MULTIPLIER;
-        }
-    }
-
-    static float calculateHorizontalPadding(float maxShadowSize, float cornerRadius,
-            boolean addPaddingForCorners) {
-        if (addPaddingForCorners) {
-            return (float) (maxShadowSize + (1 - COS_45) * cornerRadius);
-        } else {
-            return maxShadowSize;
-        }
     }
 
     @Override
@@ -284,7 +271,7 @@ class FakeShadowDrawable extends Drawable {
 
     float getMinHeight() {
         final float content = 2 * Math.max(mRawMaxShadowSize, mCornerRadius + mInsetShadow
-                        + mRawMaxShadowSize * SHADOW_MULTIPLIER / 2);
+                + mRawMaxShadowSize * SHADOW_MULTIPLIER / 2);
         return content + (mRawMaxShadowSize * SHADOW_MULTIPLIER + mInsetShadow) * 2;
     }
 }

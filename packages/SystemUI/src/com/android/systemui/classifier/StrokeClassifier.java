@@ -22,10 +22,10 @@ package com.android.systemui.classifier;
 public abstract class StrokeClassifier extends Classifier {
 
     /**
-     * @param type the type of action for which this method is called
+     * @param type   the type of action for which this method is called
      * @param stroke the stroke for which the evaluation will be calculated
      * @return a non-negative value which is used to determine whether this a false touch; the
-     *         bigger the value the greater the chance that this a false touch
+     * bigger the value the greater the chance that this a false touch
      */
     public abstract float getFalseTouchEvaluation(int type, Stroke stroke);
 }

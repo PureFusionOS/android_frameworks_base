@@ -239,7 +239,7 @@ public class KeyguardAffordanceHelper {
     }
 
     public void startHintAnimation(boolean right,
-            Runnable onFinishedListener) {
+                                   Runnable onFinishedListener) {
         cancelAnimation();
         startHintAnimationPhase1(right, onFinishedListener);
     }
@@ -369,13 +369,13 @@ public class KeyguardAffordanceHelper {
     }
 
     private void startFinishingCircleAnimation(float velocity, Runnable mAnimationEndRunnable,
-            boolean right) {
+                                               boolean right) {
         KeyguardAffordanceView targetView = right ? mRightIcon : mLeftIcon;
         targetView.finishAnimation(velocity, mAnimationEndRunnable);
     }
 
     private void setTranslation(float translation, boolean isReset, boolean animateReset,
-            boolean force) {
+                                boolean force) {
         translation = rightSwipePossible() ? translation : Math.max(0, translation);
         translation = leftSwipePossible() ? translation : Math.min(0, translation);
         float absTranslation = Math.abs(translation);
@@ -413,7 +413,7 @@ public class KeyguardAffordanceHelper {
         float alpha = absTranslation / getMinTranslationAmount();
 
         // We interpolate the alpha of the other icons to 0
-        float fadeOutAlpha =  1.0f - alpha;
+        float fadeOutAlpha = 1.0f - alpha;
         fadeOutAlpha = Math.max(0.0f, fadeOutAlpha);
 
         // We interpolate the alpha of the targetView to 1
@@ -433,7 +433,7 @@ public class KeyguardAffordanceHelper {
         if (translation <= mTouchSlop) {
             return 0.0f;
         }
-        return (translation - mTouchSlop)  * BACKGROUND_RADIUS_SCALE_FACTOR + mMinBackgroundRadius;
+        return (translation - mTouchSlop) * BACKGROUND_RADIUS_SCALE_FACTOR + mMinBackgroundRadius;
     }
 
     public void animateHideLeftRightIcon() {

@@ -42,48 +42,43 @@ import java.io.PrintWriter;
 /**
  * When the phone is locked, listens to touch, sensor and phone events and sends them to
  * DataCollector and HumanInteractionClassifier.
- *
+ * <p>
  * It does not collect touch events when the bouncer shows up.
  */
 public class FalsingManager implements SensorEventListener {
     private static final String ENFORCE_BOUNCER = "falsing_manager_enforce_bouncer";
 
-    private static final int[] CLASSIFIER_SENSORS = new int[] {
+    private static final int[] CLASSIFIER_SENSORS = new int[]{
             Sensor.TYPE_PROXIMITY,
     };
 
-    private static final int[] COLLECTOR_SENSORS = new int[] {
+    private static final int[] COLLECTOR_SENSORS = new int[]{
             Sensor.TYPE_ACCELEROMETER,
             Sensor.TYPE_GYROSCOPE,
             Sensor.TYPE_PROXIMITY,
             Sensor.TYPE_LIGHT,
             Sensor.TYPE_ROTATION_VECTOR,
     };
-
+    private static FalsingManager sInstance = null;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final Context mContext;
-
     private final SensorManager mSensorManager;
     private final DataCollector mDataCollector;
     private final HumanInteractionClassifier mHumanInteractionClassifier;
     private final AccessibilityManager mAccessibilityManager;
     private final UiOffloadThread mUiOffloadThread;
-
-    private static FalsingManager sInstance = null;
-
     private boolean mEnforceBouncer = false;
-    private boolean mBouncerOn = false;
-    private boolean mSessionActive = false;
-    private int mState = StatusBarState.SHADE;
-    private boolean mScreenOn;
-    private Runnable mPendingWtf;
-
     protected final ContentObserver mSettingsObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
             updateConfiguration();
         }
     };
+    private boolean mBouncerOn = false;
+    private boolean mSessionActive = false;
+    private int mState = StatusBarState.SHADE;
+    private boolean mScreenOn;
+    private Runnable mPendingWtf;
 
     private FalsingManager(Context context) {
         mContext = context;
@@ -160,7 +155,7 @@ public class FalsingManager implements SensorEventListener {
         }
     }
 
-    private void registerSensors(int [] sensors) {
+    private void registerSensors(int[] sensors) {
         for (int sensorType : sensors) {
             Sensor s = mSensorManager.getDefaultSensor(sensorType);
             if (s != null) {
@@ -444,11 +439,16 @@ public class FalsingManager implements SensorEventListener {
 
     public void dump(PrintWriter pw) {
         pw.println("FALSING MANAGER");
-        pw.print("classifierEnabled="); pw.println(isClassiferEnabled() ? 1 : 0);
-        pw.print("mSessionActive="); pw.println(mSessionActive ? 1 : 0);
-        pw.print("mBouncerOn="); pw.println(mSessionActive ? 1 : 0);
-        pw.print("mState="); pw.println(StatusBarState.toShortString(mState));
-        pw.print("mScreenOn="); pw.println(mScreenOn ? 1 : 0);
+        pw.print("classifierEnabled=");
+        pw.println(isClassiferEnabled() ? 1 : 0);
+        pw.print("mSessionActive=");
+        pw.println(mSessionActive ? 1 : 0);
+        pw.print("mBouncerOn=");
+        pw.println(mSessionActive ? 1 : 0);
+        pw.print("mState=");
+        pw.println(StatusBarState.toShortString(mState));
+        pw.print("mScreenOn=");
+        pw.println(mScreenOn ? 1 : 0);
         pw.println();
     }
 

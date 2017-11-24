@@ -60,13 +60,13 @@ public class KeyguardShortcuts extends LinearLayout {
         // On boot, keyguard is inflated before icons can be loaded.
         // To work around that, recreate shorcuts on boot completed
         context.registerReceiver(
-            new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    recreateShortcuts();
-                }
-            },
-            new IntentFilter(Intent.ACTION_LOCKED_BOOT_COMPLETED)
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        recreateShortcuts();
+                    }
+                },
+                new IntentFilter(Intent.ACTION_LOCKED_BOOT_COMPLETED)
         );
         mContext = context;
         mPackageManager = mContext.getPackageManager();
@@ -134,13 +134,13 @@ public class KeyguardShortcuts extends LinearLayout {
             } else if (clickType == 1) {
                 final GestureDetector gestureDetector = new GestureDetector(mContext,
                         new GestureDetector.SimpleOnGestureListener() {
-                    @Override
-                    public boolean onDoubleTap(MotionEvent e) {
-                        doHapticKeyClick(HapticFeedbackConstants.VIRTUAL_KEY);
-                        Action.processAction(mContext, action, false);
-                        return true;
-                    }
-                });
+                            @Override
+                            public boolean onDoubleTap(MotionEvent e) {
+                                doHapticKeyClick(HapticFeedbackConstants.VIRTUAL_KEY);
+                                Action.processAction(mContext, action, false);
+                                return true;
+                            }
+                        });
                 i.setOnTouchListener(new OnTouchListener() {
                     public boolean onTouch(View v, MotionEvent event) {
                         gestureDetector.onTouchEvent(event);
@@ -158,7 +158,7 @@ public class KeyguardShortcuts extends LinearLayout {
                 });
             }
             addView(i);
-            if (j+1 < actionConfigs.size()) {
+            if (j + 1 < actionConfigs.size()) {
                 addSeparator();
             }
         }
@@ -168,7 +168,7 @@ public class KeyguardShortcuts extends LinearLayout {
         if (mLockPatternUtils.isTactileFeedbackEnabled()) {
             performHapticFeedback(type,
                     HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING
-                    | HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            | HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
     }
 
@@ -176,7 +176,7 @@ public class KeyguardShortcuts extends LinearLayout {
         View v = new View(mContext);
         LinearLayout.LayoutParams vp =
                 new LinearLayout.LayoutParams(mContext.getResources()
-                .getDimensionPixelSize(R.dimen.shortcut_seperater_width), 0);
+                        .getDimensionPixelSize(R.dimen.shortcut_seperater_width), 0);
         v.setLayoutParams(vp);
         addView(v);
     }
@@ -184,6 +184,11 @@ public class KeyguardShortcuts extends LinearLayout {
     @Override
     public boolean hasOverlappingRendering() {
         return false;
+    }
+
+    private void recreateShortcuts() {
+        removeAllViews();
+        createShortcuts();
     }
 
     class SettingsObserver extends ContentObserver {
@@ -214,10 +219,5 @@ public class KeyguardShortcuts extends LinearLayout {
         public void onChange(boolean selfChange, Uri uri) {
             recreateShortcuts();
         }
-    }
-
-    private void recreateShortcuts() {
-        removeAllViews();
-        createShortcuts();
     }
 }

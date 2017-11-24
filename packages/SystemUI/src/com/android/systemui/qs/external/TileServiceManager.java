@@ -46,32 +46,76 @@ import libcore.util.Objects;
  */
 public class TileServiceManager {
 
-    private static final long MIN_BIND_TIME = 5000;
-    private static final long UNBIND_DELAY = 30000;
-
     public static final boolean DEBUG = true;
-
-    private static final String TAG = "TileServiceManager";
-
     @VisibleForTesting
     static final String PREFS_FILE = "CustomTileModes";
-
+    private static final long MIN_BIND_TIME = 5000;
+    private static final long UNBIND_DELAY = 30000;
+    private static final String TAG = "TileServiceManager";
     private final TileServices mServices;
     private final TileLifecycleManager mStateManager;
     private final Handler mHandler;
+    private final BroadcastReceiver mUninstallReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!Intent.ACTION_PACKAGE_REMOVED.equals(intent.getAction())) {
+                return;
+            }
+
+            Uri data = intent.getData();
+            String pkgName = data.getEncodedSchemeSpecificPart();
+            final ComponentName component = mStateManager.getComponent();
+            if (!Objects.equal(pkgName, component.getPackageName())) {
+                return;
+            }
+
+            // If the package is being updated, verify the component still exists.
+            if (intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
+                Intent queryIntent = new Intent(TileService.ACTION_QS_TILE);
+                queryIntent.setPackage(pkgName);
+                PackageManager pm = context.getPackageManager();
+                List<ResolveInfo> services = pm.queryIntentServicesAsUser(
+                        queryIntent, 0, ActivityManager.getCurrentUser());
+                for (ResolveInfo info : services) {
+                    if (Objects.equal(info.serviceInfo.packageName, component.getPackageName())
+                            && Objects.equal(info.serviceInfo.name, component.getClassName())) {
+                        return;
+                    }
+                }
+            }
+
+            mServices.getHost().removeTile(component);
+        }
+    };
     private boolean mBindRequested;
     private boolean mBindAllowed;
     private boolean mBound;
     private int mPriority;
     private boolean mJustBound;
+    private final Runnable mUnbind = new Runnable() {
+        @Override
+        public void run() {
+            if (mBound && !mBindRequested) {
+                unbindService();
+            }
+        }
+    };
     private long mLastUpdate;
     private boolean mShowingDialog;
     // Whether we have a pending bind going out to the service without a response yet.
     // This defaults to true to ensure tiles start out unavailable.
     private boolean mPendingBind = true;
+    @VisibleForTesting
+    final Runnable mJustBoundOver = new Runnable() {
+        @Override
+        public void run() {
+            mJustBound = false;
+            mServices.recalculateBindAllowance();
+        }
+    };
 
     TileServiceManager(TileServices tileServices, Handler handler, ComponentName component,
-            Tile tile) {
+                       Tile tile) {
         this(tileServices, handler, new TileLifecycleManager(handler,
                 tileServices.getContext(), tileServices, tile, new Intent().setComponent(component),
                 new UserHandle(ActivityManager.getCurrentUser())));
@@ -79,7 +123,7 @@ public class TileServiceManager {
 
     @VisibleForTesting
     TileServiceManager(TileServices tileServices, Handler handler,
-            TileLifecycleManager tileLifecycleManager) {
+                       TileLifecycleManager tileLifecycleManager) {
         mServices = tileServices;
         mHandler = handler;
         mStateManager = tileLifecycleManager;
@@ -218,55 +262,4 @@ public class TileServiceManager {
     public int getBindPriority() {
         return mPriority;
     }
-
-    private final Runnable mUnbind = new Runnable() {
-        @Override
-        public void run() {
-            if (mBound && !mBindRequested) {
-                unbindService();
-            }
-        }
-    };
-
-    @VisibleForTesting
-    final Runnable mJustBoundOver = new Runnable() {
-        @Override
-        public void run() {
-            mJustBound = false;
-            mServices.recalculateBindAllowance();
-        }
-    };
-
-    private final BroadcastReceiver mUninstallReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (!Intent.ACTION_PACKAGE_REMOVED.equals(intent.getAction())) {
-                return;
-            }
-
-            Uri data = intent.getData();
-            String pkgName = data.getEncodedSchemeSpecificPart();
-            final ComponentName component = mStateManager.getComponent();
-            if (!Objects.equal(pkgName, component.getPackageName())) {
-                return;
-            }
-
-            // If the package is being updated, verify the component still exists.
-            if (intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
-                Intent queryIntent = new Intent(TileService.ACTION_QS_TILE);
-                queryIntent.setPackage(pkgName);
-                PackageManager pm = context.getPackageManager();
-                List<ResolveInfo> services = pm.queryIntentServicesAsUser(
-                        queryIntent, 0, ActivityManager.getCurrentUser());
-                for (ResolveInfo info : services) {
-                    if (Objects.equal(info.serviceInfo.packageName, component.getPackageName())
-                            && Objects.equal(info.serviceInfo.name, component.getClassName())) {
-                        return;
-                    }
-                }
-            }
-
-            mServices.getHost().removeTile(component);
-        }
-    };
 }

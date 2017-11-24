@@ -87,8 +87,8 @@ public abstract class TriggerOverlayView extends FrameLayout {
     }
 
     protected void setTopPercentage(float value) {
-        mLayoutParams = (WindowManager.LayoutParams)this.getLayoutParams();
-        mTriggerTop = (int)(mViewHeight * value);
+        mLayoutParams = (WindowManager.LayoutParams) this.getLayoutParams();
+        mTriggerTop = (int) (mViewHeight * value);
         mLayoutParams.y = mTriggerTop;
         mLayoutParams.height = mTriggerBottom;
         try {
@@ -98,8 +98,8 @@ public abstract class TriggerOverlayView extends FrameLayout {
     }
 
     protected void setBottomPercentage(float value) {
-        mLayoutParams = (WindowManager.LayoutParams)this.getLayoutParams();
-        mTriggerBottom = (int)(mViewHeight * value);
+        mLayoutParams = (WindowManager.LayoutParams) this.getLayoutParams();
+        mTriggerBottom = (int) (mViewHeight * value);
         mLayoutParams.height = mTriggerBottom;
         try {
             mWM.updateViewLayout(this, mLayoutParams);
@@ -108,7 +108,7 @@ public abstract class TriggerOverlayView extends FrameLayout {
     }
 
     protected void setTriggerWidth(int value) {
-        mLayoutParams = (WindowManager.LayoutParams)this.getLayoutParams();
+        mLayoutParams = (WindowManager.LayoutParams) this.getLayoutParams();
         mTriggerWidth = value;
         mLayoutParams.width = mTriggerWidth;
         try {
@@ -139,7 +139,7 @@ public abstract class TriggerOverlayView extends FrameLayout {
     }
 
     protected boolean isKeyguardEnabled() {
-        KeyguardManager km = (KeyguardManager)mContext.getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager km = (KeyguardManager) mContext.getSystemService(Context.KEYGUARD_SERVICE);
         return km.inKeyguardRestrictedInputMode();
     }
 }

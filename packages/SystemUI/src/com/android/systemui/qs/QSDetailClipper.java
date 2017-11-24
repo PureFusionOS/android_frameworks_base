@@ -23,13 +23,43 @@ import android.graphics.drawable.TransitionDrawable;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 
-/** Helper for quick settings detail panel clip animations. **/
+/**
+ * Helper for quick settings detail panel clip animations.
+ **/
 public class QSDetailClipper {
 
     private final View mDetail;
     private final TransitionDrawable mBackground;
 
     private Animator mAnimator;
+    private final Runnable mReverseBackground = new Runnable() {
+        @Override
+        public void run() {
+            if (mAnimator != null) {
+                mBackground.reverseTransition((int) (mAnimator.getDuration() * 0.35));
+            }
+        }
+    };
+    private final AnimatorListenerAdapter mVisibleOnStart = new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationStart(Animator animation) {
+            mDetail.setVisibility(View.VISIBLE);
+        }
+
+        public void onAnimationEnd(Animator animation) {
+            mAnimator = null;
+        }
+    };
+    private final AnimatorListenerAdapter mGoneOnEnd = new AnimatorListenerAdapter() {
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            mDetail.setVisibility(View.GONE);
+            mBackground.resetTransition();
+            mAnimator = null;
+        }
+
+        ;
+    };
 
     public QSDetailClipper(View detail) {
         mDetail = detail;
@@ -58,46 +88,17 @@ public class QSDetailClipper {
         } else {
             mAnimator = ViewAnimationUtils.createCircularReveal(mDetail, x, y, r, innerR);
         }
-        mAnimator.setDuration((long)(mAnimator.getDuration() * 1.5));
+        mAnimator.setDuration((long) (mAnimator.getDuration() * 1.5));
         if (listener != null) {
             mAnimator.addListener(listener);
         }
         if (in) {
-            mBackground.startTransition((int)(mAnimator.getDuration() * 0.6));
+            mBackground.startTransition((int) (mAnimator.getDuration() * 0.6));
             mAnimator.addListener(mVisibleOnStart);
         } else {
-            mDetail.postDelayed(mReverseBackground, (long)(mAnimator.getDuration() * 0.65));
+            mDetail.postDelayed(mReverseBackground, (long) (mAnimator.getDuration() * 0.65));
             mAnimator.addListener(mGoneOnEnd);
         }
         mAnimator.start();
     }
-
-    private final Runnable mReverseBackground = new Runnable() {
-        @Override
-        public void run() {
-            if (mAnimator != null) {
-                mBackground.reverseTransition((int)(mAnimator.getDuration() * 0.35));
-            }
-        }
-    };
-
-    private final AnimatorListenerAdapter mVisibleOnStart = new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationStart(Animator animation) {
-            mDetail.setVisibility(View.VISIBLE);
-        }
-
-        public void onAnimationEnd(Animator animation) {
-            mAnimator = null;
-        }
-    };
-
-    private final AnimatorListenerAdapter mGoneOnEnd = new AnimatorListenerAdapter() {
-        @Override
-        public void onAnimationEnd(Animator animation) {
-            mDetail.setVisibility(View.GONE);
-            mBackground.resetTransition();
-            mAnimator = null;
-        };
-    };
 }

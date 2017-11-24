@@ -31,7 +31,7 @@ import java.util.List;
  * To the differences there is artificially added value 0.0 and the difference between the first
  * angle and PI (angles are in radians). It helps with strokes which have few points and punishes
  * more strokes which are not smooth.
- *
+ * <p>
  * This classifier also tries to split the stroke into two parts in the place in which the biggest
  * angle is. It calculates the angle variance of the two parts and sums them up. The reason the
  * classifier is doing this, is because some human swipes at the beginning go for a moment in one
@@ -39,7 +39,7 @@ import java.util.List;
  * final result is the minimum of angle variance of the whole stroke and the sum of angle variances
  * of the two parts split up. The classifier tries the tick option only if the first part is
  * shorter than the second part.
- *
+ * <p>
  * Additionally, the classifier classifies the angles as left angles (those angles which value is
  * in [0.0, PI - ANGLE_DEVIATION) interval), straight angles
  * ([PI - ANGLE_DEVIATION, PI + ANGLE_DEVIATION] interval) and right angles

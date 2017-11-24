@@ -31,7 +31,7 @@ import java.util.ArrayList;
  */
 public class VisualStabilityManager implements OnHeadsUpChangedListener {
 
-    private final ArrayList<Callback> mCallbacks =  new ArrayList<>();
+    private final ArrayList<Callback> mCallbacks = new ArrayList<>();
 
     private boolean mPanelExpanded;
     private boolean mScreenOn;
@@ -44,6 +44,7 @@ public class VisualStabilityManager implements OnHeadsUpChangedListener {
 
     /**
      * Add a callback to invoke when reordering is allowed again.
+     *
      * @param callback
      */
     public void addReorderingAllowedCallback(Callback callback) {

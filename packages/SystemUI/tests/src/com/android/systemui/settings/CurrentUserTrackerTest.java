@@ -56,6 +56,7 @@ public class CurrentUserTrackerTest extends SysuiTestCase {
         secondTracker.startTracking();
         triggerUserSwitch();
     }
+
     /**
      * Simulates a user switch event.
      */

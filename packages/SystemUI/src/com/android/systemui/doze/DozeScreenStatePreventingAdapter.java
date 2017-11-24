@@ -33,6 +33,19 @@ public class DozeScreenStatePreventingAdapter implements DozeMachine.Service {
         mInner = inner;
     }
 
+    /**
+     * If the device supports the doze display state, return {@code inner}. Otherwise
+     * return a new instance of {@link DozeScreenStatePreventingAdapter} wrapping {@code inner}.
+     */
+    public static DozeMachine.Service wrapIfNeeded(DozeMachine.Service inner,
+                                                   DozeParameters params) {
+        return isNeeded(params) ? new DozeScreenStatePreventingAdapter(inner) : inner;
+    }
+
+    private static boolean isNeeded(DozeParameters params) {
+        return !params.getDisplayStateSupported();
+    }
+
     @Override
     public void finish() {
         mInner.finish();
@@ -49,18 +62,5 @@ public class DozeScreenStatePreventingAdapter implements DozeMachine.Service {
     @Override
     public void requestWakeUp() {
         mInner.requestWakeUp();
-    }
-
-    /**
-     * If the device supports the doze display state, return {@code inner}. Otherwise
-     * return a new instance of {@link DozeScreenStatePreventingAdapter} wrapping {@code inner}.
-     */
-    public static DozeMachine.Service wrapIfNeeded(DozeMachine.Service inner,
-            DozeParameters params) {
-        return isNeeded(params) ? new DozeScreenStatePreventingAdapter(inner) : inner;
-    }
-
-    private static boolean isNeeded(DozeParameters params) {
-        return !params.getDisplayStateSupported();
     }
 }

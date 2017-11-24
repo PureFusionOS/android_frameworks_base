@@ -26,7 +26,9 @@ import android.view.accessibility.AccessibilityManager;
  * accessibility. May be added to multiple views.
  */
 class LiftToActivateListener implements View.OnHoverListener {
-    /** Manager used to query accessibility enabled state. */
+    /**
+     * Manager used to query accessibility enabled state.
+     */
     private final AccessibilityManager mAccessibilityManager;
 
     private boolean mCachedClickableState;

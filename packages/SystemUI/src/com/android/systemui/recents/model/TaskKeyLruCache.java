@@ -24,19 +24,14 @@ import java.io.PrintWriter;
  * A mapping of {@link Task.TaskKey} to value, with additional LRU functionality where the least
  * recently referenced key/values will be evicted as more values than the given cache size are
  * inserted.
- *
+ * <p>
  * In addition, this also allows the caller to invalidate cached values for keys that have since
  * changed.
  */
 public class TaskKeyLruCache<V> extends TaskKeyCache<V> {
 
-    public interface EvictionCallback {
-        public void onEntryEvicted(Task.TaskKey key);
-    }
-
     private final LruCache<Integer, V> mCache;
     private final EvictionCallback mEvictionCallback;
-
     public TaskKeyLruCache(int cacheSize) {
         this(cacheSize, null);
     }
@@ -55,7 +50,9 @@ public class TaskKeyLruCache<V> extends TaskKeyCache<V> {
         };
     }
 
-    /** Trims the cache to a specific size */
+    /**
+     * Trims the cache to a specific size
+     */
     final void trimToSize(int cacheSize) {
         mCache.trimToSize(cacheSize);
     }
@@ -63,12 +60,15 @@ public class TaskKeyLruCache<V> extends TaskKeyCache<V> {
     public void dump(String prefix, PrintWriter writer) {
         String innerPrefix = prefix + "  ";
 
-        writer.print(prefix); writer.print(TAG);
-        writer.print(" numEntries="); writer.print(mKeys.size());
+        writer.print(prefix);
+        writer.print(TAG);
+        writer.print(" numEntries=");
+        writer.print(mKeys.size());
         writer.println();
         int keyCount = mKeys.size();
         for (int i = 0; i < keyCount; i++) {
-            writer.print(innerPrefix); writer.println(mKeys.get(mKeys.keyAt(i)));
+            writer.print(innerPrefix);
+            writer.println(mKeys.get(mKeys.keyAt(i)));
         }
     }
 
@@ -90,5 +90,9 @@ public class TaskKeyLruCache<V> extends TaskKeyCache<V> {
     @Override
     protected void evictAllCache() {
         mCache.evictAll();
+    }
+
+    public interface EvictionCallback {
+        public void onEntryEvicted(Task.TaskKey key);
     }
 }

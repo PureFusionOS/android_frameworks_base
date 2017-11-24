@@ -34,7 +34,7 @@ public class LaunchTaskEvent extends EventBus.Event {
     public final boolean screenPinningRequested;
 
     public LaunchTaskEvent(TaskView taskView, Task task, Rect targetTaskBounds, int targetTaskStack,
-            boolean screenPinningRequested) {
+                           boolean screenPinningRequested) {
         this.taskView = taskView;
         this.task = task;
         this.targetTaskBounds = targetTaskBounds;

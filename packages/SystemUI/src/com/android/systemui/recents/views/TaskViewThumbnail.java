@@ -52,35 +52,33 @@ public class TaskViewThumbnail extends View {
 
     private static final ColorMatrix TMP_FILTER_COLOR_MATRIX = new ColorMatrix();
     private static final ColorMatrix TMP_BRIGHTNESS_COLOR_MATRIX = new ColorMatrix();
-
-    private Task mTask;
-
-    private int mDisplayOrientation = Configuration.ORIENTATION_UNDEFINED;
-    private Rect mDisplayRect = new Rect();
-
     // Drawing
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     protected Rect mTaskViewRect = new Rect();
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     protected Rect mThumbnailRect = new Rect();
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     protected float mThumbnailScale;
-    private float mFullscreenThumbnailScale = 1f;
-    /** The height, in pixels, of the task view's title bar. */
-    private int mTitleBarHeight;
-    private boolean mSizeToFit = false;
-    private boolean mOverlayHeaderOnThumbnailActionBar = true;
-    private ThumbnailData mThumbnailData;
-
     protected int mCornerRadius;
-    @ViewDebug.ExportedProperty(category="recents")
-    private float mDimAlpha;
-    private Matrix mMatrix = new Matrix();
-    private Paint mDrawPaint = new Paint();
     protected Paint mLockedPaint = new Paint();
     protected Paint mBgFillPaint = new Paint();
     protected BitmapShader mBitmapShader;
     protected boolean mUserLocked = false;
+    private Task mTask;
+    private int mDisplayOrientation = Configuration.ORIENTATION_UNDEFINED;
+    private Rect mDisplayRect = new Rect();
+    private float mFullscreenThumbnailScale = 1f;
+    /**
+     * The height, in pixels, of the task view's title bar.
+     */
+    private int mTitleBarHeight;
+    private boolean mSizeToFit = false;
+    private boolean mOverlayHeaderOnThumbnailActionBar = true;
+    private ThumbnailData mThumbnailData;
+    @ViewDebug.ExportedProperty(category = "recents")
+    private float mDimAlpha;
+    private Matrix mMatrix = new Matrix();
+    private Paint mDrawPaint = new Paint();
     private LightingColorFilter mLightingColorFilter = new LightingColorFilter(0xffffffff, 0);
 
     // Clip the top of the thumbnail against the opaque header bar that overlaps this view
@@ -88,10 +86,10 @@ public class TaskViewThumbnail extends View {
 
     // Visibility optimization, if the thumbnail height is less than the height of the header
     // bar for the task view, then just mark this thumbnail view as invisible
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private boolean mInvisible;
 
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private boolean mDisabledInSafeMode;
 
     public TaskViewThumbnail(Context context) {
@@ -178,7 +176,9 @@ public class TaskViewThumbnail extends View {
         }
     }
 
-    /** Sets the thumbnail to a given bitmap. */
+    /**
+     * Sets the thumbnail to a given bitmap.
+     */
     void setThumbnail(ThumbnailData thumbnailData) {
         if (thumbnailData != null && thumbnailData.thumbnail != null) {
             Bitmap bm = thumbnailData.thumbnail;
@@ -200,7 +200,9 @@ public class TaskViewThumbnail extends View {
         }
     }
 
-    /** Updates the paint to draw the thumbnail. */
+    /**
+     * Updates the paint to draw the thumbnail.
+     */
     void updateThumbnailPaintFilter() {
         if (mInvisible) {
             return;
@@ -301,7 +303,9 @@ public class TaskViewThumbnail extends View {
         }
     }
 
-    /** Sets whether the thumbnail should be resized to fit the task view in all orientations. */
+    /**
+     * Sets whether the thumbnail should be resized to fit the task view in all orientations.
+     */
     public void setSizeToFit(boolean flag) {
         mSizeToFit = flag;
     }
@@ -314,13 +318,17 @@ public class TaskViewThumbnail extends View {
         mOverlayHeaderOnThumbnailActionBar = flag;
     }
 
-    /** Updates the clip rect based on the given task bar. */
+    /**
+     * Updates the clip rect based on the given task bar.
+     */
     void updateClipToTaskBar(View taskBar) {
         mTaskBar = taskBar;
         invalidate();
     }
 
-    /** Updates the visibility of the the thumbnail. */
+    /**
+     * Updates the visibility of the the thumbnail.
+     */
     void updateThumbnailVisibility(int clipBottom) {
         boolean invisible = mTaskBar != null && (getHeight() - clipBottom) <= mTaskBar.getHeight();
         if (invisible != mInvisible) {
@@ -377,7 +385,9 @@ public class TaskViewThumbnail extends View {
         setThumbnail(thumbnailData);
     }
 
-    /** Unbinds the thumbnail view from the task */
+    /**
+     * Unbinds the thumbnail view from the task
+     */
     void unbindFromTask() {
         mTask = null;
         setThumbnail(null);
@@ -393,11 +403,16 @@ public class TaskViewThumbnail extends View {
     }
 
     public void dump(String prefix, PrintWriter writer) {
-        writer.print(prefix); writer.print("TaskViewThumbnail");
-        writer.print(" mTaskViewRect="); writer.print(Utilities.dumpRect(mTaskViewRect));
-        writer.print(" mThumbnailRect="); writer.print(Utilities.dumpRect(mThumbnailRect));
-        writer.print(" mThumbnailScale="); writer.print(mThumbnailScale);
-        writer.print(" mDimAlpha="); writer.print(mDimAlpha);
+        writer.print(prefix);
+        writer.print("TaskViewThumbnail");
+        writer.print(" mTaskViewRect=");
+        writer.print(Utilities.dumpRect(mTaskViewRect));
+        writer.print(" mThumbnailRect=");
+        writer.print(Utilities.dumpRect(mThumbnailRect));
+        writer.print(" mThumbnailScale=");
+        writer.print(mThumbnailScale);
+        writer.print(" mDimAlpha=");
+        writer.print(mDimAlpha);
         writer.println();
     }
 }

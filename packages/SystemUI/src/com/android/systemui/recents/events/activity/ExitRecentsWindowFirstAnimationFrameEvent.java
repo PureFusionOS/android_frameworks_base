@@ -20,7 +20,7 @@ import com.android.systemui.recents.events.EventBus;
 
 /**
  * Event sent when the exit animation is started.
- *
+ * <p>
  * This is sent so parts of UI can synchronize on this event and adjust their appearance. An example
  * of that is hiding the tasks when the launched application window becomes visible.
  */

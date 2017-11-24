@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 /*
  * Copyright (C) 2015 The OmniRom Open Source Project
  *
@@ -19,8 +18,8 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="64dp"
     android:height="64dp"
-    android:viewportWidth="48"
-    android:viewportHeight="48">
+    android:viewportHeight="48"
+    android:viewportWidth="48">
 
     <path
         android:fillColor="#4dffffff"

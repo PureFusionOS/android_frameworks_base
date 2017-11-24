@@ -39,21 +39,31 @@ public class LeakDetector implements Dumpable {
 
     @VisibleForTesting
     public LeakDetector(TrackedCollections trackedCollections,
-            TrackedGarbage trackedGarbage,
-            TrackedObjects trackedObjects) {
+                        TrackedGarbage trackedGarbage,
+                        TrackedObjects trackedObjects) {
         mTrackedCollections = trackedCollections;
         mTrackedGarbage = trackedGarbage;
         mTrackedObjects = trackedObjects;
     }
 
+    public static LeakDetector create() {
+        if (ENABLED) {
+            TrackedCollections collections = new TrackedCollections();
+            return new LeakDetector(collections, new TrackedGarbage(collections),
+                    new TrackedObjects(collections));
+        } else {
+            return new LeakDetector(null, null, null);
+        }
+    }
+
     /**
      * Tracks an instance that has a high leak risk (i.e. has complex ownership and references
      * a large amount of memory).
-     *
+     * <p>
      * The LeakDetector will monitor and keep weak references to such instances, dump statistics
      * about them in a bugreport, and in the future dump the heap if their count starts growing
      * unreasonably.
-     *
+     * <p>
      * This should be called when the instance is first constructed.
      */
     public <T> void trackInstance(T object) {
@@ -65,11 +75,11 @@ public class LeakDetector implements Dumpable {
     /**
      * Tracks a collection that is at risk of leaking large objects, e.g. a collection of
      * dynamically registered listeners.
-     *
+     * <p>
      * The LeakDetector will monitor and keep weak references to such collections, dump
      * statistics about them in a bugreport, and in the future dump the heap if their size starts
      * growing unreasonably.
-     *
+     * <p>
      * This should be called whenever the collection grows.
      *
      * @param tag A tag for labeling the collection in a bugreport
@@ -82,11 +92,11 @@ public class LeakDetector implements Dumpable {
 
     /**
      * Tracks an instance that should become garbage soon.
-     *
+     * <p>
      * The LeakDetector will monitor and keep weak references to such garbage, dump
      * statistics about them in a bugreport, and in the future dump the heap if it is not
      * collected reasonably soon.
-     *
+     * <p>
      * This should be called when the last strong reference to the instance is dropped.
      */
     public void trackGarbage(Object o) {
@@ -128,15 +138,5 @@ public class LeakDetector implements Dumpable {
         }
         pw.decreaseIndent();
         pw.println();
-    }
-
-    public static LeakDetector create() {
-        if (ENABLED) {
-            TrackedCollections collections = new TrackedCollections();
-            return new LeakDetector(collections, new TrackedGarbage(collections),
-                    new TrackedObjects(collections));
-        } else {
-            return new LeakDetector(null, null, null);
-        }
     }
 }

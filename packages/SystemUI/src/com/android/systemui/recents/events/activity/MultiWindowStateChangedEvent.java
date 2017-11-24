@@ -30,7 +30,7 @@ public class MultiWindowStateChangedEvent extends EventBus.AnimatedEvent {
     public final TaskStack stack;
 
     public MultiWindowStateChangedEvent(boolean inMultiWindow, boolean showDeferredAnimation,
-            TaskStack stack) {
+                                        TaskStack stack) {
         this.inMultiWindow = inMultiWindow;
         this.showDeferredAnimation = showDeferredAnimation;
         this.stack = stack;

@@ -39,9 +39,12 @@ import java.util.List;
  */
 public class KeyguardPINView extends KeyguardPinBasedInputView {
 
+    private static List<Integer> sNumbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
     private final AppearAnimationUtils mAppearAnimationUtils;
     private final DisappearAnimationUtils mDisappearAnimationUtils;
     private final DisappearAnimationUtils mDisappearAnimationUtilsLocked;
+    private final KeyguardUpdateMonitor mKeyguardUpdateMonitor;
+    private final int userId = KeyguardUpdateMonitor.getCurrentUser();
     private ViewGroup mContainer;
     private ViewGroup mRow0;
     private ViewGroup mRow1;
@@ -50,10 +53,6 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
     private View mDivider;
     private int mDisappearYTranslation;
     private View[][] mViews;
-    private final KeyguardUpdateMonitor mKeyguardUpdateMonitor;
-
-    private static List<Integer> sNumbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
-    private final int userId = KeyguardUpdateMonitor.getCurrentUser();
 
     public KeyguardPINView(Context context) {
         this(context, null);
@@ -65,12 +64,12 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
         mDisappearAnimationUtils = new DisappearAnimationUtils(context,
                 125, 0.6f /* translationScale */,
                 0.45f /* delayScale */, AnimationUtils.loadInterpolator(
-                        mContext, android.R.interpolator.fast_out_linear_in));
+                mContext, android.R.interpolator.fast_out_linear_in));
         mDisappearAnimationUtilsLocked = new DisappearAnimationUtils(context,
                 (long) (125 * KeyguardPatternView.DISAPPEAR_MULTIPLIER_LOCKED),
                 0.6f /* translationScale */,
                 0.45f /* delayScale */, AnimationUtils.loadInterpolator(
-                        mContext, android.R.interpolator.fast_out_linear_in));
+                mContext, android.R.interpolator.fast_out_linear_in));
         mDisappearYTranslation = getResources().getDimensionPixelSize(
                 R.dimen.disappear_y_translation);
         mKeyguardUpdateMonitor = KeyguardUpdateMonitor.getInstance(context);
@@ -131,7 +130,7 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
             for (int i = 0; i < container.getChildCount(); i++) {
                 if (container.getChildAt(i) instanceof LinearLayout) {
                     LinearLayout nestedLayout = ((LinearLayout) container.getChildAt(i));
-                    for (int j = 0; j < nestedLayout.getChildCount(); j++){
+                    for (int j = 0; j < nestedLayout.getChildCount(); j++) {
                         View view = nestedLayout.getChildAt(j);
                         if (view.getClass() == NumPadKey.class) {
                             views.add((NumPadKey) view);
@@ -194,8 +193,8 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
                 mDisappearYTranslation, mDisappearAnimationUtils.getInterpolator());
         DisappearAnimationUtils disappearAnimationUtils = mKeyguardUpdateMonitor
                 .needsSlowUnlockTransition()
-                        ? mDisappearAnimationUtilsLocked
-                        : mDisappearAnimationUtils;
+                ? mDisappearAnimationUtilsLocked
+                : mDisappearAnimationUtils;
         disappearAnimationUtils.startAnimation2d(mViews,
                 new Runnable() {
                     @Override

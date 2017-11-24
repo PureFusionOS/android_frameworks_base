@@ -53,6 +53,13 @@ public class ShortcutParser {
                 getResId(context, component));
     }
 
+    public ShortcutParser(Context context, String pkg, String name, int resId) {
+        mContext = context;
+        mPkg = pkg;
+        mResId = resId;
+        mName = name;
+    }
+
     private static int getResId(Context context, ComponentName component)
             throws NameNotFoundException {
         ActivityInfo i = context.getPackageManager().getActivityInfo(
@@ -62,13 +69,6 @@ public class ShortcutParser {
             resId = i.metaData.getInt(SHORTCUTS);
         }
         return resId;
-    }
-
-    public ShortcutParser(Context context, String pkg, String name, int resId) {
-        mContext = context;
-        mPkg = pkg;
-        mResId = resId;
-        mName = name;
     }
 
     public List<Shortcut> getShortcuts() {

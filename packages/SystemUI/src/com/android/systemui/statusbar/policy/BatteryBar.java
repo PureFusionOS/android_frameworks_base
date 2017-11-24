@@ -24,76 +24,57 @@ import android.widget.RelativeLayout;
 
 public class BatteryBar extends RelativeLayout implements Animatable {
 
+    public static final int STYLE_REGULAR = 0;
+    public static final int STYLE_SYMMETRIC = 1;
     private static final String TAG = BatteryBar.class.getSimpleName();
-
     // Total animation duration
     private static final int ANIM_DURATION = 1000; // 5 seconds
-
     // When to use the low battery color
     private static final int BATTERY_LOW_VALUE = 15;
-
+    GradientDrawable mBarGradient;
+    int[] mGradientColors;
+    LinearLayout mBatteryBarLayout;
+    View mBatteryBar;
+    LinearLayout mChargerLayout;
+    View mCharger;
+    boolean vertical = false;
     private boolean mAttached = false;
     private int mBatteryLevel = 0;
     private int mChargingLevel = -1;
     private boolean mBatteryCharging = false;
     private boolean shouldAnimateCharging = true;
     private boolean isAnimating = false;
-
     private int mColor = 0xFFFFFFFF;
     private int mChargingColor = 0xFF00FF00;
     private int mBatteryLowColorWarning = 0xFFFF6600;
-
     private int mLowColor = 0xFFFF0000;
     private int mHighColor = 0xFF00FF00;
     private int mAnimOffset;
-    GradientDrawable mBarGradient;
-    int[] mGradientColors;
     private boolean useGradientColor = false;
-
-    private Handler mHandler = new Handler();
-
-    LinearLayout mBatteryBarLayout;
-    View mBatteryBar;
-
-    LinearLayout mChargerLayout;
-    View mCharger;
-
-    public static final int STYLE_REGULAR = 0;
-    public static final int STYLE_SYMMETRIC = 1;
-
-    boolean vertical = false;
-
-    class SettingsObserver extends ContentObserver {
-
-        public SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observer() {
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_LOCATION), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_COLOR), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_ANIMATE), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_CHARGING_COLOR), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_BATTERY_LOW_COLOR_WARNING), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_HIGH_COLOR), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_LOW_COLOR), false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.BATTERY_BAR_USE_GRADIENT_COLOR), false, this, UserHandle.USER_ALL);
-        }
-
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
+                mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                mBatteryCharging = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0) == BatteryManager.BATTERY_STATUS_CHARGING;
+                if (mBatteryCharging && mBatteryLevel < 100) {
+                    start();
+                } else {
+                    stop();
+                }
+                setProgress(mBatteryLevel);
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                stop();
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                if (mBatteryCharging && mBatteryLevel < 100) {
+                    start();
+                }
+            }
         }
-    }
+    };
+    private Handler mHandler = new Handler();
 
     public BatteryBar(Context context) {
         this(context, null);
@@ -184,30 +165,6 @@ public class BatteryBar extends RelativeLayout implements Animatable {
         }
     }
 
-    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
-                mBatteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-                mBatteryCharging = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0) == BatteryManager.BATTERY_STATUS_CHARGING;
-                if (mBatteryCharging && mBatteryLevel < 100) {
-                    start();
-                } else {
-                    stop();
-                }
-                setProgress(mBatteryLevel);
-            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                stop();
-            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                if (mBatteryCharging && mBatteryLevel < 100) {
-                    start();
-                }
-            }
-        }
-    };
-
     private void updateSettings() {
         ContentResolver resolver = getContext().getContentResolver();
 
@@ -294,7 +251,7 @@ public class BatteryBar extends RelativeLayout implements Animatable {
     }
 
     private int mixedValue(int val1, int val2, float mix) {
-        return (int)Math.min((mix * val1 + (1f - mix) * val2), 255f);
+        return (int) Math.min((mix * val1 + (1f - mix) * val2), 255f);
     }
 
     @Override
@@ -332,6 +289,38 @@ public class BatteryBar extends RelativeLayout implements Animatable {
     @Override
     public boolean isRunning() {
         return isAnimating;
+    }
+
+    class SettingsObserver extends ContentObserver {
+
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observer() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_LOCATION), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_COLOR), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_ANIMATE), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_CHARGING_COLOR), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_BATTERY_LOW_COLOR_WARNING), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_HIGH_COLOR), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_LOW_COLOR), false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.BATTERY_BAR_USE_GRADIENT_COLOR), false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
     }
 
 }

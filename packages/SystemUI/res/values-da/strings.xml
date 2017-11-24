@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /**
  * Copyright (c) 2009, The Android Open Source Project
  *
@@ -25,8 +24,8 @@
     <string name="status_bar_no_recent_apps" msgid="7374907845131203189">"Dine seneste skærme vises her"</string>
     <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"Luk de seneste apps"</string>
     <plurals name="status_bar_accessibility_recent_apps" formatted="false" msgid="9138535907802238759">
-      <item quantity="one">%d skærmbilleder i Oversigt</item>
-      <item quantity="other">%d skærmbilleder i Oversigt</item>
+        <item quantity="one">%d skærmbilleder i Oversigt</item>
+        <item quantity="other">%d skærmbilleder i Oversigt</item>
     </plurals>
     <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"Ingen underretninger"</string>
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"I gang"</string>
@@ -251,8 +250,8 @@
     <string name="accessibility_clear_all" msgid="5235938559247164925">"Ryd alle underretninger."</string>
     <string name="notification_group_overflow_indicator" msgid="1863231301642314183">"<xliff:g id="NUMBER">%s</xliff:g> mere"</string>
     <plurals name="notification_group_overflow_description" formatted="false" msgid="4579313201268495404">
-      <item quantity="one"><xliff:g id="NUMBER_1">%s</xliff:g> underretning mere i gruppen.</item>
-      <item quantity="other"><xliff:g id="NUMBER_1">%s</xliff:g> underretninger mere i gruppen.</item>
+        <item quantity="one"><xliff:g id="NUMBER_1">%s</xliff:g> underretning mere i gruppen.</item>
+        <item quantity="other"><xliff:g id="NUMBER_1">%s</xliff:g> underretninger mere i gruppen.</item>
     </plurals>
     <string name="status_bar_notification_inspect_item_title" msgid="5668348142410115323">"Underretningsindstillinger"</string>
     <string name="status_bar_notification_app_settings_title" msgid="5525260160341558869">"Indstillinger for <xliff:g id="APP_NAME">%s</xliff:g>"</string>
@@ -341,8 +340,7 @@
     <string name="recents_accessibility_split_screen_top" msgid="9056056469282256287">"Delt skærm øverst"</string>
     <string name="recents_accessibility_split_screen_left" msgid="8987144699630620019">"Delt skærm til venstre"</string>
     <string name="recents_accessibility_split_screen_right" msgid="275069779299592867">"Delt skærm til højre"</string>
-  <string-array name="recents_blacklist_array">
-  </string-array>
+    <string-array name="recents_blacklist_array"></string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"Opladet"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"Oplader"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"<xliff:g id="CHARGING_TIME">%s</xliff:g> indtil fuld opladet"</string>
@@ -551,13 +549,13 @@
     <string name="notification_num_channels" msgid="2048144408999179471">"<xliff:g id="NUMBER">%d</xliff:g> underretningskategorier"</string>
     <string name="notification_default_channel_desc" msgid="2506053815870808359">"Denne app har ingen underretningskategorier"</string>
     <plurals name="notification_num_channels_desc" formatted="false" msgid="5492793452274077663">
-      <item quantity="one">1 ud af <xliff:g id="NUMBER_1">%d</xliff:g> underretningskategori fra denne app</item>
-      <item quantity="other">1 ud af <xliff:g id="NUMBER_1">%d</xliff:g> underretningskategorier fra denne app</item>
+        <item quantity="one">1 ud af <xliff:g id="NUMBER_1">%d</xliff:g> underretningskategori fra denne app</item>
+        <item quantity="other">1 ud af <xliff:g id="NUMBER_1">%d</xliff:g> underretningskategorier fra denne app</item>
     </plurals>
     <string name="notification_channels_list_desc_2" msgid="6214732715833946441">"<xliff:g id="CHANNEL_NAME_1">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2">%2$s</xliff:g>"</string>
     <plurals name="notification_channels_list_desc_2_and_others" formatted="false" msgid="2747813553355336157">
-      <item quantity="one"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> og <xliff:g id="NUMBER_5">%3$d</xliff:g> anden</item>
-      <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> og <xliff:g id="NUMBER_5">%3$d</xliff:g> andre</item>
+        <item quantity="one"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> og <xliff:g id="NUMBER_5">%3$d</xliff:g> anden</item>
+        <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g> og <xliff:g id="NUMBER_5">%3$d</xliff:g> andre</item>
     </plurals>
     <string name="notification_channel_controls_opened_accessibility" msgid="6553950422055908113">"Styring af underretninger for <xliff:g id="APP_NAME">%1$s</xliff:g> blev åbnet"</string>
     <string name="notification_channel_controls_closed_accessibility" msgid="7521619812603693144">"Styring af underretninger for <xliff:g id="APP_NAME">%1$s</xliff:g> blev lukket"</string>
@@ -640,18 +638,18 @@
     <string name="left_nav_bar_button_type" msgid="8555981238887546528">"Ekstra venstre knaptype"</string>
     <string name="right_nav_bar_button_type" msgid="2481056627065649656">"Ekstra højre knaptype"</string>
     <string name="nav_bar_default" msgid="8587114043070993007">"(standard)"</string>
-  <string-array name="nav_bar_buttons">
-    <item msgid="1545641631806817203">"Udklipsholder"</item>
-    <item msgid="5742013440802239414">"Tastekode"</item>
-    <item msgid="8802889973626281575">"Tastaturskifter"</item>
-    <item msgid="8175437057325747277">"Ingen"</item>
-  </string-array>
-  <string-array name="nav_bar_layouts">
-    <item msgid="8077901629964902399">"Normal"</item>
-    <item msgid="8256205964297588988">"Kompakt"</item>
-    <item msgid="8719936228094005878">"Venstreorienteret"</item>
-    <item msgid="586019486955594690">"Højreorienteret"</item>
-  </string-array>
+    <string-array name="nav_bar_buttons">
+        <item msgid="1545641631806817203">"Udklipsholder"</item>
+        <item msgid="5742013440802239414">"Tastekode"</item>
+        <item msgid="8802889973626281575">"Tastaturskifter"</item>
+        <item msgid="8175437057325747277">"Ingen"</item>
+    </string-array>
+    <string-array name="nav_bar_layouts">
+        <item msgid="8077901629964902399">"Normal"</item>
+        <item msgid="8256205964297588988">"Kompakt"</item>
+        <item msgid="8719936228094005878">"Venstreorienteret"</item>
+        <item msgid="586019486955594690">"Højreorienteret"</item>
+    </string-array>
     <string name="menu_ime" msgid="4998010205321292416">"Tastaturskifter"</string>
     <string name="save" msgid="2311877285724540644">"Gem"</string>
     <string name="reset" msgid="2448168080964209908">"Nulstil"</string>
@@ -666,16 +664,16 @@
     <string name="drag_to_remove_tiles" msgid="3361212377437088062">"Træk herhen for at fjerne"</string>
     <string name="qs_edit" msgid="2232596095725105230">"Rediger"</string>
     <string name="tuner_time" msgid="6572217313285536011">"Tid"</string>
-  <string-array name="clock_options">
-    <item msgid="5965318737560463480">"Vis timer, minutter og sekunder"</item>
-    <item msgid="1427801730816895300">"Vis timer og minutter (standard)"</item>
-    <item msgid="3830170141562534721">"Vis ikke dette ikon"</item>
-  </string-array>
-  <string-array name="battery_options">
-    <item msgid="3160236755818672034">"Vis altid procent"</item>
-    <item msgid="2139628951880142927">"Vis procent ved opladning (standard)"</item>
-    <item msgid="3327323682209964956">"Vis ikke dette ikon"</item>
-  </string-array>
+    <string-array name="clock_options">
+        <item msgid="5965318737560463480">"Vis timer, minutter og sekunder"</item>
+        <item msgid="1427801730816895300">"Vis timer og minutter (standard)"</item>
+        <item msgid="3830170141562534721">"Vis ikke dette ikon"</item>
+    </string-array>
+    <string-array name="battery_options">
+        <item msgid="3160236755818672034">"Vis altid procent"</item>
+        <item msgid="2139628951880142927">"Vis procent ved opladning (standard)"</item>
+        <item msgid="3327323682209964956">"Vis ikke dette ikon"</item>
+    </string-array>
     <string name="other" msgid="4060683095962566764">"Andet"</string>
     <string name="accessibility_divider" msgid="5903423481953635044">"Adskiller til delt skærm"</string>
     <string name="accessibility_action_divider_left_full" msgid="2801570521881574972">"Vis venstre del i fuld skærm"</string>

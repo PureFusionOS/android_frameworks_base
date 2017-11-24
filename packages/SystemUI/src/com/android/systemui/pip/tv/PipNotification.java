@@ -53,15 +53,28 @@ public class PipNotification {
 
     private final NotificationManager mNotificationManager;
     private final Notification.Builder mNotificationBuilder;
-
+    private final BroadcastReceiver mEventReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (DEBUG) {
+                Log.d(TAG, "Received " + intent.getAction() + " from the notification UI");
+            }
+            switch (intent.getAction()) {
+                case ACTION_MENU:
+                    mPipManager.showPictureInPictureMenu();
+                    break;
+                case ACTION_CLOSE:
+                    mPipManager.closePip();
+                    break;
+            }
+        }
+    };
     private MediaController mMediaController;
     private String mDefaultTitle;
     private int mDefaultIconResId;
-
     private boolean mNotified;
     private String mTitle;
     private Bitmap mArt;
-
     private PipManager.Listener mPipListener = new PipManager.Listener() {
         @Override
         public void onPipEntered() {
@@ -94,7 +107,6 @@ public class PipNotification {
             // no-op.
         }
     };
-
     private MediaController.Callback mMediaControllerCallback = new MediaController.Callback() {
         @Override
         public void onPlaybackStateChanged(PlaybackState state) {
@@ -104,7 +116,6 @@ public class PipNotification {
             }
         }
     };
-
     private final PipManager.MediaListener mPipMediaListener = new PipManager.MediaListener() {
         @Override
         public void onMediaControllerChanged() {
@@ -122,23 +133,6 @@ public class PipNotification {
             if (updateMediaControllerMetadata() && mNotified) {
                 // update notification
                 notifyPipNotification();
-            }
-        }
-    };
-
-    private final BroadcastReceiver mEventReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (DEBUG) {
-                Log.d(TAG, "Received " + intent.getAction() + " from the notification UI");
-            }
-            switch (intent.getAction()) {
-                case ACTION_MENU:
-                    mPipManager.showPictureInPictureMenu();
-                    break;
-                case ACTION_CLOSE:
-                    mPipManager.closePip();
-                    break;
             }
         }
     };
@@ -164,6 +158,11 @@ public class PipNotification {
         context.registerReceiver(mEventReceiver, intentFilter);
 
         onConfigurationChanged(context);
+    }
+
+    private static PendingIntent createPendingIntent(Context context, String action) {
+        return PendingIntent.getBroadcast(context, 0,
+                new Intent(action), PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     /**
@@ -223,10 +222,5 @@ public class PipNotification {
             return true;
         }
         return false;
-    }
-
-    private static PendingIntent createPendingIntent(Context context, String action) {
-        return PendingIntent.getBroadcast(context, 0,
-                new Intent(action), PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }

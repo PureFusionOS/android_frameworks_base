@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,19 +12,19 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<com.android.systemui.statusbar.AlphaOptimizedFrameLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.systemui.statusbar.AlphaOptimizedFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lock_to_app_fab"
     android:layout_width="@dimen/recents_lock_to_app_size"
     android:layout_height="@dimen/recents_lock_to_app_size"
     android:layout_gravity="bottom|end"
-    android:layout_marginEnd="15dp"
     android:layout_marginBottom="15dp"
-    android:translationZ="4dp"
-    android:contentDescription="@string/recents_lock_to_app_button_label"
+    android:layout_marginEnd="15dp"
+    android:alpha="0"
     android:background="@drawable/recents_lock_to_task_button_bg"
-    android:visibility="invisible"
-    android:alpha="0">
+    android:contentDescription="@string/recents_lock_to_app_button_label"
+    android:translationZ="4dp"
+    android:visibility="invisible">
+
     <ImageView
         android:layout_width="@dimen/recents_lock_to_app_icon_size"
         android:layout_height="@dimen/recents_lock_to_app_icon_size"

@@ -207,6 +207,7 @@ public class ViewTransformationHelper implements TransformableView {
 
     /**
      * Add the remaining transformation views such that all views are being transformed correctly
+     *
      * @param viewRoot the root below which all elements need to be transformed
      */
     public void addRemainingTransformTypes(View viewRoot) {
@@ -235,7 +236,7 @@ public class ViewTransformationHelper implements TransformableView {
                 }
             }
             child.setTag(TAG_CONTAINS_TRANSFORMED_VIEW, null);
-            if (child instanceof ViewGroup && !mTransformedViews.containsValue(child)){
+            if (child instanceof ViewGroup && !mTransformedViews.containsValue(child)) {
                 ViewGroup group = (ViewGroup) child;
                 for (int i = 0; i < group.getChildCount(); i++) {
                     stack.push(group.getChildAt(i));
@@ -260,47 +261,50 @@ public class ViewTransformationHelper implements TransformableView {
     public static abstract class CustomTransformation {
         /**
          * Transform a state to the given view
-         * @param ownState the state to transform
-         * @param notification the view to transform to
+         *
+         * @param ownState             the state to transform
+         * @param notification         the view to transform to
          * @param transformationAmount how much transformation should be done
          * @return whether a custom transformation is performed
          */
         public abstract boolean transformTo(TransformState ownState,
-                TransformableView notification,
-                float transformationAmount);
+                                            TransformableView notification,
+                                            float transformationAmount);
 
         /**
          * Transform to this state from the given view
-         * @param ownState the state to transform to
-         * @param notification the view to transform from
+         *
+         * @param ownState             the state to transform to
+         * @param notification         the view to transform from
          * @param transformationAmount how much transformation should be done
          * @return whether a custom transformation is performed
          */
         public abstract boolean transformFrom(TransformState ownState,
-                TransformableView notification,
-                float transformationAmount);
+                                              TransformableView notification,
+                                              float transformationAmount);
 
         /**
          * Perform a custom initialisation before transforming.
          *
-         * @param ownState our own state
+         * @param ownState   our own state
          * @param otherState the other state
          * @return whether a custom initialization is done
          */
         public boolean initTransformation(TransformState ownState,
-                TransformState otherState) {
+                                          TransformState otherState) {
             return false;
         }
 
         public boolean customTransformTarget(TransformState ownState,
-                TransformState otherState) {
+                                             TransformState otherState) {
             return false;
         }
 
         /**
          * Get a custom interpolator for this animation
+         *
          * @param interpolationType the type of the interpolation, i.e TranslationX / TranslationY
-         * @param isFrom true if this transformation from the other view
+         * @param isFrom            true if this transformation from the other view
          */
         public Interpolator getCustomInterpolator(int interpolationType, boolean isFrom) {
             return null;

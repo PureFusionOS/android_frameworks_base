@@ -77,10 +77,9 @@ public class NotificationInfoTest extends SysuiTestCase {
     private static final int TEST_UID = 1;
     private static final String TEST_CHANNEL = "test_channel";
     private static final String TEST_CHANNEL_NAME = "TEST CHANNEL NAME";
-
-    private NotificationInfo mNotificationInfo;
     private final INotificationManager mMockINotificationManager = mock(INotificationManager.class);
     private final PackageManager mMockPackageManager = mock(PackageManager.class);
+    private NotificationInfo mNotificationInfo;
     private NotificationChannel mNotificationChannel;
     private NotificationChannel mDefaultNotificationChannel;
     private StatusBarNotification mSbn;
@@ -277,7 +276,8 @@ public class NotificationInfoTest extends SysuiTestCase {
         mNotificationInfo.bindNotification(mMockPackageManager, mMockINotificationManager,
                 TEST_PACKAGE_NAME, Arrays.asList(mNotificationChannel),
                 mNotificationChannel.getImportance(), mSbn,
-                (View v, NotificationChannel c, int appUid) -> {}, null, null, null, null);
+                (View v, NotificationChannel c, int appUid) -> {
+                }, null, null, null, null);
         final TextView settingsButton =
                 (TextView) mNotificationInfo.findViewById(R.id.more_settings);
         assertEquals(View.VISIBLE, settingsButton.getVisibility());

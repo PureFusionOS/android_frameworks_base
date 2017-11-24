@@ -39,31 +39,67 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
     private static final int USER_TYPE_PRIMARY = 1;
     private static final int USER_TYPE_WORK_PROFILE = 2;
     private static final int USER_TYPE_SECONDARY_USER = 3;
-
+    private final KeyguardUpdateMonitor mUpdateMonitor;
     private KeyguardSecurityModel mSecurityModel;
     private LockPatternUtils mLockPatternUtils;
-
     private KeyguardSecurityViewFlipper mSecurityViewFlipper;
     private boolean mIsVerifyUnlockOnly;
     private SecurityMode mCurrentSecuritySelection = SecurityMode.Invalid;
     private SecurityCallback mSecurityCallback;
+    private KeyguardSecurityCallback mCallback = new KeyguardSecurityCallback() {
+        public void userActivity() {
+            if (mSecurityCallback != null) {
+                mSecurityCallback.userActivity();
+            }
+        }
 
-    private final KeyguardUpdateMonitor mUpdateMonitor;
+        public void dismiss(boolean authenticated, int targetId) {
+            mSecurityCallback.dismiss(authenticated, targetId);
+        }
 
-    // Used to notify the container when something interesting happens.
-    public interface SecurityCallback {
-        public boolean dismiss(boolean authenticated, int targetUserId);
-        public void userActivity();
-        public void onSecurityModeChanged(SecurityMode securityMode, boolean needsInput);
+        public boolean isVerifyUnlockOnly() {
+            return mIsVerifyUnlockOnly;
+        }
 
-        /**
-         * @param strongAuth wheher the user has authenticated with strong authentication like
-         *                   pattern, password or PIN but not by trust agents or fingerprint
-         * @param targetUserId a user that needs to be the foreground user at the finish completion.
-         */
-        public void finish(boolean strongAuth, int targetUserId);
-        public void reset();
-    }
+        public void reportUnlockAttempt(int userId, boolean success, int timeoutMs) {
+            KeyguardUpdateMonitor monitor = KeyguardUpdateMonitor.getInstance(mContext);
+            if (success) {
+                monitor.clearFailedUnlockAttempts();
+                mLockPatternUtils.reportSuccessfulPasswordAttempt(userId);
+            } else {
+                KeyguardSecurityContainer.this.reportFailedUnlockAttempt(userId, timeoutMs);
+            }
+        }
+
+        public void reset() {
+            mSecurityCallback.reset();
+        }
+    };
+    // The following is used to ignore callbacks from SecurityViews that are no longer current
+    // (e.g. face unlock). This avoids unwanted asynchronous events from messing with the
+    // state for the current security method.
+    private KeyguardSecurityCallback mNullCallback = new KeyguardSecurityCallback() {
+        @Override
+        public void userActivity() {
+        }
+
+        @Override
+        public void reportUnlockAttempt(int userId, boolean success, int timeoutMs) {
+        }
+
+        @Override
+        public boolean isVerifyUnlockOnly() {
+            return false;
+        }
+
+        @Override
+        public void dismiss(boolean securityVerified, int targetUserId) {
+        }
+
+        @Override
+        public void reset() {
+        }
+    };
 
     public KeyguardSecurityContainer(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -134,7 +170,7 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
         final int children = mSecurityViewFlipper.getChildCount();
         for (int child = 0; child < children; child++) {
             if (mSecurityViewFlipper.getChildAt(child).getId() == securityViewIdForMode) {
-                view = ((KeyguardSecurityView)mSecurityViewFlipper.getChildAt(child));
+                view = ((KeyguardSecurityView) mSecurityViewFlipper.getChildAt(child));
                 break;
             }
         }
@@ -145,7 +181,7 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
             View v = inflater.inflate(layoutId, mSecurityViewFlipper, false);
             mSecurityViewFlipper.addView(v);
             updateSecurityView(v);
-            view = (KeyguardSecurityView)v;
+            view = (KeyguardSecurityView) v;
         }
 
         return view;
@@ -174,11 +210,11 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
 
     private void showDialog(String title, String message) {
         final AlertDialog dialog = new AlertDialog.Builder(mContext)
-            .setTitle(title)
-            .setMessage(message)
-            .setCancelable(false)
-            .setNeutralButton(R.string.ok, null)
-            .create();
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setNeutralButton(R.string.ok, null)
+                .create();
         if (!(mContext instanceof Activity)) {
             dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
         }
@@ -300,6 +336,7 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
     /**
      * Shows the primary security screen for the user. This will be either the multi-selector
      * or the user's security method.
+     *
      * @param turningOff true if the device is being turned off
      */
     void showPrimarySecurityScreen(boolean turningOff) {
@@ -311,9 +348,10 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
 
     /**
      * Shows the next security screen if there is one.
+     *
      * @param authenticated true if the user entered the correct authentication
-     * @param targetUserId a user that needs to be the foreground user at the finish (if called)
-     *     completion.
+     * @param targetUserId  a user that needs to be the foreground user at the finish (if called)
+     *                      completion.
      * @return true if keyguard is done
      */
     boolean showNextSecurityScreenOrFinish(boolean authenticated, int targetUserId) {
@@ -413,70 +451,34 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
         return null;
     }
 
-    private KeyguardSecurityCallback mCallback = new KeyguardSecurityCallback() {
-        public void userActivity() {
-            if (mSecurityCallback != null) {
-                mSecurityCallback.userActivity();
-            }
-        }
-
-        public void dismiss(boolean authenticated, int targetId) {
-            mSecurityCallback.dismiss(authenticated, targetId);
-        }
-
-        public boolean isVerifyUnlockOnly() {
-            return mIsVerifyUnlockOnly;
-        }
-
-        public void reportUnlockAttempt(int userId, boolean success, int timeoutMs) {
-            KeyguardUpdateMonitor monitor = KeyguardUpdateMonitor.getInstance(mContext);
-            if (success) {
-                monitor.clearFailedUnlockAttempts();
-                mLockPatternUtils.reportSuccessfulPasswordAttempt(userId);
-            } else {
-                KeyguardSecurityContainer.this.reportFailedUnlockAttempt(userId, timeoutMs);
-            }
-        }
-
-        public void reset() {
-            mSecurityCallback.reset();
-        }
-    };
-
-    // The following is used to ignore callbacks from SecurityViews that are no longer current
-    // (e.g. face unlock). This avoids unwanted asynchronous events from messing with the
-    // state for the current security method.
-    private KeyguardSecurityCallback mNullCallback = new KeyguardSecurityCallback() {
-        @Override
-        public void userActivity() { }
-        @Override
-        public void reportUnlockAttempt(int userId, boolean success, int timeoutMs) { }
-        @Override
-        public boolean isVerifyUnlockOnly() { return false; }
-        @Override
-        public void dismiss(boolean securityVerified, int targetUserId) { }
-        @Override
-        public void reset() {}
-    };
-
     private int getSecurityViewIdForMode(SecurityMode securityMode) {
         switch (securityMode) {
-            case Pattern: return R.id.keyguard_pattern_view;
-            case PIN: return R.id.keyguard_pin_view;
-            case Password: return R.id.keyguard_password_view;
-            case SimPin: return R.id.keyguard_sim_pin_view;
-            case SimPuk: return R.id.keyguard_sim_puk_view;
+            case Pattern:
+                return R.id.keyguard_pattern_view;
+            case PIN:
+                return R.id.keyguard_pin_view;
+            case Password:
+                return R.id.keyguard_password_view;
+            case SimPin:
+                return R.id.keyguard_sim_pin_view;
+            case SimPuk:
+                return R.id.keyguard_sim_puk_view;
         }
         return 0;
     }
 
     protected int getLayoutIdFor(SecurityMode securityMode) {
         switch (securityMode) {
-            case Pattern: return R.layout.keyguard_pattern_view;
-            case PIN: return R.layout.keyguard_pin_view;
-            case Password: return R.layout.keyguard_password_view;
-            case SimPin: return R.layout.keyguard_sim_pin_view;
-            case SimPuk: return R.layout.keyguard_sim_puk_view;
+            case Pattern:
+                return R.layout.keyguard_pattern_view;
+            case PIN:
+                return R.layout.keyguard_pin_view;
+            case Password:
+                return R.layout.keyguard_password_view;
+            case SimPin:
+                return R.layout.keyguard_sim_pin_view;
+            case SimPuk:
+                return R.layout.keyguard_sim_puk_view;
             default:
                 return 0;
         }
@@ -532,7 +534,6 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
         }
     }
 
-
     public void showMessage(String message, int color) {
         if (mCurrentSecuritySelection != SecurityMode.None) {
             getSecurityView(mCurrentSecuritySelection).showMessage(message, color);
@@ -542,6 +543,24 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
     @Override
     public void showUsabilityHint() {
         mSecurityViewFlipper.showUsabilityHint();
+    }
+
+    // Used to notify the container when something interesting happens.
+    public interface SecurityCallback {
+        public boolean dismiss(boolean authenticated, int targetUserId);
+
+        public void userActivity();
+
+        public void onSecurityModeChanged(SecurityMode securityMode, boolean needsInput);
+
+        /**
+         * @param strongAuth   wheher the user has authenticated with strong authentication like
+         *                     pattern, password or PIN but not by trust agents or fingerprint
+         * @param targetUserId a user that needs to be the foreground user at the finish completion.
+         */
+        public void finish(boolean strongAuth, int targetUserId);
+
+        public void reset();
     }
 
 }

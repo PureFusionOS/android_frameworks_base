@@ -39,7 +39,7 @@ public class AlphaOptimizedImageView extends ImageView {
     }
 
     public AlphaOptimizedImageView(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                                   int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

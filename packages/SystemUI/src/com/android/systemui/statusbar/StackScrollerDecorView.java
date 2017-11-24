@@ -70,9 +70,9 @@ public abstract class StackScrollerDecorView extends ExpandableView {
     /**
      * Animate the text to a new visibility.
      *
-     * @param nowVisible should it now be visible
+     * @param nowVisible         should it now be visible
      * @param onFinishedRunnable A runnable which should be run when the animation is
-     *        finished.
+     *                           finished.
      */
     private void animateText(boolean nowVisible, final Runnable onFinishedRunnable) {
         if (nowVisible != mIsVisible) {
@@ -113,7 +113,7 @@ public abstract class StackScrollerDecorView extends ExpandableView {
 
     @Override
     public void performRemoveAnimation(long duration, float translationDirection,
-            Runnable onFinishedRunnable) {
+                                       Runnable onFinishedRunnable) {
         // TODO: Use duration
         performVisibilityAnimation(false);
     }

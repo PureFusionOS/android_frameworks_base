@@ -39,8 +39,10 @@ import static org.mockito.Mockito.when;
 @SmallTest
 @RunWith(AndroidJUnit4.class)
 public class ForegroundServiceControllerTest extends SysuiTestCase {
-    public static @UserIdInt int USERID_ONE = 10; // UserManagerService.MIN_USER_ID;
-    public static @UserIdInt int USERID_TWO = USERID_ONE + 1;
+    public static @UserIdInt
+    int USERID_ONE = 10; // UserManagerService.MIN_USER_ID;
+    public static @UserIdInt
+    int USERID_TWO = USERID_ONE + 1;
 
     private ForegroundServiceController fsc;
 
@@ -138,7 +140,7 @@ public class ForegroundServiceControllerTest extends SysuiTestCase {
         // nothing required yet
         assertFalse(fsc.isDungeonNeededForUser(USERID_ONE));
         // now the app starts a fg service
-        fsc.addNotification(makeMockDungeon(USERID_ONE, new String[]{ PKG1 }),
+        fsc.addNotification(makeMockDungeon(USERID_ONE, new String[]{PKG1}),
                 NotificationManager.IMPORTANCE_DEFAULT);
         assertTrue(fsc.isDungeonNeededForUser(USERID_ONE)); // should be required!
         // add the fg notification
@@ -206,7 +208,7 @@ public class ForegroundServiceControllerTest extends SysuiTestCase {
         StatusBarNotification sbn_user1_app1_fg = makeMockFgSBN(USERID_ONE, PKG1);
 
         fsc.addNotification(sbn_user1_app1, NotificationManager.IMPORTANCE_DEFAULT); // not fg
-        fsc.addNotification(makeMockDungeon(USERID_ONE, new String[]{ PKG1 }),
+        fsc.addNotification(makeMockDungeon(USERID_ONE, new String[]{PKG1}),
                 NotificationManager.IMPORTANCE_DEFAULT);
         assertTrue(fsc.isDungeonNeededForUser(USERID_ONE)); // should be required!
         fsc.addNotification(sbn_user1_app1_fg, NotificationManager.IMPORTANCE_DEFAULT);
@@ -262,13 +264,14 @@ public class ForegroundServiceControllerTest extends SysuiTestCase {
     }
 
     private StatusBarNotification makeMockSBN(int userid, String pkg, int id, String tag,
-            int flags) {
+                                              int flags) {
         final Notification n = mock(Notification.class);
         n.flags = flags;
         return makeMockSBN(userid, pkg, id, tag, n);
     }
+
     private StatusBarNotification makeMockSBN(int userid, String pkg, int id, String tag,
-            Notification n) {
+                                              Notification n) {
         final StatusBarNotification sbn = mock(StatusBarNotification.class);
         when(sbn.getNotification()).thenReturn(n);
         when(sbn.getId()).thenReturn(id);
@@ -276,12 +279,14 @@ public class ForegroundServiceControllerTest extends SysuiTestCase {
         when(sbn.getTag()).thenReturn(null);
         when(sbn.getUserId()).thenReturn(userid);
         when(sbn.getUser()).thenReturn(new UserHandle(userid));
-        when(sbn.getKey()).thenReturn("MOCK:"+userid+"|"+pkg+"|"+id+"|"+tag);
+        when(sbn.getKey()).thenReturn("MOCK:" + userid + "|" + pkg + "|" + id + "|" + tag);
         return sbn;
     }
+
     private StatusBarNotification makeMockFgSBN(int userid, String pkg) {
         return makeMockSBN(userid, pkg, 1000, "foo", Notification.FLAG_FOREGROUND_SERVICE);
     }
+
     private StatusBarNotification makeMockDungeon(int userid, String[] pkgs) {
         final Notification n = mock(Notification.class);
         n.flags = Notification.FLAG_ONGOING_EVENT;

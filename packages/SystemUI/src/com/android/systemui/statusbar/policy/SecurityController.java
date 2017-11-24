@@ -20,23 +20,42 @@ import com.android.systemui.statusbar.policy.SecurityController.SecurityControll
 
 public interface SecurityController extends CallbackController<SecurityControllerCallback>,
         Dumpable {
-    /** Whether the device has device owner, even if not on this user. */
+    /**
+     * Whether the device has device owner, even if not on this user.
+     */
     boolean isDeviceManaged();
+
     boolean hasProfileOwner();
+
     boolean hasWorkProfile();
+
     String getDeviceOwnerName();
+
     String getProfileOwnerName();
+
     CharSequence getDeviceOwnerOrganizationName();
+
     CharSequence getWorkProfileOrganizationName();
+
     boolean isNetworkLoggingEnabled();
+
     boolean isVpnEnabled();
+
     boolean isVpnRestricted();
-    /** Whether the VPN app should use branded VPN iconography.  */
+
+    /**
+     * Whether the VPN app should use branded VPN iconography.
+     */
     boolean isVpnBranded();
+
     String getPrimaryVpnName();
+
     String getWorkProfileVpnName();
+
     boolean hasCACertInCurrentUser();
+
     boolean hasCACertInWorkProfile();
+
     void onUserSwitched(int newUserId);
 
     public interface SecurityControllerCallback {

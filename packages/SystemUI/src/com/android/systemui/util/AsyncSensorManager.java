@@ -34,7 +34,7 @@ import java.util.List;
 
 /**
  * Wrapper around sensor manager that hides potential sources of latency.
- *
+ * <p>
  * Offloads fetching (non-dynamic) sensors and (un)registering listeners onto a background thread
  * without blocking. Note that this means registering listeners now always appears successful even
  * if it is not.
@@ -67,7 +67,7 @@ public class AsyncSensorManager extends SensorManager {
 
     @Override
     protected boolean registerListenerImpl(SensorEventListener listener, Sensor sensor, int delayUs,
-            Handler handler, int maxReportLatencyUs, int reservedFlags) {
+                                           Handler handler, int maxReportLatencyUs, int reservedFlags) {
         mHandler.post(() -> {
             if (!mInner.registerListener(listener, sensor, delayUs, maxReportLatencyUs, handler)) {
                 Log.e(TAG, "Registering " + listener + " for " + sensor + " failed.");
@@ -83,7 +83,7 @@ public class AsyncSensorManager extends SensorManager {
 
     @Override
     protected SensorDirectChannel createDirectChannelImpl(MemoryFile memoryFile,
-            HardwareBuffer hardwareBuffer) {
+                                                          HardwareBuffer hardwareBuffer) {
         throw new UnsupportedOperationException("not implemented");
     }
 
@@ -99,7 +99,7 @@ public class AsyncSensorManager extends SensorManager {
 
     @Override
     protected void registerDynamicSensorCallbackImpl(DynamicSensorCallback callback,
-            Handler handler) {
+                                                     Handler handler) {
         mHandler.post(() -> mInner.registerDynamicSensorCallback(callback, handler));
     }
 
@@ -120,7 +120,7 @@ public class AsyncSensorManager extends SensorManager {
 
     @Override
     protected boolean cancelTriggerSensorImpl(TriggerEventListener listener, Sensor sensor,
-            boolean disable) {
+                                              boolean disable) {
         Preconditions.checkArgument(disable);
 
         mHandler.post(() -> {
@@ -138,7 +138,7 @@ public class AsyncSensorManager extends SensorManager {
 
     @Override
     protected boolean injectSensorDataImpl(Sensor sensor, float[] values, int accuracy,
-            long timestamp) {
+                                           long timestamp) {
         throw new UnsupportedOperationException("not implemented");
     }
 

@@ -39,8 +39,10 @@ import static org.mockito.Mockito.verify;
 public class DismissCallbackRegistryTest extends SysuiTestCase {
 
     private final DismissCallbackRegistry mDismissCallbackRegistry = new DismissCallbackRegistry();
-    private @Mock IKeyguardDismissCallback mMockCallback;
-    private @Mock IKeyguardDismissCallback mMockCallback2;
+    private @Mock
+    IKeyguardDismissCallback mMockCallback;
+    private @Mock
+    IKeyguardDismissCallback mMockCallback2;
 
     @Before
     public void setUp() throws Exception {

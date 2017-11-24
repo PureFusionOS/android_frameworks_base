@@ -31,7 +31,7 @@ import com.android.systemui.statusbar.policy.DataSaverController;
 import com.android.systemui.statusbar.policy.NetworkController;
 
 public class DataSaverTile extends QSTileImpl<BooleanState> implements
-        DataSaverController.Listener{
+        DataSaverController.Listener {
 
     private final DataSaverController mDataSaverController;
 

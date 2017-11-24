@@ -62,6 +62,20 @@ public class TaskViewTransform {
     public RectF rect = new RectF();
 
     /**
+     * Reset the transform on a view.
+     */
+    public static void reset(TaskView v) {
+        v.setTranslationX(0f);
+        v.setTranslationY(0f);
+        v.setTranslationZ(0f);
+        v.setScaleX(1f);
+        v.setScaleY(1f);
+        v.setAlpha(1f);
+        v.getViewBounds().setClipBottom(0);
+        v.setLeftTopRightBottom(0, 0, 0, 0);
+    }
+
+    /**
      * Fills int this transform from the state of the given TaskView.
      */
     public void fillIn(TaskView tv) {
@@ -112,7 +126,9 @@ public class TaskViewTransform {
         rect.setEmpty();
     }
 
-    /** Convenience functions to compare against current property values */
+    /**
+     * Convenience functions to compare against current property values
+     */
     public boolean hasAlphaChangedFrom(float v) {
         return (Float.compare(alpha, v) != 0);
     }
@@ -134,7 +150,7 @@ public class TaskViewTransform {
      * Applies this transform to a view.
      */
     public void applyToTaskView(TaskView v, ArrayList<Animator> animators,
-            AnimationProps animation, boolean allowShadows) {
+                                AnimationProps animation, boolean allowShadows) {
         // Return early if not visible
         if (!visible) {
             return;
@@ -181,18 +197,6 @@ public class TaskViewTransform {
                 animators.add(animation.apply(AnimationProps.BOUNDS, anim));
             }
         }
-    }
-
-    /** Reset the transform on a view. */
-    public static void reset(TaskView v) {
-        v.setTranslationX(0f);
-        v.setTranslationY(0f);
-        v.setTranslationZ(0f);
-        v.setScaleX(1f);
-        v.setScaleY(1f);
-        v.setAlpha(1f);
-        v.getViewBounds().setClipBottom(0);
-        v.setLeftTopRightBottom(0, 0, 0, 0);
     }
 
     @Override

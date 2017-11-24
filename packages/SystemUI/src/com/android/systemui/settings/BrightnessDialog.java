@@ -31,7 +31,9 @@ import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.systemui.R;
 
-/** A dialog that provides controls for adjusting the screen brightness. */
+/**
+ * A dialog that provides controls for adjusting the screen brightness.
+ */
 public class BrightnessDialog extends Activity {
 
     private BrightnessController mBrightnessController;

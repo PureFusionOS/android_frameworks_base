@@ -60,7 +60,7 @@ public class UserDetailItemView extends LinearLayout {
     }
 
     public UserDetailItemView(Context context, AttributeSet attrs, int defStyleAttr,
-            int defStyleRes) {
+                              int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         final TypedArray a = context.obtainStyledAttributes(
@@ -81,7 +81,7 @@ public class UserDetailItemView extends LinearLayout {
     }
 
     public static UserDetailItemView convertOrInflate(Context context, View convertView,
-            ViewGroup root) {
+                                                      ViewGroup root) {
         if (!(convertView instanceof UserDetailItemView)) {
             convertView = LayoutInflater.from(context).inflate(
                     layoutResId, root, false);

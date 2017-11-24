@@ -59,12 +59,10 @@ import java.util.List;
 
 
 public class CropImageView extends ImageView {
+    public static final String BROADCAST_BUTTON_BAR_VISIBILITY = "BUTTON_BAR_VISIBILITY";
     private static final String TAG = CropImageView.class.getSimpleName();
 
-    public static final String BROADCAST_BUTTON_BAR_VISIBILITY = "BUTTON_BAR_VISIBILITY";
-
     // Constants ///////////////////////////////////////////////////////////////////////////////////
-
     private static final int HANDLE_SIZE_IN_DP = 16;
     private static final int MIN_FRAME_SIZE_IN_DP = 50;
     private static final int FRAME_STROKE_WEIGHT_IN_DP = 1;
@@ -77,7 +75,12 @@ public class CropImageView extends ImageView {
     private final int TRANSLUCENT_BLACK = 0xBB000000;
 
     // Member variables ////////////////////////////////////////////////////////////////////////////
-
+    ArrayList<Path> paths = new ArrayList<>();
+    ArrayList<Point> pathAttr = new ArrayList<>();
+    Matrix matrix = new Matrix();
+    // Touch Event /////////////////////////////////////////////////////////////////////////////////
+    boolean firstTouch = false;
+    long cachedTime = 0;
     private int mViewWidth = 0;
     private int mViewHeight = 0;
     private float mScale = 1.0f;
@@ -89,15 +92,13 @@ public class CropImageView extends ImageView {
     private Paint mPaintTransparent;
     private Paint mPaintFrame;
     private Paint mPaintBitmap;
+
+    // Instance variables for customizable attributes //////////////////////////////////////////////
     private RectF mFrameRect;
     private RectF mImageRect;
     private PointF mCenter = new PointF();
     private float mLastX, mLastY;
-
     private int screenHeight = 0, screenWidth = 0;
-
-    // Instance variables for customizable attributes //////////////////////////////////////////////
-
     private TouchArea mTouchArea = TouchArea.OUT_OF_BOUNDS;
     private CropMode mCropMode = CropMode.RATIO_1_1;
     private ShowMode mGuideShowMode = ShowMode.SHOW_ALWAYS;
@@ -119,19 +120,19 @@ public class CropImageView extends ImageView {
     private int mHandleColor;
     private int mGuideColor;
     private float mInitialFrameScale; // 0.01 ~ 1.0, 0.75 is default value
-
     //Draw
     private List<Point> points = new ArrayList<Point>();
     private Canvas mCanvas;
     private List<Integer> newLine = new ArrayList<Integer>();
-    private int mDrawColor = Color.RED;
-    private int mPenSize = 10;
-
-    private Bitmap mBitmap;
-    private Bitmap mBackupBitmap;
-    private Bitmap transparentLayer;
 
     // Constructor /////////////////////////////////////////////////////////////////////////////////
+    private int mDrawColor = Color.RED;
+    private int mPenSize = 10;
+    private Bitmap mBitmap;
+
+    // Lifecycle methods ///////////////////////////////////////////////////////////////////////////
+    private Bitmap mBackupBitmap;
+    private Bitmap transparentLayer;
 
     public CropImageView(Context context) {
         this(context, null);
@@ -167,8 +168,6 @@ public class CropImageView extends ImageView {
         // handle Styleable
         handleStyleable(context, attrs, defStyle, mDensity);
     }
-
-    // Lifecycle methods ///////////////////////////////////////////////////////////////////////////
 
     @Override
     public Parcelable onSaveInstanceState() {
@@ -239,7 +238,7 @@ public class CropImageView extends ImageView {
         super.onLayout(changed, l, t, r, b);
         mViewWidth = r - l - getPaddingLeft() - getPaddingRight();
         mViewHeight = b - t - getPaddingTop() - getPaddingBottom();
-        if(screenHeight == 0 && screenWidth == 0){
+        if (screenHeight == 0 && screenWidth == 0) {
             screenHeight = mViewHeight;
             screenWidth = mViewWidth;
             transparentLayer = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
@@ -249,18 +248,18 @@ public class CropImageView extends ImageView {
         if (getDrawable() != null) initLayout(mViewWidth, mViewHeight);
     }
 
+    // Handle styleable ////////////////////////////////////////////////////////////////////////////
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if(getBitmap() != null) {
+        if (getBitmap() != null) {
             mBitmap = getBitmap().copy(Bitmap.Config.ARGB_8888, true);
             mCanvas = new Canvas(mBitmap);
         }
     }
 
-    ArrayList<Path> paths = new ArrayList<>();
-    ArrayList<Point> pathAttr = new ArrayList<>();
-    Matrix matrix = new Matrix();
+    // Drawing method //////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -276,16 +275,16 @@ public class CropImageView extends ImageView {
                 canvas.drawBitmap(transparentLayer, 0, 0, null);
                 canvas.drawBitmap(bm, matrix, mPaintBitmap);
 
-                if(mIsDrawEnabled) {
+                if (mIsDrawEnabled) {
                     paths.clear();
                     pathAttr.clear();
                     Point oldPoint = new Point();
                     Path path = null;
 
-                    for (int i = 0; i<points.size(); i++) {
+                    for (int i = 0; i < points.size(); i++) {
                         boolean startNewPath = false;
                         Point newPoint;
-                        if (newLine.contains(i)||i==0){
+                        if (newLine.contains(i) || i == 0) {
                             startNewPath = true;
                             path = new Path();
                             path.setFillType(Path.FillType.EVEN_ODD);
@@ -296,10 +295,10 @@ public class CropImageView extends ImageView {
                             path.lineTo(newPoint.x, newPoint.y);
                         }
 
-                        if(newPoint.color != oldPoint.color){
+                        if (newPoint.color != oldPoint.color) {
                             startNewPath = true;
                         }
-                        if(newPoint.penSize != oldPoint.penSize){
+                        if (newPoint.penSize != oldPoint.penSize) {
                             startNewPath = true;
                         }
 
@@ -311,7 +310,7 @@ public class CropImageView extends ImageView {
                         }
                     }
                     final Paint paint = getDrawPaint();
-                    for(int j = 0; j < paths.size(); j++){
+                    for (int j = 0; j < paths.size(); j++) {
                         Path currentPath = paths.get(j);
                         Point currentPathAttr = pathAttr.get(j);
                         paint.setColor(currentPathAttr.color);
@@ -328,8 +327,6 @@ public class CropImageView extends ImageView {
             }
         }
     }
-
-    // Handle styleable ////////////////////////////////////////////////////////////////////////////
 
     private void handleStyleable(Context context, AttributeSet attrs, int defStyle,
                                  float mDensity) {
@@ -380,7 +377,7 @@ public class CropImageView extends ImageView {
                     (int) (GUIDE_STROKE_WEIGHT_IN_DP * mDensity));
             mIsCropEnabled = ta.getBoolean(R.styleable.CropImageView_cropEnabled, true);
             mInitialFrameScale = constrain(ta.getFloat(R.styleable.CropImageView_initialFrameScale,
-                            DEFAULT_INITIAL_FRAME_SCALE), 0.01f, 1.0f,
+                    DEFAULT_INITIAL_FRAME_SCALE), 0.01f, 1.0f,
                     DEFAULT_INITIAL_FRAME_SCALE);
         } catch (Exception e) {
             e.printStackTrace();
@@ -389,7 +386,7 @@ public class CropImageView extends ImageView {
         }
     }
 
-    // Drawing method //////////////////////////////////////////////////////////////////////////////
+    // Initializer /////////////////////////////////////////////////////////////////////////////////
 
     private void drawEditFrame(Canvas canvas) {
         if (!mIsCropEnabled) return;
@@ -462,8 +459,6 @@ public class CropImageView extends ImageView {
         mMatrix.postRotate(mAngle, mCenter.x, mCenter.y);
     }
 
-    // Initializer /////////////////////////////////////////////////////////////////////////////////
-
     private void initLayout(int viewW, int viewH) {
         mImgWidth = getDrawable().getIntrinsicWidth();
         mImgHeight = getDrawable().getIntrinsicHeight();
@@ -509,17 +504,13 @@ public class CropImageView extends ImageView {
         mImageRect = new RectF(l, t, r, b);
     }
 
-    // Touch Event /////////////////////////////////////////////////////////////////////////////////
-    boolean firstTouch = false;
-    long cachedTime = 0;
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (!mIsInitialized) return false;
 
         // Catch double tap to show/hide the button bar
-        if(event.getAction() == MotionEvent.ACTION_DOWN){
-            if(firstTouch && (System.currentTimeMillis() - cachedTime) <= 300) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (firstTouch && (System.currentTimeMillis() - cachedTime) <= 300) {
                 final Intent intent = new Intent();
                 intent.setAction(BROADCAST_BUTTON_BAR_VISIBILITY);
                 getContext().sendBroadcast(intent);
@@ -534,14 +525,14 @@ public class CropImageView extends ImageView {
         if (!mIsCropEnabled && !mIsDrawEnabled) return false;
         if (!mIsEnabled) return false;
 
-        if(mIsDrawEnabled) {
+        if (mIsDrawEnabled) {
             Point point = new Point();
             point.x = event.getX();
             point.y = event.getY();
             point.color = mDrawColor;
             point.penSize = mPenSize;
             points.add(point);
-            if(newLine.isEmpty())
+            if (newLine.isEmpty())
                 newLine.add(0);
             invalidate();
             if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -1112,7 +1103,7 @@ public class CropImageView extends ImageView {
         mIsInitialized = false;
         mBitmap = bitmap;
         mBackupBitmap = bitmap;
-        if(screenHeight > 0) {
+        if (screenHeight > 0) {
             transparentLayer = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
             Canvas layerCanvas = new Canvas(transparentLayer);
             layerCanvas.drawColor(Color.parseColor("#A6000000"));
@@ -1120,33 +1111,33 @@ public class CropImageView extends ImageView {
         newLine.clear();
         points.clear();
         super.setImageBitmap(bitmap);
-        onSizeChanged(0,0,0,0);
+        onSizeChanged(0, 0, 0, 0);
         updateDrawableInfo();
     }
 
-    public void clearMemory(){
-        if(mBitmap != null)
-             mBitmap.recycle();
-        if(mBackupBitmap != null)
+    public void clearMemory() {
+        if (mBitmap != null)
+            mBitmap.recycle();
+        if (mBackupBitmap != null)
             mBackupBitmap.recycle();
         points.clear();
         newLine.clear();
-        if(transparentLayer != null)
+        if (transparentLayer != null)
             transparentLayer.recycle();
     }
 
-    public void recoverImage(){
+    public void recoverImage() {
         this.setImageBitmap(mBackupBitmap);
         invalidate();
     }
 
-    public void cropImage(Bitmap bitmap){
+    public void cropImage(Bitmap bitmap) {
         mIsInitialized = false;
         mBitmap = bitmap;
         newLine.clear();
         points.clear();
         setImageDrawable(new BitmapDrawable(getContext().getResources(), bitmap));
-        onSizeChanged(0,0,0,0);
+        onSizeChanged(0, 0, 0, 0);
         updateDrawableInfo();
     }
 
@@ -1170,9 +1161,9 @@ public class CropImageView extends ImageView {
     @Override
     public void setImageDrawable(Drawable drawable) {
         mIsInitialized = false;
-        mBitmap = ((BitmapDrawable)drawable).getBitmap();
+        mBitmap = ((BitmapDrawable) drawable).getBitmap();
         super.setImageDrawable(drawable);
-        onSizeChanged(0,0,0,0);
+        onSizeChanged(0, 0, 0, 0);
         updateDrawableInfo();
     }
 
@@ -1338,18 +1329,18 @@ public class CropImageView extends ImageView {
             setCustomRatio(1, 1);
         } else {
             mCropMode = mode;
-            if(mode == CropMode.RATIO_FREE)
+            if (mode == CropMode.RATIO_FREE)
                 mInitialFrameScale = 0.8f;
             else mInitialFrameScale = 1;
             adjustRatio();
         }
     }
 
-    public void setDrawColor(int color){
+    public void setDrawColor(int color) {
         mDrawColor = color;
     }
 
-    public void setPenSize(int penSize){
+    public void setPenSize(int penSize) {
         mPenSize = penSize;
     }
 
@@ -1515,16 +1506,6 @@ public class CropImageView extends ImageView {
         invalidate();
     }
 
-    /**
-     * Set whether to show crop frame.
-     *
-     * @param enabled should show crop frame?
-     */
-    public void setCropEnabled(boolean enabled) {
-        mIsCropEnabled = enabled;
-        invalidate();
-    }
-
     public boolean isDrawEnabled() {
         return mIsDrawEnabled;
     }
@@ -1541,6 +1522,16 @@ public class CropImageView extends ImageView {
 
     public boolean isCropEnabled() {
         return mIsCropEnabled;
+    }
+
+    /**
+     * Set whether to show crop frame.
+     *
+     * @param enabled should show crop frame?
+     */
+    public void setCropEnabled(boolean enabled) {
+        mIsCropEnabled = enabled;
+        invalidate();
     }
 
     /**
@@ -1636,38 +1627,16 @@ public class CropImageView extends ImageView {
         }
     }
 
-    class Point {
-        float x, y;
-        int color;
-        int penSize;
-
-        @Override
-        public String toString() {
-            return x + ", " + y + " " + color + ":" + penSize;
-        }
-    }
-
-    class ColorPath extends Path{
-        Path path;
-        Paint paint;
-
-        public ColorPath(Path path, Paint paint){
-            this.path = path;
-            this.paint = paint;
-        }
-
-        public Path getPath(){
-            return path;
-        }
-
-        public Paint getPaint(){
-            return paint;
-        }
-    }
-
-    // Save/Restore support ////////////////////////////////////////////////////////////////////////
-
     public static class SavedState extends BaseSavedState {
+        public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+            public SavedState createFromParcel(final Parcel inParcel) {
+                return new SavedState(inParcel);
+            }
+
+            public SavedState[] newArray(final int inSize) {
+                return new SavedState[inSize];
+            }
+        };
         Bitmap image;
         CropMode mode;
         int cvbackgroundColor;
@@ -1741,15 +1710,36 @@ public class CropImageView extends ImageView {
             out.writeInt(guideColor);
             out.writeFloat(initialFrameScale);
         }
+    }
 
-        public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-            public SavedState createFromParcel(final Parcel inParcel) {
-                return new SavedState(inParcel);
-            }
+    class Point {
+        float x, y;
+        int color;
+        int penSize;
 
-            public SavedState[] newArray(final int inSize) {
-                return new SavedState[inSize];
-            }
-        };
+        @Override
+        public String toString() {
+            return x + ", " + y + " " + color + ":" + penSize;
+        }
+    }
+
+    // Save/Restore support ////////////////////////////////////////////////////////////////////////
+
+    class ColorPath extends Path {
+        Path path;
+        Paint paint;
+
+        public ColorPath(Path path, Paint paint) {
+            this.path = path;
+            this.paint = paint;
+        }
+
+        public Path getPath() {
+            return path;
+        }
+
+        public Paint getPaint() {
+            return paint;
+        }
     }
 }

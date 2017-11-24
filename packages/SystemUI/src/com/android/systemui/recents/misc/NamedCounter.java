@@ -30,7 +30,9 @@ public class NamedCounter {
         mSuffix = suffix;
     }
 
-    /** Returns the next name. */
+    /**
+     * Returns the next name.
+     */
     public String nextName() {
         String name = mPrefix + mCount + mSuffix;
         mCount++;

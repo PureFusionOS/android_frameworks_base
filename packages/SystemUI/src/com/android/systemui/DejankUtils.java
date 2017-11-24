@@ -47,7 +47,7 @@ public class DejankUtils {
      * Executes {@code r} after performTraversals. Use this do to CPU heavy work for which the
      * timing is not critical for animation. The work is then scheduled at the same time
      * RenderThread is doing its thing, leading to better parallelization.
-     *
+     * <p>
      * <p>Needs to be called from the main thread.
      */
     public static void postAfterTraversal(Runnable r) {
@@ -58,7 +58,7 @@ public class DejankUtils {
 
     /**
      * Removes a previously scheduled runnable.
-     *
+     * <p>
      * <p>Needs to be called from the main thread.
      */
     public static void removeCallbacks(Runnable r) {

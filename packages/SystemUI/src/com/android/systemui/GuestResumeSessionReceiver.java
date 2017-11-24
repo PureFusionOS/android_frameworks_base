@@ -45,51 +45,9 @@ public class GuestResumeSessionReceiver extends BroadcastReceiver {
 
     private Dialog mNewSessionDialog;
 
-    public void register(Context context) {
-        IntentFilter f = new IntentFilter(Intent.ACTION_USER_SWITCHED);
-        context.registerReceiverAsUser(this, UserHandle.SYSTEM,
-                f, null /* permission */, null /* scheduler */);
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
-
-        if (Intent.ACTION_USER_SWITCHED.equals(action)) {
-            cancelDialog();
-
-            int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, UserHandle.USER_NULL);
-            if (userId == UserHandle.USER_NULL) {
-                Log.e(TAG, intent + " sent to " + TAG + " without EXTRA_USER_HANDLE");
-                return;
-            }
-
-            UserInfo currentUser;
-            try {
-                currentUser = ActivityManager.getService().getCurrentUser();
-            } catch (RemoteException e) {
-                return;
-            }
-            if (!currentUser.isGuest()) {
-                return;
-            }
-
-            ContentResolver cr = context.getContentResolver();
-            int notFirstLogin = Settings.System.getIntForUser(
-                    cr, SETTING_GUEST_HAS_LOGGED_IN, 0, userId);
-            if (notFirstLogin != 0) {
-                mNewSessionDialog = new ResetSessionDialog(context, userId);
-                mNewSessionDialog.show();
-            } else {
-                Settings.System.putIntForUser(
-                        cr, SETTING_GUEST_HAS_LOGGED_IN, 1, userId);
-            }
-        }
-    }
-
     /**
      * Wipes the guest session.
-     *
+     * <p>
      * The guest must be the current user and its id must be {@param userId}.
      */
     private static void wipeGuestSession(Context context, int userId) {
@@ -132,6 +90,48 @@ public class GuestResumeSessionReceiver extends BroadcastReceiver {
         } catch (RemoteException e) {
             Log.e(TAG, "Couldn't wipe session because ActivityManager or WindowManager is dead");
             return;
+        }
+    }
+
+    public void register(Context context) {
+        IntentFilter f = new IntentFilter(Intent.ACTION_USER_SWITCHED);
+        context.registerReceiverAsUser(this, UserHandle.SYSTEM,
+                f, null /* permission */, null /* scheduler */);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+
+        if (Intent.ACTION_USER_SWITCHED.equals(action)) {
+            cancelDialog();
+
+            int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, UserHandle.USER_NULL);
+            if (userId == UserHandle.USER_NULL) {
+                Log.e(TAG, intent + " sent to " + TAG + " without EXTRA_USER_HANDLE");
+                return;
+            }
+
+            UserInfo currentUser;
+            try {
+                currentUser = ActivityManager.getService().getCurrentUser();
+            } catch (RemoteException e) {
+                return;
+            }
+            if (!currentUser.isGuest()) {
+                return;
+            }
+
+            ContentResolver cr = context.getContentResolver();
+            int notFirstLogin = Settings.System.getIntForUser(
+                    cr, SETTING_GUEST_HAS_LOGGED_IN, 0, userId);
+            if (notFirstLogin != 0) {
+                mNewSessionDialog = new ResetSessionDialog(context, userId);
+                mNewSessionDialog.show();
+            } else {
+                Settings.System.putIntForUser(
+                        cr, SETTING_GUEST_HAS_LOGGED_IN, 1, userId);
+            }
         }
     }
 

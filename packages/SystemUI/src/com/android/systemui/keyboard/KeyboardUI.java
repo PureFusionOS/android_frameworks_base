@@ -95,12 +95,9 @@ public class KeyboardUI extends SystemUI implements InputManager.OnTabletModeCha
     private static final int MSG_DISMISS_BLUETOOTH_DIALOG = 9;
     private static final int MSG_BLE_ABORT_SCAN = 10;
     private static final int MSG_SHOW_ERROR = 11;
-
+    protected volatile Context mContext;
     private volatile KeyboardHandler mHandler;
     private volatile KeyboardUIHandler mUIHandler;
-
-    protected volatile Context mContext;
-
     private boolean mEnabled;
     private String mKeyboardName;
     private CachedBluetoothDeviceManager mCachedDeviceManager;
@@ -115,6 +112,34 @@ public class KeyboardUI extends SystemUI implements InputManager.OnTabletModeCha
     private BluetoothDialog mDialog;
 
     private int mState;
+
+    private static String stateToString(int state) {
+        switch (state) {
+            case STATE_NOT_ENABLED:
+                return "STATE_NOT_ENABLED";
+            case STATE_WAITING_FOR_BOOT_COMPLETED:
+                return "STATE_WAITING_FOR_BOOT_COMPLETED";
+            case STATE_WAITING_FOR_TABLET_MODE_EXIT:
+                return "STATE_WAITING_FOR_TABLET_MODE_EXIT";
+            case STATE_WAITING_FOR_DEVICE_DISCOVERY:
+                return "STATE_WAITING_FOR_DEVICE_DISCOVERY";
+            case STATE_WAITING_FOR_BLUETOOTH:
+                return "STATE_WAITING_FOR_BLUETOOTH";
+            case STATE_PAIRING:
+                return "STATE_PAIRING";
+            case STATE_PAIRED:
+                return "STATE_PAIRED";
+            case STATE_PAIRING_FAILED:
+                return "STATE_PAIRING_FAILED";
+            case STATE_USER_CANCELLED:
+                return "STATE_USER_CANCELLED";
+            case STATE_DEVICE_NOT_FOUND:
+                return "STATE_DEVICE_NOT_FOUND";
+            case STATE_UNKNOWN:
+            default:
+                return "STATE_UNKNOWN (" + state + ")";
+        }
+    }
 
     @Override
     public void start() {
@@ -172,7 +197,7 @@ public class KeyboardUI extends SystemUI implements InputManager.OnTabletModeCha
         }
 
         LocalBluetoothManager bluetoothManager = LocalBluetoothManager.getInstance(context, null);
-        if (bluetoothManager == null)  {
+        if (bluetoothManager == null) {
             if (DEBUG) {
                 Slog.e(TAG, "Failed to retrieve LocalBluetoothManager instance");
             }
@@ -314,7 +339,6 @@ public class KeyboardUI extends SystemUI implements InputManager.OnTabletModeCha
         return null;
     }
 
-
     private CachedBluetoothDevice getCachedBluetoothDevice(BluetoothDevice d) {
         CachedBluetoothDevice cachedDevice = mCachedDeviceManager.findDevice(d);
         if (cachedDevice == null) {
@@ -328,11 +352,11 @@ public class KeyboardUI extends SystemUI implements InputManager.OnTabletModeCha
         BluetoothLeScanner scanner = mLocalBluetoothAdapter.getBluetoothLeScanner();
         ScanFilter filter = (new ScanFilter.Builder()).setDeviceName(mKeyboardName).build();
         ScanSettings settings = (new ScanSettings.Builder())
-            .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
-            .setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT)
-            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-            .setReportDelay(0)
-            .build();
+                .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+                .setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT)
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                .setReportDelay(0)
+                .build();
         mScanCallback = new KeyboardScanCallback();
         scanner.startScan(Arrays.asList(filter), settings, mScanCallback);
 
@@ -415,9 +439,10 @@ public class KeyboardUI extends SystemUI implements InputManager.OnTabletModeCha
         public KeyboardUIHandler() {
             super(Looper.getMainLooper(), null, true /*async*/);
         }
+
         @Override
         public void handleMessage(Message msg) {
-            switch(msg.what) {
+            switch (msg.what) {
                 case MSG_SHOW_BLUETOOTH_DIALOG: {
                     if (mDialog != null) {
                         // Don't show another dialog if one is already present
@@ -454,7 +479,7 @@ public class KeyboardUI extends SystemUI implements InputManager.OnTabletModeCha
 
         @Override
         public void handleMessage(Message msg) {
-            switch(msg.what) {
+            switch (msg.what) {
                 case MSG_INIT: {
                     init();
                     break;
@@ -487,13 +512,13 @@ public class KeyboardUI extends SystemUI implements InputManager.OnTabletModeCha
                     break;
                 }
                 case MSG_ON_DEVICE_BOND_STATE_CHANGED: {
-                    CachedBluetoothDevice d = (CachedBluetoothDevice)msg.obj;
+                    CachedBluetoothDevice d = (CachedBluetoothDevice) msg.obj;
                     int bondState = msg.arg1;
                     onDeviceBondStateChangedInternal(d, bondState);
                     break;
                 }
                 case MSG_ON_BLUETOOTH_DEVICE_ADDED: {
-                    BluetoothDevice d = (BluetoothDevice)msg.obj;
+                    BluetoothDevice d = (BluetoothDevice) msg.obj;
                     CachedBluetoothDevice cachedDevice = getCachedBluetoothDevice(d);
                     onDeviceAddedInternal(cachedDevice);
                     break;
@@ -582,7 +607,7 @@ public class KeyboardUI extends SystemUI implements InputManager.OnTabletModeCha
                         result.getDevice()).sendToTarget();
             } else if (DEBUG) {
                 Slog.d(TAG, "onScanResult: device " + result.getDevice() +
-                       " is not discoverable, ignoring");
+                        " is not discoverable, ignoring");
             }
         }
     }
@@ -601,47 +626,26 @@ public class KeyboardUI extends SystemUI implements InputManager.OnTabletModeCha
         }
 
         @Override
-        public void onDeviceAdded(CachedBluetoothDevice cachedDevice) { }
+        public void onDeviceAdded(CachedBluetoothDevice cachedDevice) {
+        }
+
         @Override
-        public void onDeviceDeleted(CachedBluetoothDevice cachedDevice) { }
+        public void onDeviceDeleted(CachedBluetoothDevice cachedDevice) {
+        }
+
         @Override
-        public void onScanningStateChanged(boolean started) { }
+        public void onScanningStateChanged(boolean started) {
+        }
+
         @Override
-        public void onConnectionStateChanged(CachedBluetoothDevice cachedDevice, int state) { }
+        public void onConnectionStateChanged(CachedBluetoothDevice cachedDevice, int state) {
+        }
     }
 
     private final class BluetoothErrorListener implements Utils.ErrorListener {
         public void onShowError(Context context, String name, int messageResId) {
             mHandler.obtainMessage(MSG_SHOW_ERROR, messageResId, 0 /*unused*/,
                     new Pair<>(context, name)).sendToTarget();
-        }
-    }
-
-    private static String stateToString(int state) {
-        switch (state) {
-            case STATE_NOT_ENABLED:
-                return "STATE_NOT_ENABLED";
-            case STATE_WAITING_FOR_BOOT_COMPLETED:
-                return "STATE_WAITING_FOR_BOOT_COMPLETED";
-            case STATE_WAITING_FOR_TABLET_MODE_EXIT:
-                return "STATE_WAITING_FOR_TABLET_MODE_EXIT";
-            case STATE_WAITING_FOR_DEVICE_DISCOVERY:
-                return "STATE_WAITING_FOR_DEVICE_DISCOVERY";
-            case STATE_WAITING_FOR_BLUETOOTH:
-                return "STATE_WAITING_FOR_BLUETOOTH";
-            case STATE_PAIRING:
-                return "STATE_PAIRING";
-            case STATE_PAIRED:
-                return "STATE_PAIRED";
-            case STATE_PAIRING_FAILED:
-                return "STATE_PAIRING_FAILED";
-            case STATE_USER_CANCELLED:
-                return "STATE_USER_CANCELLED";
-            case STATE_DEVICE_NOT_FOUND:
-                return "STATE_DEVICE_NOT_FOUND";
-            case STATE_UNKNOWN:
-            default:
-                return "STATE_UNKNOWN (" + state + ")";
         }
     }
 }

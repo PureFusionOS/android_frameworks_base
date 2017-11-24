@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -36,8 +35,8 @@
     <string name="keyguard_instructions_when_pattern_disabled" msgid="8566679946700751371">"Ýttu á valmyndarhnappinn til að taka úr lás."</string>
     <string name="keyguard_network_locked_message" msgid="6743537524631420759">"Net læst"</string>
     <string name="keyguard_missing_sim_message_short" msgid="6327533369959764518">"Ekkert SIM-kort"</string>
-    <string name="keyguard_missing_sim_message" product="tablet" msgid="4550152848200783542">"Ekkert SIM-kort í spjaldtölvunni."</string>
-    <string name="keyguard_missing_sim_message" product="default" msgid="6585414237800161146">"Ekkert SIM-kort í símanum."</string>
+    <string name="keyguard_missing_sim_message" msgid="4550152848200783542" product="tablet">"Ekkert SIM-kort í spjaldtölvunni."</string>
+    <string name="keyguard_missing_sim_message" msgid="6585414237800161146" product="default">"Ekkert SIM-kort í símanum."</string>
     <string name="keyguard_missing_sim_instructions" msgid="7350295932015220392">"Settu SIM-kort í."</string>
     <string name="keyguard_missing_sim_instructions_long" msgid="589889372883904477">"SIM-kort vantar eða það er ekki læsilegt. Settu SIM-kort í."</string>
     <string name="keyguard_permanent_disabled_sim_message_short" msgid="654102080186420706">"Ónothæft SIM-kort."</string>
@@ -69,34 +68,34 @@
     <string name="kg_invalid_sim_pin_hint" msgid="3057533256729513335">"Sláðu in PIN-númer sem er 4 til 8 tölustafir."</string>
     <string name="kg_invalid_sim_puk_hint" msgid="6003602401368264144">"PUK-númerið verður að vera 8 tölustafir eða lengra."</string>
     <string name="kg_invalid_puk" msgid="5399287873762592502">"Prófaðu aftur að setja inn rétt PUK-númer. Endurteknar tilraunir gera SIM-kortið varanlega óvirkt."</string>
-    <string name="kg_invalid_confirm_pin_hint" product="default" msgid="5672736555427444330">"PIN-númerin stemma ekki"</string>
+    <string name="kg_invalid_confirm_pin_hint" msgid="5672736555427444330" product="default">"PIN-númerin stemma ekki"</string>
     <string name="kg_login_too_many_attempts" msgid="6604574268387867255">"Of margar tilraunir til að teikna mynstur"</string>
     <string name="kg_too_many_failed_pin_attempts_dialog_message" msgid="8637788033282252027">"Þú hefur slegið inn rangt PIN-númer <xliff:g id="NUMBER_0">%1$d</xliff:g> sinnum. \n\nReyndu aftur eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> sekúndur."</string>
     <string name="kg_too_many_failed_password_attempts_dialog_message" msgid="7724148763268377734">"Þú hefur slegið inn rangt aðgangsorð <xliff:g id="NUMBER_0">%1$d</xliff:g> sinnum. \n\nReyndu aftur eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> sekúndur."</string>
     <string name="kg_too_many_failed_pattern_attempts_dialog_message" msgid="4820967667848302092">"Þú hefur teiknað rangt opnunarmynstur <xliff:g id="NUMBER_0">%1$d</xliff:g> sinnum. \n\nReyndu aftur eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> sekúndur."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="tablet" msgid="1629351522209932316">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður spjaldtölvan endurstillt, með þeim afleiðingum að öllum gögnum hennar verður eytt."</string>
-    <string name="kg_failed_attempts_almost_at_wipe" product="default" msgid="3921998703529189931">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna símann. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður síminn endurstilltur, með þeim afleiðingum að öllum gögnum hans verður eytt."</string>
-    <string name="kg_failed_attempts_now_wiping" product="tablet" msgid="4694232971224663735">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Spjaldtölvan verður endurstillt, með þeim afleiðingum að öllum gögnum hennar verður eytt."</string>
-    <string name="kg_failed_attempts_now_wiping" product="default" msgid="2365964340830006961">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna símann. Síminn verður endurstilltur, með þeim afleiðingum að öllum gögnum hans verður eytt."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="tablet" msgid="1365418870560228936">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður notandinn fjarlægður með þeim afleiðingum að öllum notandagögnum verður eytt."</string>
-    <string name="kg_failed_attempts_almost_at_erase_user" product="default" msgid="2151286957817486128">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna símann. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður notandinn fjarlægður með þeim afleiðingum að öllum notandagögnum verður eytt."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="tablet" msgid="5464020754932560928">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Notandinn verður fjarlægður, með þeim afleiðingum að öllum notandagögnum verður eytt."</string>
-    <string name="kg_failed_attempts_now_erasing_user" product="default" msgid="6171564974118059">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna símann. Notandinn verður fjarlægður, með þeim afleiðingum að öllum notandagögnum verður eytt."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="tablet" msgid="9154513795928824239">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður vinnusniðið fjarlægt með þeim afleiðingum að öllum gögnum þess verður eytt."</string>
-    <string name="kg_failed_attempts_almost_at_erase_profile" product="default" msgid="2162434417489128282">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna símann. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður vinnusniðið fjarlægt með þeim afleiðingum að öllum gögnum þess verður eytt."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="tablet" msgid="8966727588974691544">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Vinnusniðið verður fjarlægt, með þeim afleiðingum að öllum gögnum þess verður eytt."</string>
-    <string name="kg_failed_attempts_now_erasing_profile" product="default" msgid="8476407539834855">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna símann. Vinnusniðið verður fjarlægt, með þeim afleiðingum að öllum gögnum þess verður eytt."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="tablet" msgid="956706236554092172">"Þú hefur teiknað rangt opnunarmynstur <xliff:g id="NUMBER_0">%1$d</xliff:g> sinnum. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður þú beðin(n) um að opna spjaldtölvuna með tölvupóstreikningi.\n\n Reyndu aftur eftir <xliff:g id="NUMBER_2">%3$d</xliff:g> sekúndur."</string>
-    <string name="kg_failed_attempts_almost_at_login" product="default" msgid="8364140853305528449">"Þú hefur teiknað rangt opnunarmynstur <xliff:g id="NUMBER_0">%1$d</xliff:g> sinnum. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verðurðu beðin(n) um að opna símann með tölvupóstreikningi.\n\n Reyndu aftur eftir <xliff:g id="NUMBER_2">%3$d</xliff:g> sekúndur."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="1629351522209932316" product="tablet">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður spjaldtölvan endurstillt, með þeim afleiðingum að öllum gögnum hennar verður eytt."</string>
+    <string name="kg_failed_attempts_almost_at_wipe" msgid="3921998703529189931" product="default">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna símann. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður síminn endurstilltur, með þeim afleiðingum að öllum gögnum hans verður eytt."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="4694232971224663735" product="tablet">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Spjaldtölvan verður endurstillt, með þeim afleiðingum að öllum gögnum hennar verður eytt."</string>
+    <string name="kg_failed_attempts_now_wiping" msgid="2365964340830006961" product="default">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna símann. Síminn verður endurstilltur, með þeim afleiðingum að öllum gögnum hans verður eytt."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="1365418870560228936" product="tablet">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður notandinn fjarlægður með þeim afleiðingum að öllum notandagögnum verður eytt."</string>
+    <string name="kg_failed_attempts_almost_at_erase_user" msgid="2151286957817486128" product="default">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna símann. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður notandinn fjarlægður með þeim afleiðingum að öllum notandagögnum verður eytt."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="5464020754932560928" product="tablet">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Notandinn verður fjarlægður, með þeim afleiðingum að öllum notandagögnum verður eytt."</string>
+    <string name="kg_failed_attempts_now_erasing_user" msgid="6171564974118059" product="default">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna símann. Notandinn verður fjarlægður, með þeim afleiðingum að öllum notandagögnum verður eytt."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="9154513795928824239" product="tablet">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður vinnusniðið fjarlægt með þeim afleiðingum að öllum gögnum þess verður eytt."</string>
+    <string name="kg_failed_attempts_almost_at_erase_profile" msgid="2162434417489128282" product="default">"Þú hefur gert <xliff:g id="NUMBER_0">%1$d</xliff:g> árangurslausar tilraunir til að opna símann. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður vinnusniðið fjarlægt með þeim afleiðingum að öllum gögnum þess verður eytt."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8966727588974691544" product="tablet">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna spjaldtölvuna. Vinnusniðið verður fjarlægt, með þeim afleiðingum að öllum gögnum þess verður eytt."</string>
+    <string name="kg_failed_attempts_now_erasing_profile" msgid="8476407539834855" product="default">"Þú hefur gert <xliff:g id="NUMBER">%d</xliff:g> árangurslausar tilraunir til að opna símann. Vinnusniðið verður fjarlægt, með þeim afleiðingum að öllum gögnum þess verður eytt."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="956706236554092172" product="tablet">"Þú hefur teiknað rangt opnunarmynstur <xliff:g id="NUMBER_0">%1$d</xliff:g> sinnum. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verður þú beðin(n) um að opna spjaldtölvuna með tölvupóstreikningi.\n\n Reyndu aftur eftir <xliff:g id="NUMBER_2">%3$d</xliff:g> sekúndur."</string>
+    <string name="kg_failed_attempts_almost_at_login" msgid="8364140853305528449" product="default">"Þú hefur teiknað rangt opnunarmynstur <xliff:g id="NUMBER_0">%1$d</xliff:g> sinnum. Eftir <xliff:g id="NUMBER_1">%2$d</xliff:g> árangurslausar tilraunir í viðbót verðurðu beðin(n) um að opna símann með tölvupóstreikningi.\n\n Reyndu aftur eftir <xliff:g id="NUMBER_2">%3$d</xliff:g> sekúndur."</string>
     <string name="kg_password_wrong_pin_code_pukked" msgid="3389829202093674267">"Rangt PIN-númer SIM-korts. Nú þarftu að hafa samband við símafyrirtækið til að opna fyrir tækið."</string>
     <plurals name="kg_password_wrong_pin_code" formatted="false" msgid="4314341367727055967">
-      <item quantity="one">Rangt PIN-númer SIM-korts. Þú átt <xliff:g id="NUMBER_1">%d</xliff:g> tilraun eftir.</item>
-      <item quantity="other">Rangt PIN-númer SIM-korts. Þú átt <xliff:g id="NUMBER_1">%d</xliff:g> tilraunir eftir.</item>
+        <item quantity="one">Rangt PIN-númer SIM-korts. Þú átt <xliff:g id="NUMBER_1">%d</xliff:g> tilraun eftir.</item>
+        <item quantity="other">Rangt PIN-númer SIM-korts. Þú átt <xliff:g id="NUMBER_1">%d</xliff:g> tilraunir eftir.</item>
     </plurals>
     <string name="kg_password_wrong_puk_code_dead" msgid="3329017604125179374">"SIM-kortið er ónothæft. Hafðu samband við símafyrirtækið þitt."</string>
     <plurals name="kg_password_wrong_puk_code" formatted="false" msgid="2287504898931957513">
-      <item quantity="one">Rangt PUK-númer SIM-korts. Þú átt <xliff:g id="NUMBER_1">%d</xliff:g> tilraun eftir áður en SIM-kortið verður ónothæft til frambúðar.</item>
-      <item quantity="other">Rangt PUK-númer SIM-korts. Þú átt <xliff:g id="NUMBER_1">%d</xliff:g> tilraunir eftir áður en SIM-kortið verður ónothæft til frambúðar.</item>
+        <item quantity="one">Rangt PUK-númer SIM-korts. Þú átt <xliff:g id="NUMBER_1">%d</xliff:g> tilraun eftir áður en SIM-kortið verður ónothæft til frambúðar.</item>
+        <item quantity="other">Rangt PUK-númer SIM-korts. Þú átt <xliff:g id="NUMBER_1">%d</xliff:g> tilraunir eftir áður en SIM-kortið verður ónothæft til frambúðar.</item>
     </plurals>
     <string name="kg_password_pin_failed" msgid="8769990811451236223">"PIN-aðgerð SIM-korts mistókst!"</string>
     <string name="kg_password_puk_failed" msgid="1331621440873439974">"PUK-aðgerð SIM-korts mistókst!"</string>
@@ -116,16 +115,16 @@
     <string name="kg_prompt_reason_device_admin" msgid="3452168247888906179">"Kerfisstjóri læsti tæki"</string>
     <string name="kg_prompt_reason_user_request" msgid="8236951765212462286">"Tækinu var læst handvirkt"</string>
     <plurals name="kg_prompt_reason_time_pattern" formatted="false" msgid="71299470072448533">
-      <item quantity="one">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustund. Staðfestu mynstrið.</item>
-      <item quantity="other">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustundir. Staðfestu mynstrið.</item>
+        <item quantity="one">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustund. Staðfestu mynstrið.</item>
+        <item quantity="other">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustundir. Staðfestu mynstrið.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_pin" formatted="false" msgid="34586942088144385">
-      <item quantity="one">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustund. Staðfestu PIN-númerið.</item>
-      <item quantity="other">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustundir. Staðfestu PIN-númerið.</item>
+        <item quantity="one">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustund. Staðfestu PIN-númerið.</item>
+        <item quantity="other">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustundir. Staðfestu PIN-númerið.</item>
     </plurals>
     <plurals name="kg_prompt_reason_time_password" formatted="false" msgid="257297696215346527">
-      <item quantity="one">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustund. Staðfestu aðgangsorðið.</item>
-      <item quantity="other">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustundir. Staðfestu aðgangsorðið.</item>
+        <item quantity="one">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustund. Staðfestu aðgangsorðið.</item>
+        <item quantity="other">Tækið hefur ekki verið tekið úr lás í <xliff:g id="NUMBER_1">%d</xliff:g> klukkustundir. Staðfestu aðgangsorðið.</item>
     </plurals>
     <string name="fingerprint_not_recognized" msgid="348813995267914625">"Þekktist ekki"</string>
 </resources>

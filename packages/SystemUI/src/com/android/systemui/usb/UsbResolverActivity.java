@@ -50,10 +50,14 @@ public class UsbResolverActivity extends ResolverActivity {
     private UsbAccessory mAccessory;
     private UsbDisconnectedReceiver mDisconnectedReceiver;
 
-    /** Resolve info that switches user profiles */
+    /**
+     * Resolve info that switches user profiles
+     */
     private ResolveInfo mForwardResolveInfo;
 
-    /** The intent that should be started when the profile is switched */
+    /**
+     * The intent that should be started when the profile is switched
+     */
     private Intent mOtherProfileIntent;
 
     @Override
@@ -65,7 +69,7 @@ public class UsbResolverActivity extends ResolverActivity {
             finish();
             return;
         }
-        Intent target = (Intent)targetParcelable;
+        Intent target = (Intent) targetParcelable;
         ArrayList<ResolveInfo> rList = new ArrayList<>(
                 intent.getParcelableArrayListExtra(EXTRA_RESOLVE_INFOS));
 
@@ -73,7 +77,7 @@ public class UsbResolverActivity extends ResolverActivity {
         // only support two profiles, i.e. one forward resolve info.
         ArrayList<ResolveInfo> rListOtherProfile = new ArrayList<>();
         mForwardResolveInfo = null;
-        for (Iterator<ResolveInfo> iterator = rList.iterator(); iterator.hasNext();) {
+        for (Iterator<ResolveInfo> iterator = rList.iterator(); iterator.hasNext(); ) {
             ResolveInfo ri = iterator.next();
 
             if (ri.getComponentInfo().name.equals(FORWARD_INTENT_TO_MANAGED_PROFILE)) {
@@ -85,11 +89,11 @@ public class UsbResolverActivity extends ResolverActivity {
             }
         }
 
-        mDevice = (UsbDevice)target.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+        mDevice = (UsbDevice) target.getParcelableExtra(UsbManager.EXTRA_DEVICE);
         if (mDevice != null) {
             mDisconnectedReceiver = new UsbDisconnectedReceiver(this, mDevice);
         } else {
-            mAccessory = (UsbAccessory)target.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
+            mAccessory = (UsbAccessory) target.getParcelableExtra(UsbManager.EXTRA_ACCESSORY);
             if (mAccessory == null) {
                 Log.e(TAG, "no device or accessory");
                 finish();
@@ -122,7 +126,7 @@ public class UsbResolverActivity extends ResolverActivity {
         CharSequence title = getResources().getText(com.android.internal.R.string.chooseUsbActivity);
         super.onCreate(savedInstanceState, target, title, null, rList, true);
 
-        CheckBox alwaysUse = (CheckBox)findViewById(com.android.internal.R.id.alwaysUse);
+        CheckBox alwaysUse = (CheckBox) findViewById(com.android.internal.R.id.alwaysUse);
         if (alwaysUse != null) {
             if (mDevice == null) {
                 alwaysUse.setText(R.string.always_use_accessory);

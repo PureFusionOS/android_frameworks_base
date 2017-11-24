@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2012 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2012 The Android Open Source Project
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,33 +13,32 @@
     limitations under the License.
 -->
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BrightnessDialogContainer">
 
     <TextView
         android:id="@+id/alpha_slider_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/onthego_transparency"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:text="@string/onthego_transparency" />
 
     <SeekBar
         android:id="@+id/alpha_slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:layout_below="@+id/alpha_slider_label"
+        android:layout_gravity="center_vertical"
         android:max="65" />
 
     <View
         android:id="@+id/onthego_divider_0"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@android:color/transparent"
-        android:layout_marginTop="5dp"
+        android:layout_below="@+id/alpha_slider"
         android:layout_marginBottom="5dp"
-        android:layout_below="@+id/alpha_slider" />
+        android:layout_marginTop="5dp"
+        android:background="@android:color/transparent" />
 
     <RelativeLayout
         android:id="@+id/onthego_category_1"
@@ -52,34 +50,34 @@
             android:id="@+id/onthego_camera_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/onthego_front_camera"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            android:text="@string/onthego_front_camera" />
 
         <View
             android:id="@+id/onthego_divider_1"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/transparent"
-            android:layout_marginTop="5dp"
+            android:layout_below="@+id/onthego_camera_toggle"
             android:layout_marginBottom="5dp"
-            android:layout_below="@+id/onthego_camera_toggle" />
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent" />
 
         <Switch
             android:id="@+id/onthego_service_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_below="@+id/onthego_divider_1"
-            android:text="@string/onthego_service_toggle"
-            android:layout_alignParentRight="true" />
+            android:text="@string/onthego_service_toggle" />
 
         <View
             android:id="@+id/onthego_divider_2"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/transparent"
-            android:layout_marginTop="5dp"
+            android:layout_below="@+id/onthego_service_toggle"
             android:layout_marginBottom="5dp"
-            android:layout_below="@+id/onthego_service_toggle" />
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent" />
     </RelativeLayout>
 
 </RelativeLayout>

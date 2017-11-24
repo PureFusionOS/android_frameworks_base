@@ -23,27 +23,13 @@ import com.android.systemui.statusbar.phone.LightBarTransitionsController;
 
 public interface DarkIconDispatcher {
 
-    void setIconsDarkArea(Rect r);
-    LightBarTransitionsController getTransitionsController();
-
-    void addDarkReceiver(DarkReceiver receiver);
-    void addDarkReceiver(ImageView imageView);
-
-    // Must have been previously been added through one of the addDarkReceive methods above.
-    void removeDarkReceiver(DarkReceiver object);
-    void removeDarkReceiver(ImageView object);
-
-    // Used to reapply darkness on an object, must have previously been added through
-    // addDarkReceiver.
-    void applyDark(ImageView object);
-
     int DEFAULT_ICON_TINT = Color.WHITE;
     Rect sTmpRect = new Rect();
     int[] sTmpInt2 = new int[2];
 
     /**
      * @return the tint to apply to {@param view} depending on the desired tint {@param color} and
-     *         the screen {@param tintArea} in which to apply that tint
+     * the screen {@param tintArea} in which to apply that tint
      */
     static int getTint(Rect tintArea, View view, int color) {
         if (isInArea(tintArea, view)) {
@@ -55,7 +41,7 @@ public interface DarkIconDispatcher {
 
     /**
      * @return the dark intensity to apply to {@param view} depending on the desired dark
-     *         {@param intensity} and the screen {@param tintArea} in which to apply that intensity
+     * {@param intensity} and the screen {@param tintArea} in which to apply that intensity
      */
     static float getDarkIntensity(Rect tintArea, View view, float intensity) {
         if (isInArea(tintArea, view)) {
@@ -67,7 +53,7 @@ public interface DarkIconDispatcher {
 
     /**
      * @return true if more than half of the {@param view} area are in {@param area}, false
-     *         otherwise
+     * otherwise
      */
     static boolean isInArea(Rect area, View view) {
         if (area.isEmpty()) {
@@ -85,6 +71,23 @@ public interface DarkIconDispatcher {
         boolean majorityOfWidth = 2 * intersectAmount > view.getWidth();
         return majorityOfWidth && coversFullStatusBar;
     }
+
+    void setIconsDarkArea(Rect r);
+
+    LightBarTransitionsController getTransitionsController();
+
+    void addDarkReceiver(DarkReceiver receiver);
+
+    void addDarkReceiver(ImageView imageView);
+
+    // Must have been previously been added through one of the addDarkReceive methods above.
+    void removeDarkReceiver(DarkReceiver object);
+
+    void removeDarkReceiver(ImageView object);
+
+    // Used to reapply darkness on an object, must have previously been added through
+    // addDarkReceiver.
+    void applyDark(ImageView object);
 
     interface DarkReceiver {
         void onDarkChanged(Rect area, float darkIntensity, int tint);

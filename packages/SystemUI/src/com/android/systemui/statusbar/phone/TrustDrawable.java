@@ -49,24 +49,36 @@ public class TrustDrawable extends Drawable {
     private static final int STATE_ENTERING = 1;
     private static final int STATE_VISIBLE = 2;
     private static final int STATE_EXITING = 3;
-
-    private int mAlpha;
-    private boolean mAnimating;
-
-    private int mCurAlpha;
-    private float mCurInnerRadius;
-    private Animator mCurAnimator;
-    private int mState = STATE_UNSET;
-    private Paint mPaint;
-    private boolean mTrustManaged;
-
     private final float mInnerRadiusVisibleMin;
     private final float mInnerRadiusVisibleMax;
     private final float mInnerRadiusExit;
     private final float mInnerRadiusEnter;
     private final float mThickness;
-
     private final Animator mVisibleAnimator;
+    private int mAlpha;
+    private boolean mAnimating;
+    private int mCurAlpha;
+    private final ValueAnimator.AnimatorUpdateListener mAlphaUpdateListener =
+            new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    mCurAlpha = (int) animation.getAnimatedValue();
+                    invalidateSelf();
+                }
+            };
+    private float mCurInnerRadius;
+    private final ValueAnimator.AnimatorUpdateListener mRadiusUpdateListener =
+            new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    mCurInnerRadius = (float) animation.getAnimatedValue();
+                    invalidateSelf();
+                }
+            };
+    private Animator mCurAnimator;
+    private int mState = STATE_UNSET;
+    private Paint mPaint;
+    private boolean mTrustManaged;
 
     public TrustDrawable(Context context) {
         Resources r = context.getResources();
@@ -99,13 +111,13 @@ public class TrustDrawable extends Drawable {
     }
 
     @Override
-    public void setAlpha(int alpha) {
-        mAlpha = alpha;
+    public int getAlpha() {
+        return mAlpha;
     }
 
     @Override
-    public int getAlpha() {
-        return mAlpha;
+    public void setAlpha(int alpha) {
+        mAlpha = alpha;
     }
 
     @Override
@@ -218,8 +230,8 @@ public class TrustDrawable extends Drawable {
     }
 
     private Animator makeAnimators(float startRadius, float endRadius,
-            int startAlpha, int endAlpha, long duration, Interpolator interpolator,
-            boolean repeating, boolean stateUpdateListener) {
+                                   int startAlpha, int endAlpha, long duration, Interpolator interpolator,
+                                   boolean repeating, boolean stateUpdateListener) {
         ValueAnimator alphaAnimator = configureAnimator(
                 ValueAnimator.ofInt(startAlpha, endAlpha),
                 duration, mAlphaUpdateListener, interpolator, repeating);
@@ -236,8 +248,8 @@ public class TrustDrawable extends Drawable {
     }
 
     private ValueAnimator configureAnimator(ValueAnimator animator, long duration,
-            ValueAnimator.AnimatorUpdateListener updateListener, Interpolator interpolator,
-            boolean repeating) {
+                                            ValueAnimator.AnimatorUpdateListener updateListener, Interpolator interpolator,
+                                            boolean repeating) {
         animator.setDuration(duration);
         animator.addUpdateListener(updateListener);
         animator.setInterpolator(interpolator);
@@ -247,24 +259,6 @@ public class TrustDrawable extends Drawable {
         }
         return animator;
     }
-
-    private final ValueAnimator.AnimatorUpdateListener mAlphaUpdateListener =
-            new ValueAnimator.AnimatorUpdateListener() {
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            mCurAlpha = (int) animation.getAnimatedValue();
-            invalidateSelf();
-        }
-    };
-
-    private final ValueAnimator.AnimatorUpdateListener mRadiusUpdateListener =
-            new ValueAnimator.AnimatorUpdateListener() {
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            mCurInnerRadius = (float) animation.getAnimatedValue();
-            invalidateSelf();
-        }
-    };
 
     private class StateUpdateAnimatorListener extends AnimatorListenerAdapter {
         boolean mCancelled;

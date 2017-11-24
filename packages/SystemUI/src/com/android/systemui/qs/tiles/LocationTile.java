@@ -33,7 +33,9 @@ import com.android.systemui.statusbar.policy.KeyguardMonitor;
 import com.android.systemui.statusbar.policy.LocationController;
 import com.android.systemui.statusbar.policy.LocationController.LocationChangeCallback;
 
-/** Quick settings tile: Location **/
+/**
+ * Quick settings tile: Location
+ **/
 public class LocationTile extends QSTileImpl<BooleanState> {
 
     private final AnimationIcon mEnable =
@@ -95,7 +97,7 @@ public class LocationTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-        final boolean locationEnabled =  mController.isLocationEnabled();
+        final boolean locationEnabled = mController.isLocationEnabled();
 
         // Work around for bug 15916487: don't show location tile on top of lock screen. After the
         // bug is fixed, this should be reverted to only hiding it on secure lock screens:
@@ -142,5 +144,7 @@ public class LocationTile extends QSTileImpl<BooleanState> {
         public void onKeyguardShowingChanged() {
             refreshState();
         }
-    };
+    }
+
+    ;
 }

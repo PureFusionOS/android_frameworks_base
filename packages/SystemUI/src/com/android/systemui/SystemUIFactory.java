@@ -47,6 +47,9 @@ public class SystemUIFactory {
 
     static SystemUIFactory mFactory;
 
+    public SystemUIFactory() {
+    }
+
     public static SystemUIFactory getInstance() {
         return mFactory;
     }
@@ -67,38 +70,36 @@ public class SystemUIFactory {
         }
     }
 
-    public SystemUIFactory() {}
-
     public StatusBarKeyguardViewManager createStatusBarKeyguardViewManager(Context context,
-            ViewMediatorCallback viewMediatorCallback, LockPatternUtils lockPatternUtils) {
+                                                                           ViewMediatorCallback viewMediatorCallback, LockPatternUtils lockPatternUtils) {
         return new StatusBarKeyguardViewManager(context, viewMediatorCallback, lockPatternUtils);
     }
 
     public KeyguardBouncer createKeyguardBouncer(Context context, ViewMediatorCallback callback,
-            LockPatternUtils lockPatternUtils,
-            ViewGroup container, DismissCallbackRegistry dismissCallbackRegistry) {
+                                                 LockPatternUtils lockPatternUtils,
+                                                 ViewGroup container, DismissCallbackRegistry dismissCallbackRegistry) {
         return new KeyguardBouncer(context, callback, lockPatternUtils, container,
                 dismissCallbackRegistry);
     }
 
     public ScrimController createScrimController(LightBarController lightBarController,
-            ScrimView scrimBehind, ScrimView scrimInFront, View headsUpScrim,
-            LockscreenWallpaper lockscreenWallpaper) {
+                                                 ScrimView scrimBehind, ScrimView scrimInFront, View headsUpScrim,
+                                                 LockscreenWallpaper lockscreenWallpaper) {
         return new ScrimController(lightBarController, scrimBehind, scrimInFront, headsUpScrim);
     }
 
     public NotificationIconAreaController createNotificationIconAreaController(Context context,
-            StatusBar statusBar) {
+                                                                               StatusBar statusBar) {
         return new NotificationIconAreaController(context, statusBar);
     }
 
     public KeyguardIndicationController createKeyguardIndicationController(Context context,
-            ViewGroup indicationArea, LockIcon lockIcon) {
+                                                                           ViewGroup indicationArea, LockIcon lockIcon) {
         return new KeyguardIndicationController(context, indicationArea, lockIcon);
     }
 
     public QSTileHost createQSTileHost(Context context, StatusBar statusBar,
-            StatusBarIconController iconController) {
+                                       StatusBarIconController iconController) {
         return new QSTileHost(context, statusBar, iconController);
     }
 
@@ -107,5 +108,6 @@ public class SystemUIFactory {
     }
 
     public void injectDependencies(ArrayMap<Object, DependencyProvider> providers,
-            Context context) { }
+                                   Context context) {
+    }
 }

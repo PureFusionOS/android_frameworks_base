@@ -19,14 +19,15 @@ import com.android.systemui.statusbar.policy.CallbackController;
 
 public interface ManagedProfileController extends CallbackController<Callback> {
 
-    void setWorkModeEnabled(boolean enabled);
-
     boolean hasActiveProfile();
 
     boolean isWorkModeEnabled();
 
+    void setWorkModeEnabled(boolean enabled);
+
     public interface Callback {
         void onManagedProfileChanged();
+
         void onManagedProfileRemoved();
     }
 }

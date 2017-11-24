@@ -34,7 +34,15 @@ public class DozeFactory {
     public DozeFactory() {
     }
 
-    /** Creates a DozeMachine with its parts for {@code dozeService}. */
+    public static DozeHost getHost(DozeService service) {
+        Application appCandidate = service.getApplication();
+        final SystemUIApplication app = (SystemUIApplication) appCandidate;
+        return app.getComponent(DozeHost.class);
+    }
+
+    /**
+     * Creates a DozeMachine with its parts for {@code dozeService}.
+     */
     public DozeMachine assembleMachine(DozeService dozeService) {
         Context context = dozeService;
         SensorManager sensorManager = Dependency.get(AsyncSensorManager.class);
@@ -60,21 +68,15 @@ public class DozeFactory {
     }
 
     private DozeTriggers createDozeTriggers(Context context, SensorManager sensorManager,
-            DozeHost host, AmbientDisplayConfiguration config, DozeParameters params,
-            Handler handler, WakeLock wakeLock, DozeMachine machine) {
+                                            DozeHost host, AmbientDisplayConfiguration config, DozeParameters params,
+                                            Handler handler, WakeLock wakeLock, DozeMachine machine) {
         boolean allowPulseTriggers = true;
         return new DozeTriggers(context, machine, host, config, params,
                 sensorManager, handler, wakeLock, allowPulseTriggers);
     }
 
     private DozeMachine.Part createDozeUi(Context context, DozeHost host, WakeLock wakeLock,
-            DozeMachine machine, Handler handler, AlarmManager alarmManager) {
+                                          DozeMachine machine, Handler handler, AlarmManager alarmManager) {
         return new DozeUi(context, alarmManager, machine, wakeLock, host, handler);
-    }
-
-    public static DozeHost getHost(DozeService service) {
-        Application appCandidate = service.getApplication();
-        final SystemUIApplication app = (SystemUIApplication) appCandidate;
-        return app.getComponent(DozeHost.class);
     }
 }

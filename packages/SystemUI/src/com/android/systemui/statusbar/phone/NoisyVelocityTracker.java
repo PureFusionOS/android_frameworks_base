@@ -38,22 +38,12 @@ public class NoisyVelocityTracker implements VelocityTrackerInterface {
     private ArrayDeque<MotionEventCopy> mEventBuf = new ArrayDeque<MotionEventCopy>(MAX_EVENTS);
     private float mVX, mVY = 0;
 
-    private static class MotionEventCopy {
-        public MotionEventCopy(float x2, float y2, long eventTime) {
-            this.x = x2;
-            this.y = y2;
-            this.t = eventTime;
-        }
-        float x, y;
-        long t;
+    private NoisyVelocityTracker() {
     }
 
     public static NoisyVelocityTracker obtain() {
         NoisyVelocityTracker instance = sNoisyPool.acquire();
         return (instance != null) ? instance : new NoisyVelocityTracker();
-    }
-
-    private NoisyVelocityTracker() {
     }
 
     public void addMovement(MotionEvent event) {
@@ -73,7 +63,7 @@ public class NoisyVelocityTracker implements VelocityTrackerInterface {
         float totalweight = 0f;
         float weight = 10f;
         for (final Iterator<MotionEventCopy> iter = mEventBuf.iterator();
-                iter.hasNext();) {
+             iter.hasNext(); ) {
             final MotionEventCopy event = iter.next();
             if (last != null) {
                 final float dt = (float) (event.t - last.t) / units;
@@ -84,8 +74,8 @@ public class NoisyVelocityTracker implements VelocityTrackerInterface {
                             "   [%d] (t=%d %.1f,%.1f) dx=%.1f dy=%.1f dt=%f vx=%.1f vy=%.1f",
                             i, event.t, event.x, event.y,
                             dx, dy, dt,
-                            (dx/dt),
-                            (dy/dt)
+                            (dx / dt),
+                            (dy / dt)
                     ));
                 }
                 if (event.t == last.t) {
@@ -131,5 +121,15 @@ public class NoisyVelocityTracker implements VelocityTrackerInterface {
     public void recycle() {
         mEventBuf.clear();
         sNoisyPool.release(this);
+    }
+
+    private static class MotionEventCopy {
+        float x, y;
+        long t;
+        public MotionEventCopy(float x2, float y2, long eventTime) {
+            this.x = x2;
+            this.y = y2;
+            this.t = eventTime;
+        }
     }
 }

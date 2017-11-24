@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="UTF-8"?><!--
 /**
  * Copyright (c) 2009, The Android Open Source Project
  *
@@ -25,8 +24,8 @@
     <string name="status_bar_no_recent_apps" msgid="7374907845131203189">"சமீபத்திய திரைகள் இங்கு தோன்றும்"</string>
     <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"சமீபத்திய பயன்பாடுகளை நிராகரி"</string>
     <plurals name="status_bar_accessibility_recent_apps" formatted="false" msgid="9138535907802238759">
-      <item quantity="other">மேலோட்டப் பார்வையில் %d திரைகள்</item>
-      <item quantity="one">மேலோட்டப் பார்வையில் 1 திரை</item>
+        <item quantity="other">மேலோட்டப் பார்வையில் %d திரைகள்</item>
+        <item quantity="one">மேலோட்டப் பார்வையில் 1 திரை</item>
     </plurals>
     <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"அறிவிப்புகள் இல்லை"</string>
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"செயலில் இருக்கும்"</string>
@@ -251,8 +250,8 @@
     <string name="accessibility_clear_all" msgid="5235938559247164925">"எல்லா அறிவிப்புகளையும் அழி."</string>
     <string name="notification_group_overflow_indicator" msgid="1863231301642314183">"+ <xliff:g id="NUMBER">%s</xliff:g>"</string>
     <plurals name="notification_group_overflow_description" formatted="false" msgid="4579313201268495404">
-      <item quantity="other">உள்ளே மேலும் <xliff:g id="NUMBER_1">%s</xliff:g> அறிவிப்புகள் உள்ளன.</item>
-      <item quantity="one">உள்ளே மேலும் <xliff:g id="NUMBER_0">%s</xliff:g> அறிவிப்பு உள்ளது.</item>
+        <item quantity="other">உள்ளே மேலும் <xliff:g id="NUMBER_1">%s</xliff:g> அறிவிப்புகள் உள்ளன.</item>
+        <item quantity="one">உள்ளே மேலும் <xliff:g id="NUMBER_0">%s</xliff:g> அறிவிப்பு உள்ளது.</item>
     </plurals>
     <string name="status_bar_notification_inspect_item_title" msgid="5668348142410115323">"அறிவிப்பு அமைப்புகள்"</string>
     <string name="status_bar_notification_app_settings_title" msgid="5525260160341558869">"<xliff:g id="APP_NAME">%s</xliff:g> அமைப்புகள்"</string>
@@ -341,8 +340,7 @@
     <string name="recents_accessibility_split_screen_top" msgid="9056056469282256287">"திரையை மேல்புறமாகப் பிரி"</string>
     <string name="recents_accessibility_split_screen_left" msgid="8987144699630620019">"திரையை இடப்புறமாகப் பிரி"</string>
     <string name="recents_accessibility_split_screen_right" msgid="275069779299592867">"திரையை வலப்புறமாகப் பிரி"</string>
-  <string-array name="recents_blacklist_array">
-  </string-array>
+    <string-array name="recents_blacklist_array"></string-array>
     <string name="expanded_header_battery_charged" msgid="5945855970267657951">"சார்ஜ் செய்யப்பட்டது"</string>
     <string name="expanded_header_battery_charging" msgid="205623198487189724">"சார்ஜாகிறது"</string>
     <string name="expanded_header_battery_charging_with_time" msgid="457559884275395376">"முழுவதும் சார்ஜாக <xliff:g id="CHARGING_TIME">%s</xliff:g> ஆகும்"</string>
@@ -551,13 +549,13 @@
     <string name="notification_num_channels" msgid="2048144408999179471">"<xliff:g id="NUMBER">%d</xliff:g> அறிவிப்பு வகைகள்"</string>
     <string name="notification_default_channel_desc" msgid="2506053815870808359">"இந்தப் பயன்பாட்டில் அறிவிப்பு வகைகள் இல்லை"</string>
     <plurals name="notification_num_channels_desc" formatted="false" msgid="5492793452274077663">
-      <item quantity="other">இந்தப் பயன்பாடு வழங்கும் <xliff:g id="NUMBER_1">%d</xliff:g> அறிவிப்பு வகைகளில் ஒரு அறிவிப்பு வகை</item>
-      <item quantity="one">இந்தப் பயன்பாடு வழங்கும் <xliff:g id="NUMBER_0">%d</xliff:g> அறிவிப்பு வகையில் ஒரு அறிவிப்பு வகை</item>
+        <item quantity="other">இந்தப் பயன்பாடு வழங்கும் <xliff:g id="NUMBER_1">%d</xliff:g> அறிவிப்பு வகைகளில் ஒரு அறிவிப்பு வகை</item>
+        <item quantity="one">இந்தப் பயன்பாடு வழங்கும் <xliff:g id="NUMBER_0">%d</xliff:g> அறிவிப்பு வகையில் ஒரு அறிவிப்பு வகை</item>
     </plurals>
     <string name="notification_channels_list_desc_2" msgid="6214732715833946441">"<xliff:g id="CHANNEL_NAME_1">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2">%2$s</xliff:g>"</string>
     <plurals name="notification_channels_list_desc_2_and_others" formatted="false" msgid="2747813553355336157">
-      <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g>, மேலும் <xliff:g id="NUMBER_5">%3$d</xliff:g> சேனல்கள்</item>
-      <item quantity="one"><xliff:g id="CHANNEL_NAME_1_0">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_1">%2$s</xliff:g>, மேலும் <xliff:g id="NUMBER_2">%3$d</xliff:g> சேனல்</item>
+        <item quantity="other"><xliff:g id="CHANNEL_NAME_1_3">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_4">%2$s</xliff:g>, மேலும் <xliff:g id="NUMBER_5">%3$d</xliff:g> சேனல்கள்</item>
+        <item quantity="one"><xliff:g id="CHANNEL_NAME_1_0">%1$s</xliff:g>, <xliff:g id="CHANNEL_NAME_2_1">%2$s</xliff:g>, மேலும் <xliff:g id="NUMBER_2">%3$d</xliff:g> சேனல்</item>
     </plurals>
     <string name="notification_channel_controls_opened_accessibility" msgid="6553950422055908113">"<xliff:g id="APP_NAME">%1$s</xliff:g>க்கான அறிவிப்புக் கட்டுப்பாடுகள் திறக்கப்பட்டன"</string>
     <string name="notification_channel_controls_closed_accessibility" msgid="7521619812603693144">"<xliff:g id="APP_NAME">%1$s</xliff:g>க்கான அறிவிப்புக் கட்டுப்பாடுகள் மூடப்பட்டன"</string>
@@ -640,18 +638,18 @@
     <string name="left_nav_bar_button_type" msgid="8555981238887546528">"கூடுதல் இடப்புறப் பொத்தான் வகை"</string>
     <string name="right_nav_bar_button_type" msgid="2481056627065649656">"கூடுதல் வலப்புறப் பொத்தான் வகை"</string>
     <string name="nav_bar_default" msgid="8587114043070993007">"(இயல்பு)"</string>
-  <string-array name="nav_bar_buttons">
-    <item msgid="1545641631806817203">"கிளிப்போர்டு"</item>
-    <item msgid="5742013440802239414">"விசைக்குறியீடு"</item>
-    <item msgid="8802889973626281575">"விசைப்பலகை மாற்றி"</item>
-    <item msgid="8175437057325747277">"ஏதுமில்லை"</item>
-  </string-array>
-  <string-array name="nav_bar_layouts">
-    <item msgid="8077901629964902399">"இயல்பானது"</item>
-    <item msgid="8256205964297588988">"சுருக்கமானது"</item>
-    <item msgid="8719936228094005878">"இடப்புறம் சாய்ந்தது"</item>
-    <item msgid="586019486955594690">"வலப்புறம் சாய்ந்தது"</item>
-  </string-array>
+    <string-array name="nav_bar_buttons">
+        <item msgid="1545641631806817203">"கிளிப்போர்டு"</item>
+        <item msgid="5742013440802239414">"விசைக்குறியீடு"</item>
+        <item msgid="8802889973626281575">"விசைப்பலகை மாற்றி"</item>
+        <item msgid="8175437057325747277">"ஏதுமில்லை"</item>
+    </string-array>
+    <string-array name="nav_bar_layouts">
+        <item msgid="8077901629964902399">"இயல்பானது"</item>
+        <item msgid="8256205964297588988">"சுருக்கமானது"</item>
+        <item msgid="8719936228094005878">"இடப்புறம் சாய்ந்தது"</item>
+        <item msgid="586019486955594690">"வலப்புறம் சாய்ந்தது"</item>
+    </string-array>
     <string name="menu_ime" msgid="4998010205321292416">"விசைப்பலகை மாற்றி"</string>
     <string name="save" msgid="2311877285724540644">"சேமி"</string>
     <string name="reset" msgid="2448168080964209908">"மீட்டமை"</string>
@@ -666,16 +664,16 @@
     <string name="drag_to_remove_tiles" msgid="3361212377437088062">"அகற்ற, இங்கே இழுக்கவும்"</string>
     <string name="qs_edit" msgid="2232596095725105230">"மாற்று"</string>
     <string name="tuner_time" msgid="6572217313285536011">"நேரம்"</string>
-  <string-array name="clock_options">
-    <item msgid="5965318737560463480">"மணிநேரம், நிமிடங்கள், வினாடிகளைக் காட்டு"</item>
-    <item msgid="1427801730816895300">"மணிநேரம், நிமிடங்களைக் காட்டு (இயல்பு)"</item>
-    <item msgid="3830170141562534721">"இந்த ஐகானைக் காட்டாதே"</item>
-  </string-array>
-  <string-array name="battery_options">
-    <item msgid="3160236755818672034">"எப்போதும் சதவீதத்தைக் காட்டு"</item>
-    <item msgid="2139628951880142927">"சார்ஜ் செய்யும் போது சதவீதத்தைக் காட்டு (இயல்பு)"</item>
-    <item msgid="3327323682209964956">"இந்த ஐகானைக் காட்டாதே"</item>
-  </string-array>
+    <string-array name="clock_options">
+        <item msgid="5965318737560463480">"மணிநேரம், நிமிடங்கள், வினாடிகளைக் காட்டு"</item>
+        <item msgid="1427801730816895300">"மணிநேரம், நிமிடங்களைக் காட்டு (இயல்பு)"</item>
+        <item msgid="3830170141562534721">"இந்த ஐகானைக் காட்டாதே"</item>
+    </string-array>
+    <string-array name="battery_options">
+        <item msgid="3160236755818672034">"எப்போதும் சதவீதத்தைக் காட்டு"</item>
+        <item msgid="2139628951880142927">"சார்ஜ் செய்யும் போது சதவீதத்தைக் காட்டு (இயல்பு)"</item>
+        <item msgid="3327323682209964956">"இந்த ஐகானைக் காட்டாதே"</item>
+    </string-array>
     <string name="other" msgid="4060683095962566764">"மற்றவை"</string>
     <string name="accessibility_divider" msgid="5903423481953635044">"திரையைப் பிரிக்கும் பிரிப்பான்"</string>
     <string name="accessibility_action_divider_left_full" msgid="2801570521881574972">"இடது புறம் முழுத் திரை"</string>

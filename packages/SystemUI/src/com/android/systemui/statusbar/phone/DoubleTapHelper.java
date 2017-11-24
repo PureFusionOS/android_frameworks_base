@@ -49,8 +49,8 @@ public class DoubleTapHelper {
     private Runnable mTapTimeoutRunnable = this::makeInactive;
 
     public DoubleTapHelper(View view, ActivationListener activationListener,
-            DoubleTapListener doubleTapListener, SlideBackListener slideBackListener,
-            DoubleTapLogListener doubleTapLogListener) {
+                           DoubleTapListener doubleTapListener, SlideBackListener slideBackListener,
+                           DoubleTapLogListener doubleTapLogListener) {
         mTouchSlop = ViewConfiguration.get(view.getContext()).getScaledTouchSlop();
         mDoubleTapSlop = view.getResources().getDimension(R.dimen.double_tap_slop);
         mView = view;

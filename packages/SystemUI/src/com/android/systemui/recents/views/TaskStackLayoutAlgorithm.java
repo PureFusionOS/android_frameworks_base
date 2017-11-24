@@ -110,244 +110,124 @@ class Range {
  */
 public class TaskStackLayoutAlgorithm {
 
-    private static final String TAG = "TaskStackLayoutAlgorithm";
-
     // The distribution of view bounds alpha
     // XXX: This is a hack because you can currently set the max alpha to be > 1f
     public static final float OUTLINE_ALPHA_MIN_VALUE = 0f;
     public static final float OUTLINE_ALPHA_MAX_VALUE = 2f;
-
-    // The medium/maximum dim on the tasks
-    private static final float MED_DIM = 0.15f;
-    private static final float MAX_DIM = 0.25f;
-
     // The various focus states
     public static final int STATE_FOCUSED = 1;
     public static final int STATE_UNFOCUSED = 0;
-
-    // The side that an offset is anchored
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({FROM_TOP, FROM_BOTTOM})
-    public @interface AnchorSide {}
+    private static final String TAG = "TaskStackLayoutAlgorithm";
+    // The medium/maximum dim on the tasks
+    private static final float MED_DIM = 0.15f;
+    private static final float MAX_DIM = 0.25f;
     private static final int FROM_TOP = 0;
     private static final int FROM_BOTTOM = 1;
-
-    // The extent that we care about when calculating fractions
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({WIDTH, HEIGHT})
-    public @interface Extent {}
     private static final int WIDTH = 0;
     private static final int HEIGHT = 1;
-
-    public interface TaskStackLayoutAlgorithmCallbacks {
-        void onFocusStateChanged(int prevFocusState, int curFocusState);
-    }
-
-    /**
-     * The various stack/freeform states.
-     */
-    public static class StackState {
-
-        public static final StackState FREEFORM_ONLY = new StackState(1f, 255);
-        public static final StackState STACK_ONLY = new StackState(0f, 0);
-        public static final StackState SPLIT = new StackState(0.5f, 255);
-
-        public final float freeformHeightPct;
-        public final int freeformBackgroundAlpha;
-
-        /**
-         * @param freeformHeightPct the percentage of the stack height (not including paddings) to
-         *                          allocate to the freeform workspace
-         * @param freeformBackgroundAlpha the background alpha for the freeform workspace
-         */
-        private StackState(float freeformHeightPct, int freeformBackgroundAlpha) {
-            this.freeformHeightPct = freeformHeightPct;
-            this.freeformBackgroundAlpha = freeformBackgroundAlpha;
-        }
-
-        /**
-         * Resolves the stack state for the layout given a task stack.
-         */
-        public static StackState getStackStateForStack(TaskStack stack) {
-            SystemServicesProxy ssp = Recents.getSystemServices();
-            boolean hasFreeformWorkspaces = ssp.hasFreeformWorkspaceSupport();
-            int freeformCount = stack.getFreeformTaskCount();
-            int stackCount = stack.getStackTaskCount();
-            if (hasFreeformWorkspaces && stackCount > 0 && freeformCount > 0) {
-                return SPLIT;
-            } else if (hasFreeformWorkspaces && freeformCount > 0) {
-                return FREEFORM_ONLY;
-            } else {
-                return STACK_ONLY;
-            }
-        }
-
-        /**
-         * Computes the freeform and stack rect for this state.
-         *
-         * @param freeformRectOut the freeform rect to be written out
-         * @param stackRectOut the stack rect, we only write out the top of the stack
-         * @param taskStackBounds the full rect that the freeform rect can take up
-         */
-        public void computeRects(Rect freeformRectOut, Rect stackRectOut,
-                Rect taskStackBounds, int topMargin, int freeformGap, int stackBottomOffset) {
-            // The freeform height is the visible height (not including system insets) - padding
-            // above freeform and below stack - gap between the freeform and stack
-            int availableHeight = taskStackBounds.height() - topMargin - stackBottomOffset;
-            int ffPaddedHeight = (int) (availableHeight * freeformHeightPct);
-            int ffHeight = Math.max(0, ffPaddedHeight - freeformGap);
-            freeformRectOut.set(taskStackBounds.left,
-                    taskStackBounds.top + topMargin,
-                    taskStackBounds.right,
-                    taskStackBounds.top + topMargin + ffHeight);
-            stackRectOut.set(taskStackBounds.left,
-                    taskStackBounds.top,
-                    taskStackBounds.right,
-                    taskStackBounds.bottom);
-            if (ffPaddedHeight > 0) {
-                stackRectOut.top += ffPaddedHeight;
-            } else {
-                stackRectOut.top += topMargin;
-            }
-        }
-    }
-
-    /**
-     * @return True if we should use the grid layout.
-     */
-    boolean useGridLayout() {
-        return Recents.getConfiguration().isGridEnabled;
-    }
-
-    // A report of the visibility state of the stack
-    public static class VisibilityReport {
-        public int numVisibleTasks;
-        public int numVisibleThumbnails;
-
-        public VisibilityReport(int tasks, int thumbnails) {
-            numVisibleTasks = tasks;
-            numVisibleThumbnails = thumbnails;
-        }
-    }
-
-    Context mContext;
-    private StackState mState = StackState.SPLIT;
-    private TaskStackLayoutAlgorithmCallbacks mCb;
-
     // The task bounds (untransformed) for layout.  This rect is anchored at mTaskRoot.
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public Rect mTaskRect = new Rect();
     // The freeform workspace bounds, inset by the top system insets and is a fixed height
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public Rect mFreeformRect = new Rect();
     // The stack bounds, inset from the top system insets, and runs to the bottom of the screen
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public Rect mStackRect = new Rect();
     // This is the current system insets
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     public Rect mSystemInsets = new Rect();
-
+    @ViewDebug.ExportedProperty(category = "recents")
+    public int mMaxTranslationZ;
+    Context mContext;
+    // The smallest scroll progress, at this value, the back most task will be visible
+    @ViewDebug.ExportedProperty(category = "recents")
+    float mMinScrollP;
+    // The largest scroll progress, at this value, the front most task will be visible above the
+    // navigation bar
+    @ViewDebug.ExportedProperty(category = "recents")
+    float mMaxScrollP;
+    // The initial progress that the scroller is set when you first enter recents
+    @ViewDebug.ExportedProperty(category = "recents")
+    float mInitialScrollP;
+    // The task progress for the front-most task in the stack
+    @ViewDebug.ExportedProperty(category = "recents")
+    float mFrontMostTaskP;
+    // The last computed task counts
+    @ViewDebug.ExportedProperty(category = "recents")
+    int mNumStackTasks;
+    @ViewDebug.ExportedProperty(category = "recents")
+    int mNumFreeformTasks;
+    // The min/max z translations
+    @ViewDebug.ExportedProperty(category = "recents")
+    int mMinTranslationZ;
+    // The freeform workspace layout
+    FreeformWorkspaceLayoutAlgorithm mFreeformLayoutAlgorithm;
+    TaskGridLayoutAlgorithm mTaskGridLayoutAlgorithm;
+    // The transform to place TaskViews at the front and back of the stack respectively
+    TaskViewTransform mBackOfStackTransform = new TaskViewTransform();
+    TaskViewTransform mFrontOfStackTransform = new TaskViewTransform();
+    private StackState mState = StackState.SPLIT;
+    private TaskStackLayoutAlgorithmCallbacks mCb;
     // The visible ranges when the stack is focused and unfocused
     private Range mUnfocusedRange;
     private Range mFocusedRange;
-
     // This is the bounds of the stack action above the stack rect
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private Rect mStackActionButtonRect = new Rect();
     // The base top margin for the stack from the system insets
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private int mBaseTopMargin;
     // The base side margin for the stack from the system insets
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private int mBaseSideMargin;
     // The base bottom margin for the stack from the system insets
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private int mBaseBottomMargin;
     private int mMinMargin;
-
     // The gap between the freeform and stack layouts
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private int mFreeformStackGap;
-
     // The initial offset that the focused task is from the top
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private int mInitialTopOffset;
     private int mBaseInitialTopOffset;
     // The initial offset that the launch-from task is from the bottom
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private int mInitialBottomOffset;
     private int mBaseInitialBottomOffset;
-
     // The height between the top margin and the top of the focused task
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private int mFocusedTopPeekHeight;
     // The height between the bottom margin and the top of task in front of the focused task
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private int mFocusedBottomPeekHeight;
-
     // The offset from the bottom of the stack to the bottom of the bounds when the stack is
     // scrolled to the front
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private int mStackBottomOffset;
-
-    /** The height, in pixels, of each task view's title bar. */
+    /**
+     * The height, in pixels, of each task view's title bar.
+     */
     private int mTitleBarHeight;
-
     // The paths defining the motion of the tasks when the stack is focused and unfocused
     private Path mUnfocusedCurve;
     private Path mFocusedCurve;
     private FreePathInterpolator mUnfocusedCurveInterpolator;
     private FreePathInterpolator mFocusedCurveInterpolator;
-
     // The paths defining the distribution of the dim to apply to tasks in the stack when focused
     // and unfocused
     private Path mUnfocusedDimCurve;
     private Path mFocusedDimCurve;
     private FreePathInterpolator mUnfocusedDimCurveInterpolator;
     private FreePathInterpolator mFocusedDimCurveInterpolator;
-
     // The state of the stack focus (0..1), which controls the transition of the stack from the
     // focused to non-focused state
-    @ViewDebug.ExportedProperty(category="recents")
+    @ViewDebug.ExportedProperty(category = "recents")
     private int mFocusState;
-
-    // The smallest scroll progress, at this value, the back most task will be visible
-    @ViewDebug.ExportedProperty(category="recents")
-    float mMinScrollP;
-    // The largest scroll progress, at this value, the front most task will be visible above the
-    // navigation bar
-    @ViewDebug.ExportedProperty(category="recents")
-    float mMaxScrollP;
-    // The initial progress that the scroller is set when you first enter recents
-    @ViewDebug.ExportedProperty(category="recents")
-    float mInitialScrollP;
-    // The task progress for the front-most task in the stack
-    @ViewDebug.ExportedProperty(category="recents")
-    float mFrontMostTaskP;
-
-    // The last computed task counts
-    @ViewDebug.ExportedProperty(category="recents")
-    int mNumStackTasks;
-    @ViewDebug.ExportedProperty(category="recents")
-    int mNumFreeformTasks;
-
-    // The min/max z translations
-    @ViewDebug.ExportedProperty(category="recents")
-    int mMinTranslationZ;
-    @ViewDebug.ExportedProperty(category="recents")
-    public int mMaxTranslationZ;
-
     // Optimization, allows for quick lookup of task -> index
     private SparseIntArray mTaskIndexMap = new SparseIntArray();
     private SparseArray<Float> mTaskIndexOverrideMap = new SparseArray<>();
-
-    // The freeform workspace layout
-    FreeformWorkspaceLayoutAlgorithm mFreeformLayoutAlgorithm;
-    TaskGridLayoutAlgorithm mTaskGridLayoutAlgorithm;
-
-    // The transform to place TaskViews at the front and back of the stack respectively
-    TaskViewTransform mBackOfStackTransform = new TaskViewTransform();
-    TaskViewTransform mFrontOfStackTransform = new TaskViewTransform();
 
     public TaskStackLayoutAlgorithm(Context context, TaskStackLayoutAlgorithmCallbacks cb) {
         Resources res = context.getResources();
@@ -356,6 +236,49 @@ public class TaskStackLayoutAlgorithm {
         mFreeformLayoutAlgorithm = new FreeformWorkspaceLayoutAlgorithm(context);
         mTaskGridLayoutAlgorithm = new TaskGridLayoutAlgorithm(context);
         reloadOnConfigurationChange(context);
+    }
+
+    /**
+     * Retrieves resources that are constant regardless of the current configuration of the device.
+     */
+    public static int getDimensionForDevice(Context ctx, int phoneResId,
+                                            int tabletResId, int xlargeTabletResId, int gridLayoutResId) {
+        return getDimensionForDevice(ctx, phoneResId, phoneResId, tabletResId, tabletResId,
+                xlargeTabletResId, xlargeTabletResId, gridLayoutResId);
+    }
+
+    /**
+     * Retrieves resources that are constant regardless of the current configuration of the device.
+     */
+    public static int getDimensionForDevice(Context ctx, int phonePortResId, int phoneLandResId,
+                                            int tabletPortResId, int tabletLandResId, int xlargeTabletPortResId,
+                                            int xlargeTabletLandResId, int gridLayoutResId) {
+        RecentsConfiguration config = Recents.getConfiguration();
+        Resources res = ctx.getResources();
+        boolean isLandscape = Utilities.getAppConfiguration(ctx).orientation ==
+                Configuration.ORIENTATION_LANDSCAPE;
+        if (config.isGridEnabled) {
+            return res.getDimensionPixelSize(gridLayoutResId);
+        } else if (config.isXLargeScreen) {
+            return res.getDimensionPixelSize(isLandscape
+                    ? xlargeTabletLandResId
+                    : xlargeTabletPortResId);
+        } else if (config.isLargeScreen) {
+            return res.getDimensionPixelSize(isLandscape
+                    ? tabletLandResId
+                    : tabletPortResId);
+        } else {
+            return res.getDimensionPixelSize(isLandscape
+                    ? phoneLandResId
+                    : phonePortResId);
+        }
+    }
+
+    /**
+     * @return True if we should use the grid layout.
+     */
+    boolean useGridLayout() {
+        return Recents.getConfiguration().isGridEnabled;
     }
 
     /**
@@ -434,6 +357,13 @@ public class TaskStackLayoutAlgorithm {
     }
 
     /**
+     * Gets the focused state.
+     */
+    public int getFocusState() {
+        return mFocusState;
+    }
+
+    /**
      * Sets the focused state.
      */
     public void setFocusState(int focusState) {
@@ -446,18 +376,11 @@ public class TaskStackLayoutAlgorithm {
     }
 
     /**
-     * Gets the focused state.
-     */
-    public int getFocusState() {
-        return mFocusState;
-    }
-
-    /**
      * Computes the stack and task rects.  The given task stack bounds already has the top/right
      * insets and left/right padding already applied.
      */
     public void initialize(Rect displayRect, Rect windowRect, Rect taskStackBounds,
-            StackState state) {
+                           StackState state) {
         Rect lastStackRect = new Rect(mStackRect);
 
         int topMargin = getScaleForExtent(windowRect, displayRect, mBaseTopMargin, mMinMargin, HEIGHT);
@@ -505,7 +428,7 @@ public class TaskStackLayoutAlgorithm {
      * in the stack.
      */
     void update(TaskStack stack, ArraySet<Task.TaskKey> ignoreTasksSet,
-            RecentsActivityLaunchState launchState) {
+                RecentsActivityLaunchState launchState) {
         SystemServicesProxy ssp = Recents.getSystemServices();
 
         // Clear the progress map
@@ -616,7 +539,7 @@ public class TaskStackLayoutAlgorithm {
         if (getInitialFocusState() == STATE_UNFOCUSED && mNumStackTasks > 1) {
             if (ignoreScrollToFront || (!launchState.launchedWithAltTab && !scrollToFront)) {
                 // Set the initial scroll to the predefined state (which differs from the stack)
-                float [] initialNormX = null;
+                float[] initialNormX = null;
                 float minBottomTaskNormX = getNormalizedXFromUnfocusedY(mSystemInsets.bottom +
                         mInitialBottomOffset, FROM_BOTTOM);
                 float maxBottomTaskNormX = getNormalizedXFromUnfocusedY(mFocusedTopPeekHeight +
@@ -625,12 +548,12 @@ public class TaskStackLayoutAlgorithm {
                     // For small stacks, position the tasks so that they are top aligned to under
                     // the action button, but ensure that it is at least a certain offset from the
                     // bottom of the stack
-                    initialNormX = new float[] {
+                    initialNormX = new float[]{
                             Math.min(maxBottomTaskNormX, minBottomTaskNormX),
                             getNormalizedXFromUnfocusedY(mFocusedTopPeekHeight, FROM_TOP)
                     };
                 } else {
-                    initialNormX = new float[] {
+                    initialNormX = new float[]{
                             minBottomTaskNormX,
                             getNormalizedXFromUnfocusedY(mInitialTopOffset, FROM_TOP)
                     };
@@ -694,10 +617,9 @@ public class TaskStackLayoutAlgorithm {
 
     /**
      * Updates this stack when a scroll happens.
-     *
      */
     public float updateFocusStateOnScroll(float lastTargetStackScroll, float targetStackScroll,
-            float lastStackScroll) {
+                                          float lastStackScroll) {
         if (targetStackScroll == lastStackScroll) {
             return targetStackScroll;
         }
@@ -724,7 +646,7 @@ public class TaskStackLayoutAlgorithm {
                 newOverrideX = overrideX - deltaTargetScroll;
                 if (isInvalidOverrideX(x, overrideX, newOverrideX)) {
                     mTaskIndexOverrideMap.removeAt(i);
-                } else{
+                } else {
                     mTaskIndexOverrideMap.put(taskId, newOverrideX);
                 }
             }
@@ -865,21 +787,21 @@ public class TaskStackLayoutAlgorithm {
      * is what the view is measured and laid out with.
      */
     public TaskViewTransform getStackTransform(Task task, float stackScroll,
-            TaskViewTransform transformOut, TaskViewTransform frontTransform) {
+                                               TaskViewTransform transformOut, TaskViewTransform frontTransform) {
         return getStackTransform(task, stackScroll, mFocusState, transformOut, frontTransform,
                 false /* forceUpdate */, false /* ignoreTaskOverrides */);
     }
 
     public TaskViewTransform getStackTransform(Task task, float stackScroll,
-            TaskViewTransform transformOut, TaskViewTransform frontTransform,
-            boolean ignoreTaskOverrides) {
+                                               TaskViewTransform transformOut, TaskViewTransform frontTransform,
+                                               boolean ignoreTaskOverrides) {
         return getStackTransform(task, stackScroll, mFocusState, transformOut, frontTransform,
                 false /* forceUpdate */, ignoreTaskOverrides);
     }
 
     public TaskViewTransform getStackTransform(Task task, float stackScroll, int focusState,
-            TaskViewTransform transformOut, TaskViewTransform frontTransform, boolean forceUpdate,
-            boolean ignoreTaskOverrides) {
+                                               TaskViewTransform transformOut, TaskViewTransform frontTransform, boolean forceUpdate,
+                                               boolean ignoreTaskOverrides) {
         if (mFreeformLayoutAlgorithm.isTransformAvailable(task, this)) {
             mFreeformLayoutAlgorithm.getTransform(task, transformOut, this);
             return transformOut;
@@ -908,8 +830,8 @@ public class TaskStackLayoutAlgorithm {
      * Like {@link #getStackTransform}, but in screen coordinates
      */
     public TaskViewTransform getStackTransformScreenCoordinates(Task task, float stackScroll,
-            TaskViewTransform transformOut, TaskViewTransform frontTransform,
-            Rect windowOverrideRect) {
+                                                                TaskViewTransform transformOut, TaskViewTransform frontTransform,
+                                                                Rect windowOverrideRect) {
         TaskViewTransform transform = getStackTransform(task, stackScroll, mFocusState,
                 transformOut, frontTransform, true /* forceUpdate */,
                 false /* ignoreTaskOverrides */);
@@ -921,7 +843,7 @@ public class TaskStackLayoutAlgorithm {
      * window rectangle with {@param windowOverrideRect} if non-null.
      */
     TaskViewTransform transformToScreenCoordinates(TaskViewTransform transformOut,
-            Rect windowOverrideRect) {
+                                                   Rect windowOverrideRect) {
         Rect windowRect = windowOverrideRect != null
                 ? windowOverrideRect
                 : Recents.getSystemServices().getWindowRect();
@@ -943,8 +865,8 @@ public class TaskStackLayoutAlgorithm {
      *                             position in the stack.
      */
     public void getStackTransform(float taskProgress, float nonOverrideTaskProgress,
-            float stackScroll, int focusState, TaskViewTransform transformOut,
-            TaskViewTransform frontTransform, boolean ignoreSingleTaskCase, boolean forceUpdate) {
+                                  float stackScroll, int focusState, TaskViewTransform transformOut,
+                                  TaskViewTransform frontTransform, boolean ignoreSingleTaskCase, boolean forceUpdate) {
         SystemServicesProxy ssp = Recents.getSystemServices();
 
         // Ensure that the task is in range
@@ -1111,7 +1033,7 @@ public class TaskStackLayoutAlgorithm {
      * the top/bottom padding or insets.
      */
     public void getTaskStackBounds(Rect displayRect, Rect windowRect, int topInset, int leftInset,
-            int rightInset, Rect taskStackBounds) {
+                                   int rightInset, Rect taskStackBounds) {
         taskStackBounds.set(windowRect.left + leftInset, windowRect.top + topInset,
                 windowRect.right - rightInset, windowRect.bottom);
 
@@ -1132,42 +1054,6 @@ public class TaskStackLayoutAlgorithm {
                     portraitDisplayRect.width() - 2 * portraitSideMargin);
         }
         taskStackBounds.inset((taskStackBounds.width() - targetStackWidth) / 2, 0);
-    }
-
-    /**
-     * Retrieves resources that are constant regardless of the current configuration of the device.
-     */
-    public static int getDimensionForDevice(Context ctx, int phoneResId,
-            int tabletResId, int xlargeTabletResId, int gridLayoutResId) {
-        return getDimensionForDevice(ctx, phoneResId, phoneResId, tabletResId, tabletResId,
-                xlargeTabletResId, xlargeTabletResId, gridLayoutResId);
-    }
-
-    /**
-     * Retrieves resources that are constant regardless of the current configuration of the device.
-     */
-    public static int getDimensionForDevice(Context ctx, int phonePortResId, int phoneLandResId,
-            int tabletPortResId, int tabletLandResId, int xlargeTabletPortResId,
-            int xlargeTabletLandResId, int gridLayoutResId) {
-        RecentsConfiguration config = Recents.getConfiguration();
-        Resources res = ctx.getResources();
-        boolean isLandscape = Utilities.getAppConfiguration(ctx).orientation ==
-                Configuration.ORIENTATION_LANDSCAPE;
-        if (config.isGridEnabled) {
-            return res.getDimensionPixelSize(gridLayoutResId);
-        } else if (config.isXLargeScreen) {
-            return res.getDimensionPixelSize(isLandscape
-                    ? xlargeTabletLandResId
-                    : xlargeTabletPortResId);
-        } else if (config.isLargeScreen) {
-            return res.getDimensionPixelSize(isLandscape
-                    ? tabletLandResId
-                    : tabletPortResId);
-        } else {
-            return res.getDimensionPixelSize(isLandscape
-                    ? phoneLandResId
-                    : phonePortResId);
-        }
     }
 
     /**
@@ -1315,26 +1201,37 @@ public class TaskStackLayoutAlgorithm {
     public void dump(String prefix, PrintWriter writer) {
         String innerPrefix = prefix + "  ";
 
-        writer.print(prefix); writer.print(TAG);
-        writer.write(" numStackTasks="); writer.print(mNumStackTasks);
+        writer.print(prefix);
+        writer.print(TAG);
+        writer.write(" numStackTasks=");
+        writer.print(mNumStackTasks);
         writer.println();
 
         writer.print(innerPrefix);
-        writer.print("insets="); writer.print(Utilities.dumpRect(mSystemInsets));
-        writer.print(" stack="); writer.print(Utilities.dumpRect(mStackRect));
-        writer.print(" task="); writer.print(Utilities.dumpRect(mTaskRect));
-        writer.print(" freeform="); writer.print(Utilities.dumpRect(mFreeformRect));
-        writer.print(" actionButton="); writer.print(Utilities.dumpRect(mStackActionButtonRect));
+        writer.print("insets=");
+        writer.print(Utilities.dumpRect(mSystemInsets));
+        writer.print(" stack=");
+        writer.print(Utilities.dumpRect(mStackRect));
+        writer.print(" task=");
+        writer.print(Utilities.dumpRect(mTaskRect));
+        writer.print(" freeform=");
+        writer.print(Utilities.dumpRect(mFreeformRect));
+        writer.print(" actionButton=");
+        writer.print(Utilities.dumpRect(mStackActionButtonRect));
         writer.println();
 
         writer.print(innerPrefix);
-        writer.print("minScroll="); writer.print(mMinScrollP);
-        writer.print(" maxScroll="); writer.print(mMaxScrollP);
-        writer.print(" initialScroll="); writer.print(mInitialScrollP);
+        writer.print("minScroll=");
+        writer.print(mMinScrollP);
+        writer.print(" maxScroll=");
+        writer.print(mMaxScrollP);
+        writer.print(" initialScroll=");
+        writer.print(mInitialScrollP);
         writer.println();
 
         writer.print(innerPrefix);
-        writer.print("focusState="); writer.print(mFocusState);
+        writer.print("focusState=");
+        writer.print(mFocusState);
         writer.println();
 
         if (mTaskIndexOverrideMap.size() > 0) {
@@ -1344,11 +1241,110 @@ public class TaskStackLayoutAlgorithm {
                 float overrideX = mTaskIndexOverrideMap.get(taskId, 0f);
 
                 writer.print(innerPrefix);
-                writer.print("taskId= "); writer.print(taskId);
-                writer.print(" x= "); writer.print(x);
-                writer.print(" overrideX= "); writer.print(overrideX);
+                writer.print("taskId= ");
+                writer.print(taskId);
+                writer.print(" x= ");
+                writer.print(x);
+                writer.print(" overrideX= ");
+                writer.print(overrideX);
                 writer.println();
             }
+        }
+    }
+
+    // The side that an offset is anchored
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({FROM_TOP, FROM_BOTTOM})
+    public @interface AnchorSide {
+    }
+
+    // The extent that we care about when calculating fractions
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({WIDTH, HEIGHT})
+    public @interface Extent {
+    }
+
+    public interface TaskStackLayoutAlgorithmCallbacks {
+        void onFocusStateChanged(int prevFocusState, int curFocusState);
+    }
+
+    /**
+     * The various stack/freeform states.
+     */
+    public static class StackState {
+
+        public static final StackState FREEFORM_ONLY = new StackState(1f, 255);
+        public static final StackState STACK_ONLY = new StackState(0f, 0);
+        public static final StackState SPLIT = new StackState(0.5f, 255);
+
+        public final float freeformHeightPct;
+        public final int freeformBackgroundAlpha;
+
+        /**
+         * @param freeformHeightPct       the percentage of the stack height (not including paddings) to
+         *                                allocate to the freeform workspace
+         * @param freeformBackgroundAlpha the background alpha for the freeform workspace
+         */
+        private StackState(float freeformHeightPct, int freeformBackgroundAlpha) {
+            this.freeformHeightPct = freeformHeightPct;
+            this.freeformBackgroundAlpha = freeformBackgroundAlpha;
+        }
+
+        /**
+         * Resolves the stack state for the layout given a task stack.
+         */
+        public static StackState getStackStateForStack(TaskStack stack) {
+            SystemServicesProxy ssp = Recents.getSystemServices();
+            boolean hasFreeformWorkspaces = ssp.hasFreeformWorkspaceSupport();
+            int freeformCount = stack.getFreeformTaskCount();
+            int stackCount = stack.getStackTaskCount();
+            if (hasFreeformWorkspaces && stackCount > 0 && freeformCount > 0) {
+                return SPLIT;
+            } else if (hasFreeformWorkspaces && freeformCount > 0) {
+                return FREEFORM_ONLY;
+            } else {
+                return STACK_ONLY;
+            }
+        }
+
+        /**
+         * Computes the freeform and stack rect for this state.
+         *
+         * @param freeformRectOut the freeform rect to be written out
+         * @param stackRectOut    the stack rect, we only write out the top of the stack
+         * @param taskStackBounds the full rect that the freeform rect can take up
+         */
+        public void computeRects(Rect freeformRectOut, Rect stackRectOut,
+                                 Rect taskStackBounds, int topMargin, int freeformGap, int stackBottomOffset) {
+            // The freeform height is the visible height (not including system insets) - padding
+            // above freeform and below stack - gap between the freeform and stack
+            int availableHeight = taskStackBounds.height() - topMargin - stackBottomOffset;
+            int ffPaddedHeight = (int) (availableHeight * freeformHeightPct);
+            int ffHeight = Math.max(0, ffPaddedHeight - freeformGap);
+            freeformRectOut.set(taskStackBounds.left,
+                    taskStackBounds.top + topMargin,
+                    taskStackBounds.right,
+                    taskStackBounds.top + topMargin + ffHeight);
+            stackRectOut.set(taskStackBounds.left,
+                    taskStackBounds.top,
+                    taskStackBounds.right,
+                    taskStackBounds.bottom);
+            if (ffPaddedHeight > 0) {
+                stackRectOut.top += ffPaddedHeight;
+            } else {
+                stackRectOut.top += topMargin;
+            }
+        }
+    }
+
+    // A report of the visibility state of the stack
+    public static class VisibilityReport {
+        public int numVisibleTasks;
+        public int numVisibleThumbnails;
+
+        public VisibilityReport(int tasks, int thumbnails) {
+            numVisibleTasks = tasks;
+            numVisibleThumbnails = thumbnails;
         }
     }
 }

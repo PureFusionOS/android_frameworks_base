@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2015 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2015 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -17,10 +16,10 @@
     android:title="@string/statusbar_icons_blacklist">
 
     <SwitchPreference
+        android:defaultValue="false"
         android:key="show_fourg"
-        android:title="@string/show_fourg_title"
         android:summary="@string/show_fourg_summary"
-        android:defaultValue="false" />
+        android:title="@string/show_fourg_title" />
 
     <com.android.systemui.tuner.StatusBarSwitch
         android:key="airplane"
@@ -35,9 +34,9 @@
         android:title="@string/status_bar_settings_auto_rotation" />
 
     <com.android.systemui.tuner.BatteryPreference
-        android:title="@string/battery"
+        android:entries="@array/battery_options"
         android:summary="%s"
-        android:entries="@array/battery_options" />
+        android:title="@string/battery" />
 
     <com.android.systemui.tuner.StatusBarSwitch
         android:key="bluetooth"
@@ -68,9 +67,9 @@
         android:title="@string/quick_settings_cellular_detail_title" />
 
     <com.android.systemui.tuner.ClockPreference
-        android:title="@string/tuner_time"
+        android:entries="@array/clock_options"
         android:summary="%s"
-        android:entries="@array/clock_options" />
+        android:title="@string/tuner_time" />
 
     <com.android.systemui.tuner.StatusBarSwitch
         android:key="volume"

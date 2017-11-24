@@ -43,7 +43,9 @@ import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.IconState;
 import com.android.systemui.statusbar.policy.NetworkController.SignalCallback;
 
-/** Quick settings tile: Cellular **/
+/**
+ * Quick settings tile: Cellular
+ **/
 public class CellularTile extends QSTileImpl<SignalState> {
     static final Intent CELLULAR_SETTINGS = new Intent().setComponent(new ComponentName(
             "com.android.settings", "com.android.settings.Settings$DataUsageSummaryActivity"));
@@ -61,6 +63,16 @@ public class CellularTile extends QSTileImpl<SignalState> {
         mActivityStarter = Dependency.get(ActivityStarter.class);
         mDataController = mController.getMobileDataController();
         mDetailAdapter = new CellularDetailAdapter();
+    }
+
+    // Remove the period from the network name
+    public static String removeTrailingPeriod(String string) {
+        if (string == null) return null;
+        final int length = string.length();
+        if (string.endsWith(".")) {
+            return string.substring(0, length - 1);
+        }
+        return string;
     }
 
     @Override
@@ -156,16 +168,6 @@ public class CellularTile extends QSTileImpl<SignalState> {
         return mController.hasMobileDataFeature();
     }
 
-    // Remove the period from the network name
-    public static String removeTrailingPeriod(String string) {
-        if (string == null) return null;
-        final int length = string.length();
-        if (string.endsWith(".")) {
-            return string.substring(0, length - 1);
-        }
-        return string;
-    }
-
     private static final class CallbackInfo {
         boolean enabled;
         boolean wifiEnabled;
@@ -184,17 +186,18 @@ public class CellularTile extends QSTileImpl<SignalState> {
 
     private final class CellSignalCallback implements SignalCallback {
         private final CallbackInfo mInfo = new CallbackInfo();
+
         @Override
         public void setWifiIndicators(boolean enabled, IconState statusIcon, IconState qsIcon,
-                boolean activityIn, boolean activityOut, String description, boolean isTransient) {
+                                      boolean activityIn, boolean activityOut, String description, boolean isTransient) {
             mInfo.wifiEnabled = enabled;
             refreshState(mInfo);
         }
 
         @Override
         public void setMobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
-                int qsType, boolean activityIn, boolean activityOut, String typeContentDescription,
-                String description, boolean isWide, int subId, boolean roaming) {
+                                            int qsType, boolean activityIn, boolean activityOut, String typeContentDescription,
+                                            String description, boolean isWide, int subId, boolean roaming) {
             if (qsIcon == null) {
                 // Not data sim, don't display.
                 return;
@@ -238,7 +241,9 @@ public class CellularTile extends QSTileImpl<SignalState> {
         public void setMobileDataEnabled(boolean enabled) {
             mDetailAdapter.setMobileDataEnabled(enabled);
         }
-    };
+    }
+
+    ;
 
     private final class CellularDetailAdapter implements DetailAdapter {
 
@@ -255,14 +260,14 @@ public class CellularTile extends QSTileImpl<SignalState> {
         }
 
         @Override
-        public Intent getSettingsIntent() {
-            return CELLULAR_SETTINGS;
-        }
-
-        @Override
         public void setToggleState(boolean state) {
             MetricsLogger.action(mContext, MetricsEvent.QS_CELLULAR_TOGGLE, state);
             mDataController.setMobileDataEnabled(state);
+        }
+
+        @Override
+        public Intent getSettingsIntent() {
+            return CELLULAR_SETTINGS;
         }
 
         @Override

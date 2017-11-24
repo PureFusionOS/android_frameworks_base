@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2015 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,36 +15,39 @@
 -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:fitsSystemWindows="true"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:visibility="gone">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:visibility="gone">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/car_lockscreen_disclaimer_title"
-            android:textSize="@dimen/car_lockscreen_disclaimer_title_size"
             android:paddingStart="@dimen/car_lockscreen_disclaimer_title_padding_start"
-            android:paddingTop="@dimen/car_lockscreen_disclaimer_title_padding_top" />
+            android:paddingTop="@dimen/car_lockscreen_disclaimer_title_padding_top"
+            android:text="@string/car_lockscreen_disclaimer_title"
+            android:textSize="@dimen/car_lockscreen_disclaimer_title_size" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="@string/car_lockscreen_disclaimer_text"
-            android:textSize="@dimen/car_lockscreen_disclaimer_text_size"
-            android:paddingStart="@dimen/car_lockscreen_disclaimer_text_padding_start"
             android:paddingEnd="@dimen/car_lockscreen_disclaimer_text_padding_end"
-            android:paddingTop="@dimen/car_lockscreen_disclaimer_text_padding_top" />
+            android:paddingStart="@dimen/car_lockscreen_disclaimer_text_padding_start"
+            android:paddingTop="@dimen/car_lockscreen_disclaimer_text_padding_top"
+            android:text="@string/car_lockscreen_disclaimer_text"
+            android:textSize="@dimen/car_lockscreen_disclaimer_text_size" />
+
         <com.android.systemui.statusbar.car.UserGridView
             android:id="@+id/user_grid"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:stretchMode="columnWidth">
-        </com.android.systemui.statusbar.car.UserGridView>
+            android:layout_gravity="center"
+            android:stretchMode="columnWidth"></com.android.systemui.statusbar.car.UserGridView>
     </LinearLayout>
 </FrameLayout>

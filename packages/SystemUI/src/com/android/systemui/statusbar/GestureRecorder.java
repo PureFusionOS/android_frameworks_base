@@ -36,112 +36,14 @@ import java.util.LinkedList;
 public class GestureRecorder {
     public static final boolean DEBUG = false; // for now
     public static final String TAG = GestureRecorder.class.getSimpleName();
-
-    public class Gesture {
-        public abstract class Record {
-            long time;
-            public abstract String toJson();
-        }
-        public class MotionEventRecord extends Record {
-            public MotionEvent event;
-            public MotionEventRecord(long when, MotionEvent event) {
-                this.time = when;
-                this.event = MotionEvent.obtain(event);
-            }
-            String actionName(int action) {
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        return "down";
-                    case MotionEvent.ACTION_UP:
-                        return "up";
-                    case MotionEvent.ACTION_MOVE:
-                        return "move";
-                    case MotionEvent.ACTION_CANCEL:
-                        return "cancel";
-                    default:
-                        return String.valueOf(action);
-                }
-            }
-            public String toJson() {
-                return String.format(
-                        ("{\"type\":\"motion\", \"time\":%d, \"action\":\"%s\", "
-                            + "\"x\":%.2f, \"y\":%.2f, \"s\":%.2f, \"p\":%.2f}"),
-                        this.time,
-                        actionName(this.event.getAction()),
-                        this.event.getRawX(),
-                        this.event.getRawY(),
-                        this.event.getSize(),
-                        this.event.getPressure()
-                        );
-            }
-        }
-        public class TagRecord extends Record {
-            public String tag, info;
-            public TagRecord(long when, String tag, String info) {
-                this.time = when;
-                this.tag = tag;
-                this.info = info;
-            }
-            public String toJson() {
-                return String.format("{\"type\":\"tag\", \"time\":%d, \"tag\":\"%s\", \"info\":\"%s\"}",
-                        this.time,
-                        this.tag,
-                        this.info
-                        );
-            }
-        }
-        private LinkedList<Record> mRecords = new LinkedList<Record>();
-        private HashSet<String> mTags = new HashSet<String>();
-        long mDownTime = -1;
-        boolean mComplete = false;
-
-        public void add(MotionEvent ev) {
-            mRecords.add(new MotionEventRecord(ev.getEventTime(), ev));
-            if (mDownTime < 0) {
-                mDownTime = ev.getDownTime();
-            } else {
-                if (mDownTime != ev.getDownTime()) {
-                    Log.w(TAG, "Assertion failure in GestureRecorder: event downTime ("
-                            +ev.getDownTime()+") does not match gesture downTime ("+mDownTime+")");
-                }
-            }
-            switch (ev.getActionMasked()) {
-                case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_CANCEL:
-                    mComplete = true;
-            }
-        }
-        public void tag(long when, String tag, String info) {
-            mRecords.add(new TagRecord(when, tag, info));
-            mTags.add(tag);
-        }
-        public boolean isComplete() {
-            return mComplete;
-        }
-        public String toJson() {
-            StringBuilder sb = new StringBuilder();
-            boolean first = true;
-            sb.append("[");
-            for (Record r : mRecords) {
-                if (!first) sb.append(", ");
-                first = false;
-                sb.append(r.toJson());
-            }
-            sb.append("]");
-            return sb.toString();
-        }
-    }
+    static final long SAVE_DELAY = 5000; // ms
 
     // -=-=-=-=-=-=-=-=-=-=-=-
-
-    static final long SAVE_DELAY = 5000; // ms
     static final int SAVE_MESSAGE = 6351;
-
     private LinkedList<Gesture> mGestures;
     private Gesture mCurrentGesture;
     private int mLastSaveLen = -1;
     private String mLogfile;
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -202,7 +104,7 @@ public class GestureRecorder {
         int count = 0;
         for (Gesture g : mGestures) {
             if (!g.isComplete()) continue;
-            if (!first) sb.append("," );
+            if (!first) sb.append(",");
             first = false;
             sb.append(g.toJson());
             count++;
@@ -252,6 +154,113 @@ public class GestureRecorder {
             pw.println(String.valueOf(mLastSaveLen) + " gestures written to " + mLogfile);
         } else {
             pw.println("error writing gestures");
+        }
+    }
+
+    public class Gesture {
+        long mDownTime = -1;
+        boolean mComplete = false;
+        private LinkedList<Record> mRecords = new LinkedList<Record>();
+        private HashSet<String> mTags = new HashSet<String>();
+
+        public void add(MotionEvent ev) {
+            mRecords.add(new MotionEventRecord(ev.getEventTime(), ev));
+            if (mDownTime < 0) {
+                mDownTime = ev.getDownTime();
+            } else {
+                if (mDownTime != ev.getDownTime()) {
+                    Log.w(TAG, "Assertion failure in GestureRecorder: event downTime ("
+                            + ev.getDownTime() + ") does not match gesture downTime (" + mDownTime + ")");
+                }
+            }
+            switch (ev.getActionMasked()) {
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    mComplete = true;
+            }
+        }
+
+        public void tag(long when, String tag, String info) {
+            mRecords.add(new TagRecord(when, tag, info));
+            mTags.add(tag);
+        }
+
+        public boolean isComplete() {
+            return mComplete;
+        }
+
+        public String toJson() {
+            StringBuilder sb = new StringBuilder();
+            boolean first = true;
+            sb.append("[");
+            for (Record r : mRecords) {
+                if (!first) sb.append(", ");
+                first = false;
+                sb.append(r.toJson());
+            }
+            sb.append("]");
+            return sb.toString();
+        }
+
+        public abstract class Record {
+            long time;
+
+            public abstract String toJson();
+        }
+
+        public class MotionEventRecord extends Record {
+            public MotionEvent event;
+
+            public MotionEventRecord(long when, MotionEvent event) {
+                this.time = when;
+                this.event = MotionEvent.obtain(event);
+            }
+
+            String actionName(int action) {
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        return "down";
+                    case MotionEvent.ACTION_UP:
+                        return "up";
+                    case MotionEvent.ACTION_MOVE:
+                        return "move";
+                    case MotionEvent.ACTION_CANCEL:
+                        return "cancel";
+                    default:
+                        return String.valueOf(action);
+                }
+            }
+
+            public String toJson() {
+                return String.format(
+                        ("{\"type\":\"motion\", \"time\":%d, \"action\":\"%s\", "
+                                + "\"x\":%.2f, \"y\":%.2f, \"s\":%.2f, \"p\":%.2f}"),
+                        this.time,
+                        actionName(this.event.getAction()),
+                        this.event.getRawX(),
+                        this.event.getRawY(),
+                        this.event.getSize(),
+                        this.event.getPressure()
+                );
+            }
+        }
+
+        public class TagRecord extends Record {
+            public String tag, info;
+
+            public TagRecord(long when, String tag, String info) {
+                this.time = when;
+                this.tag = tag;
+                this.info = info;
+            }
+
+            public String toJson() {
+                return String.format("{\"type\":\"tag\", \"time\":%d, \"tag\":\"%s\", \"info\":\"%s\"}",
+                        this.time,
+                        this.tag,
+                        this.info
+                );
+            }
         }
     }
 }

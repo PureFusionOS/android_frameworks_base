@@ -37,21 +37,28 @@ import java.util.Collection;
 public class QSAnimator implements Callback, PageListener, Listener, OnLayoutChangeListener,
         OnAttachStateChangeListener, Tunable {
 
+    public static final float EXPANDED_TILE_DELAY = .86f;
     private static final String TAG = "QSAnimator";
-
     private static final String ALLOW_FANCY_ANIMATION = "sysui_qs_fancy_anim";
     private static final String MOVE_FULL_ROWS = "sysui_qs_move_whole_rows";
-
-    public static final float EXPANDED_TILE_DELAY = .86f;
-
     private final ArrayList<View> mAllViews = new ArrayList<>();
     private final ArrayList<View> mTopFiveQs = new ArrayList<>();
     private final QuickQSPanel mQuickQsPanel;
     private final QSPanel mQsPanel;
     private final QS mQs;
+    private final TouchAnimator.Listener mNonFirstPageListener =
+            new TouchAnimator.ListenerAdapter() {
+                @Override
+                public void onAnimationAtEnd() {
+                    mQuickQsPanel.setVisibility(View.INVISIBLE);
+                }
 
+                @Override
+                public void onAnimationStarted() {
+                    mQuickQsPanel.setVisibility(View.VISIBLE);
+                }
+            };
     private PagedTileLayout mPagedLayout;
-
     private boolean mOnFirstPage = true;
     private TouchAnimator mFirstPageAnimator;
     private TouchAnimator mFirstPageDelayedAnimator;
@@ -59,14 +66,19 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
     private TouchAnimator mTranslationYAnimator;
     private TouchAnimator mNonfirstPageAnimator;
     private TouchAnimator mBrightnessAnimator;
-
     private boolean mOnKeyguard;
-
     private boolean mAllowFancy;
     private boolean mFullRows;
     private int mNumQuickTiles;
     private float mLastPosition;
     private QSTileHost mHost;
+    private Runnable mUpdateAnimators = new Runnable() {
+        @Override
+        public void run() {
+            updateAnimators();
+            setPosition(mLastPosition);
+        }
+    };
 
     public QSAnimator(QS qs, QuickQSPanel quickPanel, QSPanel panel) {
         mQs = qs;
@@ -288,7 +300,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
     }
 
     private void getRelativePositionInt(int[] loc1, View view, View parent) {
-        if(view == parent || view == null) return;
+        if (view == parent || view == null) return;
         // Ignore tile pages as they can have some offset we don't want to take into account in
         // RTL.
         if (!(view instanceof PagedTileLayout.TilePage)) {
@@ -360,7 +372,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft,
-            int oldTop, int oldRight, int oldBottom) {
+                               int oldTop, int oldRight, int oldBottom) {
         mQsPanel.post(mUpdateAnimators);
     }
 
@@ -370,25 +382,4 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
         // hooked up to the new views.
         mQsPanel.post(mUpdateAnimators);
     }
-
-    private final TouchAnimator.Listener mNonFirstPageListener =
-            new TouchAnimator.ListenerAdapter() {
-                @Override
-                public void onAnimationAtEnd() {
-                    mQuickQsPanel.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onAnimationStarted() {
-                    mQuickQsPanel.setVisibility(View.VISIBLE);
-                }
-            };
-
-    private Runnable mUpdateAnimators = new Runnable() {
-        @Override
-        public void run() {
-            updateAnimators();
-            setPosition(mLastPosition);
-        }
-    };
 }

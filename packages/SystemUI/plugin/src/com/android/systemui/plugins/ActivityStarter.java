@@ -29,11 +29,17 @@ public interface ActivityStarter {
     int VERSION = 1;
 
     void startPendingIntentDismissingKeyguard(PendingIntent intent);
+
     void startActivity(Intent intent, boolean dismissShade);
+
     void startActivity(Intent intent, boolean onlyProvisioned, boolean dismissShade);
+
     void startActivity(Intent intent, boolean dismissShade, Callback callback);
+
     void postStartActivityDismissingKeyguard(Intent intent, int delay);
+
     void postStartActivityDismissingKeyguard(PendingIntent intent);
+
     void postQSRunnableDismissingKeyguard(Runnable runnable);
 
     interface Callback {

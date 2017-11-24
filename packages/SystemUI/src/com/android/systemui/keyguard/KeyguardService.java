@@ -40,31 +40,6 @@ public class KeyguardService extends Service {
     static final String PERMISSION = android.Manifest.permission.CONTROL_KEYGUARD;
 
     private KeyguardViewMediator mKeyguardViewMediator;
-
-    @Override
-    public void onCreate() {
-        ((SystemUIApplication) getApplication()).startServicesIfNeeded();
-        mKeyguardViewMediator =
-                ((SystemUIApplication) getApplication()).getComponent(KeyguardViewMediator.class);
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-
-    void checkPermission() {
-        // Avoid deadlock by avoiding calling back into the system process.
-        if (Binder.getCallingUid() == Process.SYSTEM_UID) return;
-
-        // Otherwise,explicitly check for caller permission ...
-        if (getBaseContext().checkCallingOrSelfPermission(PERMISSION) != PERMISSION_GRANTED) {
-            Log.w(TAG, "Caller needs permission '" + PERMISSION + "' to call " + Debug.getCaller());
-            throw new SecurityException("Access denied to process: " + Binder.getCallingPid()
-                    + ", must have permission " + PERMISSION);
-        }
-    }
-
     private final IKeyguardService.Stub mBinder = new IKeyguardService.Stub() {
 
         @Override // Binder interface
@@ -201,5 +176,29 @@ public class KeyguardService extends Service {
             mKeyguardViewMediator.onShortPowerPressedGoHome();
         }
     };
+
+    @Override
+    public void onCreate() {
+        ((SystemUIApplication) getApplication()).startServicesIfNeeded();
+        mKeyguardViewMediator =
+                ((SystemUIApplication) getApplication()).getComponent(KeyguardViewMediator.class);
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+
+    void checkPermission() {
+        // Avoid deadlock by avoiding calling back into the system process.
+        if (Binder.getCallingUid() == Process.SYSTEM_UID) return;
+
+        // Otherwise,explicitly check for caller permission ...
+        if (getBaseContext().checkCallingOrSelfPermission(PERMISSION) != PERMISSION_GRANTED) {
+            Log.w(TAG, "Caller needs permission '" + PERMISSION + "' to call " + Debug.getCaller());
+            throw new SecurityException("Access denied to process: " + Binder.getCallingPid()
+                    + ", must have permission " + PERMISSION);
+        }
+    }
 }
 

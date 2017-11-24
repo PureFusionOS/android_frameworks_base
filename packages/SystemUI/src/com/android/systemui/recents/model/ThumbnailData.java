@@ -25,10 +25,10 @@ import android.graphics.Rect;
  */
 public class ThumbnailData {
 
+    public final Rect insets = new Rect();
     // TODO: Make these final once the non-snapshot path is removed.
     public Bitmap thumbnail;
     public int orientation;
-    public final Rect insets = new Rect();
     public boolean reducedResolution;
     public float scale;
 

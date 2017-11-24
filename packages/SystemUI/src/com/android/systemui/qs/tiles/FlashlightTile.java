@@ -31,7 +31,9 @@ import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.tileimpl.QSTileImpl;
 import com.android.systemui.statusbar.policy.FlashlightController;
 
-/** Quick settings tile: Control flashlight **/
+/**
+ * Quick settings tile: Control flashlight
+ **/
 public class FlashlightTile extends QSTileImpl<BooleanState> implements
         FlashlightController.FlashlightListener {
 

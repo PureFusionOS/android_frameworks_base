@@ -35,6 +35,33 @@ public class KeyguardDisplayManager {
     private MediaRouter mMediaRouter;
     private Context mContext;
     private boolean mShowing;
+    private OnDismissListener mOnDismissListener = new OnDismissListener() {
+
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            mPresentation = null;
+        }
+    };
+    private final MediaRouter.SimpleCallback mMediaRouterCallback =
+            new MediaRouter.SimpleCallback() {
+                @Override
+                public void onRouteSelected(MediaRouter router, int type, RouteInfo info) {
+                    if (DEBUG) Slog.d(TAG, "onRouteSelected: type=" + type + ", info=" + info);
+                    updateDisplays(mShowing);
+                }
+
+                @Override
+                public void onRouteUnselected(MediaRouter router, int type, RouteInfo info) {
+                    if (DEBUG) Slog.d(TAG, "onRouteUnselected: type=" + type + ", info=" + info);
+                    updateDisplays(mShowing);
+                }
+
+                @Override
+                public void onRoutePresentationDisplayChanged(MediaRouter router, RouteInfo info) {
+                    if (DEBUG) Slog.d(TAG, "onRoutePresentationDisplayChanged: info=" + info);
+                    updateDisplays(mShowing);
+                }
+            };
 
     public KeyguardDisplayManager(Context context) {
         mContext = context;
@@ -59,35 +86,6 @@ public class KeyguardDisplayManager {
         }
         mShowing = false;
     }
-
-    private final MediaRouter.SimpleCallback mMediaRouterCallback =
-            new MediaRouter.SimpleCallback() {
-        @Override
-        public void onRouteSelected(MediaRouter router, int type, RouteInfo info) {
-            if (DEBUG) Slog.d(TAG, "onRouteSelected: type=" + type + ", info=" + info);
-            updateDisplays(mShowing);
-        }
-
-        @Override
-        public void onRouteUnselected(MediaRouter router, int type, RouteInfo info) {
-            if (DEBUG) Slog.d(TAG, "onRouteUnselected: type=" + type + ", info=" + info);
-            updateDisplays(mShowing);
-        }
-
-        @Override
-        public void onRoutePresentationDisplayChanged(MediaRouter router, RouteInfo info) {
-            if (DEBUG) Slog.d(TAG, "onRoutePresentationDisplayChanged: info=" + info);
-            updateDisplays(mShowing);
-        }
-    };
-
-    private OnDismissListener mOnDismissListener = new OnDismissListener() {
-
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            mPresentation = null;
-        }
-    };
 
     protected void updateDisplays(boolean showing) {
         if (showing) {
@@ -158,8 +156,8 @@ public class KeyguardDisplayManager {
 
             Point p = new Point();
             getDisplay().getSize(p);
-            mUsableWidth = VIDEO_SAFE_REGION * p.x/100;
-            mUsableHeight = VIDEO_SAFE_REGION * p.y/100;
+            mUsableWidth = VIDEO_SAFE_REGION * p.x / 100;
+            mUsableHeight = VIDEO_SAFE_REGION * p.y / 100;
             mMarginLeft = (100 - VIDEO_SAFE_REGION) * p.x / 200;
             mMarginTop = (100 - VIDEO_SAFE_REGION) * p.y / 200;
 

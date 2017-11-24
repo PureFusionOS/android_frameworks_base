@@ -68,14 +68,13 @@ public class MediaNotificationProcessor {
     private static final int RESIZE_BITMAP_AREA = 150 * 150;
     private final ImageGradientColorizer mColorizer;
     private final Context mContext;
-    private float[] mFilteredBackgroundHsl = null;
-    private Palette.Filter mBlackWhiteFilter = (rgb, hsl) -> !isWhiteOrBlack(hsl);
-
     /**
      * The context of the notification. This is the app context of the package posting the
      * notification.
      */
     private final Context mPackageContext;
+    private float[] mFilteredBackgroundHsl = null;
+    private Palette.Filter mBlackWhiteFilter = (rgb, hsl) -> !isWhiteOrBlack(hsl);
     private boolean mIsLowPriority;
 
     public MediaNotificationProcessor(Context context, Context packageContext) {
@@ -84,7 +83,7 @@ public class MediaNotificationProcessor {
 
     @VisibleForTesting
     MediaNotificationProcessor(Context context, Context packageContext,
-            ImageGradientColorizer colorizer) {
+                               ImageGradientColorizer colorizer) {
         mContext = context;
         mPackageContext = packageContext;
         mColorizer = colorizer;
@@ -95,7 +94,7 @@ public class MediaNotificationProcessor {
      * be used.
      *
      * @param notification the notification that is being processed
-     * @param builder the recovered builder for the notification. this will be modified
+     * @param builder      the recovered builder for the notification. this will be modified
      */
     public void processNotification(Notification notification, Notification.Builder builder) {
         Icon largeIcon = notification.getLargeIcon();
@@ -177,8 +176,8 @@ public class MediaNotificationProcessor {
     }
 
     private int selectForegroundColorForSwatches(Palette.Swatch moreVibrant,
-            Palette.Swatch vibrant, Palette.Swatch moreMutedSwatch, Palette.Swatch mutedSwatch,
-            Palette.Swatch dominantSwatch, int fallbackColor) {
+                                                 Palette.Swatch vibrant, Palette.Swatch moreMutedSwatch, Palette.Swatch mutedSwatch,
+                                                 Palette.Swatch dominantSwatch, int fallbackColor) {
         Palette.Swatch coloredCandidate = selectVibrantCandidate(moreVibrant, vibrant);
         if (coloredCandidate == null) {
             coloredCandidate = selectMutedCandidate(mutedSwatch, moreMutedSwatch);
@@ -201,7 +200,7 @@ public class MediaNotificationProcessor {
     }
 
     private Palette.Swatch selectMutedCandidate(Palette.Swatch first,
-            Palette.Swatch second) {
+                                                Palette.Swatch second) {
         boolean firstValid = hasEnoughPopulation(first);
         boolean secondValid = hasEnoughPopulation(second);
         if (firstValid && secondValid) {
@@ -264,7 +263,7 @@ public class MediaNotificationProcessor {
         List<Palette.Swatch> swatches = palette.getSwatches();
         float highestNonWhitePopulation = -1;
         Palette.Swatch second = null;
-        for (Palette.Swatch swatch: swatches) {
+        for (Palette.Swatch swatch : swatches) {
             if (swatch != dominantSwatch
                     && swatch.getPopulation() > highestNonWhitePopulation
                     && !isWhiteOrBlack(swatch.getHsl())) {

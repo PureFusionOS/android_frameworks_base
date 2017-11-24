@@ -25,20 +25,21 @@ import android.widget.FrameLayout;
 public abstract class PanelBar extends FrameLayout {
     public static final boolean DEBUG = false;
     public static final String TAG = PanelBar.class.getSimpleName();
+    public static final int STATE_CLOSED = 0;
+    public static final int STATE_OPENING = 1;
+    public static final int STATE_OPEN = 2;
     private static final boolean SPEW = false;
+    PanelView mPanel;
+    private int mState = STATE_CLOSED;
+    private boolean mTracking;
+    public PanelBar(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
     public static final void LOG(String fmt, Object... args) {
         if (!DEBUG) return;
         Log.v(TAG, String.format(fmt, args));
     }
-
-    public static final int STATE_CLOSED = 0;
-    public static final int STATE_OPENING = 1;
-    public static final int STATE_OPEN = 2;
-
-    PanelView mPanel;
-    private int mState = STATE_CLOSED;
-    private boolean mTracking;
 
     public void go(int state) {
         if (DEBUG) LOG("go state: %d -> %d", mState, state);
@@ -47,10 +48,6 @@ public abstract class PanelBar extends FrameLayout {
 
     public int getState() {
         return mState;
-    }
-
-    public PanelBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
     }
 
     @Override
@@ -112,7 +109,7 @@ public abstract class PanelBar extends FrameLayout {
     public abstract void panelScrimMinFractionChanged(float minFraction);
 
     /**
-     * @param frac the fraction from the expansion in [0, 1]
+     * @param frac     the fraction from the expansion in [0, 1]
      * @param expanded whether the panel is currently expanded; this is independent from the
      *                 fraction as the panel also might be expanded if the fraction is 0
      */
@@ -142,7 +139,7 @@ public abstract class PanelBar extends FrameLayout {
         }
 
         if (SPEW) LOG("panelExpansionChanged: end state=%d [%s%s ]", mState,
-                fullyOpened?" fullyOpened":"", fullyClosed?" fullyClosed":"");
+                fullyOpened ? " fullyOpened" : "", fullyClosed ? " fullyClosed" : "");
     }
 
     public void collapsePanel(boolean animate, boolean delayed, float speedUpFactor) {

@@ -35,8 +35,8 @@ public class UserAvatarView extends View {
     private final UserIconDrawable mDrawable = new UserIconDrawable();
 
     public UserAvatarView(Context context, AttributeSet attrs,
-            int defStyleAttr,
-            int defStyleRes) {
+                          int defStyleAttr,
+                          int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         final TypedArray a = context.obtainStyledAttributes(
