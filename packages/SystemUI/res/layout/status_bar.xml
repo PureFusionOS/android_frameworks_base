@@ -43,7 +43,8 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:paddingEnd="8dp"
-        android:paddingStart="6dp">
+        android:paddingStart="6dp"
+        android:baselineAligned="false">
 
         <!-- The alpha of this area is controlled from both PhoneStatusBarTransitions and
              PhoneStatusBar (DISABLE_NOTIFICATION_ICONS). -->

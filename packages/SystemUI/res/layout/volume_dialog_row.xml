@@ -47,7 +47,6 @@
             android:id="@+id/volume_row_slider"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignWithParentIfMissing="true"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:paddingStart="@dimen/volume_row_slider_padding_start" />
