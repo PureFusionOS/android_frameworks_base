@@ -15,13 +15,15 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sysui="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:title="@string/other">
 
 
     <Preference
         android:fragment="com.android.systemui.tuner.ShortcutPicker"
         android:key="sysui_keyguard_left"
-        android:title="@string/lockscreen_shortcut_left" />
+        android:title="@string/lockscreen_shortcut_left"
+        tools:targetApi="honeycomb" />
 
     <com.android.systemui.tuner.TunerSwitch
         android:key="sysui_keyguard_left_unlock"
@@ -31,7 +33,8 @@
     <Preference
         android:fragment="com.android.systemui.tuner.ShortcutPicker"
         android:key="sysui_keyguard_right"
-        android:title="@string/lockscreen_shortcut_right" />
+        android:title="@string/lockscreen_shortcut_right"
+        tools:targetApi="honeycomb" />
 
     <com.android.systemui.tuner.TunerSwitch
         android:key="sysui_keyguard_right_unlock"

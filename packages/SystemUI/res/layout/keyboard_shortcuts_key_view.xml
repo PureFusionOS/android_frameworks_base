@@ -14,6 +14,7 @@
   ~ limitations under the License
   -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/ksh_item_margin_start"
@@ -23,4 +24,5 @@
     android:singleLine="true"
     android:textAllCaps="true"
     android:textColor="@color/ksh_key_item_color"
-    android:textSize="@dimen/ksh_item_text_size" />
+    android:textSize="@dimen/ksh_item_text_size"
+    tools:targetApi="ice_cream_sandwich" />

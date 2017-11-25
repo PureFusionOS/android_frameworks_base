@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:width="360dp"
     android:height="2dp"
     android:viewportHeight="1"
@@ -26,7 +27,8 @@
         <group
             android:name="path1"
             android:scaleX="0.1"
-            android:translateX="-522.59">
+            android:translateX="-522.59"
+            tools:targetApi="honeycomb">
             <path
                 android:name="rect1"
                 android:fillColor="?android:attr/colorControlActivated"
@@ -35,7 +37,8 @@
         <group
             android:name="path2"
             android:scaleX="0.1"
-            android:translateX="-197.6">
+            android:translateX="-197.6"
+            tools:targetApi="honeycomb">
             <path
                 android:name="rect2"
                 android:fillColor="?android:attr/colorControlActivated"

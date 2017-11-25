@@ -14,6 +14,7 @@ Copyright (C) 2015 The Android Open Source Project
     limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:name="trusted_state_to_error"
     android:width="32dp"
     android:height="32dp"
@@ -67,7 +68,8 @@ Copyright (C) 2015 The Android Open Source Project
             android:name="exclamation_dot"
             android:scaleX="0"
             android:scaleY="0"
-            android:translateY="4">
+            android:translateY="4"
+            tools:targetApi="honeycomb">
             <path
                 android:name="rectangle_path_1"
                 android:fillAlpha="0.5"

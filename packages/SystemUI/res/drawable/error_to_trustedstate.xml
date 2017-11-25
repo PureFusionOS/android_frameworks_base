@@ -14,6 +14,7 @@ Copyright (C) 2015 The Android Open Source Project
     limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:name="error_to_trustedstate"
     android:width="32dp"
     android:height="32dp"
@@ -44,7 +45,8 @@ Copyright (C) 2015 The Android Open Source Project
         <group
             android:name="lock_right_side"
             android:scaleX="1.33333"
-            android:scaleY="1.33333">
+            android:scaleY="1.33333"
+            tools:targetApi="honeycomb">
             <path
                 android:name="path_1"
                 android:fillColor="#FFF3511E"
@@ -53,7 +55,8 @@ Copyright (C) 2015 The Android Open Source Project
         <group
             android:name="lock_left_side"
             android:scaleX="1.33333"
-            android:scaleY="1.33333">
+            android:scaleY="1.33333"
+            tools:targetApi="honeycomb">
             <path
                 android:name="path_2"
                 android:fillColor="#FFF3511E"
@@ -62,7 +65,8 @@ Copyright (C) 2015 The Android Open Source Project
         <group
             android:name="lock_top"
             android:scaleX="0"
-            android:scaleY="0">
+            android:scaleY="0"
+            tools:targetApi="honeycomb">
             <path
                 android:name="path_3"
                 android:fillColor="#FFF3511E"

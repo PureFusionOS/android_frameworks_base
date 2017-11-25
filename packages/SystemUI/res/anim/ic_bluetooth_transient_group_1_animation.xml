@@ -1,56 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-    <set android:ordering="sequentially">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <set android:ordering="sequentially"
+        tools:targetApi="honeycomb">
         <objectAnimator
             android:duration="83"
             android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="scaleX"
             android:valueFrom="1.0"
             android:valueTo="0.0"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="333"
             android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="scaleX"
             android:valueFrom="0.0"
             android:valueTo="0.0"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="83"
             android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="scaleX"
             android:valueFrom="0.0"
             android:valueTo="1.0"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="333"
             android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="scaleX"
             android:valueFrom="1.0"
             android:valueTo="1.0"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
     </set>
-    <set android:ordering="sequentially">
+    <set android:ordering="sequentially"
+        tools:targetApi="honeycomb">
         <objectAnimator
             android:duration="83"
             android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="scaleY"
             android:valueFrom="1.0"
             android:valueTo="0.0"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="333"
             android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="scaleY"
             android:valueFrom="0.0"
             android:valueTo="0.0"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="83"
             android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="scaleY"
             android:valueFrom="0.0"
             android:valueTo="1.0"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
     </set>
 </set>

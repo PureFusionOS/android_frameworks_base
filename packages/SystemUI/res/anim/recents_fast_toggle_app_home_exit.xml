@@ -16,6 +16,7 @@
 */
 --><!-- Recents Activity -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:shareInterpolator="false"
     android:zAdjustment="top">
     <alpha
@@ -24,5 +25,6 @@
         android:fillBefore="true"
         android:fillEnabled="true"
         android:fromAlpha="1.0"
-        android:toAlpha="1.0" />
+        android:toAlpha="1.0"
+        tools:targetApi="cupcake" />
 </set>

@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/colorPrimary"
@@ -39,6 +40,7 @@
         android:layout_height="@dimen/qs_footer_icon_size"
         android:contentDescription="@null"
         android:src="@drawable/ic_info_outline"
-        android:tint="?android:attr/textColorSecondary" />
+        android:tint="?android:attr/textColorSecondary"
+        tools:targetApi="donut" />
 
 </LinearLayout>

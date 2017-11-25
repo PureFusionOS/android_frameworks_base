@@ -14,4 +14,6 @@
      limitations under the License.
 -->
 <pathInterpolator xmlns:android="http://schemas.android.com/apk/res/android"
-    android:pathData="M 0,0 c 0.4,0.143709151 0.2,1 1,1" />
+    xmlns:tools="http://schemas.android.com/tools"
+    android:pathData="M 0,0 c 0.4,0.143709151 0.2,1 1,1"
+    tools:targetApi="lollipop" />

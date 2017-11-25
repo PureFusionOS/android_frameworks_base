@@ -14,6 +14,7 @@
 -->
 <com.google.android.systemui.OpaLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home"
     android:layout_width="@dimen/navigation_key_width"
     android:layout_height="fill_parent"
@@ -31,25 +32,29 @@
             android:id="@+id/red"
             style="@style/DotStyle"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_sysbar_opa_red" />
+            android:src="@drawable/ic_sysbar_opa_red"
+            tools:targetApi="jelly_bean" />
 
         <ImageView
             android:id="@+id/blue"
             style="@style/DotStyle"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_sysbar_opa_blue" />
+            android:src="@drawable/ic_sysbar_opa_blue"
+            tools:targetApi="jelly_bean" />
 
         <ImageView
             android:id="@+id/green"
             style="@style/DotStyle"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_sysbar_opa_green" />
+            android:src="@drawable/ic_sysbar_opa_green"
+            tools:targetApi="jelly_bean" />
 
         <ImageView
             android:id="@+id/yellow"
             style="@style/DotStyle"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_sysbar_opa_yellow" />
+            android:src="@drawable/ic_sysbar_opa_yellow"
+            tools:targetApi="jelly_bean" />
     </RelativeLayout>
 
     <ImageView
@@ -58,7 +63,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:importantForAccessibility="no"
-        android:src="@drawable/ic_sysbar_home" />
+        android:src="@drawable/ic_sysbar_home"
+        tools:targetApi="jelly_bean" />
 
     <com.android.systemui.statusbar.policy.KeyButtonView
         android:id="@+id/home_button"
@@ -67,7 +73,8 @@
         android:layout_gravity="center"
         android:contentDescription="@string/accessibility_home"
         android:scaleType="center"
-        systemui:keyCode="3" />
+        systemui:keyCode="3"
+        tools:targetApi="donut" />
 
     <ImageView
         android:id="@+id/halo"
@@ -75,5 +82,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:importantForAccessibility="no"
-        android:src="@drawable/halo" />
+        android:src="@drawable/halo"
+        tools:targetApi="jelly_bean" />
 </com.google.android.systemui.OpaLayout>

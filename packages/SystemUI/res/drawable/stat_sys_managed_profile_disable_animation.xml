@@ -14,6 +14,7 @@ Copyright (C) 2015 The Android Open Source Project
     limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:width="27.0dp"
     android:height="22.0dp"
     android:viewportHeight="22.0"
@@ -34,7 +35,8 @@ Copyright (C) 2015 The Android Open Source Project
         android:name="work_badge"
         android:scaleX="1.4"
         android:scaleY="1.4"
-        android:translateX="3.0">
+        android:translateX="3.0"
+        tools:targetApi="honeycomb">
         <path
             android:fillColor="@android:color/white"
             android:pathData="M9.9,11.6H7v-1.1H2.1v2.8c0,0.8,0.6,1.4,1.4,1.4h9.9c0.8,0,1.4,-0.6,1.4,-1.4v-2.8H9.9V11.6z" />

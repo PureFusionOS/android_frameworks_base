@@ -176,6 +176,7 @@ public class ScreenPinningRequest implements View.OnClickListener {
 
         @Override
         public void onAttachedToWindow() {
+            super.onAttachedToWindow();
             DisplayMetrics metrics = new DisplayMetrics();
             mWindowManager.getDefaultDisplay().getMetrics(metrics);
             float density = metrics.density;
@@ -301,6 +302,7 @@ public class ScreenPinningRequest implements View.OnClickListener {
 
         @Override
         public void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
             mContext.unregisterReceiver(mReceiver);
         }
 

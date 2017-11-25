@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-    <set android:ordering="sequentially">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <set android:ordering="sequentially"
+        tools:targetApi="honeycomb">
         <objectAnimator
             android:duration="133"
             android:interpolator="@android:interpolator/linear"
             android:propertyName="fillAlpha"
             android:valueFrom="1.0"
             android:valueTo="1.0"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="16"
             android:interpolator="@android:interpolator/linear"
             android:propertyName="fillAlpha"
             android:valueFrom="1.0"
             android:valueTo="0.5"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="433"
             android:interpolator="@android:interpolator/linear"
             android:propertyName="fillAlpha"
             android:valueFrom="0.5"
             android:valueTo="0.5"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="16"
             android:interpolator="@android:interpolator/linear"
             android:propertyName="fillAlpha"
             android:valueFrom="0.5"
             android:valueTo="1.0"
-            android:valueType="floatType" />
+            android:valueType="floatType"
+            tools:targetApi="honeycomb" />
     </set>
 </set>

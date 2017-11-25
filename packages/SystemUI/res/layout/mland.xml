@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -39,7 +40,8 @@
             android:background="@drawable/ripplebg"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="startButtonPressed">
+            android:onClick="startButtonPressed"
+            tools:targetApi="donut">
 
             <ImageView
                 android:id="@+id/play_button_image"
@@ -57,7 +59,8 @@
                 android:layout_gravity="center"
                 android:alpha="0"
                 android:textColor="#000000"
-                android:textSize="40dp" />
+                android:textSize="40sp"
+                tools:targetApi="honeycomb" />
         </FrameLayout>
     </FrameLayout>
 
@@ -77,7 +80,8 @@
             android:onClick="playerMinus"
             android:padding="10dp"
             android:scaleType="centerInside"
-            android:src="@drawable/minus" />
+            android:src="@drawable/minus"
+            tools:targetApi="donut" />
 
         <LinearLayout
             android:id="@+id/scores"
@@ -95,6 +99,7 @@
             android:onClick="playerPlus"
             android:padding="10dp"
             android:scaleType="centerInside"
-            android:src="@drawable/plus" />
+            android:src="@drawable/plus"
+            tools:targetApi="donut" />
     </LinearLayout>
 </FrameLayout>

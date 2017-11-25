@@ -17,6 +17,7 @@
 <!-- Extends RelativeLayout -->
 <com.android.systemui.qs.QuickStatusBarHeader xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/header"
     android:layout_width="match_parent"
     android:layout_height="@dimen/status_bar_header_height"
@@ -29,7 +30,8 @@
     android:elevation="4dp"
     android:paddingEnd="0dp"
     android:paddingStart="0dp"
-    android:paddingTop="0dp">
+    android:paddingTop="0dp"
+    tools:targetApi="lollipop">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,7 +87,8 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         android:focusable="true"
-        android:importantForAccessibility="yes" />
+        android:importantForAccessibility="yes"
+        tools:targetApi="lollipop_mr1" />
 
     <com.android.systemui.statusbar.AlphaOptimizedImageView
         android:id="@+id/qs_detail_header_progress"
@@ -94,7 +97,8 @@
         android:layout_alignParentBottom="true"
         android:alpha="0"
         android:background="@color/qs_detail_progress_track"
-        android:src="@drawable/indeterminate_anim" />
+        android:src="@drawable/indeterminate_anim"
+        tools:targetApi="honeycomb" />
 
     <TextView
         android:id="@+id/header_debug_info"
@@ -104,8 +108,9 @@
         android:fontFamily="sans-serif-condensed"
         android:padding="2dp"
         android:textColor="#00A040"
-        android:textSize="11dp"
+        android:textSize="11sp"
         android:textStyle="bold"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        tools:targetApi="jelly_bean" />
 
 </com.android.systemui.qs.QuickStatusBarHeader>

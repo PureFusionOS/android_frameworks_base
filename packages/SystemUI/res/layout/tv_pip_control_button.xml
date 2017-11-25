@@ -17,7 +17,8 @@
 -->
 
 <!-- Layout for {@link com.android.systemui.pip.tv.PipControlButtonView}. -->
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
         android:id="@+id/button"
@@ -27,7 +28,8 @@
         android:layout_centerHorizontal="true"
         android:focusable="true"
         android:importantForAccessibility="yes"
-        android:src="@drawable/tv_pip_button_focused" />
+        android:src="@drawable/tv_pip_button_focused"
+        tools:targetApi="jelly_bean" />
 
     <ImageView
         android:id="@+id/icon"
@@ -36,7 +38,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:importantForAccessibility="no"
-        android:padding="5dp" />
+        android:padding="5dp"
+        tools:targetApi="jelly_bean" />
 
     <TextView
         android:id="@+id/desc"
@@ -51,5 +54,6 @@
         android:importantForAccessibility="no"
         android:text="@string/pip_fullscreen"
         android:textColor="#EEEEEE"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:targetApi="honeycomb" />
 </merge>

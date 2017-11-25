@@ -13,26 +13,31 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<set xmlns:android="http://schemas.android.com/apk/res/android">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="350"
         android:interpolator="@interpolator/ic_signal_location_enable_cross_1_pathdata_interpolator"
         android:propertyName="pathData"
         android:valueFrom="M 6.44050598145,1.9430847168 c 0.0,0.0 33.5749816895,33.4499664307 33.5749816895,33.4499664307 "
         android:valueTo="M 6.44050598145,1.9430847168 c 0.0,0.0 0.374984741211,0.399978637695 0.374984741211,0.399978637695 "
-        android:valueType="pathType" />
-    <set android:ordering="sequentially">
+        android:valueType="pathType"
+        tools:targetApi="honeycomb" />
+    <set android:ordering="sequentially"
+        tools:targetApi="honeycomb">
         <objectAnimator
             android:duration="333"
             android:interpolator="@android:interpolator/linear"
             android:propertyName="strokeAlpha"
             android:valueFrom="1"
-            android:valueTo="1" />
+            android:valueTo="1"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="17"
             android:interpolator="@android:interpolator/linear"
             android:propertyName="strokeAlpha"
             android:valueFrom="1"
-            android:valueTo="0" />
+            android:valueTo="0"
+            tools:targetApi="honeycomb" />
     </set>
 </set>

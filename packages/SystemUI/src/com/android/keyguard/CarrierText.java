@@ -89,7 +89,7 @@ public class CarrierText extends TextView {
         }
         setTransformationMethod(new CarrierTextTransformationMethod(mContext, useAllCaps));
 
-        mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
     private static CharSequence concatenate(CharSequence plmn, CharSequence spn) {

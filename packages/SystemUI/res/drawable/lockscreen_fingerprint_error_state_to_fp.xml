@@ -14,6 +14,7 @@
   ~ limitations under the License
   -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:name="lockscreen_fingerprint_error_state_to_fp"
     android:width="32dp"
     android:height="32dp"
@@ -23,7 +24,8 @@
         android:name="white_fingerprint_ridges"
         android:rotation="200.66753"
         android:translateX="16.125"
-        android:translateY="19.75">
+        android:translateY="19.75"
+        tools:targetApi="honeycomb">
         <group
             android:name="white_fingerprint_ridges_pivot"
             android:translateX="33.2085"
@@ -106,7 +108,8 @@
             android:name="group_1"
             android:rotation="430"
             android:scaleX="1.12734"
-            android:scaleY="1.12734">
+            android:scaleY="1.12734"
+            tools:targetApi="honeycomb">
             <path
                 android:name="path_3"
                 android:pathData="M 0.0101470947266,10.8087768555 c -5.96701049805,0.0 -10.8000183105,-4.8330078125 -10.8000183105,-10.8000488281 c 0.0,-5.96691894531 4.8330078125,-10.7999267578 10.8000183105,-10.7999267578 c 5.96697998047,0.0 10.799987793,4.8330078125 10.799987793,10.7999267578 c 0.0,5.96704101562 -4.8330078125,10.8000488281 -10.799987793,10.8000488281 Z"

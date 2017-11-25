@@ -14,6 +14,7 @@
 -->
 
 <com.android.systemui.stackdivider.DividerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,12 +26,14 @@
     <com.android.systemui.stackdivider.MinimizedDockShadow
         android:id="@+id/minimized_dock_shadow"
         style="@style/DockedDividerMinimizedShadow"
-        android:alpha="0" />">
+        android:alpha="0"
+        tools:targetApi="honeycomb" />">
 
     <com.android.systemui.stackdivider.DividerHandleView
         android:id="@+id/docked_divider_handle"
         style="@style/DockedDividerHandle"
         android:background="@null"
-        android:contentDescription="@string/accessibility_divider" />
+        android:contentDescription="@string/accessibility_divider"
+        tools:targetApi="donut" />
 
 </com.android.systemui.stackdivider.DividerView>

@@ -16,12 +16,14 @@
  */
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/screen_pinning_request_width"
     android:layout_height="wrap_content"
     android:gravity="bottom|center_horizontal"
     android:layoutDirection="ltr"
     android:orientation="vertical"
-    android:theme="@android:style/Theme.DeviceDefault.Light">
+    android:theme="@android:style/Theme.DeviceDefault.Light"
+    tools:targetApi="jelly_bean_mr1">
 
     <include
         layout="@layout/screen_pinning_request_text_area"

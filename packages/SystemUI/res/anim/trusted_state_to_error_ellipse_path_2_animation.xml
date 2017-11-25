@@ -13,25 +13,29 @@ Copyright (C) 2015 The Android Open Source Project
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<set xmlns:android="http://schemas.android.com/apk/res/android">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="200"
         android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="pathData"
         android:valueFrom="M 0.0,-1.988645 c 1.09829830627,0.0 1.988645,0.890346693734 1.988645,1.988645 c 0.0,1.09829830627 -0.890346693734,1.988645 -1.988645,1.988645 c -1.09829830627,0.0 -1.988645,-0.890346693734 -1.988645,-1.988645 c 0.0,-1.09829830627 0.890346693734,-1.988645 1.988645,-1.988645 Z"
         android:valueTo="M 0.0,0.0 c 0.0,0.0 0.0,0.0 0.0,0.0 c 0.0,0.0 0.0,0.0 0.0,0.0 c 0.0,0.0 0.0,0.0 0.0,0.0 c 0.0,0.0 0.0,0.0 0.0,0.0 Z"
-        android:valueType="pathType" />
+        android:valueType="pathType"
+        tools:targetApi="honeycomb" />
     <objectAnimator
         android:duration="600"
         android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="fillColor"
         android:valueFrom="#FFFFFFFF"
-        android:valueTo="#FFF3511E" />
+        android:valueTo="#FFF3511E"
+        tools:targetApi="honeycomb" />
     <objectAnimator
         android:duration="600"
         android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="fillAlpha"
         android:valueFrom="0.5"
         android:valueTo="1.0"
-        android:valueType="floatType" />
+        android:valueType="floatType"
+        tools:targetApi="honeycomb" />
 </set>

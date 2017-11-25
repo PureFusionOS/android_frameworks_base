@@ -88,7 +88,7 @@ public class AdbOverNetworkTile extends QSTileImpl<BooleanState> {
         }
         mActive = isAdbNetworkEnabled();
         if (mActive) {
-            WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifiManager = (WifiManager) mContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 
             if (wifiInfo != null) {

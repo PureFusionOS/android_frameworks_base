@@ -14,13 +14,15 @@
      limitations under the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/volume_dialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/volume_dialog_margin_bottom"
     android:background="@drawable/volume_dialog_background"
     android:paddingTop="@dimen/volume_dialog_padding_top"
-    android:translationZ="4dp">
+    android:translationZ="4dp"
+    tools:targetApi="lollipop">
 
     <LinearLayout
         android:id="@+id/volume_dialog_content"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:name="ic_bluetooth_transient"
     android:width="48dp"
     android:height="48dp"
@@ -23,7 +24,8 @@
                     android:translateY="-18.72031">
                     <group
                         android:name="cross"
-                        android:rotation="-1.88453">
+                        android:rotation="-1.88453"
+                        tools:targetApi="honeycomb">
                         <path
                             android:name="extented_cross"
                             android:pathData="M 10.6188659668,6.56344604492 c 0.0,0.0 21.7386016846,23.1297454834 21.7386016846,23.1297454834"
@@ -78,7 +80,8 @@
                         android:scaleX="0"
                         android:scaleY="0"
                         android:translateX="37.38789"
-                        android:translateY="18.72031">
+                        android:translateY="18.72031"
+                        tools:targetApi="honeycomb">
                         <group
                             android:name="group_1_pivot_0"
                             android:translateX="-37.38789"

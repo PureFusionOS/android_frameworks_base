@@ -14,12 +14,14 @@
   ~ limitations under the License
   -->
 
-<set xmlns:android="http://schemas.android.com/apk/res/android">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="233"
         android:interpolator="@interpolator/lockscreen_fingerprint_error_state_to_fp_animation_interpolator_1"
         android:propertyName="rotation"
         android:valueFrom="0.0"
         android:valueTo="-289.0"
-        android:valueType="floatType" />
+        android:valueType="floatType"
+        tools:targetApi="honeycomb" />
 </set>

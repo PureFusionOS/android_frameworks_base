@@ -15,6 +15,7 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -39,7 +40,8 @@
         android:layout_marginStart="16dp"
         android:colorAccent="?android:attr/colorAccent"
         systemui:sideLabels="@array/battery_labels"
-        systemui:textColor="?android:attr/textColorSecondary" />
+        systemui:textColor="?android:attr/textColorSecondary"
+        tools:targetApi="lollipop" />
 
     <com.android.systemui.ResizingSpace
         android:layout_width="match_parent"

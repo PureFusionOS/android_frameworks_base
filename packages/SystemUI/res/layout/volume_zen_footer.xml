@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <com.android.systemui.volume.ZenFooter xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/volume_zen_footer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -51,7 +52,8 @@
             android:contentDescription="@string/accessibility_desc_close"
             android:scaleType="center"
             android:src="@drawable/ic_close"
-            android:tint="@android:color/white" />
+            android:tint="@android:color/white"
+            tools:targetApi="donut" />
 
         <TextView
             android:id="@+id/zen_introduction_message"
@@ -63,7 +65,8 @@
             android:lineSpacingMultiplier="1.20029"
             android:text="@string/zen_alarms_introduction"
             android:textAppearance="@style/TextAppearance.QS.Introduction"
-            android:textDirection="locale" />
+            android:textDirection="locale"
+            tools:targetApi="jelly_bean_mr1" />
 
         <View
             android:layout_width="0dp"
@@ -98,7 +101,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.Volume.ZenSummary"
-                android:textDirection="locale" />
+                android:textDirection="locale"
+                tools:targetApi="jelly_bean_mr1" />
 
             <TextView
                 android:id="@+id/volume_zen_summary_line_2"
@@ -106,7 +110,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:textAppearance="@style/TextAppearance.Volume.ZenDetail"
-                android:textDirection="locale" />
+                android:textDirection="locale"
+                tools:targetApi="jelly_bean_mr1" />
 
         </LinearLayout>
 

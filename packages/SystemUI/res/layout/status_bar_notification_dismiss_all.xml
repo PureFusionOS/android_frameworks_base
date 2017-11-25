@@ -16,6 +16,7 @@
 
 <!-- Extends Framelayout -->
 <com.android.systemui.statusbar.DismissView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingEnd="8dp"
@@ -30,5 +31,6 @@
         android:contentDescription="@string/accessibility_clear_all"
         android:focusable="true"
         android:text="@string/clear_all_notifications_text"
-        android:textAllCaps="true" />
+        android:textAllCaps="true"
+        tools:targetApi="donut" />
 </com.android.systemui.statusbar.DismissView>

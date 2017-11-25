@@ -19,6 +19,7 @@
 <!-- This is the combined status bar / notification panel window. -->
 <com.android.systemui.statusbar.phone.StatusBarWindowView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:sysui="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -50,7 +51,8 @@
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
         sysui:ignoreRightInset="true"
-        sysui:scrimColor="@color/scrim_behind_color" />
+        sysui:scrimColor="@color/scrim_behind_color"
+        tools:targetApi="jelly_bean" />
 
     <com.android.systemui.statusbar.AlphaOptimizedView
         android:id="@+id/heads_up_scrim"
@@ -58,7 +60,8 @@
         android:layout_height="@dimen/heads_up_scrim_height"
         android:background="@drawable/heads_up_scrim"
         android:importantForAccessibility="no"
-        sysui:ignoreRightInset="true" />
+        sysui:ignoreRightInset="true"
+        tools:targetApi="jelly_bean" />
 
     <FrameLayout
         android:id="@+id/status_bar_container"
@@ -84,6 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
-        sysui:ignoreRightInset="true" />
+        sysui:ignoreRightInset="true"
+        tools:targetApi="jelly_bean" />
 
 </com.android.systemui.statusbar.phone.StatusBarWindowView>

@@ -14,6 +14,7 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:systemui="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/BrightnessDialogContainer"
     android:layout_width="match_parent"
     android:layout_height="48dp"
@@ -28,7 +29,8 @@
         android:contentDescription="@null"
         android:paddingLeft="8dp"
         android:src="@drawable/ic_qs_brightness_auto_off"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:targetApi="donut" />
 
     <com.android.systemui.settings.ToggleSliderView
         android:id="@+id/brightness_slider"
@@ -38,6 +40,7 @@
         android:layout_weight="1"
         android:contentDescription="@string/accessibility_brightness"
         android:importantForAccessibility="no"
-        systemui:text="@string/status_bar_settings_auto_brightness_label" />
+        systemui:text="@string/status_bar_settings_auto_brightness_label"
+        tools:targetApi="donut" />
 
 </LinearLayout>

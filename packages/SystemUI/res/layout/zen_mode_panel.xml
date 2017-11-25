@@ -14,6 +14,7 @@
      limitations under the License.
 --><!-- extends LinearLayout -->
 <com.android.systemui.volume.ZenModePanel xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/zen_mode_panel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -58,7 +59,8 @@
                 android:contentDescription="@string/accessibility_desc_close"
                 android:scaleType="center"
                 android:src="@drawable/ic_close"
-                android:tint="@android:color/white" />
+                android:tint="@android:color/white"
+                tools:targetApi="donut" />
 
             <TextView
                 android:id="@+id/zen_introduction_message"
@@ -69,7 +71,8 @@
                 android:layout_toStartOf="@id/zen_introduction_confirm"
                 android:lineSpacingMultiplier="1.20029"
                 android:textAppearance="@style/TextAppearance.QS.Introduction"
-                android:textDirection="locale" />
+                android:textDirection="locale"
+                tools:targetApi="jelly_bean_mr1" />
 
             <TextView
                 android:id="@+id/zen_introduction_customize"
@@ -122,7 +125,8 @@
             android:layout_marginStart="18dp"
             android:lineSpacingMultiplier="1.20029"
             android:textAppearance="@style/TextAppearance.QS.Warning"
-            android:textDirection="locale" />
+            android:textDirection="locale"
+            tools:targetApi="jelly_bean_mr1" />
     </LinearLayout>
 
     <LinearLayout
@@ -139,7 +143,8 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:alpha="?android:attr/disabledAlpha"
-            android:tint="?android:attr/colorForeground" />
+            android:tint="?android:attr/colorForeground"
+            tools:targetApi="honeycomb" />
 
         <TextView
             android:id="@android:id/title"

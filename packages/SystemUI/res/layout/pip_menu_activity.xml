@@ -13,6 +13,7 @@
      limitations under the License.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -22,7 +23,8 @@
         android:id="@+id/menu_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:forceHasOverlappingRendering="false">
+        android:forceHasOverlappingRendering="false"
+        tools:targetApi="n">
 
         <!-- The margins for this container is calculated in the code depending on whether the
              actions_container is visible. -->
@@ -39,7 +41,8 @@
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:contentDescription="@string/pip_phone_expand"
                 android:padding="10dp"
-                android:src="@drawable/pip_expand" />
+                android:src="@drawable/pip_expand"
+                tools:targetApi="donut" />
         </FrameLayout>
 
         <FrameLayout
@@ -56,7 +59,8 @@
                 android:layout_gravity="center_horizontal"
                 android:divider="@android:color/transparent"
                 android:orientation="horizontal"
-                android:showDividers="middle" />
+                android:showDividers="middle"
+                tools:targetApi="honeycomb" />
         </FrameLayout>
     </FrameLayout>
 
@@ -68,6 +72,7 @@
         android:background="?android:selectableItemBackgroundBorderless"
         android:contentDescription="@string/pip_phone_close"
         android:padding="@dimen/pip_action_padding"
-        android:src="@drawable/ic_close_white" />
+        android:src="@drawable/ic_close_white"
+        tools:targetApi="donut" />
 
 </FrameLayout>

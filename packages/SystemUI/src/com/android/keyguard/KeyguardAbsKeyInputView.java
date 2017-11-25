@@ -94,6 +94,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
 
     @Override
     protected void onFinishInflate() {
+        super.onFinishInflate();
         mLockPatternUtils = new LockPatternUtils(mContext);
         mSecurityMessageDisplay = KeyguardMessageArea.findSecurityMessageDisplay(this);
         mEcaView = findViewById(R.id.keyguard_selector_fade_container);

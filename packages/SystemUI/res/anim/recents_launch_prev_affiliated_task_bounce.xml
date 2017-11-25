@@ -17,6 +17,7 @@
 -->
 
 <set xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#ff000000"
     android:shareInterpolator="false"
     android:zAdjustment="top">
@@ -28,7 +29,8 @@
         android:fillEnabled="true"
         android:fromYDelta="0%"
         android:interpolator="@android:interpolator/fast_out_slow_in"
-        android:toYDelta="10%" />
+        android:toYDelta="10%"
+        tools:targetApi="cupcake" />
 
     <translate
         android:duration="217"
@@ -38,5 +40,6 @@
         android:fromYDelta="0%"
         android:interpolator="@interpolator/recents_launch_prev_affiliated_task_bounce_ydelta"
         android:startOffset="133"
-        android:toYDelta="-10%" />
+        android:toYDelta="-10%"
+        tools:targetApi="cupcake" />
 </set>

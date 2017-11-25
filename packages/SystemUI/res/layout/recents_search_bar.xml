@@ -13,6 +13,7 @@
      limitations under the License.
 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/search_bg_transparent">
@@ -24,6 +25,7 @@
         android:text="@string/recents_search_bar_label"
         android:textAllCaps="true"
         android:textColor="#99ffffff"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        tools:targetApi="ice_cream_sandwich" />
 </FrameLayout>
 

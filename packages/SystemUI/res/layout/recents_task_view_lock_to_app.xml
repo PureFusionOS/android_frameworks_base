@@ -13,6 +13,7 @@
      limitations under the License.
 -->
 <com.android.systemui.statusbar.AlphaOptimizedFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lock_to_app_fab"
     android:layout_width="@dimen/recents_lock_to_app_size"
     android:layout_height="@dimen/recents_lock_to_app_size"
@@ -23,7 +24,8 @@
     android:background="@drawable/recents_lock_to_task_button_bg"
     android:contentDescription="@string/recents_lock_to_app_button_label"
     android:translationZ="4dp"
-    android:visibility="invisible">
+    android:visibility="invisible"
+    tools:targetApi="honeycomb">
 
     <ImageView
         android:layout_width="@dimen/recents_lock_to_app_icon_size"

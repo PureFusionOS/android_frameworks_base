@@ -18,6 +18,7 @@
 
 <!-- Extends FrameLayout -->
 <com.android.systemui.assist.AssistOrbContainer xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -46,6 +47,7 @@
         android:layout_gravity="bottom"
         android:background="@drawable/assist_orb_navbar_scrim"
         android:elevation="50dp"
-        android:outlineProvider="none" />
+        android:outlineProvider="none"
+        tools:targetApi="lollipop" />
 
 </com.android.systemui.assist.AssistOrbContainer>

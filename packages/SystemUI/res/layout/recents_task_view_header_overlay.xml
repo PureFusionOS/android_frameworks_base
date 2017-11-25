@@ -13,6 +13,7 @@
      limitations under the License.
 --><!-- The layouts params are calculated in TaskViewHeader.java -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,7 +26,8 @@
         android:paddingBottom="8dp"
         android:paddingEnd="12dp"
         android:paddingStart="16dp"
-        android:paddingTop="8dp" />
+        android:paddingTop="8dp"
+        tools:targetApi="donut" />
 
     <TextView
         android:id="@+id/app_title"
@@ -39,7 +41,8 @@
         android:singleLine="true"
         android:text="@string/recents_empty_message"
         android:textColor="#ffffffff"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        tools:targetApi="jelly_bean" />
 
     <com.android.systemui.recents.views.FixedSizeImageView
         android:id="@+id/app_info"

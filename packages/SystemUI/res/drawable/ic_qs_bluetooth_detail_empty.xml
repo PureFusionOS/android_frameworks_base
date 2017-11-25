@@ -14,12 +14,14 @@ Copyright (C) 2014 The Android Open Source Project
     limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:width="56dp"
     android:height="56dp"
     android:alpha="0.14"
     android:tint="?android:attr/colorForeground"
     android:viewportHeight="48.0"
-    android:viewportWidth="48.0">
+    android:viewportWidth="48.0"
+    tools:targetApi="honeycomb">
 
     <path
         android:fillColor="#FFFFFF"

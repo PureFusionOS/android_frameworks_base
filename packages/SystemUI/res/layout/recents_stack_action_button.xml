@@ -13,6 +13,7 @@
      limitations under the License.
 -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/button"
     style="?attr/clearAllStyle"
     android:layout_width="wrap_content"
@@ -32,4 +33,5 @@
     android:textAllCaps="true"
     android:textColor="#FFFFFF"
     android:textSize="14sp"
-    android:visibility="invisible" />
+    android:visibility="invisible"
+    tools:targetApi="jelly_bean" />

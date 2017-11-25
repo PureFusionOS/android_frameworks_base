@@ -13,19 +13,23 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-    <set android:ordering="sequentially">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <set android:ordering="sequentially"
+        tools:targetApi="honeycomb">
         <objectAnimator
             android:duration="200"
             android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="alpha"
             android:valueFrom="1"
-            android:valueTo="1" />
+            android:valueTo="1"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="350"
             android:interpolator="@android:interpolator/fast_out_slow_in"
             android:propertyName="alpha"
             android:valueFrom="1"
-            android:valueTo="0.5" />
+            android:valueTo="0.5"
+            tools:targetApi="honeycomb" />
     </set>
 </set>

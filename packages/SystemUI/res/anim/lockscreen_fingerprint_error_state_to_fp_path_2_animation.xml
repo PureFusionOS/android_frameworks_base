@@ -14,21 +14,25 @@
   ~ limitations under the License
   -->
 
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-    <set android:ordering="sequentially">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <set android:ordering="sequentially"
+        tools:targetApi="honeycomb">
         <objectAnimator
             android:duration="100"
             android:interpolator="@android:interpolator/linear"
             android:propertyName="pathData"
             android:valueFrom="M 1.35900878906,6.76104736328 c 0.0,0.0 -2.69998168945,0.0 -2.69998168945,0.0 c 0.0,0.0 0.0,-2.69995117188 0.0,-2.69995117188 c 0.0,0.0 2.69998168945,0.0 2.69998168945,0.0 c 0.0,0.0 0.0,2.69995117188 0.0,2.69995117188 Z"
             android:valueTo="M 1.35900878906,6.76104736328 c 0.0,0.0 -2.69998168945,0.0 -2.69998168945,0.0 c 0.0,0.0 0.0,-2.69995117188 0.0,-2.69995117188 c 0.0,0.0 2.69998168945,0.0 2.69998168945,0.0 c 0.0,0.0 0.0,2.69995117188 0.0,2.69995117188 Z"
-            android:valueType="pathType" />
+            android:valueType="pathType"
+            tools:targetApi="honeycomb" />
         <objectAnimator
             android:duration="83"
             android:interpolator="@android:interpolator/linear"
             android:propertyName="pathData"
             android:valueFrom="M 1.35900878906,6.76104736328 c 0.0,0.0 -2.69998168945,0.0 -2.69998168945,0.0 c 0.0,0.0 0.0,-2.69995117188 0.0,-2.69995117188 c 0.0,0.0 2.69998168945,0.0 2.69998168945,0.0 c 0.0,0.0 0.0,2.69995117188 0.0,2.69995117188 Z"
             android:valueTo="M 1.35900878906,6.76104736328 c 0.0,0.0 -2.69998168945,0.0 -2.69998168945,0.0 c 0.0,0.0 0.0340270996094,0.050048828125 0.0340270996094,0.050048828125 c 0.0,0.0 2.69998168945,0.0 2.69998168945,0.0 c 0.0,0.0 -0.0340270996094,-0.050048828125 -0.0340270996094,-0.050048828125 Z"
-            android:valueType="pathType" />
+            android:valueType="pathType"
+            tools:targetApi="honeycomb" />
     </set>
 </set>

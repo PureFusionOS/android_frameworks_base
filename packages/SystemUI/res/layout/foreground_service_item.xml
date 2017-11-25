@@ -17,6 +17,7 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
@@ -32,7 +33,8 @@
         android:layout_height="@android:dimen/app_icon_size"
         android:layout_marginEnd="8dp"
         android:contentDescription="@null"
-        android:scaleType="centerInside" />
+        android:scaleType="centerInside"
+        tools:targetApi="donut" />
 
     <TextView
         android:id="@+id/app_name"

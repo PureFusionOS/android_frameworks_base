@@ -14,12 +14,14 @@
 -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:title="@string/other">
 
     <!-- importance -->
     <Preference
         android:fragment="com.android.systemui.tuner.PowerNotificationControlsFragment"
         android:key="power_notification_controls"
-        android:title="@string/tuner_full_importance_settings" />
+        android:title="@string/tuner_full_importance_settings"
+        tools:targetApi="honeycomb" />
 
 </PreferenceScreen>

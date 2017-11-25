@@ -17,6 +17,7 @@
 
 <!-- Extends FrameLayout -->
 <com.android.systemui.omni.DetailedWeatherView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -251,7 +252,8 @@
             android:layout_height="56dp"
             android:alpha="0.14"
             android:src="@drawable/ic_qs_weather_default_on"
-            android:tint="?android:attr/textColorSecondary" />
+            android:tint="?android:attr/textColorSecondary"
+            tools:targetApi="honeycomb" />
 
         <TextView
             android:id="@+id/status_msg"

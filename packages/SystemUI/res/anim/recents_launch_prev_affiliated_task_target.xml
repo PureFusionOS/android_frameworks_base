@@ -17,6 +17,7 @@
 -->
 
 <set xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#ff000000"
     android:shareInterpolator="false"
     android:zAdjustment="normal">
@@ -29,7 +30,8 @@
         android:fromAlpha="0.6"
         android:interpolator="@android:interpolator/decelerate_cubic"
         android:startOffset="75"
-        android:toAlpha="1.0" />
+        android:toAlpha="1.0"
+        tools:targetApi="cupcake" />
 
     <scale
         android:duration="225"
@@ -43,5 +45,6 @@
         android:pivotY="50%p"
         android:startOffset="75"
         android:toXScale="1.0"
-        android:toYScale="1.0" />
+        android:toYScale="1.0"
+        tools:targetApi="cupcake" />
 </set>

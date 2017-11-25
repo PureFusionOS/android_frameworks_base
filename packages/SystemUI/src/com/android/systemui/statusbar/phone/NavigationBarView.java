@@ -521,6 +521,7 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
 
     @Override
     public void onFinishInflate() {
+        super.onFinishInflate();
         mNavigationInflaterView = (NavigationBarInflaterView) findViewById(
                 R.id.navigation_inflater);
         updateRotatedViews();

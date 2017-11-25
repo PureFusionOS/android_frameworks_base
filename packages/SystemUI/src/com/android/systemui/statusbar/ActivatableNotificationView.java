@@ -262,6 +262,7 @@ public abstract class ActivatableNotificationView extends ExpandableOutlineView 
 
     @Override
     public void drawableHotspotChanged(float x, float y) {
+        super.drawableHotspotChanged(x, y);
         if (!mDimmed) {
             mBackgroundNormal.drawableHotspotChanged(x, y);
         }

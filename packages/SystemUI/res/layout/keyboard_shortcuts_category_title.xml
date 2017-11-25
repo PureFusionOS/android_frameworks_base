@@ -16,6 +16,7 @@
   ~ limitations under the License
   -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:fontFamily="sans-serif-medium"
@@ -23,4 +24,5 @@
     android:paddingEnd="24dp"
     android:paddingStart="24dp"
     android:paddingTop="20dp"
-    android:textSize="14sp" />
+    android:textSize="14sp"
+    tools:targetApi="jelly_bean" />

@@ -15,13 +15,15 @@
 
 <!-- This expects to be included inside a RelativeLayout -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recents_membar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="top"
     android:elevation="@dimen/recents_membar_spacing"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:targetApi="lollipop">
 
     <ProgressBar
         android:id="@+id/recents_memory_bar"

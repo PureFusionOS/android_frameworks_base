@@ -14,7 +14,8 @@
      limitations under the License.
 -->
 
-<set xmlns:android="http://schemas.android.com/apk/res/android">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <objectAnimator
         android:duration="2016"
@@ -50,6 +51,7 @@ l -0.00927038192749 0 l -0.00915899276733 0 l -0.00905097961426 0 l -0.008946142
 l -0.00884438514709 0 l -0.00874552726746 0 l -0.00864946365356 0 l -0.00855606079102 0
 l -0.00846519470215 0 l -0.00837676048279 0 "
         android:propertyXName="scaleX"
-        android:repeatCount="infinite" />
+        android:repeatCount="infinite"
+        tools:targetApi="lollipop" />
 
 </set>

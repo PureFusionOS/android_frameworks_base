@@ -16,8 +16,8 @@
   ~ limitations under the License
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="?android:attr/colorAccent" android:state_activated="true" />
+<selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="?android:attr/colorAccent" android:state_activated="true" tools:targetApi="honeycomb" />
     <item android:color="@color/qs_tile_disabled_color" android:state_enabled="false" />
     <item android:color="#66ffffff" /> <!-- 40% white -->
 </selector>

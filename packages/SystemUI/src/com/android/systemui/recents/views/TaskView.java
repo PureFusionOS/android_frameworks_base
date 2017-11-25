@@ -216,6 +216,7 @@ public class TaskView extends FixedSizeFrameLayout implements Task.TaskCallbacks
     @Override
     protected void onFinishInflate() {
         // Bind the views
+        super.onFinishInflate();
         mHeaderView = findViewById(R.id.task_view_bar);
         mThumbnailView = findViewById(R.id.task_view_thumbnail);
         mThumbnailView.updateClipToTaskBar(mHeaderView);

@@ -14,25 +14,31 @@
     limitations under the License.
 -->
 <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:duration="@integer/carrier_network_change_anim_time"
     android:interpolator="@android:anim/linear_interpolator"
     android:repeatCount="-1">
 
     <propertyValuesHolder
         android:propertyName="fillColor"
-        android:valueType="colorType">
+        android:valueType="colorType"
+        tools:targetApi="honeycomb">
         <keyframe
             android:fraction="0.0"
-            android:value="?attr/backgroundColor" />
+            android:value="?attr/backgroundColor"
+            tools:targetApi="m" />
         <keyframe
             android:fraction="0.66"
-            android:value="?attr/backgroundColor" />
+            android:value="?attr/backgroundColor"
+            tools:targetApi="m" />
         <keyframe
             android:fraction="0.67"
-            android:value="?attr/fillColor" />
+            android:value="?attr/fillColor"
+            tools:targetApi="m" />
         <keyframe
             android:fraction="1.0"
-            android:value="?attr/fillColor" />
+            android:value="?attr/fillColor"
+            tools:targetApi="m" />
     </propertyValuesHolder>
 
 </objectAnimator>

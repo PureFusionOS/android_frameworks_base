@@ -14,7 +14,8 @@
      limitations under the License.
 -->
 
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Toolbar
         android:id="@*android:id/action_bar"
@@ -22,7 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:navigationContentDescription="@*android:string/action_bar_up_description" />
+        android:navigationContentDescription="@*android:string/action_bar_up_description"
+        tools:targetApi="lollipop" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@android:id/list"
@@ -31,7 +33,8 @@
         android:layout_weight="1"
         android:importantForAccessibility="no"
         android:scrollIndicators="top"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        tools:targetApi="jelly_bean" />
 
     <View
         android:id="@+id/nav_bar_background"

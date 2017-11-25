@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/upperLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:targetApi="honeycomb">
 
 
     <com.android.systemui.screenshot.CropImageView
@@ -19,7 +21,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:animateLayoutChanges="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:targetApi="honeycomb">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -27,7 +30,8 @@
             android:layout_alignParentLeft="true"
             android:animateLayoutChanges="true"
             android:background="@drawable/cropper_bg"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:targetApi="honeycomb">
 
             <ImageButton
                 android:id="@+id/workMode"
@@ -105,7 +109,8 @@
             android:layout_alignParentRight="true"
             android:animateLayoutChanges="true"
             android:background="@drawable/cropper_bg"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:targetApi="honeycomb">
 
 
             <ImageButton

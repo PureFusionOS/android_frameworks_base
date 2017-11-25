@@ -14,6 +14,7 @@
      limitations under the License.
 --><!-- Extends LinearLayout -->
 <com.android.systemui.qs.QSDetail xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/qs_detail_background"
@@ -21,7 +22,8 @@
     android:elevation="4dp"
     android:orientation="vertical"
     android:paddingBottom="8dp"
-    android:visibility="invisible">
+    android:visibility="invisible"
+    tools:targetApi="lollipop">
 
     <include
         android:id="@+id/qs_detail_header"
@@ -37,7 +39,8 @@
         android:background="@color/qs_detail_progress_track"
         android:scaleType="fitXY"
         android:src="@drawable/indeterminate_anim"
-        android:translationY="16dp" />
+        android:translationY="16dp"
+        tools:targetApi="honeycomb" />
 
     <com.android.systemui.qs.NonInterceptingScrollView
         android:layout_width="match_parent"

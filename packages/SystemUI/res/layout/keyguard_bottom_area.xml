@@ -15,11 +15,13 @@
   -->
 
 <com.android.systemui.statusbar.phone.KeyguardBottomAreaView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/keyguard_bottom_area"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="5dp"
-    android:outlineProvider="none"> <!-- Put it above the status bar header -->
+    android:outlineProvider="none"
+    tools:targetApi="lollipop"> <!-- Put it above the status bar header -->
 
     <LinearLayout
         android:id="@+id/keyguard_indication_area"
@@ -28,7 +30,8 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="@dimen/keyguard_indication_margin_bottom"
         android:forceHasOverlappingRendering="false"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:targetApi="n">
 
         <com.android.systemui.statusbar.phone.KeyguardIndicationTextView
             android:id="@+id/keyguard_indication_enterprise_disclosure"
@@ -48,7 +51,8 @@
             android:gravity="center_horizontal"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#ffffff"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            tools:targetApi="kitkat" />
 
     </LinearLayout>
 
@@ -64,7 +68,8 @@
         android:layout_gravity="bottom|end"
         android:contentDescription="@string/accessibility_camera_button"
         android:scaleType="center"
-        android:src="@drawable/ic_camera_alt_24dp" />
+        android:src="@drawable/ic_camera_alt_24dp"
+        tools:targetApi="donut" />
 
     <com.android.systemui.statusbar.KeyguardAffordanceView
         android:id="@+id/left_button"
@@ -73,7 +78,8 @@
         android:layout_gravity="bottom|start"
         android:contentDescription="@string/accessibility_phone_button"
         android:scaleType="center"
-        android:src="@drawable/ic_phone_24dp" />
+        android:src="@drawable/ic_phone_24dp"
+        tools:targetApi="donut" />
 
     <com.android.systemui.statusbar.phone.LockIcon
         android:id="@+id/lock_icon"
@@ -82,6 +88,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:contentDescription="@string/accessibility_unlock_button"
         android:scaleType="center"
-        android:src="@drawable/ic_lock_24dp" />
+        android:src="@drawable/ic_lock_24dp"
+        tools:targetApi="donut" />
 
 </com.android.systemui.statusbar.phone.KeyguardBottomAreaView>

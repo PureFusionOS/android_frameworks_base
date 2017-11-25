@@ -151,7 +151,7 @@ public class NetworkControllerImpl extends BroadcastReceiver
         this(context, (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE),
                 context.getSystemService(NetworkScoreManager.class),
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE),
-                (WifiManager) context.getSystemService(Context.WIFI_SERVICE),
+                (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE),
                 SubscriptionManager.from(context),
                 Config.readConfig(context),
                 bgLooper,

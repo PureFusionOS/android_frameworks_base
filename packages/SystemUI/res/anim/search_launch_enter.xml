@@ -17,10 +17,12 @@
 -->
 
 <alpha xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:duration="300"
     android:fillAfter="true"
     android:fillBefore="true"
     android:fillEnabled="true"
     android:fromAlpha="0"
     android:interpolator="@android:interpolator/decelerate_cubic"
-    android:toAlpha="1.0" />
+    android:toAlpha="1.0"
+    tools:targetApi="cupcake" />

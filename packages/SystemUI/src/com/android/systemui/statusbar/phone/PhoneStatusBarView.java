@@ -70,6 +70,7 @@ public class PhoneStatusBarView extends PanelBar {
 
     @Override
     public void onFinishInflate() {
+        super.onFinishInflate();
         mBarTransitions.init();
         mBattery = findViewById(R.id.battery);
     }

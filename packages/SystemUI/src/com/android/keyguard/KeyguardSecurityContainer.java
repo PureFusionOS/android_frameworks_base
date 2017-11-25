@@ -198,6 +198,7 @@ public class KeyguardSecurityContainer extends FrameLayout implements KeyguardSe
     }
 
     protected void onFinishInflate() {
+        super.onFinishInflate();
         mSecurityViewFlipper = findViewById(R.id.view_flipper);
         mSecurityViewFlipper.setLockPatternUtils(mLockPatternUtils);
     }

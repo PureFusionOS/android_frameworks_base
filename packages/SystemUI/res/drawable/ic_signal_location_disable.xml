@@ -14,12 +14,14 @@
      limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:name="root"
     android:width="48dp"
     android:height="48dp"
     android:alpha="1.0"
     android:viewportHeight="48"
-    android:viewportWidth="48">
+    android:viewportWidth="48"
+    tools:targetApi="honeycomb">
     <group
         android:name="ic_signal_location"
         android:translateX="21.9995"

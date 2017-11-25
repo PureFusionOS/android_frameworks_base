@@ -176,6 +176,7 @@ public class TaskViewHeader extends FrameLayout
 
     @Override
     protected void onFinishInflate() {
+        super.onFinishInflate();
         SystemServicesProxy ssp = Recents.getSystemServices();
 
         // Initialize the icon and description views

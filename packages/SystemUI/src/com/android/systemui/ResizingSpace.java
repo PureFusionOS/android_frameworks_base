@@ -92,6 +92,7 @@ public class ResizingSpace extends View {
      */
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
     }
 
     @Override

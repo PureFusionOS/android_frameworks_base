@@ -13,12 +13,14 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License
   -->
-<set xmlns:android="http://schemas.android.com/apk/res/android">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <objectAnimator
         android:duration="140"
         android:interpolator="@interpolator/lockscreen_fingerprint_draw_off_animation_interpolator_0"
         android:propertyName="trimPathEnd"
         android:valueFrom="1.0"
         android:valueTo="0.0"
-        android:valueType="floatType" />
+        android:valueType="floatType"
+        tools:targetApi="honeycomb" />
 </set>

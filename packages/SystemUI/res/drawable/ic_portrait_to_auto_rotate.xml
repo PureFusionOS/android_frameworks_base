@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:width="48dp"
     android:height="48dp"
     android:tint="?android:attr/colorControlNormal"
@@ -33,7 +34,8 @@
                 android:scaleX="0.9"
                 android:scaleY="0.9"
                 android:translateX="24.1"
-                android:translateY="24.1">
+                android:translateY="24.1"
+                tools:targetApi="honeycomb">
                 <group
                     android:name="arrows_pivot"
                     android:translateX="-24.1"
@@ -54,7 +56,8 @@
                 android:name="device"
                 android:rotation="-135"
                 android:translateX="24.14999"
-                android:translateY="24.25">
+                android:translateY="24.25"
+                tools:targetApi="honeycomb">
                 <path
                     android:name="device_1"
                     android:fillAlpha="1"

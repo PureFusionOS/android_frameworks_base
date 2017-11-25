@@ -125,6 +125,7 @@ class KeyguardMessageArea extends TextView implements SecurityMessageDisplay {
 
     @Override
     protected void onFinishInflate() {
+        super.onFinishInflate();
         boolean shouldMarquee = KeyguardUpdateMonitor.getInstance(mContext).isDeviceInteractive();
         setSelected(shouldMarquee); // This is required to ensure marquee works
     }

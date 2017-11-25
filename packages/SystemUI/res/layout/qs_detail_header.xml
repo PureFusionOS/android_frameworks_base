@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <com.android.keyguard.AlphaOptimizedLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/btn_borderless_rect"
@@ -40,7 +41,8 @@
             android:layout_weight="1"
             android:paddingStart="@dimen/qs_detail_header_text_padding"
             android:textAppearance="@style/TextAppearance.QS.DetailHeader"
-            android:textDirection="locale" />
+            android:textDirection="locale"
+            tools:targetApi="jelly_bean_mr1" />
 
         <ImageView
             android:id="@+id/settings"

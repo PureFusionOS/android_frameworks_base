@@ -59,6 +59,7 @@ public class NotificationBackgroundView extends View {
 
     @Override
     protected void drawableStateChanged() {
+        super.drawableStateChanged();
         drawableStateChanged(mBackground);
     }
 
@@ -70,6 +71,7 @@ public class NotificationBackgroundView extends View {
 
     @Override
     public void drawableHotspotChanged(float x, float y) {
+        super.drawableHotspotChanged(x, y);
         if (mBackground != null) {
             mBackground.setHotspot(x, y);
         }

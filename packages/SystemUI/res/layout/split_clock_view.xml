@@ -16,6 +16,7 @@
 
 <!-- Extends LinearLayout -->
 <com.android.systemui.statusbar.policy.SplitClockView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -36,7 +37,8 @@
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="@dimen/qs_time_collapsed_size" />
+        android:textSize="@dimen/qs_time_collapsed_size"
+        tools:targetApi="jelly_bean" />
 
     <!-- Empty text view so we have the same height when expanded/collapsed-->
     <TextView

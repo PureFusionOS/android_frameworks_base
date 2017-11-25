@@ -122,6 +122,7 @@ public class NotificationGuts extends FrameLayout {
 
     @Override
     protected void drawableStateChanged() {
+        super.drawableStateChanged();
         drawableStateChanged(mBackground);
     }
 
@@ -133,6 +134,7 @@ public class NotificationGuts extends FrameLayout {
 
     @Override
     public void drawableHotspotChanged(float x, float y) {
+        super.drawableHotspotChanged(x, y);
         if (mBackground != null) {
             mBackground.setHotspot(x, y);
         }

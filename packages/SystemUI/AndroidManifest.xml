@@ -17,10 +17,15 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     coreApp="true"
     package="com.android.systemui"
     android:sharedUserId="android.uid.systemui">
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -222,7 +227,8 @@
         android:persistent="true"
         android:process="com.android.systemui"
         android:supportsRtl="true"
-        android:theme="@style/systemui_theme">
+        android:theme="@style/systemui_theme"
+        tools:targetApi="donut">
         <!-- Keep theme in sync with SystemUIApplication.onCreate().
              Setting the theme on the application does not affect views inflated by services.
              The application theme is set again from onCreate to take effect for those views. -->
@@ -297,7 +303,8 @@
             android:label="@string/system_ui_tuner"
             android:parentActivityName="com.fusion.reactor.settings.FusionReactor"
             android:process=":tuner"
-            android:theme="@style/TunerSettings"></activity>
+            android:theme="@style/TunerSettings"
+            tools:targetApi="jelly_bean"></activity>
 
         <activity
             android:name=".tuner.StatusBarIconsTunerActivity"
@@ -306,7 +313,8 @@
             android:label="@string/statusbar_icons_blacklist"
             android:parentActivityName="com.fusion.reactor.settings.StatusbarSettings"
             android:process=":tuner"
-            android:theme="@style/TunerSettings"></activity>
+            android:theme="@style/TunerSettings"
+            tools:targetApi="jelly_bean"></activity>
 
         <activity
             android:name=".tuner.NavBarTunerActivity"
@@ -314,7 +322,8 @@
             android:label="@string/navbar_tuner_activity"
             android:parentActivityName="com.fusion.reactor.settings.NavbarSettings"
             android:process=":tuner"
-            android:theme="@style/TunerSettings"></activity>
+            android:theme="@style/TunerSettings"
+            tools:targetApi="jelly_bean"></activity>
 
         <activity
             android:name=".tuner.LockscreenTunerActivity"
@@ -322,7 +331,8 @@
             android:label="@string/lockscreen_tuner_activity"
             android:parentActivityName="com.fusion.reactor.settings.LockScreenSettings"
             android:process=":tuner"
-            android:theme="@style/TunerSettings"></activity>
+            android:theme="@style/TunerSettings"
+            tools:targetApi="jelly_bean"></activity>
 
         <activity
             android:name=".tuner.PowerNotificationsTunerActivity"
@@ -330,7 +340,8 @@
             android:label="@string/powernotif_tuner_activity"
             android:parentActivityName="com.fusion.reactor.settings.PowerNotificationsSettings"
             android:process=":tuner"
-            android:theme="@style/TunerSettings"></activity>
+            android:theme="@style/TunerSettings"
+            tools:targetApi="jelly_bean"></activity>
 
         <activity-alias
             android:name=".DemoMode"
@@ -363,7 +374,8 @@
             android:resizeableActivity="true"
             android:resumeWhilePausing="true"
             android:stateNotNeeded="true"
-            android:theme="@style/RecentsTheme.Wallpaper">
+            android:theme="@style/RecentsTheme.Wallpaper"
+            tools:targetApi="n">
             <intent-filter>
                 <action android:name="com.android.systemui.recents.TOGGLE_RECENTS" />
             </intent-filter>
@@ -404,7 +416,8 @@
             android:exported="true"
             android:finishOnCloseSystemDialogs="true"
             android:permission="android.permission.MANAGE_USB"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"
+            tools:targetApi="eclair"></activity>
 
         <!-- started from UsbDeviceSettingsManager -->
         <activity
@@ -413,7 +426,8 @@
             android:exported="true"
             android:finishOnCloseSystemDialogs="true"
             android:permission="android.permission.MANAGE_USB"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"
+            tools:targetApi="eclair"></activity>
 
         <!-- started from UsbDeviceSettingsManager -->
         <activity
@@ -422,7 +436,8 @@
             android:exported="true"
             android:finishOnCloseSystemDialogs="true"
             android:permission="android.permission.MANAGE_USB"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"
+            tools:targetApi="eclair"></activity>
 
         <!-- started from UsbDeviceSettingsManager -->
         <activity
@@ -431,7 +446,8 @@
             android:exported="true"
             android:finishOnCloseSystemDialogs="true"
             android:permission="android.permission.MANAGE_USB"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"
+            tools:targetApi="eclair"></activity>
 
         <!-- started from UsbDebuggingManager -->
         <activity
@@ -439,12 +455,14 @@
             android:excludeFromRecents="true"
             android:finishOnCloseSystemDialogs="true"
             android:permission="android.permission.MANAGE_USB"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"
+            tools:targetApi="eclair"></activity>
         <activity
             android:name=".usb.UsbDebuggingSecondaryUserActivity"
             android:excludeFromRecents="true"
             android:finishOnCloseSystemDialogs="true"
-            android:theme="@style/Theme.SystemUI.Dialog.Alert"></activity>
+            android:theme="@style/Theme.SystemUI.Dialog.Alert"
+            tools:targetApi="eclair"></activity>
 
         <!-- started from NetworkPolicyManagerService -->
         <activity
@@ -456,7 +474,8 @@
             android:launchMode="singleTop"
             android:permission="android.permission.MANAGE_NETWORK_POLICY"
             android:taskAffinity="com.android.systemui.net"
-            android:theme="@android:style/Theme.DeviceDefault.Light.Panel" />
+            android:theme="@android:style/Theme.DeviceDefault.Light.Panel"
+            tools:targetApi="eclair" />
 
         <!-- started from MediaProjectionManager -->
         <activity
@@ -465,7 +484,8 @@
             android:exported="true"
             android:finishOnCloseSystemDialogs="true"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AlertDialogHost" />
+            android:theme="@style/Theme.AlertDialogHost"
+            tools:targetApi="eclair" />
 
         <!-- started from PipUI -->
         <activity
@@ -478,7 +498,8 @@
             android:supportsPictureInPicture="true"
             android:taskAffinity=""
             android:theme="@style/PipTheme"
-            androidprv:alwaysFocusable="true" />
+            androidprv:alwaysFocusable="true"
+            tools:targetApi="n" />
         <activity
             android:name=".pip.tv.PipOverlayActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|locale|layoutDirection"
@@ -487,7 +508,8 @@
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
             android:taskAffinity=""
-            android:theme="@style/PipTheme" />
+            android:theme="@style/PipTheme"
+            tools:targetApi="n" />
         <activity
             android:name=".pip.tv.PipOnboardingActivity"
             android:excludeFromRecents="true"
@@ -506,7 +528,8 @@
             android:supportsPictureInPicture="true"
             android:taskAffinity=""
             android:theme="@style/PipPhoneOverlayControlTheme"
-            androidprv:alwaysFocusable="true" />
+            androidprv:alwaysFocusable="true"
+            tools:targetApi="n" />
 
         <!-- Slim shortcut picker -->
         <activity
@@ -620,7 +643,8 @@
             android:launchMode="singleInstance"
             android:process=":sweetsweetdesserts"
             android:screenOrientation="locked"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            tools:targetApi="honeycomb">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -637,7 +661,8 @@
             android:launchMode="singleInstance"
             android:process=":sweetsweetdesserts"
             android:screenOrientation="locked"
-            android:theme="@android:style/Theme.Material.NoActionBar">
+            android:theme="@android:style/Theme.Material.NoActionBar"
+            tools:targetApi="honeycomb">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -671,7 +696,8 @@
             android:permission="android.permission.MANAGE_USERS"
             android:resumeWhilePausing="true"
             android:stateNotNeeded="true"
-            android:theme="@android:style/Theme.Black.NoTitleBar">
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            tools:targetApi="lollipop">
             <intent-filter>
                 <action android:name="android.app.action.CONFIRM_DEVICE_CREDENTIAL_WITH_USER" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -721,7 +747,8 @@
             android:finishOnCloseSystemDialogs="true"
             android:label="@string/quick_settings_brightness_dialog_title"
             android:launchMode="singleInstance"
-            android:theme="@*android:style/Theme.DeviceDefault.QuickSettings.Dialog">
+            android:theme="@*android:style/Theme.DeviceDefault.QuickSettings.Dialog"
+            tools:targetApi="eclair">
             <intent-filter>
                 <action android:name="com.android.intent.action.SHOW_BRIGHTNESS_DIALOG" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -745,7 +772,8 @@
             android:name=".doze.DozeService"
             android:exported="true"
             android:permission="android.permission.BIND_DREAM_SERVICE"
-            android:singleUser="true" />
+            android:singleUser="true"
+            tools:targetApi="jelly_bean_mr1" />
 
         <!--<receiver
             android:name=".tuner.TunerService$ClearReceiver"

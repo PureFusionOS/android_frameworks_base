@@ -74,6 +74,7 @@ public class ScreenshotSelectorView extends View {
 
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
         canvas.drawRect(mLeft, mTop, mRight, mBottom, mPaintBackground);
         if (mSelectionRect != null) {
             canvas.drawRect(mSelectionRect, mPaintSelection);

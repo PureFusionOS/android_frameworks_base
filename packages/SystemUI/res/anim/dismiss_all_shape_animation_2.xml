@@ -12,18 +12,22 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<set xmlns:android="http://schemas.android.com/apk/res/android">
-    <set android:ordering="sequentially">
+<set xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <set android:ordering="sequentially"
+        tools:targetApi="honeycomb">
         <objectAnimator
             android:duration="33"
             android:pathData="M -12,18 L -12,18"
             android:propertyXName="translateX"
-            android:propertyYName="translateY" />
+            android:propertyYName="translateY"
+            tools:targetApi="lollipop" />
         <objectAnimator
             android:duration="500"
             android:interpolator="@android:interpolator/fast_out_slow_in"
             android:pathData="M -12,18 c 31.33333,0 156.66667,0 188,0 "
             android:propertyXName="translateX"
-            android:propertyYName="translateY" />
+            android:propertyYName="translateY"
+            tools:targetApi="lollipop" />
     </set>
 </set>

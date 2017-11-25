@@ -13,6 +13,7 @@
      limitations under the License.
 -->
 <com.android.systemui.qs.QSContainerImpl xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/quick_settings_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,7 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/qs_background_primary"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        tools:targetApi="lollipop" />
 
     <com.android.systemui.qs.QSPanel
         android:id="@+id/quick_settings_panel"
@@ -34,7 +36,8 @@
         android:layout_marginBottom="48dp"
         android:layout_marginTop="28dp"
         android:background="#00000000"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        tools:targetApi="lollipop" />
 
     <include layout="@layout/quick_status_bar_expanded_header" />
 

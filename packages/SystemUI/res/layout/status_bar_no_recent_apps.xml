@@ -27,5 +27,5 @@
         android:gravity="center_horizontal"
         android:text="@string/status_bar_no_recent_apps"
         android:textColor="@android:color/holo_blue_light"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 </FrameLayout>

@@ -82,12 +82,14 @@ public class KeyguardShortcuts extends LinearLayout {
 
     @Override
     public void onAttachedToWindow() {
+        super.onAttachedToWindow();
         mSettingsObserver.observe();
 
     }
 
     @Override
     public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         mSettingsObserver.unobserve();
     }
 

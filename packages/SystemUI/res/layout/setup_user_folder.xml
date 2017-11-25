@@ -14,6 +14,7 @@
 -->
 
 <com.android.systemui.statusbar.sidebar.Folder xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/portal_container_holo"
@@ -33,7 +34,8 @@
         android:paddingLeft="@dimen/folder_padding"
         android:paddingRight="@dimen/folder_padding"
         android:paddingTop="@dimen/folder_padding"
-        android:verticalSpacing="5dp" />
+        android:verticalSpacing="5dp"
+        tools:targetApi="cupcake" />
 
     <FrameLayout
         android:id="@+id/folder_footer"
@@ -56,7 +58,8 @@
             android:singleLine="true"
             android:textColor="#ff33b5e5"
             android:textColorHighlight="#ff333333"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:targetApi="cupcake" />
         <!--
                 <ImageView
                     android:id="@+id/btn_sort"

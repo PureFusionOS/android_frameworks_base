@@ -14,11 +14,13 @@
      limitations under the License.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:width="18.41dp"
     android:height="17dp"
     android:autoMirrored="true"
     android:viewportHeight="24.0"
-    android:viewportWidth="26.0">
+    android:viewportWidth="26.0"
+    tools:targetApi="kitkat">
     <path
         android:name="in"
         android:fillColor="#FFFFFFFF"

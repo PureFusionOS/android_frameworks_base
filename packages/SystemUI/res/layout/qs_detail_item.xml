@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/btn_borderless_rect"
@@ -44,7 +45,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:textAppearance="@style/TextAppearance.QS.DetailItemPrimary"
-            android:textDirection="locale" />
+            android:textDirection="locale"
+            tools:targetApi="jelly_bean_mr1" />
 
         <TextView
             android:id="@android:id/summary"
@@ -52,7 +54,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:textAppearance="@style/TextAppearance.QS.DetailItemSecondary"
-            android:textDirection="locale" />
+            android:textDirection="locale"
+            tools:targetApi="jelly_bean_mr1" />
     </LinearLayout>
 
     <ImageView
@@ -64,6 +67,7 @@
         android:contentDescription="@*android:string/media_route_controller_disconnect"
         android:focusable="true"
         android:scaleType="center"
-        android:tint="?android:attr/textColorPrimary" />
+        android:tint="?android:attr/textColorPrimary"
+        tools:targetApi="donut" />
 
 </LinearLayout>
