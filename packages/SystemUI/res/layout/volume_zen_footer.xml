@@ -53,7 +53,8 @@
             android:scaleType="center"
             android:src="@drawable/ic_close"
             android:tint="@android:color/white"
-            tools:targetApi="donut" />
+            tools:targetApi="donut"
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/zen_introduction_message"
@@ -88,7 +89,8 @@
             android:layout_width="@dimen/volume_button_size"
             android:layout_height="@dimen/volume_button_size"
             android:layout_marginEnd="7dp"
-            android:scaleType="center" />
+            android:scaleType="center"
+            android:contentDescription="TODO" />
 
         <LinearLayout
             android:layout_width="0dp"

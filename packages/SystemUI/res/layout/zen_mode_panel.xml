@@ -60,7 +60,8 @@
                 android:scaleType="center"
                 android:src="@drawable/ic_close"
                 android:tint="@android:color/white"
-                tools:targetApi="donut" />
+                tools:targetApi="donut"
+                android:focusable="true" />
 
             <TextView
                 android:id="@+id/zen_introduction_message"
@@ -144,7 +145,8 @@
             android:layout_height="56dp"
             android:alpha="?android:attr/disabledAlpha"
             android:tint="?android:attr/colorForeground"
-            tools:targetApi="honeycomb" />
+            tools:targetApi="honeycomb"
+            android:contentDescription="TODO" />
 
         <TextView
             android:id="@android:id/title"

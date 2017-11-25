@@ -20,13 +20,15 @@
     android:clickable="true"
     android:gravity="center"
     android:paddingEnd="4dp"
-    android:paddingStart="4dp">
+    android:paddingStart="4dp"
+    android:focusable="true">
 
     <ImageView
         android:id="@android:id/icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@android:id/title"

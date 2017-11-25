@@ -37,6 +37,7 @@
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_settings"
-        android:tint="@android:color/black" />
+        android:tint="@android:color/black"
+        android:contentDescription="TODO" />
 
 </LinearLayout>

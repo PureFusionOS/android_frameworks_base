@@ -21,4 +21,5 @@
     android:layout_marginStart="@dimen/ksh_item_margin_start"
     android:background="@drawable/ksh_key_item_background"
     android:padding="@dimen/ksh_item_padding"
-    android:scaleType="fitXY" />
+    android:scaleType="fitXY"
+    android:contentDescription="TODO" />

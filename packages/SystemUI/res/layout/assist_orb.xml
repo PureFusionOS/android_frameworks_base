@@ -37,7 +37,8 @@
         <ImageView
             android:id="@+id/search_logo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="TODO" />
     </com.android.systemui.assist.AssistOrbView>
 
     <com.android.systemui.statusbar.AlphaOptimizedView

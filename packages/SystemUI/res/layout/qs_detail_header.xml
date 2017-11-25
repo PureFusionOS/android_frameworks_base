@@ -51,7 +51,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:padding="@dimen/qs_detail_image_padding"
             android:src="@drawable/ic_settings"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:contentDescription="TODO" />
 
         <Switch
             android:id="@android:id/toggle"

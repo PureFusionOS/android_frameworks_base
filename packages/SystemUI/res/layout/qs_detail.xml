@@ -23,7 +23,8 @@
     android:orientation="vertical"
     android:paddingBottom="8dp"
     android:visibility="invisible"
-    tools:targetApi="lollipop">
+    tools:targetApi="lollipop"
+    android:focusable="true">
 
     <include
         android:id="@+id/qs_detail_header"

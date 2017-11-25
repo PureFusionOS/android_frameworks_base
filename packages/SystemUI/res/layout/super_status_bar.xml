@@ -35,14 +35,16 @@
             android:id="@+id/backdrop_back"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/backdrop_front"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:contentDescription="TODO" />
     </com.android.systemui.statusbar.BackDropView>
 
     <com.android.systemui.statusbar.ScrimView

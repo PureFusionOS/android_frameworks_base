@@ -30,7 +30,8 @@
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="24dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/keyboard_shortcuts_keyword"

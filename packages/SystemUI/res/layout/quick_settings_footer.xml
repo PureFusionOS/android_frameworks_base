@@ -23,7 +23,8 @@
     android:paddingBottom="@dimen/qs_tile_padding_top"
     android:paddingEnd="@dimen/qs_footer_padding_end"
     android:paddingStart="@dimen/qs_footer_padding_start"
-    android:paddingTop="@dimen/qs_tile_padding_top">
+    android:paddingTop="@dimen/qs_tile_padding_top"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/footer_text"

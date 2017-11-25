@@ -40,7 +40,8 @@
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/selector_light"
                 android:padding="2dp"
-                android:scaleType="centerInside" />
+                android:scaleType="centerInside"
+                android:contentDescription="TODO" />
 
             <LinearLayout
                 android:id="@+id/layout_work_mode_crop"
@@ -55,7 +56,8 @@
                     android:background="@drawable/selector_light"
                     android:padding="2dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_image_crop_square" />
+                    android:src="@drawable/ic_image_crop_square"
+                    android:contentDescription="TODO" />
 
                 <ImageButton
                     android:id="@+id/doneCrop"
@@ -64,7 +66,8 @@
                     android:background="@drawable/selector_light"
                     android:padding="2dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_menu_done" />
+                    android:src="@drawable/ic_menu_done"
+                    android:contentDescription="TODO" />
 
             </LinearLayout>
 
@@ -80,14 +83,16 @@
                     android:layout_width="@dimen/crop_buttons"
                     android:layout_height="@dimen/crop_buttons"
                     android:background="@drawable/selector_light"
-                    android:scaleType="center" />
+                    android:scaleType="center"
+                    android:contentDescription="TODO" />
 
                 <ImageButton
                     android:id="@+id/penSize"
                     android:layout_width="@dimen/crop_buttons"
                     android:layout_height="@dimen/crop_buttons"
                     android:background="@drawable/selector_light"
-                    android:scaleType="center" />
+                    android:scaleType="center"
+                    android:contentDescription="TODO" />
 
             </LinearLayout>
 
@@ -98,7 +103,8 @@
                 android:background="@drawable/selector_light"
                 android:padding="2dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_menu_recover" />
+                android:src="@drawable/ic_menu_recover"
+                android:contentDescription="TODO" />
 
         </LinearLayout>
 
@@ -120,7 +126,8 @@
                 android:background="@drawable/selector_light"
                 android:padding="2dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_delete" />
+                android:src="@drawable/ic_delete"
+                android:contentDescription="TODO" />
 
             <ImageButton
                 android:id="@+id/save"
@@ -129,7 +136,8 @@
                 android:background="@drawable/selector_light"
                 android:padding="2dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_menu_save" />
+                android:src="@drawable/ic_menu_save"
+                android:contentDescription="TODO" />
 
             <ImageButton
                 android:id="@+id/share"
@@ -138,7 +146,8 @@
                 android:background="@drawable/selector_light"
                 android:padding="2dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_screenshot_share_white" />
+                android:src="@drawable/ic_screenshot_share_white"
+                android:contentDescription="TODO" />
 
         </LinearLayout>
 

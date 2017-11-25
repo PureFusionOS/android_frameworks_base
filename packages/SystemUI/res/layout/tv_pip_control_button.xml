@@ -29,7 +29,8 @@
         android:focusable="true"
         android:importantForAccessibility="yes"
         android:src="@drawable/tv_pip_button_focused"
-        tools:targetApi="jelly_bean" />
+        tools:targetApi="jelly_bean"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/icon"

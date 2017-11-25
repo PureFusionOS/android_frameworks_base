@@ -26,7 +26,8 @@
         android:layout_width="@dimen/car_fullscreen_user_pod_image_avatar_width"
         android:layout_height="@dimen/car_fullscreen_user_pod_image_avatar_height"
         android:layout_gravity="center"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/user_name"

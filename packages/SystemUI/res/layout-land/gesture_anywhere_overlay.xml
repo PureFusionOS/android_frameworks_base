@@ -46,7 +46,9 @@
             android:clickable="true"
             android:orientation="horizontal"
             android:padding="15dp"
-            android:src="@drawable/btn_ga_cancel_gesturing" />
+            android:src="@drawable/btn_ga_cancel_gesturing"
+            android:focusable="true"
+            android:contentDescription="TODO" />
     </FrameLayout>
 
 </com.android.systemui.chaos.lab.gestureanywhere.GestureAnywhereView><!-- ChaosLab: GestureAnywhere - END -->

@@ -30,7 +30,8 @@
         android:layout_height="match_parent"
         android:background="#a0000000"
         android:clickable="true"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:focusable="true">
 
         <FrameLayout
             android:id="@+id/play_button"
@@ -50,7 +51,8 @@
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
                 android:src="@drawable/play"
-                android:tint="#000000" />
+                android:tint="#000000"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:id="@+id/play_button_text"
@@ -81,7 +83,8 @@
             android:padding="10dp"
             android:scaleType="centerInside"
             android:src="@drawable/minus"
-            tools:targetApi="donut" />
+            tools:targetApi="donut"
+            android:contentDescription="TODO" />
 
         <LinearLayout
             android:id="@+id/scores"
@@ -100,6 +103,7 @@
             android:padding="10dp"
             android:scaleType="centerInside"
             android:src="@drawable/plus"
-            tools:targetApi="donut" />
+            tools:targetApi="donut"
+            android:contentDescription="TODO" />
     </LinearLayout>
 </FrameLayout>

@@ -34,5 +34,6 @@
         android:layout_width="@dimen/status_bar_connected_device_bt_indicator_size"
         android:layout_height="@dimen/status_bar_connected_device_bt_indicator_size"
         android:scaleType="centerInside"
-        android:src="@drawable/car_stat_sys_data_bluetooth_indicator" />
+        android:src="@drawable/car_stat_sys_data_bluetooth_indicator"
+        android:contentDescription="TODO" />
 </FrameLayout>

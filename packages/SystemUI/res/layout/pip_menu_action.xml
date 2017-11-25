@@ -19,4 +19,5 @@
     android:background="?android:selectableItemBackgroundBorderless"
     android:forceHasOverlappingRendering="false"
     android:padding="@dimen/pip_action_padding"
-    tools:targetApi="n" />
+    tools:targetApi="n"
+    android:contentDescription="TODO" />

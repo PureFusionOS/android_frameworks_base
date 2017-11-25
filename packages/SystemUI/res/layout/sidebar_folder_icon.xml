@@ -24,7 +24,8 @@
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/portal_ring_inner_holo" />
+        android:src="@drawable/portal_ring_inner_holo"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/folder_icon_name"

@@ -35,7 +35,8 @@
         android:paddingStart="6dip"
         android:scaleType="center"
         android:src="@drawable/ic_sysbar_lights_out_dot_small"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="TODO" />
 
     <LinearLayout
         android:id="@+id/status_bar_contents"

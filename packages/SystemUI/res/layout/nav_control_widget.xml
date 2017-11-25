@@ -28,7 +28,9 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:src="@drawable/ic_width"
-        android:tint="?android:attr/textColorPrimary" />
+        android:tint="?android:attr/textColorPrimary"
+        android:focusable="true"
+        android:contentDescription="TODO" />
 
     <View
         android:layout_width="1dp"
@@ -41,7 +43,9 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:src="@drawable/ic_close"
-        android:tint="?android:attr/textColorPrimary" />
+        android:tint="?android:attr/textColorPrimary"
+        android:focusable="true"
+        android:contentDescription="TODO" />
 
     <View
         android:layout_width="1dp"
@@ -54,6 +58,8 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:src="@drawable/ic_drag_handle"
-        android:tint="?android:attr/textColorPrimary" />
+        android:tint="?android:attr/textColorPrimary"
+        android:focusable="true"
+        android:contentDescription="TODO" />
 
 </LinearLayout>

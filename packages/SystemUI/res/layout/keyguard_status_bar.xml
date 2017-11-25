@@ -34,7 +34,8 @@
             android:layout_width="@dimen/multi_user_avatar_keyguard_size"
             android:layout_height="@dimen/multi_user_avatar_keyguard_size"
             android:layout_gravity="center"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            android:contentDescription="TODO" />
     </com.android.systemui.statusbar.phone.MultiUserSwitch>
 
     <LinearLayout

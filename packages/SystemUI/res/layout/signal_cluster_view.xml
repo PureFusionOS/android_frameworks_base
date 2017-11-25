@@ -63,7 +63,8 @@
             android:layout_height="wrap_content"
             android:paddingEnd="2dp"
             android:src="@drawable/ic_activity_down"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/wifi_out"
@@ -71,7 +72,8 @@
             android:layout_height="wrap_content"
             android:paddingEnd="2dp"
             android:src="@drawable/ic_activity_up"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:contentDescription="TODO" />
     </FrameLayout>
 
     <FrameLayout
@@ -96,7 +98,8 @@
         <ImageView
             android:id="@+id/wifi_inout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="TODO" />
     </FrameLayout>
 
     <View
@@ -150,5 +153,6 @@
     <ImageView
         android:id="@+id/airplane"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:contentDescription="TODO" />
 </com.android.systemui.statusbar.SignalClusterView>

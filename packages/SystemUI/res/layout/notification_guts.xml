@@ -21,4 +21,5 @@
     android:clickable="true"
     android:gravity="top|start"
     android:theme="@*android:style/Theme.DeviceDefault.Light"
-    android:visibility="gone" />
+    android:visibility="gone"
+    android:focusable="true" />

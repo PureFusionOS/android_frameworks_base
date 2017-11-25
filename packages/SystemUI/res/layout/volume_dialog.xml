@@ -71,7 +71,8 @@
             android:clickable="true"
             android:soundEffectsEnabled="false"
             android:src="@drawable/ic_volume_collapse_animation"
-            tools:ignore="RtlHardcoded" />
+            tools:ignore="RtlHardcoded"
+            android:focusable="true" />
 
     </LinearLayout>
 </RelativeLayout>

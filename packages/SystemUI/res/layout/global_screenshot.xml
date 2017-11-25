@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@android:color/black"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/global_screenshot"
@@ -31,14 +32,16 @@
         android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:background="@drawable/screenshot_panel"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/global_screenshot_flash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@android:color/white"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="TODO" />
 
     <com.android.systemui.screenshot.ScreenshotSelectorView
         android:id="@+id/global_screenshot_selector"

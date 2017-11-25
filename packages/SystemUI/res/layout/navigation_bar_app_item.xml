@@ -25,4 +25,5 @@
     android:paddingLeft="14dp"
     android:paddingRight="14dp"
     android:paddingTop="6dp"
-    android:scaleType="centerInside" />
+    android:scaleType="centerInside"
+    android:contentDescription="TODO" />

@@ -29,7 +29,8 @@
     android:clipToPadding="false"
     android:gravity="center_vertical"
     android:padding="8dp"
-    sysui:activatedFontFamily="sans-serif-medium">
+    sysui:activatedFontFamily="sans-serif-medium"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/user_name"

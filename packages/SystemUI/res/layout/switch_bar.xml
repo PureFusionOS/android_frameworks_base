@@ -22,7 +22,8 @@
     android:gravity="center"
     android:paddingEnd="16dp"
     android:paddingStart="16dp"
-    android:theme="@*android:style/ThemeOverlay.DeviceDefault.Accent">
+    android:theme="@*android:style/ThemeOverlay.DeviceDefault.Accent"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/switch_text"
