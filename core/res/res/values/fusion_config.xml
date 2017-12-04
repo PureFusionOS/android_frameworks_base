@@ -69,4 +69,6 @@
          config to 7. -->
     <integer name="config_deviceHardwareKeys">64</integer>
 
+    <bool name="config_deviceHasButtonBacklight">false</bool>
+
 </resources>
