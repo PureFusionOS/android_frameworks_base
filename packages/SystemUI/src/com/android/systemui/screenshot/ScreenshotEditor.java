@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.content.FileProvider;
 import android.widget.ListPopupWindow;
 import android.util.Log;
 import android.view.Display;
@@ -53,6 +54,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 public class ScreenshotEditor extends Service implements View.OnClickListener {
+
+    public static final String FILEPROVIDER_AUTHORITY = "com.android.systemui.screenprovider";
 
     private Context mContext;
 
@@ -583,16 +586,15 @@ public class ScreenshotEditor extends Service implements View.OnClickListener {
             return false;
         }
     }
-
+	
     private void shareBitmap() {
         final Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(screenshotPath)));
+        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(this, getPackageName(),new File(screenshotPath)));
         intent.setType("image/png");
         Intent sender = Intent.createChooser(intent, null);
         sender.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(sender);
     }
-
     private void deleteBitmap(String file) {
         String msg;
         boolean deleted = new File(file).delete();
