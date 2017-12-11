@@ -111,6 +111,7 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
     private static final String GLOBAL_ACTION_KEY_RESTART_RECOVERY = "recovery";
     private static final String GLOBAL_ACTION_KEY_SCREENSHOT = "screenshot";
     private static final String GLOBAL_ACTION_KEY_TORCH = "torch";
+    private static final String GLOBAL_ACTION_KEY_EMERGENCY_AFFORDANCE = "emergency";
 
     private final Context mContext;
     private final GlobalActionsManager mWindowManagerFuncs;
@@ -425,15 +426,16 @@ class GlobalActionsDialog implements DialogInterface.OnDismissListener, DialogIn
                         Settings.System.POWERMENU_SCREENSHOT, 0) == 1) {
                     mItems.add(new ScreenshotAction());
                 }
+            } else if (GLOBAL_ACTION_KEY_EMERGENCY_AFFORDANCE.equals(actionKey)) {
+                if (Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.POWERMENU_EMERGENCY_AFFORDANCE, 0) == 1) {
+                    mItems.add(getEmergencyAction());
+                }
             } else {
                 Log.e(TAG, "Invalid global action key " + actionKey);
             }
             // Add here so we don't add more than one.
             addedKeys.add(actionKey);
-        }
-
-        if (mEmergencyAffordanceManager.needsEmergencyAffordance()) {
-            mItems.add(getEmergencyAction());
         }
 
         mAdapter = new MyAdapter();

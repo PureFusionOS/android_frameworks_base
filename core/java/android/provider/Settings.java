@@ -4124,6 +4124,13 @@ public final class Settings {
         public static final String POWERMENU_TORCH = "powermenu_torch";
 
         /**
+         * Whether to display the emergency affordance manager in the power menu
+         *
+         * @hide
+         */
+        public static final String POWERMENU_EMERGENCY_AFFORDANCE = "powermenu_emergency_affordance";
+
+        /**
          * Whether to show network traffic indicator in statusbar
          * @hide
          */
