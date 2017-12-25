@@ -41,6 +41,7 @@ import android.content.pm.UserInfo;
 import android.graphics.drawable.Icon;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
@@ -114,6 +115,7 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
     private final String mSlotHeadset;
     private final String mSlotDataSaver;
     private final String mSlotLocation;
+    private final String mSlotNfc;
 
     private final Context mContext;
     private final Handler mHandler = new Handler();
@@ -142,6 +144,8 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
     private boolean mCurrentUserSetup;
     private boolean mDockedStackExists;
     private Float mBluetoothBatteryLevel = null;
+    private boolean mNfcVisible;
+    private NfcAdapter mAdapter;
 
     private boolean mManagedProfileIconVisible = false;
     private boolean mManagedProfileInQuietMode = false;
@@ -178,6 +182,7 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
         mSlotHeadset = context.getString(com.android.internal.R.string.status_bar_headset);
         mSlotDataSaver = context.getString(com.android.internal.R.string.status_bar_data_saver);
         mSlotLocation = context.getString(com.android.internal.R.string.status_bar_location);
+        mSlotNfc = context.getString(com.android.internal.R.string.status_bar_nfc);
 
         // listen for broadcasts
         IntentFilter filter = new IntentFilter();
@@ -189,6 +194,7 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
         filter.addAction(Intent.ACTION_MANAGED_PROFILE_AVAILABLE);
         filter.addAction(Intent.ACTION_MANAGED_PROFILE_UNAVAILABLE);
         filter.addAction(Intent.ACTION_MANAGED_PROFILE_REMOVED);
+        filter.addAction(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED);
 
         filter.addAction(BluetoothHeadset.ACTION_VENDOR_SPECIFIC_HEADSET_EVENT);
         filter.addCategory(BluetoothHeadset.VENDOR_SPECIFIC_HEADSET_EVENT_COMPANY_ID_CATEGORY
@@ -241,6 +247,12 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
         mIconController.setIcon(mSlotDataSaver, R.drawable.stat_sys_data_saver,
                 context.getString(R.string.accessibility_data_saver_on));
         mIconController.setIconVisibility(mSlotDataSaver, false);
+
+        mIconController.setIcon(mSlotNfc, R.drawable.stat_sys_nfc,
+                mContext.getString(R.string.accessibility_status_bar_nfc));
+
+        mIconController.setIconVisibility(mSlotNfc, false);
+        updateNfc();
 
         mRotationLockController.addCallback(this);
         mBluetooth.addCallback(this);
@@ -340,6 +352,26 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
             }
         } else {
             mSimState = IccCardConstants.State.UNKNOWN;
+        }
+    }
+
+    private NfcAdapter getAdapter() {
+        if (mAdapter == null) {
+            try {
+                mAdapter = NfcAdapter.getNfcAdapter(mContext);
+            } catch (UnsupportedOperationException e) {
+                mAdapter = null;
+            }
+        }
+        return mAdapter;
+    }
+
+    private final void updateNfc() {
+        mNfcVisible =  getAdapter() != null && getAdapter().isEnabled();
+        if (mNfcVisible) {
+            mIconController.setIconVisibility(mSlotNfc, true);
+        } else {
+            mIconController.setIconVisibility(mSlotNfc, false);
         }
     }
 
@@ -809,6 +841,8 @@ public class PhoneStatusBarPolicy implements Callback, Callbacks,
                 updateHeadsetPlug(intent);
             } else if (action.equals(BluetoothHeadset.ACTION_VENDOR_SPECIFIC_HEADSET_EVENT)) {
                 updateBluetoothBattery(intent);
+            } else if (action.equals(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED)) {
+                updateNfc();
             }
         }
     };
